@@ -466,70 +466,46 @@ function updateGallery() {
 /* ===== DROPDOWN MENU ===== */
 function buildDropdownMenus() {
   if (!ENABLE_DROPDOWN_MENU) return;
-  function buildDD(containerId, typeFilter, propsList) {
+  function buildDD(containerId, typeFilter) {
     var container = document.getElementById(containerId);
     if (!container) return;
-    var items = propsList || PROPERTIES;
-    if (typeFilter) items = items.filter(function(p) { return p.type === typeFilter; });
-    var groups = {};
+    var items = PROPERTIES.filter(function(p) { return p.type === typeFilter; });
+    var cats = {};
     for (var i = 0; i < items.length; i++) {
-      var p = items[i];
-      if (!groups[p.category]) groups[p.category] = {};
-      var bedKey = (p.category === 'Terreno' || p.category === 'Comercial') ? '_' : (p.beds || 0);
-      if (!groups[p.category][bedKey]) groups[p.category][bedKey] = [];
-      groups[p.category][bedKey].push(p);
+      var cat = items[i].category;
+      if (!cats[cat]) cats[cat] = 0;
+      cats[cat]++;
     }
     var html = '';
-    var catKeys = Object.keys(groups).sort();
-    for (var ci = 0; ci < catKeys.length; ci++) {
-      var cat = catKeys[ci];
-      html += '<div class="dd-cat">' + cat + '</div>';
-      var bedKeys = Object.keys(groups[cat]).sort(function(a,b) { return a === '_' ? -1 : b === '_' ? 1 : a - b; });
-      for (var bi = 0; bi < bedKeys.length; bi++) {
-        var bk = bedKeys[bi];
-        var props = groups[cat][bk];
-        if (bk === '_') {
-          for (var pi = 0; pi < props.length; pi++) {
-            html += '<a href="#' + props[pi].id + '">' + props[pi].title + '</a>';
-          }
-        } else {
-          var qtd = parseInt(bk, 10);
-          var label = qtd === 0 ? 'Sem quarto' : (qtd + (qtd === 1 ? ' quarto' : ' quartos'));
-          html += '<a href="#' + props[0].id + '" data-beds="' + bk + '">' + label + ' (' + props.length + ')</a>';
-        }
-      }
+    var sorted = Object.keys(cats).sort();
+    var sectionId = typeFilter === 'sale' ? 'comprar' : 'alugar';
+    for (var ci = 0; ci < sorted.length; ci++) {
+      html += '<a href="#' + sectionId + '" data-cat="' + sorted[ci] + '">' + sorted[ci] + ' (' + cats[sorted[ci]] + ')</a>';
     }
-    container.innerHTML = html || '<div class="dd-cat">Nenhum im\u00F3vel dispon\u00EDvel</div>';
-    // Attach click for bed-based submenu — navigate to section with filter
-    container.querySelectorAll('a[data-beds]').forEach(function(a) {
+    container.innerHTML = html || '<span style="display:block;padding:0.4rem 1.25rem;font-size:0.65rem;color:rgba(255,255,255,0.4);">Nenhum dispon\u00EDvel</span>';
+    // Click on category → navigate to section and set type filter
+    container.querySelectorAll('a[data-cat]').forEach(function(a) {
       a.addEventListener('click', function(e) {
         e.preventDefault();
-        var beds = this.getAttribute('data-beds');
-        var sectionId = typeFilter === 'sale' ? 'comprar' : (typeFilter === 'rent' ? 'alugar' : '');
-        if (sectionId) {
-          window.location.hash = sectionId;
-          // After navigation, apply filter by beds
-          setTimeout(function() {
-            var filterInput = document.getElementById(sectionId + '-price');
-            if (filterInput) {
-              // Set the filter by simulating a search
-              document.getElementById(sectionId + '-type').value = '';
-              document.getElementById(sectionId + '-location').value = '';
-              document.getElementById(sectionId + '-price').value = '';
-              // We'll manually filter
-              var fn = sectionId === 'comprar' ? handleComprarSearch : handleAlugarSearch;
-              if (typeof fn === 'function') {
-                // Temporarily override to filter by beds — too complex, just navigate to section
-              }
-            }
-          }, 50);
-        }
+        var cat = this.getAttribute('data-cat');
+        window.location.hash = sectionId;
+        var tries = 0;
+        var iv = setInterval(function() {
+          tries++;
+          var sel = document.getElementById(sectionId + '-type');
+          if (sel || tries > 20) {
+            clearInterval(iv);
+            if (sel) { sel.value = cat; sel.dispatchEvent(new Event('change')); }
+            var fn = sectionId === 'comprar' ? handleComprarSearch : handleAlugarSearch;
+            if (typeof fn === 'function') fn();
+          }
+        }, 50);
       });
     });
   }
   buildDD('ddComprar', 'sale');
   buildDD('ddAlugar', 'rent');
-  // Build lancamentos dropdown
+  // Lançamentos dropdown
   var lancContainer = document.getElementById('ddLanc');
   if (lancContainer && EMPREENDIMENTOS && EMPREENDIMENTOS.length) {
     var lHtml = '';
