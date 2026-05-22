@@ -39,11 +39,11 @@
 <header class="site-header" id="topo" role="banner">
   <nav class="container" role="navigation" aria-label="Navegação principal">
     <a href="#topo" class="site-logo">Su <span>Imobiliária</span></a>
-    <ul class="nav-list">
+    <ul class="nav-list" id="navList">
       <li><a href="#topo" class="active" aria-current="page">Início</a></li>
-      <li><a href="#comprar">Comprar</a></li>
-      <li><a href="#alugar">Alugar</a></li>
-      <li><a href="#lancamentos">Lançamentos</a></li>
+      <li class="nav-dropdown" id="navDropComprar"><a href="#comprar">Comprar</a><div class="dd-menu" id="ddComprar"></div></li>
+      <li class="nav-dropdown" id="navDropAlugar"><a href="#alugar">Alugar</a><div class="dd-menu" id="ddAlugar"></div></li>
+      <li class="nav-dropdown" id="navDropLanc"><a href="#lancamentos">Lançamentos</a><div class="dd-menu" id="ddLanc"></div></li>
       <li><a href="#financiamento">Financiamento</a></li>
     </ul>
     <a href="#contato" class="nav-cta nav-whatsapp-cta" data-whatsapp-msg="Olá, gostaria de falar com a Su Imobiliária.">Fale conosco</a>
@@ -53,9 +53,9 @@
   <div class="nav-overlay" id="mobileNav" role="dialog" aria-label="Menu de navegação">
     <button class="close-btn" onclick="document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''" aria-label="Fechar menu">✕</button>
     <a href="#topo" onclick="document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''">Início</a>
-    <a href="#comprar" onclick="document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''">Comprar</a>
-    <a href="#alugar" onclick="document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''">Alugar</a>
-    <a href="#lancamentos" onclick="document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''">Lançamentos</a>
+    <div class="mobile-dropdown" id="mobileDropComprar"><a href="#comprar" onclick="document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''">Comprar</a><div class="mobile-dd-body" id="mobileDdComprar"></div></div>
+    <div class="mobile-dropdown" id="mobileDropAlugar"><a href="#alugar" onclick="document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''">Alugar</a><div class="mobile-dd-body" id="mobileDdAlugar"></div></div>
+    <div class="mobile-dropdown" id="mobileDropLanc"><a href="#lancamentos" onclick="document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''">Lançamentos</a><div class="mobile-dd-body" id="mobileDdLanc"></div></div>
     <a href="#financiamento" onclick="document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''">Financiamento</a>
     <div class="mobile-social" id="mobileSocial"></div>
   </div>

@@ -79,6 +79,9 @@ const SOCIAL = {
 /* Paginación — cuántos imóveis mostrar por página */
 const PAGE_SIZE = 6;
 
+/* Menú desplegable en el nav (Comprar → Categoría → Quartos) */
+const ENABLE_DROPDOWN_MENU = false; // cambiá a true para activar
+
 
 /* ===================================================================
    TABELA: PROPERTIES (Imóveis para venda / aluguel)
