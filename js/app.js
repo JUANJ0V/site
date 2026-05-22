@@ -521,6 +521,7 @@ function updateGallery() {
 
   function navigate(id) {
     closeGallery();
+    window.scrollTo(0, 0);
     if (!id || id === "topo") {
       id = "inicio";
       window.location.hash = 'inicio';
@@ -659,6 +660,16 @@ function updateGallery() {
     if (!state) return;
     state.page++;
     renderPropertyPage(sel, type);
+  });
+
+  // Back to top — scroll to current active section or top of page
+  document.getElementById("backTop").addEventListener("click", function() {
+    var active = document.querySelector(".page-content > section.active");
+    if (active) {
+      active.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   });
 
   // Gallery: keyboard
