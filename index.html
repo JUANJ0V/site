@@ -46,7 +46,7 @@
       <li><a href="#lancamentos">Lançamentos</a></li>
       <li><a href="#financiamento">Financiamento</a></li>
     </ul>
-    <a href="#contato" class="nav-cta">Fale conosco</a>
+    <a href="#contato" class="nav-cta nav-whatsapp-cta" data-whatsapp-msg="Olá, gostaria de falar com a Su Imobiliária.">Fale conosco</a>
     <div class="nav-actions"><div class="nav-social" id="navSocial"></div><button class="theme-toggle" aria-label="Alternar modo escuro">🌙</button></div>
     <span class="menu-btn" role="button" tabindex="0" aria-label="Abrir menu">☰</span>
   </nav>
@@ -89,7 +89,7 @@
       </div>
       <div class="hero-actions">
         <a href="#comprar" class="btn-primary">Ver imóveis</a>
-        <a href="#contato" class="btn-outline">Pedir consultoria</a>
+        <a href="#contato" class="btn-outline nav-whatsapp-cta" data-whatsapp-msg="Olá, gostaria de pedir uma consultoria sobre imóveis.">Pedir consultoria</a>
       </div>
     </div>
     <div class="hero-nav" id="heroNav"></div>
@@ -246,7 +246,7 @@
       <div class="faq-section" id="faq-list"></div>
       <div class="faq-cta">
         <p>Ainda tem dúvidas? </p>
-          <p><a href="#contato">Fale com a nossa equipe →</a></p>
+          <p><a href="#contato" class="nav-whatsapp-cta" data-whatsapp-msg="Olá, tenho uma dúvida sobre imóveis. Poderiam me ajudar?">Fale com a nossa equipe →</a></p>
       </div>
     </div>
   </section>
@@ -471,6 +471,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // WhatsApp display text in footer
   document.querySelectorAll('.footer-col li a[href*="wa.me/"]').forEach(function(a) {
     a.textContent = 'WhatsApp: ' + WHATSAPP_DISPLAY;
+  });
+  // WhatsApp CTAs com mensagem personalizada
+  document.querySelectorAll('.nav-whatsapp-cta').forEach(function(a) {
+    var msg = a.getAttribute('data-whatsapp-msg') || 'Olá, gostaria de falar com a Su Imobiliária.';
+    a.href = WHATSAPP_URL + '?text=' + encodeURIComponent(msg);
+    a.target = '_blank';
   });
   // Email links
   document.querySelectorAll('a[href^="mailto:"]').forEach(function(a) {
