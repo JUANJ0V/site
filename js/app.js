@@ -466,6 +466,7 @@ function updateGallery() {
 /* ===== DROPDOWN MENU ===== */
 function buildDropdownMenus() {
   if (!ENABLE_DROPDOWN_MENU) return;
+  document.documentElement.classList.add('dd-active');
   function buildDD(containerId, typeFilter) {
     var container = document.getElementById(containerId);
     if (!container) return;
