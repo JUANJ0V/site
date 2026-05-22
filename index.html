@@ -1,0 +1,675 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR" class="spa">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Su Imobiliária — Imóveis à venda e aluguel em SC</title>
+  <meta name="description" content="Su Imobiliária — mais de 15 anos no litoral catarinense. Imóveis à venda e aluguel em Balneário Camboriú, Florianópolis, Itapema, Bombinhas e Joinville." />
+  <meta property="og:title" content="Su Imobiliária — Imóveis à venda e aluguel" />
+  <meta property="og:description" content="Mais de 15 anos transformando sonhos em endereços no litoral catarinense." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://suimobiliaria.com.br" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80" />
+  <meta name="theme-color" content="#0e142e" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%230e142e'/><text x='16' y='22' text-anchor='middle' font-size='18' fill='%23d4af37'>S</text></svg>" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "RealEstateAgent",
+    "name": "Su Imobiliária",
+    "url": "https://suimobiliaria.com.br",
+    "telephone": "+5547996548410",
+    "areaServed": ["Balneário Camboriú", "Florianópolis", "Itapema", "Bombinhas", "Joinville"],
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Av. Atlântica, 1500 — Centro",
+      "addressLocality": "Balneário Camboriú",
+      "addressRegion": "SC",
+      "addressCountry": "BR"
+    }
+  }
+  </script>
+</head>
+<body>
+
+<header class="site-header" id="topo" role="banner">
+  <nav class="container" role="navigation" aria-label="Navegação principal">
+    <a href="#topo" class="site-logo">Su <span>Imobiliária</span></a>
+    <ul class="nav-list">
+      <li><a href="#topo" class="active" aria-current="page">Início</a></li>
+      <li><a href="#comprar">Comprar</a></li>
+      <li><a href="#alugar">Alugar</a></li>
+      <li><a href="#lancamentos">Lançamentos</a></li>
+      <li><a href="#financiamento">Financiamento</a></li>
+    </ul>
+    <a href="#contato" class="nav-cta">Fale conosco</a>
+    <div class="nav-actions"><div class="nav-social" id="navSocial"></div><button class="theme-toggle" aria-label="Alternar modo escuro">🌙</button></div>
+    <span class="menu-btn" role="button" tabindex="0" aria-label="Abrir menu">☰</span>
+  </nav>
+  <div class="nav-overlay" id="mobileNav" role="dialog" aria-label="Menu de navegação">
+    <button class="close-btn" onclick="document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''" aria-label="Fechar menu">✕</button>
+    <a href="#topo" onclick="document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''">Início</a>
+    <a href="#comprar" onclick="document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''">Comprar</a>
+    <a href="#alugar" onclick="document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''">Alugar</a>
+    <a href="#lancamentos" onclick="document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''">Lançamentos</a>
+    <a href="#financiamento" onclick="document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''">Financiamento</a>
+    <div class="mobile-social" id="mobileSocial"></div>
+  </div>
+</header>
+
+<div class="page-content" role="main">
+
+  <!-- HERO -->
+  <section id="inicio" class="hero">
+    <div class="hero-media" id="heroMedia">
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="eyebrow" style="margin-bottom:1.5rem;">Seu lar começa aqui</p>
+      <h1>Encontre o imóvel perfeito para você.</h1>
+      <p>Mais de 500 imóveis à venda e aluguel. Acompanhamos você em cada passo para encontrar o lar que sempre sonhou.</p>
+      <div class="hero-search">
+        <form class="hero-search-inner" onsubmit="handleSearch();return false;">
+          <select id="search-type" aria-label="Tipo de imóvel">
+            <option value="">Tipo de imóvel</option>
+          </select>
+          <select id="search-location" aria-label="Localização">
+            <option value="">Localização</option>
+          </select>
+          <select id="search-purpose" aria-label="Finalidade">
+            <option value="">Todos os imóveis</option>
+          </select>
+          <input id="search-price" type="number" placeholder="Preço máximo" aria-label="Preço máximo" min="0" step="10000" />
+          <button type="submit">Buscar</button>
+        </form>
+      </div>
+      <div class="hero-actions">
+        <a href="#comprar" class="btn-primary">Ver imóveis</a>
+        <a href="#contato" class="btn-outline">Pedir consultoria</a>
+      </div>
+    </div>
+    <div class="hero-nav" id="heroNav"></div>
+  </section>
+
+  <!-- SOBRE -->
+  <section id="sobre">
+    <div class="container reveal">
+      <div class="about-grid">
+        <div>
+          <p class="eyebrow" style="margin-bottom:1.5rem;">Quem somos</p>
+          <div class="gold-rule" style="margin-bottom:2rem;"></div>
+          <h2 style="font-size:2.25rem;color:var(--text);line-height:1.2;">Mais de 15 anos assessorando famílias e empresas.</h2>
+          <div class="about-stats" id="aboutStats"></div>
+        </div>
+        <div class="about-text">
+          <p>A <strong>Su Imobiliária</strong> nasceu em Balneário Camboriú com uma missão clara: transformar a experiência de comprar, vender ou alugar um imóvel em algo transparente, seguro e humano.</p>
+          <p>Ao longo de mais de 15 anos, construímos uma sólida trajetória assessorando famílias, investidores e empresas em todo o litoral catarinense. Cada operação é tratada com a dedicação e o profissionalismo que nos caracterizam.</p>
+          <p>Nossa equipe combina conhecimento profundo do mercado imobiliário local com uma rede consolidada de parceiros — bancos, cartórios, avaliadores e construtoras — para garantir resultados consistentes em qualquer tipo de operação.</p>
+          <a href="#contato" class="about-link">Agende uma visita →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPRAR -->
+  <section id="comprar">
+    <div class="container">
+      <div class="section-header">
+        <p class="eyebrow">Imóveis à venda</p>
+        <div class="gold-rule"></div>
+        <h2>Encontre o imóvel ideal para comprar</h2>
+      </div>
+      <div class="grid-3" id="compra-cards"></div>
+    </div>
+  </section>
+
+  <!-- ALUGAR -->
+  <section id="alugar">
+    <div class="container">
+      <div class="section-header">
+        <p class="eyebrow">Imóveis para alugar</p>
+        <div class="gold-rule"></div>
+        <h2>As melhores opções de aluguel</h2>
+      </div>
+      <div class="grid-2" id="aluga-cards"></div>
+    </div>
+  </section>
+
+  <!-- LANÇAMENTOS -->
+  <section id="lancamentos">
+    <div class="container">
+      <div class="section-header">
+        <p class="eyebrow">Lançamentos</p>
+        <div class="gold-rule"></div>
+        <h2>Empreendimentos exclusivos</h2>
+      </div>
+      <div class="grid-3" id="lanc-cards"></div>
+    </div>
+
+  </section>
+
+  <!-- SERVIÇOS -->
+  <section id="servicos">
+    <div class="container reveal">
+      <div class="section-header">
+        <p class="eyebrow">Serviços</p>
+        <div class="gold-rule"></div>
+        <h2>Tudo que você precisa em um só lugar</h2>
+      </div>
+      <div class="grid-2" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));">
+        <div class="service-card">
+          <div style="font-size:2rem;color:var(--gold);margin-bottom:1rem;">🏠</div>
+          <h3>Comprar</h3>
+          <p>Assessoria completa para compra de imóveis residenciais e comerciais. Análise de documentação, negociação e financiamento.</p>
+        </div>
+        <div class="service-card">
+          <div style="font-size:2rem;color:var(--gold);margin-bottom:1rem;">🔑</div>
+          <h3>Alugar</h3>
+          <p>Gestão de locação com segurança jurídica. Seleção de inquilinos, contratos e acompanhamento durante todo o período.</p>
+        </div>
+        <div class="service-card">
+          <div style="font-size:2rem;color:var(--gold);margin-bottom:1rem;">📋</div>
+          <h3>Vender</h3>
+          <p>Estratégias de marketing e precificação para vender seu imóvel mais rápido e pelo melhor valor de mercado.</p>
+        </div>
+        <div class="service-card">
+          <div style="font-size:2rem;color:var(--gold);margin-bottom:1rem;">📊</div>
+          <h3>Avaliação</h3>
+          <p>Laudo de avaliação imobiliária com metodologia reconhecida pelo mercado. Ideal para financiamento, inventário ou venda.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section id="stats" class="bg-deep">
+    <div class="container reveal" style="padding:2rem 1.5rem;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1.5rem;text-align:center;max-width:960px;margin:0 auto;" id="statsGrid"></div>
+    </div>
+  </section>
+
+  <!-- DEPOIMENTOS -->
+  <section id="depoimentos" class="bg-cream">
+    <div class="container reveal">
+      <div class="section-header">
+        <p class="eyebrow">Depoimentos</p>
+        <div class="gold-rule"></div>
+        <h2>O que nossos clientes dizem</h2>
+      </div>
+      <div class="grid-3" id="depoimentos-list"></div>
+    </div>
+  </section>
+
+  <!-- PARCEIROS -->
+  <section id="parceiros">
+    <div class="container reveal">
+      <div class="section-header">
+        <p class="eyebrow">Parceiros</p>
+        <div class="gold-rule"></div>
+        <h2>Instituições que confiam em nós</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:2rem;align-items:center;justify-items:center;padding:2rem 0;" id="parceiros-list"></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container reveal">
+      <div class="section-header">
+        <p class="eyebrow">FAQ</p>
+        <div class="gold-rule"></div>
+        <h2>Perguntas frequentes</h2>
+      </div>
+      <div class="faq-section" id="faq-list"></div>
+      <div class="faq-cta">
+        <p>Ainda tem dúvidas? </p>
+          <p><a href="#contato">Fale com a nossa equipe →</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINANCIAMENTO -->
+  <section id="financiamento">
+    <div class="container reveal">
+      <div class="section-header">
+        <p class="eyebrow">Financiamento</p>
+        <div class="gold-rule"></div>
+        <h2>Simule seu financiamento imobiliário</h2>
+      </div>
+      <div class="fin-simulator" id="finSimulator">
+        <div class="fin-form">
+          <div style="display:grid;gap:1rem;">
+            <div style="display:grid;gap:0.5rem;">
+              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);">Valor do imóvel (R$)</label>
+              <input type="number" id="fin-price" value="500000" min="50000" step="10000" style="padding:0.75rem 1rem;border:1px solid var(--border);background:var(--cream);font-family:var(--font-sans);font-size:0.9rem;color:var(--text);outline:none;" />
+            </div>
+            <div style="display:grid;gap:0.5rem;">
+              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);">Entrada (R$)</label>
+              <input type="number" id="fin-down" value="100000" min="0" step="5000" style="padding:0.75rem 1rem;border:1px solid var(--border);background:var(--cream);font-family:var(--font-sans);font-size:0.9rem;color:var(--text);outline:none;" />
+            </div>
+            <div style="display:grid;gap:0.5rem;">
+              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);">Taxa de juros (% a.a.)</label>
+              <input type="number" id="fin-rate" value="8.5" min="1" max="20" step="0.1" style="padding:0.75rem 1rem;border:1px solid var(--border);background:var(--cream);font-family:var(--font-sans);font-size:0.9rem;color:var(--text);outline:none;" />
+            </div>
+            <div style="display:grid;gap:0.5rem;">
+              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);">Prazo (meses)</label>
+              <select id="fin-term" style="padding:0.75rem 1rem;border:1px solid var(--border);background:var(--cream);font-family:var(--font-sans);font-size:0.9rem;color:var(--text);outline:none;">
+                <option value="180">15 anos (180 meses)</option>
+                <option value="240" selected>20 anos (240 meses)</option>
+                <option value="300">25 anos (300 meses)</option>
+                <option value="360">30 anos (360 meses)</option>
+              </select>
+            </div>
+            <button onclick="calcFinancing()" class="btn-primary" style="justify-self:start;">Calcular</button>
+          </div>
+        </div>
+        <div class="fin-result" id="finResult" style="display:none;">
+          <div class="fin-result-grid">
+            <div><p class="fin-label">Valor financiado</p><p class="fin-value" id="fin-financed">R$ 400.000</p></div>
+            <div><p class="fin-label">Prestação mensal</p><p class="fin-value fin-highlight" id="fin-monthly">R$ 3.471</p></div>
+            <div><p class="fin-label">Total do financiamento</p><p class="fin-value" id="fin-total">R$ 833.040</p></div>
+            <div><p class="fin-label">Total de juros</p><p class="fin-value" id="fin-interest">R$ 433.040</p></div>
+          </div>
+          <p class="fin-obs" style="font-size:0.75rem;color:var(--muted-foreground);margin-top:0.75rem;">* Simulação com taxa fixa de juros. Valores aproximados sujeitos a aprovação de crédito.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTATO -->
+  <section id="contato">
+    <div class="cta-band">
+      <div class="container reveal">
+        <div class="gold-rule"></div>
+        <h2>Pronto para encontrar seu imóvel dos sonhos?</h2>
+        <p>Solicite uma consultoria gratuita e descubra as melhores opções para você e sua família.</p>
+        <div class="cta-actions">
+          <a href="https://wa.me/5547996548410" class="btn-primary" target="_blank">Fale pelo WhatsApp</a>
+          <a href="#contato" class="btn-outline" onclick="setTimeout(function(){var f=document.getElementById('contato-form');if(f)f.scrollIntoView({behavior:'smooth'})},100);">Enviar mensagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="container reveal" id="contato-form" style="padding-top:1.5rem;padding-bottom:1rem;">
+      <div style="display:grid;gap:2rem;">
+        <div class="section-header">
+          <p class="eyebrow">Envie sua mensagem</p>
+          <div class="gold-rule"></div>
+          <h2>Fale conosco</h2>
+        </div>
+        <form id="contactForm" method="POST" style="max-width:640px;margin:0 auto;width:100%;">
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_subject" value="Novo contato do site — Su Imobiliária" />
+          <input type="hidden" name="_template" value="table" />
+          <div id="formFields" style="display:grid;gap:1rem;">
+            <div style="display:grid;gap:0.5rem;">
+              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);">Nome completo</label>
+              <input type="text" name="Nome" required style="padding:0.75rem 1rem;border:1px solid var(--border);background:var(--cream);font-family:var(--font-sans);font-size:0.9rem;color:var(--text);outline:none;" placeholder="Seu nome" />
+            </div>
+            <div style="display:grid;gap:0.5rem;">
+              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);">E-mail</label>
+              <input type="email" name="Email" required style="padding:0.75rem 1rem;border:1px solid var(--border);background:var(--cream);font-family:var(--font-sans);font-size:0.9rem;color:var(--text);outline:none;" placeholder="seu@email.com" />
+            </div>
+            <div style="display:grid;gap:0.5rem;">
+              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);">Telefone / WhatsApp</label>
+              <input type="tel" name="Telefone" required style="padding:0.75rem 1rem;border:1px solid var(--border);background:var(--cream);font-family:var(--font-sans);font-size:0.9rem;color:var(--text);outline:none;" placeholder="(47) 99999-9999" />
+            </div>
+            <div style="display:grid;gap:0.5rem;">
+              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);">Mensagem</label>
+              <textarea rows="4" name="Mensagem" required style="padding:0.75rem 1rem;border:1px solid var(--border);background:var(--cream);font-family:var(--font-sans);font-size:0.9rem;color:var(--text);outline:none;resize:vertical;" placeholder="Escreva sua mensagem..."></textarea>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+              <input type="checkbox" id="lgpd-consent" required style="margin-top:0.25rem;width:1rem;height:1rem;flex-shrink:0;" />
+              <label for="lgpd-consent" style="font-size:0.75rem;color:var(--muted-foreground);line-height:1.4;">Autorizo o tratamento dos meus dados pessoais conforme a Lei Geral de Proteção de Dados (LGPD) para fins de contato e resposta à minha solicitação. Para mais informações, consulte nossa <a href="#contato" style="color:var(--gold);text-decoration:underline;">Política de Privacidade</a>.</label>
+            </div>
+            <button type="submit" class="btn-primary" style="justify-self:start;">Enviar mensagem</button>
+          </div>
+          <div id="formSuccess" style="display:none;text-align:center;padding:2rem;">
+            <p style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold);margin-bottom:0.5rem;">Mensagem enviada! ✓</p>
+            <p style="color:var(--text);">Obrigado pelo contato. Responderemos em breve.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#topo" class="site-logo" style="font-size:1.25rem;">Su <span>Imobiliária</span></a>
+          <p>Referência em consultoria imobiliária no litoral catarinense. Mais de 15 anos transformando sonhos em endereços.</p>
+        </div>
+        <div class="footer-col">
+          <p class="eyebrow">Navegação</p>
+          <div class="gold-rule"></div>
+          <ul>
+            <li><a href="#comprar">Comprar</a></li>
+            <li><a href="#alugar">Alugar</a></li>
+            <li><a href="#lancamentos">Lançamentos</a></li>
+            <li><a href="#servicos">Serviços</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#financiamento">Financiamento</a></li>
+            <li><a href="#contato">Contato</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <p class="eyebrow">Contato</p>
+          <div class="gold-rule"></div>
+          <ul>
+            <li><a href="https://wa.me/5547996548410" target="_blank">WhatsApp: +55 47 99654-8410</a></li>
+            <li><a href="mailto:contato@suimobiliaria.com.br">contato@suimobiliaria.com.br</a></li>
+            <li>Av. Atlântica, 1500 — Centro</li>
+            <li>Balneário Camboriú — SC</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-social" id="footerSocial"></div>
+        <span>&copy; 2026 Su Imobiliária. Todos os direitos reservados.</span>
+        <span>Feito com dedicação para nossos clientes.</span>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /page-content -->
+
+<!-- WHATSAPP FAB -->
+<a class="whatsapp-fab" href="https://wa.me/5547996548410" target="_blank" aria-label="Fale conosco pelo WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<!-- BACK TO TOP -->
+<a class="back-top" href="#topo" aria-label="Voltar ao topo">↑</a>
+
+<!-- DETAIL CARDS -->
+<!-- GALLERY MODAL -->
+<div class="gallery-modal" id="galleryModal" role="dialog" aria-label="Galeria de fotos">
+  <div class="gallery-backdrop"></div>
+  <div class="gallery-panel">
+    <button class="gallery-close" aria-label="Fechar galeria">&times;</button>
+    <div class="gallery-top">
+      <button class="gallery-nav gallery-prev" aria-label="Anterior">&#8249;</button>
+      <div class="gallery-stage">
+        <div class="gallery-counter" id="galleryCounter"></div>
+        <img id="galleryMainImg" src="" alt="" />
+      </div>
+      <button class="gallery-nav gallery-next" aria-label="Próximo">&#8250;</button>
+    </div>
+    <div class="gallery-bottom">
+      <div class="gallery-meta">
+        <h3 id="galleryTitle"></h3>
+        <p class="price" id="galleryPrice"></p>
+        <a id="galleryDetailsLink" href="#">Ver detalhes completos &rarr;</a>
+      </div>
+      <div class="gallery-thumbs" id="galleryThumbs"></div>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script>
+// Auto-update site info from data.js constants
+document.addEventListener('DOMContentLoaded', function() {
+  // Site name in logo and brand (first word plain, rest in gold span)
+  document.querySelectorAll('.site-logo, .footer-brand .site-logo').forEach(function(el) {
+    var words = SITE_NAME.split(' ');
+    el.innerHTML = words.length > 1 ? words[0] + ' <span>' + words.slice(1).join(' ') + '</span>' : SITE_NAME;
+  });
+  // Page title, meta tags (rebuild after " — ")
+  function rebuildMeta(text, name) {
+    var parts = text.split('\u2014');
+    return name + (parts.length > 1 ? ' \u2014 ' + parts.slice(1).join('\u2014').trim() : '');
+  }
+  var titleTag = document.querySelector('title');
+  if (titleTag) titleTag.textContent = rebuildMeta(titleTag.textContent, SITE_NAME);
+  var metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) metaDesc.content = rebuildMeta(metaDesc.content, SITE_NAME);
+  var ogTitle = document.querySelector('meta[property="og:title"]');
+  if (ogTitle) ogTitle.content = rebuildMeta(ogTitle.content, SITE_NAME);
+  var ogDesc = document.querySelector('meta[property="og:description"]');
+  if (ogDesc) ogDesc.content = rebuildMeta(ogDesc.content, SITE_NAME);
+  // Footer copyright
+  document.querySelectorAll('.footer-bottom span').forEach(function(span) {
+    if (span.textContent.indexOf('Todos os direitos') > -1) {
+      span.textContent = '\u00A9 ' + new Date().getFullYear() + ' ' + SITE_NAME + '. Todos os direitos reservados.';
+    }
+  });
+  // WhatsApp links
+  document.querySelectorAll('a[href*="wa.me/"]').forEach(function(a) {
+    a.href = a.href.replace(/wa.me\/\d+/, 'wa.me/' + WHATSAPP_NUMBER);
+  });
+  // WhatsApp display text in footer
+  document.querySelectorAll('.footer-col li a[href*="wa.me/"]').forEach(function(a) {
+    a.textContent = 'WhatsApp: ' + WHATSAPP_DISPLAY;
+  });
+  // Email links
+  document.querySelectorAll('a[href^="mailto:"]').forEach(function(a) {
+    a.href = 'mailto:' + SITE_EMAIL;
+    if (a.textContent.indexOf('@') > -1) a.textContent = SITE_EMAIL;
+  });
+  // Footer address
+  document.querySelectorAll('.footer-col li').forEach(function(li) {
+    if (li.textContent.indexOf('Av.') > -1) li.textContent = SITE_ADDRESS;
+    if (li.textContent.indexOf('Balneário') > -1 || li.textContent.indexOf('— SC') > -1) li.textContent = SITE_CITY + ' \u2014 ' + SITE_REGION;
+  });
+  // OG url
+  var ogUrl = document.querySelector('meta[property="og:url"]');
+  if (ogUrl) ogUrl.content = SITE_URL;
+  // JSON-LD
+  var ld = document.querySelector('script[type="application/ld+json"]');
+  if (ld) {
+    try {
+      var data = JSON.parse(ld.textContent);
+      data.name = SITE_NAME;
+      data.url = SITE_URL;
+      data.telephone = '+' + WHATSAPP_NUMBER;
+      data.address.streetAddress = SITE_ADDRESS;
+      data.address.addressLocality = SITE_CITY;
+      data.address.addressRegion = SITE_REGION;
+      ld.textContent = JSON.stringify(data);
+    } catch(e) {}
+  }
+  // Disabled nav sections
+  if (DISABLED_SECTIONS && DISABLED_SECTIONS.length) {
+    for (var ds = 0; ds < DISABLED_SECTIONS.length; ds++) {
+      var sid = DISABLED_SECTIONS[ds];
+      // Desktop nav
+      var navLink = document.querySelector('.nav-list a[href="#' + sid + '"]');
+      if (navLink && navLink.parentElement) navLink.parentElement.style.display = 'none';
+      // Mobile nav
+      var mobLink = document.querySelector('#mobileNav a[href="#' + sid + '"]');
+      if (mobLink) mobLink.style.display = 'none';
+      // Footer nav
+      var footLink = document.querySelector('.site-footer a[href="#' + sid + '"]');
+      if (footLink && footLink.parentElement) footLink.parentElement.style.display = 'none';
+    }
+  }
+  // Stats — populate from data.js
+  if (typeof STATS !== 'undefined' && STATS.length) {
+    var aboutStats = document.getElementById('aboutStats');
+    if (aboutStats) {
+      aboutStats.innerHTML = '';
+      var showCount = Math.min(3, STATS.length);
+      for (var si = 0; si < showCount; si++) {
+        var sd = document.createElement('div');
+        sd.innerHTML = '<p class="stat-num">' + STATS[si].value + '</p><p class="stat-label">' + STATS[si].label + '</p>';
+        aboutStats.appendChild(sd);
+      }
+    }
+    var statsGrid = document.getElementById('statsGrid');
+    if (statsGrid) {
+      statsGrid.innerHTML = '';
+      for (var sj = 0; sj < STATS.length; sj++) {
+        var sd2 = document.createElement('div');
+        sd2.innerHTML = '<p style="font-family:var(--font-serif);font-size:2.5rem;color:var(--gold);">' + STATS[sj].value + '</p><p style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.2em;color:rgba(255,255,255,0.7);">' + STATS[sj].label + '</p>';
+        statsGrid.appendChild(sd2);
+      }
+    }
+  }
+  // Section texts — editable from data.js
+  var sectionTexts = [
+    { id: 'hero', eyebrowSel: '.hero-content .eyebrow', eyebrow: HERO_EYEBROW, titleSel: '.hero-content h1', title: HERO_TITLE, subtitleSel: '.hero-content p + p', subtitle: HERO_SUBTITLE },
+    { id: 'sobre', eyebrowSel: '#sobre .eyebrow', eyebrow: SECTION_SOBRE_EYEBROW, titleSel: '#sobre h2', title: SECTION_SOBRE_TITLE },
+    { id: 'comprar', eyebrowSel: '#comprar .eyebrow', eyebrow: SECTION_COMPRAR_EYEBROW, titleSel: '#comprar h2', title: SECTION_COMPRAR_TITLE },
+    { id: 'alugar', eyebrowSel: '#alugar .eyebrow', eyebrow: SECTION_ALUGAR_EYEBROW, titleSel: '#alugar h2', title: SECTION_ALUGAR_TITLE },
+    { id: 'lancamentos', eyebrowSel: '#lancamentos .eyebrow', eyebrow: SECTION_LANCAMENTOS_EYEBROW, titleSel: '#lancamentos h2', title: SECTION_LANCAMENTOS_TITLE },
+    { id: 'servicos', eyebrowSel: '#servicos .eyebrow', eyebrow: SECTION_SERVICOS_EYEBROW, titleSel: '#servicos h2', title: SECTION_SERVICOS_TITLE },
+    { id: 'depoimentos', eyebrowSel: '#depoimentos .eyebrow', eyebrow: SECTION_DEPOIMENTOS_EYEBROW, titleSel: '#depoimentos h2', title: SECTION_DEPOIMENTOS_TITLE },
+    { id: 'parceiros', eyebrowSel: '#parceiros .eyebrow', eyebrow: SECTION_PARCEIROS_EYEBROW, titleSel: '#parceiros h2', title: SECTION_PARCEIROS_TITLE },
+    { id: 'faq', eyebrowSel: '#faq .eyebrow', eyebrow: SECTION_FAQ_EYEBROW, titleSel: '#faq h2', title: SECTION_FAQ_TITLE },
+    { id: 'financiamento', eyebrowSel: '#financiamento .eyebrow', eyebrow: SECTION_FINANCIAMENTO_EYEBROW, titleSel: '#financiamento h2', title: SECTION_FINANCIAMENTO_TITLE },
+    { id: 'contato', eyebrowSel: '#contato-form .eyebrow', eyebrow: SECTION_CONTATO_EYEBROW, titleSel: '#contato-form h2', title: SECTION_CONTATO_TITLE }
+  ];
+  for (var st = 0; st < sectionTexts.length; st++) {
+    var s = sectionTexts[st];
+    var e = document.querySelector(s.eyebrowSel);
+    if (e) e.textContent = s.eyebrow;
+    var t = document.querySelector(s.titleSel);
+    if (t) t.textContent = s.title;
+    if (s.subtitleSel) {
+      var sub = document.querySelector(s.subtitleSel);
+      if (sub) sub.textContent = s.subtitle;
+    }
+  }
+  // Populate search dropdowns from data
+  function populateSelect(id, values) {
+    var sel = document.getElementById(id);
+    if (!sel) return;
+    for (var pi = 0; pi < values.length; pi++) {
+      var opt = document.createElement('option');
+      opt.textContent = values[pi];
+      sel.appendChild(opt);
+    }
+  }
+  var categories = [], locations = [];
+  for (var pi = 0; pi < PROPERTIES.length; pi++) {
+    var p = PROPERTIES[pi];
+    if (categories.indexOf(p.category) === -1) categories.push(p.category);
+    if (locations.indexOf(p.location) === -1) locations.push(p.location);
+  }
+  categories.sort(); locations.sort();
+  populateSelect('search-type', categories);
+  populateSelect('search-location', locations);
+  // Populate purpose dropdown from enabled sections
+  var purposeSel = document.getElementById('search-purpose');
+  var purposeMap = { comprar: { value: 'sale', label: 'Venda' }, alugar: { value: 'rent', label: 'Aluguel' } };
+  var enabledPurposes = ['comprar', 'alugar'].filter(function(s) { return !DISABLED_SECTIONS || DISABLED_SECTIONS.indexOf(s) === -1; });
+  for (var pp = 0; pp < enabledPurposes.length; pp++) {
+    var info = purposeMap[enabledPurposes[pp]];
+    var opt = document.createElement('option');
+    opt.value = info.value;
+    opt.textContent = info.label;
+    purposeSel.appendChild(opt);
+  }
+  // Hero slideshow
+  var heroMedia = document.getElementById('heroMedia');
+  var heroNav = document.getElementById('heroNav');
+  if (heroMedia && HERO_IMAGES && HERO_IMAGES.length) {
+    heroMedia.innerHTML = '';
+    if (HERO_VIDEO) {
+      var vw = document.createElement('div');
+      vw.className = 'hero-video-wrap';
+      vw.innerHTML = '<video autoplay muted loop playsinline><source src="' + HERO_VIDEO + '" type="video/mp4" /></video>';
+      heroMedia.appendChild(vw);
+    }
+    for (var si = 0; si < HERO_IMAGES.length; si++) {
+      var img = document.createElement('img');
+      img.className = 'hero-slide' + (si === 0 ? ' active' : '');
+      img.src = HERO_IMAGES[si];
+      img.alt = '';
+      img.loading = si === 0 ? 'eager' : 'lazy';
+      heroMedia.appendChild(img);
+      var dot = document.createElement('button');
+      dot.className = 'hero-dot' + (si === 0 ? ' active' : '');
+      dot.setAttribute('data-slide', si);
+      dot.setAttribute('aria-label', 'Slide ' + (si + 1));
+      heroNav.appendChild(dot);
+    }
+  }
+  // Contact form — set endpoint and handle submission
+  var form = document.getElementById('contactForm');
+  if (form) {
+    form.action = 'https://formsubmit.co/' + SITE_EMAIL;
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var btn = form.querySelector('button[type="submit"]');
+      var originalText = btn.textContent;
+      btn.textContent = 'Enviando...';
+      btn.disabled = true;
+      fetch(form.action, { method: 'POST', body: new FormData(form) })
+        .then(function() {
+          document.getElementById('formFields').style.display = 'none';
+          document.getElementById('formSuccess').style.display = 'block';
+        })
+        .catch(function() {
+          // Fallback: submit normally (opens thank-you page)
+          form.submit();
+        })
+        .finally(function() {
+          btn.textContent = originalText;
+          btn.disabled = false;
+        });
+    });
+  }
+  // Social media in nav + footer
+  var socialSvgs = {
+    instagram: '<svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>',
+    facebook: '<svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>',
+    youtube: '<svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>',
+    linkedin: '<svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>'
+  };
+  function renderSocial(containerId) {
+    var c = document.getElementById(containerId);
+    if (!c || !SOCIAL) return;
+    var h = '';
+    var order = ['instagram', 'facebook', 'youtube', 'linkedin'];
+    for (var si2 = 0; si2 < order.length; si2++) {
+      var k = order[si2];
+      if (SOCIAL[k]) {
+        h += '<a href="' + SOCIAL[k] + '" target="_blank" aria-label="' + k + '">' + socialSvgs[k] + '</a>';
+      }
+    }
+    if (h) c.innerHTML = h;
+  }
+  // Auto-calc financiamento on input change
+  var finInputs = document.querySelectorAll('#finSimulator input, #finSimulator select');
+  for (var fi = 0; fi < finInputs.length; fi++) {
+    finInputs[fi].addEventListener('input', calcFinancing);
+  }
+  renderSocial('navSocial');
+  renderSocial('mobileSocial');
+  renderSocial('footerSocial');
+  // Hero slideshow — auto rotation + dot clicks
+  if (HERO_IMAGES && HERO_IMAGES.length > 1) {
+    var heroCurrent = 0;
+    var heroTimer = setInterval(heroNext, 5000);
+    function heroGoTo(idx) {
+      var slides = document.querySelectorAll('.hero-slide');
+      var dots = document.querySelectorAll('.hero-dot');
+      for (var h = 0; h < slides.length; h++) {
+        slides[h].classList.toggle('active', h === idx);
+        if (dots[h]) dots[h].classList.toggle('active', h === idx);
+      }
+      heroCurrent = idx;
+    }
+    function heroNext() { heroGoTo((heroCurrent + 1) % HERO_IMAGES.length); }
+    document.getElementById('heroNav').addEventListener('click', function(e) {
+      var dot = e.target.closest('.hero-dot');
+      if (!dot) return;
+      clearInterval(heroTimer);
+      heroGoTo(parseInt(dot.getAttribute('data-slide'), 10));
+      heroTimer = setInterval(heroNext, 5000);
+    });
+  }
+  });
+</script>
+<script src="js/app.js"></script>
+</body>
+</html>
