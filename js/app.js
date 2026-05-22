@@ -560,13 +560,13 @@ function buildDropdownMenus() {
     var link = wrap.querySelector('a');
     if (!link) continue;
     link.addEventListener('click', function(e) {
-      // If has sub-items, toggle; otherwise navigate normally
       var body = this.parentElement.querySelector('.mob-dd-body');
       if (body && body.children.length > 0) {
         e.preventDefault();
+        e.stopPropagation();
         this.parentElement.classList.toggle('open');
       }
-      // else: normal navigation (href works)
+      // else: normal navigation (href works, SPA router handles it)
     });
     // Sub-items close nav
     var subLinks = wrap.querySelectorAll('.mob-dd-body a');
