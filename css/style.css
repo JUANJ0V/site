@@ -1190,10 +1190,6 @@
       transform: translateY(0);
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      .whatsapp-fab { animation: none; }
-    }
-
     /* ---- Empreendimento (Lan�amentos detalhado) ---- */
     .empreendimento { display:none; padding:3.5rem 0 2rem; }
     .spa .empreendimento.active { display: block; }
