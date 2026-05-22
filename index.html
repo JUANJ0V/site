@@ -123,6 +123,13 @@
         <div class="gold-rule"></div>
         <h2>Encontre o imóvel ideal para comprar</h2>
       </div>
+      <form class="section-search" onsubmit="handleComprarSearch();return false;">
+        <select id="comprar-type" aria-label="Tipo de imóvel"><option value="">Tipo</option></select>
+        <select id="comprar-location" aria-label="Localização"><option value="">Localização</option></select>
+        <input id="comprar-price" type="number" placeholder="Preço máx." aria-label="Preço máximo" min="0" step="10000" />
+        <button type="submit">Filtrar</button>
+        <button type="button" onclick="clearComprarSearch()">Limpar</button>
+      </form>
       <div class="grid-3" id="compra-cards"></div>
     </div>
   </section>
@@ -135,6 +142,13 @@
         <div class="gold-rule"></div>
         <h2>As melhores opções de aluguel</h2>
       </div>
+      <form class="section-search" onsubmit="handleAlugarSearch();return false;">
+        <select id="alugar-type" aria-label="Tipo de imóvel"><option value="">Tipo</option></select>
+        <select id="alugar-location" aria-label="Localização"><option value="">Localização</option></select>
+        <input id="alugar-price" type="number" placeholder="Preço máx." aria-label="Preço máximo" min="0" step="10000" />
+        <button type="submit">Filtrar</button>
+        <button type="button" onclick="clearAlugarSearch()">Limpar</button>
+      </form>
       <div class="grid-2" id="aluga-cards"></div>
     </div>
   </section>
@@ -147,6 +161,11 @@
         <div class="gold-rule"></div>
         <h2>Empreendimentos exclusivos</h2>
       </div>
+      <form class="section-search" onsubmit="handleLancSearch();return false;">
+        <select id="lanc-location" aria-label="Localização"><option value="">Localização</option></select>
+        <button type="submit">Filtrar</button>
+        <button type="button" onclick="clearLancSearch()">Limpar</button>
+      </form>
       <div class="grid-3" id="lanc-cards"></div>
     </div>
 
@@ -567,6 +586,11 @@ document.addEventListener('DOMContentLoaded', function() {
   categories.sort(); locations.sort();
   populateSelect('search-type', categories);
   populateSelect('search-location', locations);
+  populateSelect('comprar-type', categories);
+  populateSelect('comprar-location', locations);
+  populateSelect('alugar-type', categories);
+  populateSelect('alugar-location', locations);
+  populateSelect('lanc-location', locations);
   // Populate purpose dropdown from enabled sections
   var purposeSel = document.getElementById('search-purpose');
   var purposeMap = { comprar: { value: 'sale', label: 'Venda' }, alugar: { value: 'rent', label: 'Aluguel' } };

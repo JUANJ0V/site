@@ -186,6 +186,10 @@ function renderDetailCard(propId) {
   }
 
   const sectionLabel = p.type === 'sale' ? 'Comprar' : 'Alugar';
+  var detailPriceDisplay = p.price;
+  if (p.type === 'rent' && p.price.indexOf('/m\u00EAs') === -1) detailPriceDisplay += ' /m\u00EAs';
+  var detailRawMsg = WHATSAPP_MSG.replace('{titulo}', p.title).replace('{preco}', detailPriceDisplay);
+  var detailWhatsUrl = WHATSAPP_URL + '?text=' + encodeURIComponent(detailRawMsg);
 
   const detailEl = document.createElement('div');
   detailEl.className = 'detail-card';
@@ -214,7 +218,7 @@ function renderDetailCard(propId) {
     + '<div class="detail-features"><h3>Caracter\u00EDsticas</h3><ul>' + featuresHtml + '</ul></div>'
     + '</div>'
     + '<div class="detail-actions">'
-    + '<a href="' + WHATSAPP_URL + '" class="btn-primary" target="_blank">Agendar visita</a>'
+    + '<a href="' + detailWhatsUrl + '" class="btn-primary" target="_blank">Agendar visita</a>'
     + (p.maps ? '<a href="' + p.maps + '" class="btn-gold-outline" target="_blank">Ver no mapa</a>' : '')
     + '<button class="btn-gold-outline btn-share" onclick="shareProperty(\'' + p.id + '\')">Compartilhar</button>'
     + '<a href="#' + backSection + '" class="btn-gold-outline">Outros im\u00F3veis</a>'
@@ -788,6 +792,107 @@ function clearSearch() {
   document.getElementById('search-price').value = '';
   document.getElementById('search-purpose').value = '';
   window.location.hash = prevPurpose === 'rent' ? 'alugar' : 'comprar';
+}
+
+/* ===== SECTION-SPECIFIC SEARCH ===== */
+function handleComprarSearch() {
+  const typeVal = document.getElementById('comprar-type').value;
+  const locationVal = document.getElementById('comprar-location').value;
+  const priceText = document.getElementById('comprar-price').value;
+  const container = document.querySelector('#comprar .grid-3');
+  if (!container) return;
+  if (!_origCompraHTML) { const c = document.querySelector('#comprar .grid-3'); if (c) _origCompraHTML = c.innerHTML; }
+  if (!typeVal && !locationVal && !priceText) { clearComprarSearch(); return; }
+  const results = PROPERTIES.filter(function(p) {
+    if (p.type !== 'sale') return false;
+    if (typeVal && p.category !== typeVal) return false;
+    if (locationVal && p.location !== locationVal) return false;
+    if (priceText) {
+      const maxPrice = parseFloat(priceText.replace(/[^0-9]/g, ''));
+      if (!isNaN(maxPrice) && p.priceNum > maxPrice) return false;
+    }
+    return true;
+  });
+  let html = '';
+  if (results.length === 0) {
+    html = '<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted-foreground);"><p style="font-size:1.25rem;">Nenhum im\u00F3vel \u00E0 venda encontrado</p></div>';
+  } else {
+    for (let i = 0; i < results.length; i++) html += buildPropertyCardHTML(results[i], 'badge-sale', 'Venda');
+  }
+  html += '<div style="grid-column:1/-1;text-align:center;padding:1rem 0;"><button onclick="clearComprarSearch()" class="btn-gold-outline" style="font-size:0.7rem;padding:0.6rem 1.5rem;cursor:pointer;">Limpar filtros</button></div>';
+  container.innerHTML = html;
+  if (typeof window._revealObserver !== 'undefined') container.querySelectorAll('.reveal').forEach(function(el) { window._revealObserver.observe(el); });
+}
+function clearComprarSearch() {
+  document.getElementById('comprar-type').value = '';
+  document.getElementById('comprar-location').value = '';
+  document.getElementById('comprar-price').value = '';
+  const container = document.querySelector('#comprar .grid-3');
+  if (container && _origCompraHTML) {
+    container.innerHTML = _origCompraHTML;
+    if (typeof window._revealObserver !== 'undefined') container.querySelectorAll('.reveal').forEach(function(el) { window._revealObserver.observe(el); });
+  }
+}
+
+function handleAlugarSearch() {
+  const typeVal = document.getElementById('alugar-type').value;
+  const locationVal = document.getElementById('alugar-location').value;
+  const priceText = document.getElementById('alugar-price').value;
+  const container = document.querySelector('#alugar .grid-2');
+  if (!container) return;
+  if (!_origAlugaHTML) { const a = document.querySelector('#alugar .grid-2'); if (a) _origAlugaHTML = a.innerHTML; }
+  if (!typeVal && !locationVal && !priceText) { clearAlugarSearch(); return; }
+  const results = PROPERTIES.filter(function(p) {
+    if (p.type !== 'rent') return false;
+    if (typeVal && p.category !== typeVal) return false;
+    if (locationVal && p.location !== locationVal) return false;
+    if (priceText) {
+      const maxPrice = parseFloat(priceText.replace(/[^0-9]/g, ''));
+      if (!isNaN(maxPrice) && p.priceNum > maxPrice) return false;
+    }
+    return true;
+  });
+  let html = '';
+  if (results.length === 0) {
+    html = '<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted-foreground);"><p style="font-size:1.25rem;">Nenhum im\u00F3vel para alugar encontrado</p></div>';
+  } else {
+    for (let i = 0; i < results.length; i++) html += buildPropertyCardHTML(results[i], 'badge-rent', 'Aluguel');
+  }
+  html += '<div style="grid-column:1/-1;text-align:center;padding:1rem 0;"><button onclick="clearAlugarSearch()" class="btn-gold-outline" style="font-size:0.7rem;padding:0.6rem 1.5rem;cursor:pointer;">Limpar filtros</button></div>';
+  container.innerHTML = html;
+  if (typeof window._revealObserver !== 'undefined') container.querySelectorAll('.reveal').forEach(function(el) { window._revealObserver.observe(el); });
+}
+function clearAlugarSearch() {
+  document.getElementById('alugar-type').value = '';
+  document.getElementById('alugar-location').value = '';
+  document.getElementById('alugar-price').value = '';
+  const container = document.querySelector('#alugar .grid-2');
+  if (container && _origAlugaHTML) {
+    container.innerHTML = _origAlugaHTML;
+    if (typeof window._revealObserver !== 'undefined') container.querySelectorAll('.reveal').forEach(function(el) { window._revealObserver.observe(el); });
+  }
+}
+
+function handleLancSearch() {
+  const locationVal = document.getElementById('lanc-location').value;
+  const container = document.querySelector('#lancamentos .grid-3');
+  if (!container) return;
+  if (!_origLancHTML) { const l = document.querySelector('#lancamentos .grid-3'); if (l) _origLancHTML = l.innerHTML; }
+  if (!locationVal) { clearLancSearch(); return; }
+  const results = EMPREENDIMENTOS.filter(function(e) { return e.location.indexOf(locationVal) !== -1; });
+  let html = '';
+  if (results.length === 0) {
+    html = '<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted-foreground);"><p style="font-size:1.25rem;">Nenhum lan\u00E7amento encontrado nesta regi\u00E3o</p></div>';
+  } else {
+    for (let i = 0; i < results.length; i++) html += buildLancCardHTML(results[i]);
+  }
+  html += '<div style="grid-column:1/-1;text-align:center;padding:1rem 0;"><button onclick="clearLancSearch()" class="btn-gold-outline" style="font-size:0.7rem;padding:0.6rem 1.5rem;cursor:pointer;">Limpar filtros</button></div>';
+  container.innerHTML = html;
+}
+function clearLancSearch() {
+  document.getElementById('lanc-location').value = '';
+  const container = document.querySelector('#lancamentos .grid-3');
+  if (container && _origLancHTML) container.innerHTML = _origLancHTML;
 }
 
 function handleSearch() {
