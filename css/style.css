@@ -200,17 +200,17 @@
     }
 
     .menu-btn {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: none;
       border: none;
       color: rgba(255,255,255,0.9);
       font-size: 1.25rem;
       cursor: pointer;
       font-family: var(--font-sans);
-      line-height: 1;
       min-width: 44px;
       min-height: 44px;
-      text-align: center;
       padding-left: 0.75rem;
       margin-left: 0.25rem;
       border-left: 1px solid rgba(255,255,255,0.15);
@@ -1644,16 +1644,17 @@
     }
 
     .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: none;
       border: none;
       cursor: pointer;
       padding: 0;
       color: rgba(255,255,255,0.9);
       font-size: 1.25rem;
-      line-height: 1;
       min-width: 44px;
       min-height: 44px;
-      text-align: center;
     }
 
     /* ---- STATUS BADGE ---- */
