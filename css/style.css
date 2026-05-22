@@ -188,13 +188,10 @@
 
     /* ---- DROPDOWN MENU (só quando .dd-active) ---- */
     .dd-active .nav-dropdown { position: relative; }
-    .dd-active .nav-dropdown > a {
-      display: flex;
-      align-items: center;
-      gap: 0.3em;
-    }
     .dd-active .nav-dropdown > a::after {
       content: '▾';
+      display: inline-block;
+      margin-left: 0.35em;
       font-size: 0.55em;
       opacity: 0.5;
       transition: transform 0.2s;
