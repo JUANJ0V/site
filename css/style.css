@@ -207,14 +207,22 @@
       position: absolute;
       top: 100%;
       left: 50%;
-      transform: translateX(-50%) translateY(6px);
-      background: #0c1028;
+      transform: translateX(-50%) translateY(10px);
+      background: var(--deep);
       border: 1px solid rgba(255,255,255,0.08);
       border-radius: 8px;
       min-width: 200px;
       padding: 0.4rem 0;
       z-index: 100;
       box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    }
+    .dd-active .dd-menu::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 0;
+      right: 0;
+      height: 10px;
     }
     .dd-active .nav-dropdown:hover .dd-menu,
     .dd-active .nav-dropdown:focus-within .dd-menu { display: block; }

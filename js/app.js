@@ -541,6 +541,17 @@ function buildDropdownMenus() {
 
   setupMobileNav(); // handles non-dropdown links
 
+  // Hide disabled section dropdowns in mobile nav
+  var ddMap = { comprar: 'mobDropComprar', alugar: 'mobDropAlugar', lancamentos: 'mobDropLanc' };
+  if (typeof DISABLED_SECTIONS !== 'undefined' && DISABLED_SECTIONS.length) {
+    for (var dk in ddMap) {
+      if (DISABLED_SECTIONS.indexOf(dk) !== -1) {
+        var el = document.getElementById(ddMap[dk]);
+        if (el) el.style.display = 'none';
+      }
+    }
+  }
+
   // Mobile: toggle submenu and also close nav on sub-item click
   var mobileWrap = document.querySelectorAll('.mob-drop-wrap');
   for (var mi = 0; mi < mobileWrap.length; mi++) {
