@@ -204,17 +204,16 @@
       background: none;
       border: none;
       color: rgba(255,255,255,0.9);
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       cursor: pointer;
       font-family: var(--font-sans);
       line-height: 1;
       min-width: 44px;
       min-height: 44px;
       text-align: center;
-    }
-
-    @media (max-width: 1023px) {
-      .menu-btn { font-size: 1.75rem; }
+      padding-left: 0.75rem;
+      margin-left: 0.25rem;
+      border-left: 1px solid rgba(255,255,255,0.15);
     }
 
     /* Mobile nav overlay */
@@ -1440,7 +1439,7 @@
       .hero-search-inner input,
       .hero-search-inner button { border-bottom: 1px solid rgba(255,255,255,0.1); }
       .hero-search-inner > :last-child { border-bottom: none; }
-      .hero-content { padding-top: 5.5rem; padding-bottom: 5rem; }
+      .hero-content { padding-top: 6rem; padding-bottom: 4rem; }
       .hero-search { margin-top: 1.5rem; }
       .hero-actions { margin-top: 1.5rem; }
       .hero p { margin-top: 1rem; font-size: 1rem; }
@@ -1455,7 +1454,7 @@
       .hero { min-height: 100vh; }
       .hero h1 { font-size: 2rem; }
       .hero p { margin-top: 1rem; font-size: 1rem; }
-      .hero-content { justify-content: flex-start; padding-top: 5rem; padding-bottom: 4rem; }
+      .hero-content { justify-content: flex-start; padding-top: 5.5rem; padding-bottom: 4.5rem; }
       .hero-search { margin-top: 1.25rem; }
       .hero-actions { margin-top: 1.25rem; }
       .hero-search-inner select,
@@ -1648,10 +1647,13 @@
       background: none;
       border: none;
       cursor: pointer;
-      padding: 0.25rem 0.5rem;
+      padding: 0;
       color: rgba(255,255,255,0.9);
-      font-size: 1.1rem;
+      font-size: 1.25rem;
       line-height: 1;
+      min-width: 44px;
+      min-height: 44px;
+      text-align: center;
     }
 
     /* ---- STATUS BADGE ---- */
