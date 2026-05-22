@@ -586,9 +586,19 @@ document.addEventListener('DOMContentLoaded', function() {
     if (HERO_VIDEO) {
       var vw = document.createElement('div');
       vw.className = 'hero-video-wrap';
-      vw.innerHTML = '<video autoplay muted loop playsinline><source src="' + HERO_VIDEO + '" type="video/mp4" /></video>';
+      if (HERO_VIDEO.indexOf('youtube.com') !== -1 || HERO_VIDEO.indexOf('youtu.be') !== -1) {
+        var ytId = HERO_VIDEO.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+        if (ytId) {
+          vw.style.background = 'url(https://img.youtube.com/vi/' + ytId[1] + '/maxresdefault.jpg) center/cover no-repeat';
+          var ytSrc = 'https://www.youtube-nocookie.com/embed/' + ytId[1] + '?autoplay=1&mute=1&loop=1&playlist=' + ytId[1] + '&controls=0&showinfo=0&modestbranding=1&rel=0';
+          vw.innerHTML = '<iframe src="' + ytSrc + '" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="no-referrer-when-downgrade" style="width:100%;height:100%;pointer-events:none;" loading="lazy"></iframe>';
+        }
+      } else {
+        vw.innerHTML = '<video autoplay muted loop playsinline><source src="' + HERO_VIDEO + '" type="video/mp4" /></video>';
+      }
       heroMedia.appendChild(vw);
     }
+    if (!HERO_VIDEO) {
     for (var si = 0; si < HERO_IMAGES.length; si++) {
       var img = document.createElement('img');
       img.className = 'hero-slide' + (si === 0 ? ' active' : '');
@@ -601,6 +611,7 @@ document.addEventListener('DOMContentLoaded', function() {
       dot.setAttribute('data-slide', si);
       dot.setAttribute('aria-label', 'Slide ' + (si + 1));
       heroNav.appendChild(dot);
+    }
     }
   }
   // Contact form — set endpoint and handle submission
@@ -657,7 +668,7 @@ document.addEventListener('DOMContentLoaded', function() {
   renderSocial('mobileSocial');
   renderSocial('footerSocial');
   // Hero slideshow — auto rotation + dot clicks
-  if (HERO_IMAGES && HERO_IMAGES.length > 1) {
+  if (!HERO_VIDEO && HERO_IMAGES && HERO_IMAGES.length > 1) {
     var heroCurrent = 0;
     var heroTimer = setInterval(heroNext, 5000);
     function heroGoTo(idx) {
