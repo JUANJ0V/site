@@ -13,6 +13,7 @@ const SITE_LOGO     = ""; // URL do logo (SVG ou PNG) — se vazio, mostra o tex
 const SITE_EMAIL    = "contato@suimobiliaria.com.br";
 const SITE_URL      = "https://suimobiliaria.com.br";
 const SITE_ADDRESS  = "Av. Atlântica, 1500 — Centro";
+const SITE_MAPS     = ""; // URL do Google Maps para a direção — se vazio, mostra só texto
 const SITE_CITY     = "Balneário Camboriú";
 const SITE_REGION   = "SC";
 

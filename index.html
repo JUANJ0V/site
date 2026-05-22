@@ -460,7 +460,13 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   // Footer address
   document.querySelectorAll('.footer-col li').forEach(function(li) {
-    if (li.textContent.indexOf('Av.') > -1) li.textContent = SITE_ADDRESS;
+    if (li.textContent.indexOf('Av.') > -1) {
+      if (SITE_MAPS) {
+        li.innerHTML = '<a href="' + SITE_MAPS + '" target="_blank" style="text-decoration:underline;">' + SITE_ADDRESS + '</a>';
+      } else {
+        li.textContent = SITE_ADDRESS;
+      }
+    }
     if (li.textContent.indexOf('Balneário') > -1 || li.textContent.indexOf('— SC') > -1) li.textContent = SITE_CITY + ' \u2014 ' + SITE_REGION;
   });
   // OG url
