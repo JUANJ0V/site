@@ -9,6 +9,7 @@ const WHATSAPP_URL      = "https://wa.me/" + WHATSAPP_NUMBER;
 const WHATSAPP_MSG      = "Olá, tenho interesse no {titulo} ({preco})";
 
 const SITE_NAME     = "Su Imobiliária";
+const SITE_LOGO     = ""; // URL do logo (SVG ou PNG) — se vazio, mostra o texto
 const SITE_EMAIL    = "contato@suimobiliaria.com.br";
 const SITE_URL      = "https://suimobiliaria.com.br";
 const SITE_ADDRESS  = "Av. Atlântica, 1500 — Centro";

@@ -419,8 +419,12 @@
 document.addEventListener('DOMContentLoaded', function() {
   // Site name in logo and brand (first word plain, rest in gold span)
   document.querySelectorAll('.site-logo, .footer-brand .site-logo').forEach(function(el) {
-    var words = SITE_NAME.split(' ');
-    el.innerHTML = words.length > 1 ? words[0] + ' <span>' + words.slice(1).join(' ') + '</span>' : SITE_NAME;
+    if (SITE_LOGO) {
+      el.innerHTML = '<img src="' + SITE_LOGO + '" alt="' + SITE_NAME.replace(/"/g, '&quot;') + '" style="height:2rem;width:auto;display:block;" />';
+    } else {
+      var words = SITE_NAME.split(' ');
+      el.innerHTML = words.length > 1 ? words[0] + ' <span>' + words.slice(1).join(' ') + '</span>' : SITE_NAME;
+    }
   });
   // Page title, meta tags (rebuild after " — ")
   function rebuildMeta(text, name) {

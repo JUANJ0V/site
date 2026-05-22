@@ -162,9 +162,12 @@
       font-size: 1.25rem;
       color: rgba(255,255,255,0.9);
       letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
     }
 
     .site-logo span { color: var(--gold); }
+    .site-logo img { height: 2rem; width: auto; display: block; }
 
     .nav-list {
       display: none;
