@@ -80,7 +80,7 @@ const SOCIAL = {
 const PAGE_SIZE = 6;
 
 /* Menú desplegable en el nav (Comprar → Categoría → Quartos) */
-const ENABLE_DROPDOWN_MENU = false; // cambiá a true para activar
+const ENABLE_DROPDOWN_MENU = true; // cambiá a true para activar
 
 
 /* ===================================================================

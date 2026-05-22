@@ -465,11 +465,36 @@ function updateGallery() {
 
 /* ===== DROPDOWN MENU ===== */
 function buildDropdownMenus() {
-  if (!ENABLE_DROPDOWN_MENU) return;
+  if (!ENABLE_DROPDOWN_MENU) { setupMobileNav(); return; }
   document.documentElement.classList.add('dd-active');
-  function buildDD(containerId, typeFilter) {
-    var container = document.getElementById(containerId);
-    if (!container) return;
+
+  function catLink(sectionId, cat, count) {
+    var a = document.createElement('a');
+    a.href = '#' + sectionId;
+    a.textContent = cat + ' (' + count + ')';
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.hash = sectionId;
+      var iv = setInterval(function() {
+        var sel = document.getElementById(sectionId + '-type');
+        if (sel) {
+          clearInterval(iv);
+          sel.value = cat;
+          var fn = sectionId === 'comprar' ? handleComprarSearch : handleAlugarSearch;
+          if (typeof fn === 'function') fn();
+        }
+      }, 50);
+    });
+    return a;
+  }
+
+  function buildDD(ids, typeFilter) {
+    var containers = [];
+    for (var idi = 0; idi < ids.length; idi++) {
+      var el = document.getElementById(ids[idi]);
+      if (el) containers.push(el);
+    }
+    if (containers.length === 0) return;
     var items = PROPERTIES.filter(function(p) { return p.type === typeFilter; });
     var cats = {};
     for (var i = 0; i < items.length; i++) {
@@ -477,54 +502,75 @@ function buildDropdownMenus() {
       if (!cats[cat]) cats[cat] = 0;
       cats[cat]++;
     }
-    var html = '';
     var sorted = Object.keys(cats).sort();
     var sectionId = typeFilter === 'sale' ? 'comprar' : 'alugar';
+    if (sorted.length === 0) {
+      var noneMsg = 'Nenhum dispon\u00EDvel';
+      for (var ci = 0; ci < containers.length; ci++) {
+        containers[ci].innerHTML = '<span style="display:block;padding:0.4rem 1.25rem;font-size:0.65rem;color:rgba(255,255,255,0.35);">' + noneMsg + '</span>';
+      }
+      return;
+    }
     for (var ci = 0; ci < sorted.length; ci++) {
-      html += '<a href="#' + sectionId + '" data-cat="' + sorted[ci] + '">' + sorted[ci] + ' (' + cats[sorted[ci]] + ')</a>';
+      for (var ci2 = 0; ci2 < containers.length; ci2++) {
+        containers[ci2].appendChild(catLink(sectionId, sorted[ci], cats[sorted[ci]]));
+      }
     }
-    container.innerHTML = html || '<span style="display:block;padding:0.4rem 1.25rem;font-size:0.65rem;color:rgba(255,255,255,0.4);">Nenhum dispon\u00EDvel</span>';
-    // Click on category → navigate to section and set type filter
-    container.querySelectorAll('a[data-cat]').forEach(function(a) {
-      a.addEventListener('click', function(e) {
-        e.preventDefault();
-        var cat = this.getAttribute('data-cat');
-        window.location.hash = sectionId;
-        var tries = 0;
-        var iv = setInterval(function() {
-          tries++;
-          var sel = document.getElementById(sectionId + '-type');
-          if (sel || tries > 20) {
-            clearInterval(iv);
-            if (sel) { sel.value = cat; sel.dispatchEvent(new Event('change')); }
-            var fn = sectionId === 'comprar' ? handleComprarSearch : handleAlugarSearch;
-            if (typeof fn === 'function') fn();
-          }
-        }, 50);
-      });
-    });
   }
-  buildDD('ddComprar', 'sale');
-  buildDD('ddAlugar', 'rent');
+
+  buildDD(['ddComprar', 'mobDdComprar'], 'sale');
+  buildDD(['ddAlugar', 'mobDdAlugar'], 'rent');
+
   // Lançamentos dropdown
-  var lancContainer = document.getElementById('ddLanc');
-  if (lancContainer && EMPREENDIMENTOS && EMPREENDIMENTOS.length) {
-    var lHtml = '';
-    for (var li = 0; li < EMPREENDIMENTOS.length; li++) {
-      lHtml += '<a href="#' + EMPREENDIMENTOS[li].id + '">' + EMPREENDIMENTOS[li].title + '</a>';
-    }
-    lancContainer.innerHTML = lHtml;
+  var lancIds = ['ddLanc', 'mobDdLanc'];
+  var lancContainers = [];
+  for (var li = 0; li < lancIds.length; li++) {
+    var el = document.getElementById(lancIds[li]);
+    if (el) lancContainers.push(el);
   }
-  // Mobile: toggle dropdown on click
-  document.querySelectorAll('.mobile-dropdown > a').forEach(function(a) {
-    a.addEventListener('click', function(e) {
-      e.preventDefault();
-      this.parentElement.classList.toggle('open');
+  if (lancContainers.length && EMPREENDIMENTOS && EMPREENDIMENTOS.length) {
+    for (var li = 0; li < EMPREENDIMENTOS.length; li++) {
+      for (var lj = 0; lj < lancContainers.length; lj++) {
+        var la = document.createElement('a');
+        la.href = '#' + EMPREENDIMENTOS[li].id;
+        la.textContent = EMPREENDIMENTOS[li].title;
+        lancContainers[lj].appendChild(la);
+      }
+    }
+  }
+
+  setupMobileNav(); // handles non-dropdown links
+
+  // Mobile: toggle submenu and also close nav on sub-item click
+  var mobileWrap = document.querySelectorAll('.mob-drop-wrap');
+  for (var mi = 0; mi < mobileWrap.length; mi++) {
+    var wrap = mobileWrap[mi];
+    var link = wrap.querySelector('a');
+    if (!link) continue;
+    link.addEventListener('click', function(e) {
+      // If has sub-items, toggle; otherwise navigate normally
+      var body = this.parentElement.querySelector('.mob-dd-body');
+      if (body && body.children.length > 0) {
+        e.preventDefault();
+        this.parentElement.classList.toggle('open');
+      }
+      // else: normal navigation (href works)
     });
-  });
-  // Mobile: submenu links close mobile nav
-  document.querySelectorAll('.mobile-dd-body a').forEach(function(a) {
-    a.addEventListener('click', function() {
+    // Sub-items close nav
+    var subLinks = wrap.querySelectorAll('.mob-dd-body a');
+    for (var si = 0; si < subLinks.length; si++) {
+      subLinks[si].addEventListener('click', function() {
+        document.getElementById('mobileNav').classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    }
+  }
+} // end buildDropdownMenus
+
+function setupMobileNav() {
+  document.querySelectorAll('.nav-overlay a, .nav-overlay .close-btn').forEach(function(el) {
+    if (el.closest('.mob-drop-wrap')) return; // handled by dropdown logic
+    el.addEventListener('click', function() {
       document.getElementById('mobileNav').classList.remove('open');
       document.body.style.overflow = '';
     });
