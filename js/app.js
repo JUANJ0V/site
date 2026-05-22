@@ -465,6 +465,16 @@ function updateGallery() {
 
 /* ===== DROPDOWN MENU ===== */
 function buildDropdownMenus() {
+  // Always hide disabled section wrappers in mobile nav
+  var hideMap = { comprar: 'mobDropComprar', alugar: 'mobDropAlugar', lancamentos: 'mobDropLanc' };
+  if (typeof DISABLED_SECTIONS !== 'undefined' && DISABLED_SECTIONS.length) {
+    for (var hk in hideMap) {
+      if (DISABLED_SECTIONS.indexOf(hk) !== -1) {
+        var he = document.getElementById(hideMap[hk]);
+        if (he) he.style.display = 'none';
+      }
+    }
+  }
   if (!ENABLE_DROPDOWN_MENU) { setupMobileNav(); return; }
   document.documentElement.classList.add('dd-active');
 
@@ -541,17 +551,6 @@ function buildDropdownMenus() {
 
   setupMobileNav(); // handles non-dropdown links
 
-  // Hide disabled section dropdowns in mobile nav
-  var ddMap = { comprar: 'mobDropComprar', alugar: 'mobDropAlugar', lancamentos: 'mobDropLanc' };
-  if (typeof DISABLED_SECTIONS !== 'undefined' && DISABLED_SECTIONS.length) {
-    for (var dk in ddMap) {
-      if (DISABLED_SECTIONS.indexOf(dk) !== -1) {
-        var el = document.getElementById(ddMap[dk]);
-        if (el) el.style.display = 'none';
-      }
-    }
-  }
-
   // Mobile: toggle submenu and also close nav on sub-item click
   var mobileWrap = document.querySelectorAll('.mob-drop-wrap');
   for (var mi = 0; mi < mobileWrap.length; mi++) {
@@ -580,7 +579,7 @@ function buildDropdownMenus() {
 
 function setupMobileNav() {
   document.querySelectorAll('.nav-overlay a, .nav-overlay .close-btn').forEach(function(el) {
-    if (el.closest('.mob-drop-wrap')) return; // handled by dropdown logic
+    if (ENABLE_DROPDOWN_MENU && el.closest('.mob-drop-wrap')) return; // handled by dropdown logic
     el.addEventListener('click', function() {
       document.getElementById('mobileNav').classList.remove('open');
       document.body.style.overflow = '';
