@@ -355,7 +355,7 @@
 
     .hero-nav {
       position: absolute;
-      bottom: 2rem;
+      bottom: 1.5rem;
       left: 50%;
       transform: translateX(-50%);
       z-index: 15;
@@ -1440,7 +1440,7 @@
       .hero-search-inner input,
       .hero-search-inner button { border-bottom: 1px solid rgba(255,255,255,0.1); }
       .hero-search-inner > :last-child { border-bottom: none; }
-      .hero-content { padding-top: 5.5rem; padding-bottom: 3.5rem; }
+      .hero-content { padding-top: 5.5rem; padding-bottom: 5rem; }
       .hero-search { margin-top: 1.5rem; }
       .hero-actions { margin-top: 1.5rem; }
       .hero p { margin-top: 1rem; font-size: 1rem; }
@@ -1455,7 +1455,7 @@
       .hero { min-height: 100vh; }
       .hero h1 { font-size: 2rem; }
       .hero p { margin-top: 1rem; font-size: 1rem; }
-      .hero-content { justify-content: flex-start; padding-top: 5rem; padding-bottom: 3.5rem; }
+      .hero-content { justify-content: flex-start; padding-top: 5rem; padding-bottom: 4rem; }
       .hero-search { margin-top: 1.25rem; }
       .hero-actions { margin-top: 1.25rem; }
       .hero-search-inner select,
