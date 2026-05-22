@@ -465,13 +465,15 @@ function updateGallery() {
 
 /* ===== DROPDOWN MENU ===== */
 function buildDropdownMenus() {
-  // Always hide disabled section wrappers in mobile nav
   var hideMap = { comprar: 'mobDropComprar', alugar: 'mobDropAlugar', lancamentos: 'mobDropLanc' };
+  var navDropMap = { comprar: 'navDropComprar', alugar: 'navDropAlugar', lancamentos: 'navDropLanc' };
   if (typeof DISABLED_SECTIONS !== 'undefined' && DISABLED_SECTIONS.length) {
     for (var hk in hideMap) {
       if (DISABLED_SECTIONS.indexOf(hk) !== -1) {
         var he = document.getElementById(hideMap[hk]);
         if (he) he.style.display = 'none';
+        var ne = document.getElementById(navDropMap[hk]);
+        if (ne) ne.style.display = 'none';
       }
     }
   }
