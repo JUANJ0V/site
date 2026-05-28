@@ -195,7 +195,6 @@ function renderDetailCard(propId) {
   detailEl.className = 'detail-card';
   detailEl.id = p.id;
   detailEl.innerHTML = '<div class="detail-inner">'
-    + '<nav class="detail-breadcrumb" aria-label="Breadcrumb"><a href="#topo">In\u00EDcio</a> <span class="sep">/</span> <a href="#' + backSection + '">' + sectionLabel + '</a> <span class="sep">/</span> <span>' + p.title + '</span></nav>'
     + '<div class="detail-header">'
     + '<div>'
     + '<p class="eyebrow">' + eyebrow + '</p>'
@@ -516,15 +515,26 @@ function buildDropdownMenus() {
     }
     var sorted = Object.keys(cats).sort();
     var sectionId = typeFilter === 'sale' ? 'comprar' : 'alugar';
+    // "Ver todos" link at top
+    var allLink = document.createElement('a');
+    allLink.href = '#' + sectionId;
+    allLink.textContent = 'Ver todos';
+    allLink.style.borderBottom = '1px solid rgba(255,255,255,0.06)';
+    allLink.style.marginBottom = '0.25rem';
+    allLink.style.paddingBottom = '0.5rem';
     if (sorted.length === 0) {
-      var noneMsg = 'Nenhum dispon\u00EDvel';
       for (var ci = 0; ci < containers.length; ci++) {
-        containers[ci].innerHTML = '<span style="display:block;padding:0.4rem 1.25rem;font-size:0.65rem;color:rgba(255,255,255,0.35);">' + noneMsg + '</span>';
+        containers[ci].appendChild(allLink.cloneNode(true));
+        var span = document.createElement('span');
+        span.style.cssText = 'display:block;padding:0.4rem 1.25rem;font-size:0.65rem;color:rgba(255,255,255,0.35);';
+        span.textContent = 'Nenhum dispon\u00EDvel';
+        containers[ci].appendChild(span);
       }
       return;
     }
     for (var ci = 0; ci < sorted.length; ci++) {
       for (var ci2 = 0; ci2 < containers.length; ci2++) {
+        if (ci === 0) containers[ci2].appendChild(allLink.cloneNode(true));
         containers[ci2].appendChild(catLink(sectionId, sorted[ci], cats[sorted[ci]]));
       }
     }
@@ -541,6 +551,15 @@ function buildDropdownMenus() {
     if (el) lancContainers.push(el);
   }
   if (lancContainers.length && EMPREENDIMENTOS && EMPREENDIMENTOS.length) {
+    var allLancLink = document.createElement('a');
+    allLancLink.href = '#lancamentos';
+    allLancLink.textContent = 'Ver todos';
+    allLancLink.style.borderBottom = '1px solid rgba(255,255,255,0.06)';
+    allLancLink.style.marginBottom = '0.25rem';
+    allLancLink.style.paddingBottom = '0.5rem';
+    for (var lj = 0; lj < lancContainers.length; lj++) {
+      lancContainers[lj].appendChild(allLancLink.cloneNode(true));
+    }
     for (var li = 0; li < EMPREENDIMENTOS.length; li++) {
       for (var lj = 0; lj < lancContainers.length; lj++) {
         var la = document.createElement('a');
@@ -642,7 +661,7 @@ function setupMobileNav() {
   }
 
   const groups = {
-    inicio: ["inicio", "sobre", "stats", "servicos", "depoimentos", "parceiros", "faq", "contato"],
+    inicio: ["inicio", "sobre", "stats", "servicos", "depoimentos", "parceiros", "faq"],
     financiamento: ["financiamento"]
   };
 
@@ -1151,5 +1170,7 @@ function handleSearch() {
     window.location.hash = 'alugar';
   }
 }
+
+
 
 

@@ -1110,7 +1110,7 @@
       background-color: var(--deep);
       color: rgba(255,255,255,0.7);
       padding-top: 3rem;
-      padding-bottom: 1.5rem;
+      padding-bottom: 5rem;
     }
 
     .footer-grid {
@@ -1838,16 +1838,6 @@
     .status-vendido { background: #c0392b; color: #fff; }
     .status-locado { background: #e67e22; color: #fff; }
     .status-badge-lg { position: static; display: inline-block; margin-left: 0.75rem; vertical-align: middle; font-size: 0.625rem; padding: 0.3rem 0.75rem; }
-
-    /* ---- BREADCRUMB ---- */
-    .detail-breadcrumb {
-      margin-bottom: 2rem;
-      font-size: 0.75rem;
-      color: var(--muted-foreground);
-    }
-    .detail-breadcrumb a { color: var(--gold); border-bottom: 1px solid transparent; transition: border-color 0.2s; }
-    .detail-breadcrumb a:hover { border-bottom-color: var(--gold); }
-    .detail-breadcrumb .sep { margin: 0 0.5rem; color: var(--border); }
 
     /* ---- SHARE BUTTON ---- */
     .btn-share { cursor: pointer; font-family: var(--font-sans); }
