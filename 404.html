@@ -6,7 +6,9 @@
   <title>Redirecionando...</title>
   <script>
     sessionStorage.redirect = location.pathname;
-    location.replace('/');
+    var parts = location.pathname.split('/').filter(Boolean);
+    parts.pop();
+    location.replace('/' + (parts.length ? parts.join('/') + '/' : ''));
   </script>
   <style>
     body { margin: 0; background: #0e142e; display: flex; align-items: center; justify-content: center; height: 100vh; font-family: system-ui, sans-serif; color: #fff; }

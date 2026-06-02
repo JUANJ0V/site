@@ -42,15 +42,31 @@ function _t(section) {
   return {};
 }
 
+/* ===== BASE PATH DETECTION ===== */
+// Handles subdirectory deployments (e.g. GitHub Pages /site/)
+var BASE_PATH = (function() {
+  var p = window.location.pathname.replace(/\/index\.html$/, '').replace(/\/+$/, '');
+  return p === '' ? '' : p + '/';
+})();
+
 // Handle initial redirect from 404.html (GitHub Pages SPA fallback)
 (function() {
   var redirectPath = sessionStorage.getItem('redirect');
   if (redirectPath) {
     sessionStorage.removeItem('redirect');
-    var rid = redirectPath.replace(/\/$/g, '').replace(/^\//, '');
-    if (rid && rid !== 'index.html') {
-      history.replaceState(null, '', redirectPath);
-      window._redirectId = rid;
+    if (BASE_PATH && redirectPath.indexOf(BASE_PATH) === 0) {
+      var afterBase = redirectPath.substring(BASE_PATH.length).replace(/\/$/g, '');
+      if (afterBase && afterBase !== 'index.html') {
+        var clean = BASE_PATH.replace(/\/$/, '') + '/' + afterBase + '/';
+        history.replaceState(null, '', clean);
+        window._redirectId = afterBase;
+      }
+    } else {
+      var rid = redirectPath.replace(/\/$/g, '').replace(/^\//, '');
+      if (rid && rid !== 'index.html') {
+        history.replaceState(null, '', redirectPath);
+        window._redirectId = rid;
+      }
     }
   }
 })();
@@ -58,13 +74,18 @@ function _t(section) {
 /* ===== SPA ROUTER HELPERS ===== */
 function getSectionId() {
   if (window.location.protocol === 'file:') return 'inicio';
-  var p = window.location.pathname.replace(/\/$/g, '');
-  if (p === '' || p === '/index.html') return 'inicio';
+  var p = window.location.pathname.replace(/\/+$/, '') || '/';
+  // Strip BASE_PATH prefix (normalize: compare with or without trailing slash)
+  var bp = BASE_PATH.replace(/\/+$/, '');
+  if (bp && p.indexOf(bp) === 0) {
+    p = p.substring(bp.length) || '/';
+  }
+  if (p === '' || p === '/' || p === '/index.html') return 'inicio';
   return p.replace(/^\//, '');
 }
 function goTo(id) {
   if (!id || id === 'topo') id = 'inicio';
-  var url = id === 'inicio' ? '/' : '/' + id + '/';
+  var url = id === 'inicio' ? BASE_PATH : BASE_PATH + id + '/';
   if (window.location.pathname !== url) {
     try { history.pushState(null, '', url); } catch(e) {}
   }
@@ -100,7 +121,7 @@ function buildPropertyCardHTML(p, badgeClass, badgeText) {
 
   var priceDisplay = p.price;
   if (p.type === 'rent' && p.price.indexOf('/m\u00EAs') === -1) priceDisplay += ' ' + ct.perMonth;
-  var propUrl = window.location.origin + '/' + p.id + '/';
+  var propUrl = window.location.origin + BASE_PATH + p.id + '/';
   var rawMsg = WHATSAPP_MSG.replace('{titulo}', title).replace('{preco}', priceDisplay) + '\n\n' + propUrl;
   var whatsappUrl = WHATSAPP_URL + '?text=' + encodeURIComponent(rawMsg);
 
@@ -278,7 +299,7 @@ function renderDetailCard(propId) {
 
   var detailPriceDisplay = p.price;
   if (p.type === 'rent' && p.price.indexOf('/m\u00EAs') === -1) detailPriceDisplay += ' ' + ct.perMonth;
-  var detailPropUrl = window.location.origin + '/' + p.id + '/';
+  var detailPropUrl = window.location.origin + BASE_PATH + p.id + '/';
   var detailRawMsg = WHATSAPP_MSG.replace('{titulo}', p.title).replace('{preco}', detailPriceDisplay) + '\n\n' + detailPropUrl;
   var detailWhatsUrl = WHATSAPP_URL + '?text=' + encodeURIComponent(detailRawMsg);
 
@@ -537,7 +558,7 @@ function renderBlogPost(postId) {
   var ttl = document.querySelector('title');
   if (ttl) ttl.textContent = blogTitle + ' \u2014 ' + SITE_NAME;
   var ogU = document.querySelector('meta[property="og:url"]');
-  if (ogU) ogU.content = window.location.origin + '/' + postId + '/';
+  if (ogU) ogU.content = window.location.origin + BASE_PATH + postId + '/';
   function renderContent(text) {
     return text.split('\n\n').map(function(b) {
       if (/^###\s/.test(b)) return '<h3>' + b.replace(/^###\s+/, '') + '</h3>';
@@ -1228,7 +1249,7 @@ function shareProperty(propId) {
     if (PROPERTIES[i].id === propId) { p = PROPERTIES[i]; break; }
   }
   if (!p) return;
-  var url = window.location.origin + '/' + propId + '/';
+  var url = window.location.origin + BASE_PATH + propId + '/';
   var text = p.title + ' - ' + p.price + ' - ' + SITE_NAME;
   if (navigator.share) {
     navigator.share({ title: p.title, text: text, url: url }).catch(function() {});
@@ -1512,7 +1533,7 @@ function updateMetaTags(p) {
   var ogImg = document.querySelector('meta[property="og:image"]');
   if (ogImg && p.gallery && p.gallery.length) ogImg.content = p.gallery[0];
   var ogUrl = document.querySelector('meta[property="og:url"]');
-  if (ogUrl) ogUrl.content = window.location.origin + '/' + p.id + '/';
+  if (ogUrl) ogUrl.content = window.location.origin + BASE_PATH + p.id + '/';
 }
 
 function resetMetaTags() {
