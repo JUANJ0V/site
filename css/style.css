@@ -2018,25 +2018,76 @@
     #google_translate_element {
       display: inline-block;
       vertical-align: middle;
+      line-height: 1;
+    }
+    #google_translate_element .goog-te-gadget {
+      font-size: 0;
+      line-height: 0;
     }
     #google_translate_element .goog-te-gadget-simple {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.15);
+      background: transparent !important;
+      border: 1px solid rgba(255,255,255,0.15) !important;
       border-radius: 4px;
-      padding: 3px 8px;
-      font-size: 0.65rem;
+      padding: 3px 6px !important;
+      font-size: 0.65rem !important;
+      line-height: 1.4 !important;
+      display: inline-flex !important;
+      align-items: center;
+      gap: 2px;
     }
-    #google_translate_element .goog-te-gadget-simple .goog-te-menu-value {
-      color: var(--text);
-    }
-    #google_translate_element .goog-te-gadget-simple .goog-te-menu-value span {
-      color: var(--text) !important;
-    }
-    #google_translate_element .goog-te-gadget-simple .goog-te-menu-value span:last-child {
-      color: var(--gold) !important;
+    #google_translate_element .goog-te-gadget-simple:hover {
+      border-color: var(--gold) !important;
     }
     #google_translate_element .goog-te-gadget-icon {
-      display: none;
+      display: none !important;
+    }
+    #google_translate_element .goog-te-menu-value {
+      font-family: inherit !important;
+      color: var(--text) !important;
+      text-decoration: none !important;
+      white-space: nowrap;
+    }
+    #google_translate_element .goog-te-menu-value span {
+      color: var(--text) !important;
+      font-size: 0.65rem !important;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    #google_translate_element .goog-te-menu-value span:last-child {
+      color: var(--gold) !important;
+      border-left: none !important;
+      margin-left: 2px;
+    }
+    /* Dropdown menu styling - Google appends this to the body */
+    .goog-te-menu-frame {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+    }
+    .goog-te-menu2 {
+      background: var(--card, #1a1f3a) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      border-radius: 8px !important;
+      padding: 4px 0 !important;
+    }
+    .goog-te-menu2 table,
+    .goog-te-menu2 td,
+    .goog-te-menu2 tr {
+      background: transparent !important;
+      border: none !important;
+    }
+    .goog-te-menu2 a {
+      font-family: inherit !important;
+      font-size: 0.75rem !important;
+      color: var(--text, #fff) !important;
+      padding: 6px 16px !important;
+      text-decoration: none !important;
+      display: block !important;
+    }
+    .goog-te-menu2 a:hover {
+      background: rgba(212, 175, 55, 0.1) !important;
+    }
+    .goog-te-menu2 .goog-te-menu2-item-selected a {
+      color: var(--gold, #d4af37) !important;
+      font-weight: 600 !important;
     }
     /* Hide the Google Translate attribution banner */
     .goog-te-banner-frame.skiptranslate { display: none !important; }
