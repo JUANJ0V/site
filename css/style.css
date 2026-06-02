@@ -1328,34 +1328,6 @@
       right: 6px !important;
     }
 
-    /* ── LANGUAGE TOGGLE ── */
-    .lang-toggle {
-      display: flex;
-      gap: 2px;
-      margin-left: 0.5rem;
-    }
-    .lang-btn {
-      background: none;
-      border: 1px solid rgba(255,255,255,0.25);
-      color: rgba(255,255,255,0.5);
-      font-size: 0.7rem;
-      font-weight: 600;
-      padding: 2px 6px;
-      border-radius: 3px;
-      cursor: pointer;
-      font-family: inherit;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      transition: all 0.2s;
-      line-height: 1.4;
-    }
-    .lang-btn:hover { border-color: var(--gold); color: var(--gold); }
-    .lang-btn.active { color: var(--gold); border-color: var(--gold); }
-    .mobile-lang { padding: 1rem 1.25rem 0; }
-    .mobile-lang .lang-toggle { margin-left: 0; }
-    .mobile-lang { padding: 1rem 1.25rem 0; }
-    .mobile-lang .lang-toggle { margin-right: 0; }
-
     /* ── FAVORITE BUTTON ── */
     .fav-btn {
       position: absolute;
@@ -2041,3 +2013,31 @@
     .fin-highlight { color: var(--gold); }
     [data-theme="dark"] .fin-form,
     [data-theme="dark"] .fin-result { background: var(--card); }
+
+    /* ── GOOGLE TRANSLATE ── */
+    #google_translate_element {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    #google_translate_element .goog-te-gadget-simple {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 0.65rem;
+    }
+    #google_translate_element .goog-te-gadget-simple .goog-te-menu-value {
+      color: var(--text);
+    }
+    #google_translate_element .goog-te-gadget-simple .goog-te-menu-value span {
+      color: var(--text) !important;
+    }
+    #google_translate_element .goog-te-gadget-simple .goog-te-menu-value span:last-child {
+      color: var(--gold) !important;
+    }
+    #google_translate_element .goog-te-gadget-icon {
+      display: none;
+    }
+    /* Hide the Google Translate attribution banner */
+    .goog-te-banner-frame.skiptranslate { display: none !important; }
+    body { top: 0 !important; }

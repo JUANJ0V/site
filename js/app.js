@@ -1,33 +1,45 @@
-/* ===== TRANSLATION HELPER ===== */
-function _cardT() {
-  try {
-    var lang = window._lang || 'pt';
-    var ct = (typeof TRANSLATIONS !== 'undefined' && TRANSLATIONS.cards) || {};
-    return ct[lang] || ct.pt || {};
-  } catch(e) { return {}; }
-}
-function _transData(key) {
-  try {
-    var lang = window._lang || 'pt';
-    var d = (typeof TRANSLATIONS !== 'undefined' && TRANSLATIONS[key]) || {};
-    return d[lang] || d.pt || [];
-  } catch(e) { return []; }
-}
-function _propT(id) {
-  try {
-    var lang = window._lang || 'pt';
-    if (lang === 'pt') return null;
-    var pt = (typeof PROPERTIES_TRANSLATIONS !== 'undefined' && PROPERTIES_TRANSLATIONS[id]) || {};
-    return pt[lang] || null;
-  } catch(e) { return null; }
-}
-function _empT(id) {
-  try {
-    var lang = window._lang || 'pt';
-    if (lang === 'pt') return null;
-    var et = (typeof EMPREENDIMENTOS_TRANSLATIONS !== 'undefined' && EMPREENDIMENTOS_TRANSLATIONS[id]) || {};
-    return et[lang] || null;
-  } catch(e) { return null; }
+/* ===== CARD LABELS (Portuguese) ===== */
+var _cardLabels = {
+  sale: "Venda",
+  rent: "Aluguel",
+  launch: "Lan\u00E7amento",
+  beds: "quarto",
+  baths: "banheiro",
+  garage: "vaga",
+  features: "Caracter\u00EDsticas",
+  description: "Descri\u00E7\u00E3o",
+  galleryAria: "Galeria de imagens",
+  galleryClose: "Fechar galeria",
+  galleryPrev: "Anterior",
+  galleryNext: "Pr\u00F3ximo",
+  galleryDetails: "Detalhes",
+  zone: "Zona",
+  whatsapp: "Tenho interesse neste im\u00F3vel",
+  readMore: "Ler mais",
+  by: "por",
+  backToBlog: "\u2190 Voltar ao blog",
+  viewAll: "Ver todos",
+  viewDetails: "Ver detalhes",
+  noneAvailable: "Nenhum dispon\u00EDvel",
+  finError: "Preencha todos os campos.",
+  finObs: "* Valores aproximados. Procure um banco para simula\u00E7\u00E3o oficial.",
+  linkCopied: "Link copiado!",
+  sale2: "Venda",
+  rent2: "Aluguel",
+  copyright: "Todos os direitos reservados."
+};
+function _cardT() { return _cardLabels; }
+function _transData() { return []; }
+function _propT() { return null; }
+function _empT() { return null; }
+function _t(section) {
+  if (section === 'sections') return {
+    clear: 'Limpar',
+    noResultsSale: 'Nenhum im\u00F3vel \u00E0 venda encontrado',
+    noResultsRent: 'Nenhum im\u00F3vel para alugar encontrado',
+    noResultsLanc: 'Nenhum lan\u00E7amento encontrado nesta regi\u00E3o'
+  };
+  return {};
 }
 
 // Handle initial redirect from 404.html (GitHub Pages SPA fallback)
@@ -468,8 +480,7 @@ function renderFavorites() {
   if (!container) return;
   var favs = getFavs();
   var html = '';
-  var secT = window._lang ? (TRANSLATIONS.sections || {})[window._lang] : null;
-  var emptyMsg = secT && secT.favEmpty ? secT.favEmpty : 'Nenhum im\u00F3vel favoritado ainda.';
+  var emptyMsg = 'Nenhum im\u00F3vel favoritado ainda.';
   for (var fi = 0; fi < favs.length; fi++) {
     var p = null;
     for (var pj = 0; pj < PROPERTIES.length; pj++) {
@@ -495,10 +506,8 @@ function renderBlogCards() {
   var html = '';
   for (var bi = 0; bi < BLOG_POSTS.length; bi++) {
     var post = BLOG_POSTS[bi];
-    var lang = window._lang || 'pt';
-    var blogT = (typeof BLOG_TRANSLATIONS !== 'undefined' && BLOG_TRANSLATIONS[post.id] && BLOG_TRANSLATIONS[post.id][lang]) || null;
-    var blogTitle = (blogT && blogT.title) || post.title;
-    var blogExcerpt = (blogT && blogT.excerpt) || post.excerpt;
+    var blogTitle = post.title;
+    var blogExcerpt = post.excerpt;
     html += '<a href="/' + post.id + '/" class="blog-card">'
       + '<div class="blog-img"><img src="' + post.image + '" alt="' + blogTitle.replace(/"/g, '&quot;') + '" loading="lazy" /></div>'
       + '<div class="blog-body">'
@@ -523,14 +532,12 @@ function renderBlogPost(postId) {
   }
   if (!post) return;
   // Update meta tags for blog post
+  var blogContent = post.content;
+  var blogTitle = post.title;
   var ttl = document.querySelector('title');
   if (ttl) ttl.textContent = blogTitle + ' \u2014 ' + SITE_NAME;
   var ogU = document.querySelector('meta[property="og:url"]');
   if (ogU) ogU.content = window.location.origin + '/' + postId + '/';
-  var lang = window._lang || 'pt';
-  var blogT = (typeof BLOG_TRANSLATIONS !== 'undefined' && BLOG_TRANSLATIONS[post.id] && BLOG_TRANSLATIONS[post.id][lang]) || null;
-  var blogContent = (blogT && blogT.content) || post.content;
-  var blogTitle = (blogT && blogT.title) || post.title;
   function renderContent(text) {
     return text.split('\n\n').map(function(b) {
       if (/^###\s/.test(b)) return '<h3>' + b.replace(/^###\s+/, '') + '</h3>';
@@ -1213,207 +1220,6 @@ function calcFinancing() {
   document.querySelector('#finResult .fin-obs').textContent = _cardT().finObs || '* Simula\u00E7\u00E3o com taxa fixa de juros. Valores aproximados sujeitos a aprova\u00E7\u00E3o de cr\u00E9dito.';
 }
 
-function reTranslateCards() {
-  var hash = getSectionId();
-  if (hash === 'comprar' || (document.getElementById('comprar') && document.getElementById('comprar').classList.contains('active'))) {
-    renderPropertyCards('#comprar .grid-3', 'sale');
-    var ct = _cardT();
-    document.querySelectorAll('#comprar .section-search input[placeholder]').forEach(function(i) { if (ct.priceMax) i.placeholder = ct.priceMax; });
-  }
-  if (hash === 'alugar' || (document.getElementById('alugar') && document.getElementById('alugar').classList.contains('active'))) {
-    renderPropertyCards('#alugar .grid-2', 'rent');
-    var ct = _cardT();
-    document.querySelectorAll('#alugar .section-search input[placeholder]').forEach(function(i) { if (ct.priceMax) i.placeholder = ct.priceMax; });
-  }
-  if (hash === 'lancamentos' || (document.getElementById('lancamentos') && document.getElementById('lancamentos').classList.contains('active'))) {
-    renderEmpreendimentoCards();
-  }
-  if (hash === 'favoritos' || (document.getElementById('favoritos') && document.getElementById('favoritos').classList.contains('active'))) {
-    renderFavorites();
-  }
-  if (hash === 'blog' || (document.getElementById('blog') && document.getElementById('blog').classList.contains('active'))) {
-    renderBlogCards();
-  }
-  // Blog detail
-  if (hash.indexOf('post-') === 0) {
-    var blogDetail = document.getElementById(hash);
-    if (blogDetail) {
-      var ct = _cardT();
-      var backLink = blogDetail.querySelector('.blog-detail-back a');
-      if (backLink) backLink.innerHTML = '&larr; ' + ct.backToBlog;
-      var authorEl = blogDetail.querySelector('.blog-detail-author');
-      if (authorEl) {
-        var post = null;
-        for (var bi = 0; bi < BLOG_POSTS.length; bi++) {
-          if (BLOG_POSTS[bi].id === hash) { post = BLOG_POSTS[bi]; break; }
-        }
-        authorEl.textContent = ct.by + ' ' + (post ? post.author || 'Su Imobili\u00E1ria' : 'Su Imobili\u00E1ria');
-      }
-      // Translate title and content
-      var lang = window._lang || 'pt';
-      var blogT = (typeof BLOG_TRANSLATIONS !== 'undefined' && BLOG_TRANSLATIONS[hash] && BLOG_TRANSLATIONS[hash][lang]) || null;
-      if (blogT) {
-        var h1 = blogDetail.querySelector('.blog-detail-header h1');
-        if (h1 && blogT.title) h1.textContent = blogT.title;
-        if (blogT.content) {
-          var contentDiv = blogDetail.querySelector('.blog-detail-content');
-          if (contentDiv) {
-            var pars = blogT.content.split('\n\n');
-            var dh = '';
-            for (var d = 0; d < pars.length; d++) {
-              var b = pars[d];
-              if (/^###\s/.test(b)) dh += '<h3>' + b.replace(/^###\s+/, '') + '</h3>';
-              else if (/^##\s/.test(b)) dh += '<h2>' + b.replace(/^##\s+/, '') + '</h2>';
-              else dh += '<p>' + b + '</p>';
-            }
-            contentDiv.innerHTML = dh;
-          }
-        }
-      }
-    }
-  }
-  // Detail card (property)
-  if (hash.indexOf('prop-') === 0) {
-    var detailEl = document.getElementById(hash);
-    if (detailEl) {
-      var ct = _cardT();
-      detailEl.querySelectorAll('.detail-back a').forEach(function(a) {
-        a.innerHTML = '&larr; ' + ct.otherProperties;
-      });
-      var bodyH2 = detailEl.querySelector('.detail-body h2');
-      if (bodyH2) bodyH2.textContent = ct.aboutProperty;
-      var featuresH3 = detailEl.querySelector('.detail-features h3');
-      if (featuresH3) featuresH3.textContent = ct.features;
-      var scheduleBtn = detailEl.querySelector('.detail-actions a.btn-primary');
-      if (scheduleBtn) scheduleBtn.textContent = ct.scheduleVisit;
-      detailEl.querySelectorAll('.detail-actions a.btn-gold-outline').forEach(function(a) {
-        if (a.getAttribute('target') === '_blank') {
-          if (a.textContent !== ct.otherProperties) a.textContent = ct.viewOnMap;
-        }
-      });
-      var shareBtn = detailEl.querySelector('.detail-actions .btn-share');
-      if (shareBtn) shareBtn.textContent = ct.share;
-      // Property stats labels
-      detailEl.querySelectorAll('.detail-rows .lbl').forEach(function(lbl) {
-        var txt = lbl.textContent.trim().toLowerCase();
-        var map = { quartos: ct.bedrooms, quarto: ct.bedroom, banheiros: ct.bathrooms, banheiro: ct.bathroom, vagas: ct.parkings, vaga: ct.parking, 'm\u00B2': ct.sqm, frente: ct.front, fundos: ct.backs, zona: ct.zone, \u00e1rea: ct.sqm };
-        if (map[txt]) lbl.textContent = map[txt].charAt(0).toUpperCase() + map[txt].slice(1);
-      });
-      // Property title, description, features re-translation
-      var pT = _propT(hash);
-      if (pT) {
-        if (pT.title) {
-          var detailH1 = detailEl.querySelector('.detail-breadcrumb h1');
-          if (detailH1) detailH1.textContent = pT.title;
-        }
-        if (pT.description) {
-          var detailDesc = detailEl.querySelector('.detail-body');
-          if (detailDesc) {
-            var paras = pT.description.split('\n\n');
-            var dh = '';
-            for (var d = 0; d < paras.length; d++) { dh += '<p>' + paras[d] + '</p>'; }
-            detailDesc.innerHTML = dh;
-          }
-        }
-        if (pT.features) {
-          var featList = detailEl.querySelector('.detail-features ul');
-          if (featList) {
-            var fh = '';
-            for (var f = 0; f < pT.features.length; f++) { fh += '<li>' + pT.features[f] + '</li>'; }
-            featList.innerHTML = fh;
-          }
-        }
-      }
-    }
-  }
-  // Empreendimento detail
-  if (hash.indexOf('emp-') === 0) {
-    var empEl = document.getElementById(hash);
-    if (empEl) {
-      var ct = _cardT();
-      var empBack = empEl.querySelector('.emp-header ~ .container a.btn-primary');
-      if (!empBack) empBack = empEl.querySelector('a.btn-primary');
-      if (empBack) empBack.textContent = ct.wantToKnow;
-      var h3s = empEl.querySelectorAll('.emp-info h3');
-      var h3Labels = [ct.aboutDevelopment, ct.floorPlans, ct.constructionTimeline, ct.amenities, ct.priceTable, ct.paymentTerms];
-      h3s.forEach(function(h3, idx) {
-        if (h3Labels[idx]) h3.textContent = h3Labels[idx];
-      });
-      var ths = empEl.querySelectorAll('.price-table thead th');
-      var thLabels = [ct.unit, ct.area, ct.value];
-      ths.forEach(function(th, idx) {
-        if (thLabels[idx]) th.textContent = thLabels[idx];
-      });
-      // Re-translate description, tags, timeline, amenities, payment
-      var eT = _empT(hash);
-      if (eT) {
-        var empHeader = empEl.querySelector('.emp-header');
-        if (empHeader && eT.description) {
-          var paras = eT.description.split('\n\n');
-          var pEls = empHeader.querySelectorAll('p');
-          if (pEls.length > 0) pEls[pEls.length - 1].textContent = paras[0];
-        }
-        if (eT.description) {
-          var empInfo = empEl.querySelector('.emp-info > div:first-child');
-          if (empInfo) {
-            var descParas = eT.description.split('\n\n');
-            var descHtml = '';
-            for (var d = 1; d < descParas.length; d++) { descHtml += '<p>' + descParas[d] + '</p>'; }
-            var existingDesc = empInfo.querySelector('h3');
-            if (existingDesc) {
-              var next = existingDesc.nextElementSibling;
-              while (next && next.tagName !== 'H3') {
-                var toRemove = next;
-                next = next.nextElementSibling;
-                toRemove.remove();
-              }
-              existingDesc.insertAdjacentHTML('afterend', descHtml);
-            }
-          }
-        }
-        if (eT.tags) {
-          var tagContainer = empEl.querySelector('.emp-tags');
-          if (tagContainer) {
-            var tagClasses = ['emp-tag-red', 'emp-tag-gold', 'emp-tag-deep'];
-            var th = '';
-            for (var t = 0; t < eT.tags.length; t++) {
-              th += '<span class="emp-tag ' + tagClasses[t % 3] + '">' + eT.tags[t] + '</span>';
-            }
-            tagContainer.innerHTML = th;
-          }
-        }
-        if (eT.timeline) {
-          var tlContainer = empEl.querySelector('.timeline');
-          if (tlContainer) {
-            var tlh = '';
-            for (var tl = 0; tl < eT.timeline.length; tl++) {
-              tlh += '<div class="tl-item"><p class="tl-date">' + eT.timeline[tl].date + '</p><p class="tl-title">' + eT.timeline[tl].title + '</p><p class="tl-desc">' + eT.timeline[tl].desc + '</p></div>';
-            }
-            tlContainer.innerHTML = tlh;
-          }
-        }
-        if (eT.amenities) {
-          var amContainer = empEl.querySelector('.amenities');
-          if (amContainer) {
-            var amh = '';
-            for (var a = 0; a < eT.amenities.length; a++) { amh += '<li>' + eT.amenities[a] + '</li>'; }
-            amContainer.innerHTML = amh;
-          }
-        }
-        if (eT.payment) {
-          var pmContainer = empEl.querySelector('.payment-plan');
-          if (pmContainer) {
-            var pmh = '';
-            for (var pp = 0; pp < eT.payment.length; pp++) {
-              pmh += '<div><p class="pp-label">' + eT.payment[pp].label + '</p><p class="pp-value">' + eT.payment[pp].value + '</p></div>';
-            }
-            pmContainer.innerHTML = pmh;
-          }
-        }
-      }
-    }
-  }
-}
 
 /* ===== SHARE ===== */
 function shareProperty(propId) {
@@ -1464,7 +1270,9 @@ function clearSearch() {
   document.getElementById('search-location').value = '';
   document.getElementById('search-price').value = '';
   document.getElementById('search-purpose').value = '';
-  goTo(prevPurpose === 'rent' ? 'alugar' : 'comprar');
+  var target = prevPurpose === 'rent' ? 'alugar' : 'comprar';
+  if (DISABLED_SECTIONS && DISABLED_SECTIONS.indexOf(target) !== -1) target = 'comprar';
+  goTo(target);
 }
 
 /* ===== SECTION-SPECIFIC SEARCH ===== */
@@ -1685,11 +1493,9 @@ function handleSearch() {
     }
   }
 
-  if (showSale) {
-    goTo('comprar');
-  } else {
-    goTo('alugar');
-  }
+  var target = showSale ? 'comprar' : 'alugar';
+  if (DISABLED_SECTIONS && DISABLED_SECTIONS.indexOf(target) !== -1) target = 'comprar';
+  goTo(target);
 }
 
 /* ===== SEO META TAGS ===== */

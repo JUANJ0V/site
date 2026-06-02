@@ -45,35 +45,34 @@
   <nav class="container" role="navigation" aria-label="Navegação principal">
     <a href="/" class="site-logo">Su <span>Imobiliária</span></a>
     <ul class="nav-list" id="navList">
-      <li><a href="/" class="active" aria-current="page" data-i18n="nav.inicio">Início</a></li>
-      <li class="nav-dropdown" id="navDropComprar"><a href="/comprar/" data-i18n="nav.comprar">Comprar</a><div class="dd-menu" id="ddComprar"></div></li>
-      <li class="nav-dropdown" id="navDropAlugar"><a href="/alugar/" data-i18n="nav.alugar">Alugar</a><div class="dd-menu" id="ddAlugar"></div></li>
-      <li class="nav-dropdown" id="navDropLanc"><a href="/lancamentos/" data-i18n="nav.lancamentos">Lançamentos</a><div class="dd-menu" id="ddLanc"></div></li>
-      <li><a href="/financiamento/" data-i18n="nav.financiamento">Financiamento</a></li>
-      <li><a href="/mapa/" data-i18n="nav.mapa">Mapa</a></li>
-      <li><a href="/blog/" data-i18n="nav.blog">Blog</a></li>
-      <li><a href="/favoritos/" data-i18n="nav.favoritos">Favoritos</a></li>
+      <li><a href="/" class="active" aria-current="page">Início</a></li>
+      <li class="nav-dropdown" id="navDropComprar"><a href="/comprar/">Comprar</a><div class="dd-menu" id="ddComprar"></div></li>
+      <li class="nav-dropdown" id="navDropAlugar"><a href="/alugar/">Alugar</a><div class="dd-menu" id="ddAlugar"></div></li>
+      <li class="nav-dropdown" id="navDropLanc"><a href="/lancamentos/">Lançamentos</a><div class="dd-menu" id="ddLanc"></div></li>
+      <li><a href="/financiamento/">Financiamento</a></li>
+      <li><a href="/mapa/">Mapa</a></li>
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href="/favoritos/">Favoritos</a></li>
     </ul>
-    <a href="/contato/" class="nav-cta nav-whatsapp-cta" data-whatsapp-msg="Olá, gostaria de falar com a Su Imobiliária." data-i18n="nav.falemos">Fale conosco</a>
+    <a href="/contato/" class="nav-cta nav-whatsapp-cta" data-whatsapp-msg="Olá, gostaria de falar com a Su Imobiliária.">Fale conosco</a>
     <div class="nav-actions">
       <div class="nav-social" id="navSocial"></div>
       <button class="theme-toggle" aria-label="Alternar modo escuro">🌙</button>
-      <div class="lang-toggle" id="langToggle"></div>
+      <div id="google_translate_element"></div>
     </div>
     <span class="menu-btn" role="button" tabindex="0" aria-label="Abrir menu">☰</span>
   </nav>
   <div class="nav-overlay" id="mobileNav" role="dialog" aria-label="Menu de navegação">
     <button class="close-btn" onclick="document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''" aria-label="Fechar menu">✕</button>
-    <a href="/" data-i18n="nav.inicio">Início</a>
-    <div class="mob-drop-wrap" id="mobDropComprar"><a href="/comprar/" data-i18n="nav.comprar">Comprar</a><div class="mob-dd-body" id="mobDdComprar"></div></div>
-    <div class="mob-drop-wrap" id="mobDropAlugar"><a href="/alugar/" data-i18n="nav.alugar">Alugar</a><div class="mob-dd-body" id="mobDdAlugar"></div></div>
-    <div class="mob-drop-wrap" id="mobDropLanc"><a href="/lancamentos/" data-i18n="nav.lancamentos">Lançamentos</a><div class="mob-dd-body" id="mobDdLanc"></div></div>
-    <a href="/financiamento/" data-i18n="nav.financiamento">Financiamento</a>
-    <a href="/mapa/" data-i18n="nav.mapa">Mapa</a>
-    <a href="/blog/" data-i18n="nav.blog">Blog</a>
-    <a href="/favoritos/" data-i18n="nav.favoritos">Favoritos</a>
+    <a href="/">Início</a>
+    <div class="mob-drop-wrap" id="mobDropComprar"><a href="/comprar/">Comprar</a><div class="mob-dd-body" id="mobDdComprar"></div></div>
+    <div class="mob-drop-wrap" id="mobDropAlugar"><a href="/alugar/">Alugar</a><div class="mob-dd-body" id="mobDdAlugar"></div></div>
+    <div class="mob-drop-wrap" id="mobDropLanc"><a href="/lancamentos/">Lançamentos</a><div class="mob-dd-body" id="mobDdLanc"></div></div>
+    <a href="/financiamento/">Financiamento</a>
+    <a href="/mapa/">Mapa</a>
+    <a href="/blog/">Blog</a>
+    <a href="/favoritos/">Favoritos</a>
     <div class="mobile-social" id="mobileSocial"></div>
-    <div class="mobile-lang" id="mobileLang"></div>
   </div>
 </header>
 
@@ -85,9 +84,9 @@
     </div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
-      <p class="eyebrow" style="margin-bottom:1.5rem;" data-i18n="hero.eyebrow">Seu lar começa aqui</p>
-      <h1 data-i18n="hero.title">Encontre o imóvel perfeito para você.</h1>
-      <p data-i18n="hero.subtitle">Mais de 500 imóveis à venda e aluguel. Acompanhamos você em cada passo para encontrar o lar que sempre sonhou.</p>
+      <p class="eyebrow" style="margin-bottom:1.5rem;">Seu lar começa aqui</p>
+      <h1>Encontre o imóvel perfeito para você.</h1>
+      <p>Mais de 500 imóveis à venda e aluguel. Acompanhamos você em cada passo para encontrar o lar que sempre sonhou.</p>
       <div class="hero-search">
         <form class="hero-search-inner" onsubmit="handleSearch();return false;">
           <select id="search-type" aria-label="Tipo de imóvel">
@@ -100,12 +99,12 @@
             <option value="">Todos os imóveis</option>
           </select>
           <input id="search-price" type="number" placeholder="Preço máximo" aria-label="Preço máximo" min="0" step="10000" />
-          <button type="submit" data-i18n="hero.searchBtn">Buscar</button>
+          <button type="submit">Buscar</button>
         </form>
       </div>
       <div class="hero-actions">
-        <a href="/comprar/" class="btn-primary" data-i18n="hero.seeProps">Ver imóveis</a>
-        <a href="/contato/" class="btn-outline nav-whatsapp-cta" data-whatsapp-msg="Olá, gostaria de pedir uma consultoria sobre imóveis." data-i18n="hero.consult">Pedir consultoria</a>
+        <a href="/comprar/" class="btn-primary">Ver imóveis</a>
+        <a href="/contato/" class="btn-outline nav-whatsapp-cta" data-whatsapp-msg="Olá, gostaria de pedir uma consultoria sobre imóveis.">Pedir consultoria</a>
       </div>
     </div>
     <div class="hero-nav" id="heroNav"></div>
@@ -116,16 +115,16 @@
     <div class="container reveal">
       <div class="about-grid">
         <div>
-          <p class="eyebrow" style="margin-bottom:1.5rem;" data-i18n="sections.sobre">Quem somos</p>
+          <p class="eyebrow" style="margin-bottom:1.5rem;">Quem somos</p>
           <div class="gold-rule" style="margin-bottom:2rem;"></div>
-          <h2 style="font-size:2.25rem;color:var(--text);line-height:1.2;" data-i18n="sections.sobreTitle">Mais de 15 anos assessorando famílias e empresas.</h2>
+          <h2 style="font-size:2.25rem;color:var(--text);line-height:1.2;">Mais de 15 anos assessorando famílias e empresas.</h2>
           <div class="about-stats" id="aboutStats"></div>
         </div>
         <div class="about-text">
-          <p data-i18n="sections.sobreP1">A <strong>Su Imobiliária</strong> nasceu em Balneário Camboriú com uma missão clara: transformar a experiência de comprar, vender ou alugar um imóvel em algo transparente, seguro e humano.</p>
-          <p data-i18n="sections.sobreP2">Ao longo de mais de 15 anos, construímos uma sólida trajetória assessorando famílias, investidores e empresas em todo o litoral catarinense. Cada operação é tratada com a dedicação e o profissionalismo que nos caracterizam.</p>
-          <p data-i18n="sections.sobreP3">Nossa equipe combina conhecimento profundo do mercado imobiliário local com uma rede consolidada de parceiros — bancos, cartórios, avaliadores e construtoras — para garantir resultados consistentes em qualquer tipo de operação.</p>
-          <a href="/contato/" class="about-link" data-i18n="sections.sobreLink">Agende uma visita →</a>
+          <p>A <strong>Su Imobiliária</strong> nasceu em Balneário Camboriú com uma missão clara: transformar a experiência de comprar, vender ou alugar um imóvel em algo transparente, seguro e humano.</p>
+          <p>Ao longo de mais de 15 anos, construímos uma sólida trajetória assessorando famílias, investidores e empresas em todo o litoral catarinense. Cada operação é tratada com a dedicação e o profissionalismo que nos caracterizam.</p>
+          <p>Nossa equipe combina conhecimento profundo do mercado imobiliário local com uma rede consolidada de parceiros — bancos, cartórios, avaliadores e construtoras — para garantir resultados consistentes em qualquer tipo de operação.</p>
+          <a href="/contato/" class="about-link">Agende uma visita →</a>
         </div>
       </div>
     </div>
@@ -135,9 +134,9 @@
   <section id="comprar">
     <div class="container">
       <div class="section-header">
-        <p class="eyebrow" data-i18n="sections.comprar">Imóveis à venda</p>
+        <p class="eyebrow">Imóveis à venda</p>
         <div class="gold-rule"></div>
-        <h2 data-i18n="sections.comprarTitle">Encontre o imóvel ideal para comprar</h2>
+        <h2>Encontre o imóvel ideal para comprar</h2>
       </div>
       <form class="section-search" onsubmit="handleComprarSearch();return false;">
         <select id="comprar-type" aria-label="Tipo de imóvel"><option value="">Tipo</option></select>
@@ -154,9 +153,9 @@
   <section id="alugar">
     <div class="container">
       <div class="section-header">
-        <p class="eyebrow" data-i18n="sections.alugar">Imóveis para alugar</p>
+        <p class="eyebrow">Imóveis para alugar</p>
         <div class="gold-rule"></div>
-        <h2 data-i18n="sections.alugarTitle">As melhores opções de aluguel</h2>
+        <h2>As melhores opções de aluguel</h2>
       </div>
       <form class="section-search" onsubmit="handleAlugarSearch();return false;">
         <select id="alugar-type" aria-label="Tipo de imóvel"><option value="">Tipo</option></select>
@@ -173,9 +172,9 @@
   <section id="lancamentos">
     <div class="container">
       <div class="section-header">
-        <p class="eyebrow" data-i18n="sections.lancamentos">Lançamentos</p>
+        <p class="eyebrow">Lançamentos</p>
         <div class="gold-rule"></div>
-        <h2 data-i18n="sections.lancamentosTitle">Empreendimentos exclusivos</h2>
+        <h2>Empreendimentos exclusivos</h2>
       </div>
       <form class="section-search" onsubmit="handleLancSearch();return false;">
         <select id="lanc-location" aria-label="Localização"><option value="">Localização</option></select>
@@ -190,26 +189,26 @@
   <section id="servicos">
     <div class="container reveal">
       <div class="section-header">
-        <p class="eyebrow" data-i18n="sections.servicos">Serviços</p>
+        <p class="eyebrow">Serviços</p>
         <div class="gold-rule"></div>
-        <h2 data-i18n="sections.servicosTitle">Tudo que você precisa em um só lugar</h2>
+        <h2>Tudo que você precisa em um só lugar</h2>
       </div>
       <div class="grid-2" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));">
         <div class="service-card" data-service="0">
-          <h3 data-i18n="servicos.0.title">Comprar</h3>
-          <p data-i18n="servicos.0.desc">Assessoria completa para compra de imóveis residenciais e comerciais. Análise de documentação, negociação e financiamento.</p>
+          <h3>Comprar</h3>
+          <p>Assessoria completa para compra de imóveis residenciais e comerciais. Análise de documentação, negociação e financiamento.</p>
         </div>
         <div class="service-card" data-service="1">
-          <h3 data-i18n="servicos.1.title">Alugar</h3>
-          <p data-i18n="servicos.1.desc">Gestão de locação com segurança jurídica. Seleção de inquilinos, contratos e acompanhamento durante todo o período.</p>
+          <h3>Alugar</h3>
+          <p>Gestão de locação com segurança jurídica. Seleção de inquilinos, contratos e acompanhamento durante todo o período.</p>
         </div>
         <div class="service-card" data-service="2">
-          <h3 data-i18n="servicos.2.title">Vender</h3>
-          <p data-i18n="servicos.2.desc">Estratégias de marketing e precificação para vender seu imóvel mais rápido e pelo melhor valor de mercado.</p>
+          <h3>Vender</h3>
+          <p>Estratégias de marketing e precificação para vender seu imóvel mais rápido e pelo melhor valor de mercado.</p>
         </div>
         <div class="service-card" data-service="3">
-          <h3 data-i18n="servicos.3.title">Avaliação</h3>
-          <p data-i18n="servicos.3.desc">Laudo de avaliação imobiliária com metodologia reconhecida pelo mercado. Ideal para financiamento, inventário ou venda.</p>
+          <h3>Avaliação</h3>
+          <p>Laudo de avaliação imobiliária com metodologia reconhecida pelo mercado. Ideal para financiamento, inventário ou venda.</p>
         </div>
       </div>
     </div>
@@ -226,9 +225,9 @@
   <section id="depoimentos" class="bg-cream">
     <div class="container reveal">
       <div class="section-header">
-        <p class="eyebrow" data-i18n="sections.depoimentos">Depoimentos</p>
+        <p class="eyebrow">Depoimentos</p>
         <div class="gold-rule"></div>
-        <h2 data-i18n="sections.depoimentosTitle">O que nossos clientes dizem</h2>
+        <h2>O que nossos clientes dizem</h2>
       </div>
       <div class="grid-3" id="depoimentos-list"></div>
     </div>
@@ -238,9 +237,9 @@
   <section id="parceiros">
     <div class="container reveal">
       <div class="section-header">
-        <p class="eyebrow" data-i18n="sections.parceiros">Parceiros</p>
+        <p class="eyebrow">Parceiros</p>
         <div class="gold-rule"></div>
-        <h2 data-i18n="sections.parceirosTitle">Instituições que confiam em nós</h2>
+        <h2>Instituições que confiam em nós</h2>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:2rem;align-items:center;justify-items:center;padding:2rem 0;" id="parceiros-list"></div>
     </div>
@@ -250,12 +249,12 @@
   <section id="favoritos">
     <div class="container">
       <div class="section-header">
-        <p class="eyebrow" id="sectionFavEyebrow" data-i18n="sections.favoritos">Favoritos</p>
+        <p class="eyebrow" id="sectionFavEyebrow">Favoritos</p>
         <div class="gold-rule"></div>
-        <h2 id="sectionFavTitle" data-i18n="sections.favoritosTitle">Meus imóveis favoritos</h2>
+        <h2 id="sectionFavTitle">Meus imóveis favoritos</h2>
       </div>
       <div class="grid-3" id="fav-cards">
-        <p class="fav-empty" id="favEmptyMsg" data-i18n="sections.favEmpty" style="grid-column:1/-1;text-align:center;color:var(--text);padding:3rem 0;">Nenhum imóvel favoritado ainda.</p>
+        <p class="fav-empty" id="favEmptyMsg" style="grid-column:1/-1;text-align:center;color:var(--text);padding:3rem 0;">Nenhum imóvel favoritado ainda.</p>
       </div>
     </div>
   </section>
@@ -264,9 +263,9 @@
   <section id="blog">
     <div class="container">
       <div class="section-header">
-        <p class="eyebrow" id="sectionBlogEyebrow" data-i18n="sections.blog">Blog</p>
+        <p class="eyebrow" id="sectionBlogEyebrow">Blog</p>
         <div class="gold-rule"></div>
-        <h2 id="sectionBlogTitle" data-i18n="sections.blogTitle">Últimas do blog</h2>
+        <h2 id="sectionBlogTitle">Últimas do blog</h2>
       </div>
       <div class="blog-grid" id="blog-cards"></div>
     </div>
@@ -275,8 +274,8 @@
   <!-- MAPA -->
   <section id="mapa" class="section-mapa">
     <div class="container">
-      <p class="eyebrow" id="sectionMapaEyebrow" data-i18n="sections.mapa">Mapa de Imóveis</p>
-      <h2 class="section-title" id="sectionMapaTitle" data-i18n="sections.mapaTitle">Encontre no mapa</h2>
+      <p class="eyebrow" id="sectionMapaEyebrow">Mapa de Imóveis</p>
+      <h2 class="section-title" id="sectionMapaTitle">Encontre no mapa</h2>
     </div>
     <div class="map-wrapper" id="mapWrapper">
       <div id="map"></div>
@@ -292,14 +291,14 @@
   <section id="faq">
     <div class="container reveal">
       <div class="section-header">
-        <p class="eyebrow" data-i18n="sections.faq">FAQ</p>
+        <p class="eyebrow">FAQ</p>
         <div class="gold-rule"></div>
-        <h2 data-i18n="sections.faqTitle">Perguntas frequentes</h2>
+        <h2>Perguntas frequentes</h2>
       </div>
       <div class="faq-section" id="faq-list"></div>
       <div class="faq-cta">
-        <p data-i18n="sections.faqCta">Ainda tem dúvidas? </p>
-          <p><a href="/contato/" class="nav-whatsapp-cta" data-whatsapp-msg="Olá, tenho uma dúvida sobre imóveis. Poderiam me ajudar?" data-i18n="sections.faqCtaLink">Fale com a nossa equipe →</a></p>
+        <p>Ainda tem dúvidas? </p>
+          <p><a href="/contato/" class="nav-whatsapp-cta" data-whatsapp-msg="Olá, tenho uma dúvida sobre imóveis. Poderiam me ajudar?">Fale com a nossa equipe →</a></p>
       </div>
     </div>
   </section>
@@ -308,43 +307,43 @@
   <section id="financiamento">
     <div class="container reveal">
       <div class="section-header">
-        <p class="eyebrow" data-i18n="sections.financiamento">Financiamento</p>
+        <p class="eyebrow">Financiamento</p>
         <div class="gold-rule"></div>
-        <h2 data-i18n="sections.financiamentoTitle">Simule seu financiamento imobiliário</h2>
+        <h2>Simule seu financiamento imobiliário</h2>
       </div>
       <div class="fin-simulator" id="finSimulator">
         <div class="fin-form">
           <div style="display:grid;gap:1rem;">
             <div style="display:grid;gap:0.5rem;">
-              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);" data-i18n="sections.finLabelPrice">Valor do imóvel (R$)</label>
+              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);">Valor do imóvel (R$)</label>
               <input type="number" id="fin-price" value="500000" min="50000" step="10000" style="padding:0.75rem 1rem;border:1px solid var(--border);background:var(--cream);font-family:var(--font-sans);font-size:0.9rem;color:var(--text);outline:none;" />
             </div>
             <div style="display:grid;gap:0.5rem;">
-              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);" data-i18n="sections.finLabelDown">Entrada (R$)</label>
+              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);">Entrada (R$)</label>
               <input type="number" id="fin-down" value="100000" min="0" step="5000" style="padding:0.75rem 1rem;border:1px solid var(--border);background:var(--cream);font-family:var(--font-sans);font-size:0.9rem;color:var(--text);outline:none;" />
             </div>
             <div style="display:grid;gap:0.5rem;">
-              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);" data-i18n="sections.finLabelRate">Taxa de juros (% a.a.)</label>
+              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);">Taxa de juros (% a.a.)</label>
               <input type="number" id="fin-rate" value="8.5" min="1" max="20" step="0.1" style="padding:0.75rem 1rem;border:1px solid var(--border);background:var(--cream);font-family:var(--font-sans);font-size:0.9rem;color:var(--text);outline:none;" />
             </div>
             <div style="display:grid;gap:0.5rem;">
-              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);" data-i18n="sections.finLabelTerm">Prazo (meses)</label>
+              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);">Prazo (meses)</label>
               <select id="fin-term" style="padding:0.75rem 1rem;border:1px solid var(--border);background:var(--cream);font-family:var(--font-sans);font-size:0.9rem;color:var(--text);outline:none;">
-                <option value="180" data-i18n="sections.finOpt15">15 anos (180 meses)</option>
-                <option value="240" selected data-i18n="sections.finOpt20">20 anos (240 meses)</option>
-                <option value="300" data-i18n="sections.finOpt25">25 anos (300 meses)</option>
-                <option value="360" data-i18n="sections.finOpt30">30 anos (360 meses)</option>
+                <option value="180">15 anos (180 meses)</option>
+                <option value="240" selected>20 anos (240 meses)</option>
+                <option value="300">25 anos (300 meses)</option>
+                <option value="360">30 anos (360 meses)</option>
               </select>
             </div>
-            <button onclick="calcFinancing()" class="btn-primary" style="justify-self:start;" data-i18n="sections.finBtn">Calcular</button>
+            <button onclick="calcFinancing()" class="btn-primary" style="justify-self:start;">Calcular</button>
           </div>
         </div>
         <div class="fin-result" id="finResult" style="display:none;">
           <div class="fin-result-grid">
-            <div><p class="fin-label" data-i18n="sections.finResultFinanced">Valor financiado</p><p class="fin-value" id="fin-financed">R$ 400.000</p></div>
-            <div><p class="fin-label" data-i18n="sections.finResultMonthly">Prestação mensal</p><p class="fin-value fin-highlight" id="fin-monthly">R$ 3.471</p></div>
-            <div><p class="fin-label" data-i18n="sections.finResultTotal">Total do financiamento</p><p class="fin-value" id="fin-total">R$ 833.040</p></div>
-            <div><p class="fin-label" data-i18n="sections.finResultInterest">Total de juros</p><p class="fin-value" id="fin-interest">R$ 433.040</p></div>
+            <div><p class="fin-label">Valor financiado</p><p class="fin-value" id="fin-financed">R$ 400.000</p></div>
+            <div><p class="fin-label">Prestação mensal</p><p class="fin-value fin-highlight" id="fin-monthly">R$ 3.471</p></div>
+            <div><p class="fin-label">Total do financiamento</p><p class="fin-value" id="fin-total">R$ 833.040</p></div>
+            <div><p class="fin-label">Total de juros</p><p class="fin-value" id="fin-interest">R$ 433.040</p></div>
           </div>
           <p class="fin-obs" style="font-size:0.75rem;color:var(--muted-foreground);margin-top:0.75rem;">* Simulação com taxa fixa de juros. Valores aproximados sujeitos a aprovação de crédito.</p>
         </div>
@@ -357,20 +356,20 @@
     <div class="cta-band">
       <div class="container reveal">
         <div class="gold-rule"></div>
-        <h2 data-i18n="sections.contatoCtaTitle">Pronto para encontrar seu imóvel dos sonhos?</h2>
-        <p data-i18n="sections.contatoCtaP">Solicite uma consultoria gratuita e descubra as melhores opções para você e sua família.</p>
+        <h2>Pronto para encontrar seu imóvel dos sonhos?</h2>
+        <p>Solicite uma consultoria gratuita e descubra as melhores opções para você e sua família.</p>
         <div class="cta-actions">
-          <a href="https://wa.me/5547996548410" class="btn-primary" target="_blank" data-i18n="sections.contatoCtaWhats">Fale pelo WhatsApp</a>
-          <a href="/contato/" class="btn-outline" onclick="setTimeout(function(){var f=document.getElementById('contato-form');if(f)f.scrollIntoView({behavior:'smooth'})},100);" data-i18n="sections.contatoCtaMsg">Enviar mensagem</a>
+          <a href="https://wa.me/554788079254" class="btn-primary" target="_blank">Fale pelo WhatsApp</a>
+          <a href="/contato/" class="btn-outline" onclick="setTimeout(function(){var f=document.getElementById('contato-form');if(f)f.scrollIntoView({behavior:'smooth'})},100);">Enviar mensagem</a>
         </div>
       </div>
     </div>
     <div class="container reveal" id="contato-form" style="padding-top:1.5rem;padding-bottom:1rem;">
       <div style="display:grid;gap:2rem;">
         <div class="section-header">
-          <p class="eyebrow" data-i18n="sections.contato">Envie sua mensagem</p>
+          <p class="eyebrow">Envie sua mensagem</p>
           <div class="gold-rule"></div>
-          <h2 data-i18n="sections.contatoTitle">Fale conosco</h2>
+          <h2>Fale conosco</h2>
         </div>
         <form id="contactForm" method="POST" style="max-width:640px;margin:0 auto;width:100%;">
           <input type="hidden" name="_captcha" value="false" />
@@ -378,30 +377,30 @@
           <input type="hidden" name="_template" value="table" />
           <div id="formFields" style="display:grid;gap:1rem;">
             <div style="display:grid;gap:0.5rem;">
-              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);" data-i18n="sections.contatoFormLabelName">Nome completo</label>
+              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);">Nome completo</label>
               <input type="text" name="Nome" required style="padding:0.75rem 1rem;border:1px solid var(--border);background:var(--cream);font-family:var(--font-sans);font-size:0.9rem;color:var(--text);outline:none;" placeholder="Seu nome" />
             </div>
             <div style="display:grid;gap:0.5rem;">
-              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);" data-i18n="sections.contatoFormLabelEmail">E-mail</label>
+              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);">E-mail</label>
               <input type="email" name="Email" required style="padding:0.75rem 1rem;border:1px solid var(--border);background:var(--cream);font-family:var(--font-sans);font-size:0.9rem;color:var(--text);outline:none;" placeholder="seu@email.com" />
             </div>
             <div style="display:grid;gap:0.5rem;">
-              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);" data-i18n="sections.contatoFormLabelPhone">Telefone / WhatsApp</label>
+              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);">Telefone / WhatsApp</label>
               <input type="tel" name="Telefone" required style="padding:0.75rem 1rem;border:1px solid var(--border);background:var(--cream);font-family:var(--font-sans);font-size:0.9rem;color:var(--text);outline:none;" placeholder="(47) 99999-9999" />
             </div>
             <div style="display:grid;gap:0.5rem;">
-              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);" data-i18n="sections.contatoFormLabelMsg">Mensagem</label>
+              <label style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text);">Mensagem</label>
               <textarea rows="4" name="Mensagem" required style="padding:0.75rem 1rem;border:1px solid var(--border);background:var(--cream);font-family:var(--font-sans);font-size:0.9rem;color:var(--text);outline:none;resize:vertical;" placeholder="Escreva sua mensagem..."></textarea>
             </div>
             <div style="display:flex;align-items:flex-start;gap:0.75rem;">
               <input type="checkbox" id="lgpd-consent" required style="margin-top:0.25rem;width:1rem;height:1rem;flex-shrink:0;" />
-              <label for="lgpd-consent" style="font-size:0.75rem;color:var(--muted-foreground);line-height:1.4;" data-i18n="sections.contatoLgpd">Autorizo o tratamento dos meus dados pessoais conforme a Lei Geral de Proteção de Dados (LGPD) para fins de contato e resposta à minha solicitação. Para mais informações, consulte nossa <a href="/contato/" style="color:var(--gold);text-decoration:underline;" data-i18n="sections.contatoLgpdLink">Política de Privacidade</a>.</label>
+              <label for="lgpd-consent" style="font-size:0.75rem;color:var(--muted-foreground);line-height:1.4;">Autorizo o tratamento dos meus dados pessoais conforme a Lei Geral de Proteção de Dados (LGPD) para fins de contato e resposta à minha solicitação. Para mais informações, consulte nossa <a href="/contato/" style="color:var(--gold);text-decoration:underline;">Política de Privacidade</a>.</label>
             </div>
-            <button type="submit" class="btn-primary" style="justify-self:start;" data-i18n="sections.contatoBtn">Enviar mensagem</button>
+            <button type="submit" class="btn-primary" style="justify-self:start;">Enviar mensagem</button>
           </div>
           <div id="formSuccess" style="display:none;text-align:center;padding:2rem;">
-            <p style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold);margin-bottom:0.5rem;" data-i18n="sections.contatoSuccessTitle">Mensagem enviada! ✓</p>
-            <p style="color:var(--text);" data-i18n="sections.contatoSuccessP">Obrigado pelo contato. Responderemos em breve.</p>
+            <p style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold);margin-bottom:0.5rem;">Mensagem enviada! ✓</p>
+            <p style="color:var(--text);">Obrigado pelo contato. Responderemos em breve.</p>
           </div>
         </form>
       </div>
@@ -414,26 +413,26 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <a href="/" class="site-logo" style="font-size:1.25rem;">Su <span>Imobiliária</span></a>
-          <p data-i18n="sections.footerDesc">Referência em consultoria imobiliária no litoral catarinense. Mais de 15 anos transformando sonhos em endereços.</p>
+          <p>Referência em consultoria imobiliária no litoral catarinense. Mais de 15 anos transformando sonhos em endereços.</p>
         </div>
         <div class="footer-col">
-          <p class="eyebrow" data-i18n="sections.footerNavTitle">Navegação</p>
+          <p class="eyebrow">Navegação</p>
           <div class="gold-rule"></div>
           <ul>
-            <li><a href="/comprar/" data-i18n="nav.comprar">Comprar</a></li>
-            <li><a href="/alugar/" data-i18n="nav.alugar">Alugar</a></li>
-            <li><a href="/lancamentos/" data-i18n="nav.lancamentos">Lançamentos</a></li>
-            <li><a href="/servicos/" data-i18n="nav.servicos">Serviços</a></li>
-            <li><a href="/faq/" data-i18n="nav.faq">FAQ</a></li>
-            <li><a href="/financiamento/" data-i18n="nav.financiamento">Financiamento</a></li>
-            <li><a href="/contato/" data-i18n="nav.contato">Contato</a></li>
+            <li><a href="/comprar/">Comprar</a></li>
+            <li><a href="/alugar/">Alugar</a></li>
+            <li><a href="/lancamentos/">Lançamentos</a></li>
+            <li><a href="/servicos/">Serviços</a></li>
+            <li><a href="/faq/">FAQ</a></li>
+            <li><a href="/financiamento/">Financiamento</a></li>
+            <li><a href="/contato/">Contato</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <p class="eyebrow" data-i18n="sections.footerContactTitle">Contato</p>
+          <p class="eyebrow">Contato</p>
           <div class="gold-rule"></div>
           <ul>
-            <li><a href="https://wa.me/5547996548410" target="_blank">WhatsApp: +55 47 99654-8410</a></li>
+            <li><a href="https://wa.me/554788079254" target="_blank">WhatsApp: +55 47 8807-9254</a></li>
             <li><a href="mailto:contato@suimobiliaria.com.br">contato@suimobiliaria.com.br</a></li>
             <li>Av. Atlântica, 1500 — Centro</li>
             <li>Balneário Camboriú — SC</li>
@@ -443,7 +442,7 @@
       <div class="footer-bottom">
         <div class="footer-social" id="footerSocial"></div>
         <span>&copy; 2026 Su Imobiliária. Todos os direitos reservados.</span>
-        <span data-i18n="sections.footerCredit">Feito com dedicação para nossos clientes.</span>
+        <span>Feito com dedicação para nossos clientes.</span>
       </div>
     </div>
   </footer>
@@ -451,7 +450,7 @@
 </div><!-- /page-content -->
 
 <!-- WHATSAPP FAB -->
-<a class="whatsapp-fab" href="https://wa.me/5547996548410" target="_blank" aria-label="Fale conosco pelo WhatsApp">
+<a class="whatsapp-fab" href="https://wa.me/554788079254" target="_blank" aria-label="Fale conosco pelo WhatsApp">
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
   </svg>
@@ -583,6 +582,27 @@ document.addEventListener('DOMContentLoaded', function() {
       if (footLink && footLink.parentElement) footLink.parentElement.style.display = 'none';
     }
   }
+  function renderStatsWithLang() {
+    var aboutStats = document.getElementById('aboutStats');
+    if (aboutStats) {
+      aboutStats.innerHTML = '';
+      var showCount = Math.min(3, STATS.length);
+      for (var si = 0; si < showCount; si++) {
+        var sd = document.createElement('div');
+        sd.innerHTML = '<p class="stat-num">' + STATS[si].value + '</p><p class="stat-label">' + STATS[si].label + '</p>';
+        aboutStats.appendChild(sd);
+      }
+    }
+    var statsGrid = document.getElementById('statsGrid');
+    if (statsGrid) {
+      statsGrid.innerHTML = '';
+      for (var sj = 0; sj < STATS.length; sj++) {
+        var sd2 = document.createElement('div');
+        sd2.innerHTML = '<p style="font-family:var(--font-serif);font-size:2.5rem;color:var(--gold);">' + STATS[sj].value + '</p><p style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.2em;color:rgba(255,255,255,0.7);">' + STATS[sj].label + '</p>';
+        statsGrid.appendChild(sd2);
+      }
+    }
+  }
   // Stats — populate from data.js
   if (typeof STATS !== 'undefined' && STATS.length) {
     renderStatsWithLang();
@@ -615,144 +635,10 @@ document.addEventListener('DOMContentLoaded', function() {
       if (sub) sub.textContent = s.subtitle;
     }
   }
-  // ── Multi-idioma ──
-  function _t(section) {
-    try {
-      var tr = TRANSLATIONS[section];
-      return (tr && tr[window._lang]) ? tr[window._lang] : tr;
-    } catch(e) { return {}; }
-  }
-  function __(path) {
-    try {
-      var parts = path.split('.');
-      var section = parts[0], lang = window._lang || 'pt';
-      var obj = TRANSLATIONS[section];
-      if (!obj) return '';
-      obj = obj[lang] || obj.pt;
-      if (!obj) return '';
-      for (var i = 1; i < parts.length; i++) {
-        var key = /^\d+$/.test(parts[i]) ? parseInt(parts[i], 10) : parts[i];
-        if (obj == null) return '';
-        obj = obj[key];
-      }
-      return (typeof obj === 'string') ? obj : '';
-    } catch(e) { return ''; }
-  }
-  function applyLang(lang) {
-    try {
-      window._lang = lang || LANG_DEFAULT;
-      localStorage.setItem('lang', window._lang);
-      // Generic data-i18n handler
-      document.querySelectorAll('[data-i18n]').forEach(function(el) {
-        var t = __(el.getAttribute('data-i18n'));
-        if (t) el.innerHTML = t;
-      });
-      // Nav dropdown category links (not covered by data-i18n since they share keys with regular nav)
-      var navT = _t('nav');
-      document.querySelectorAll('.nav-dropdown > a, .mob-drop-wrap > a').forEach(function(a) {
-        var h = a.getAttribute('href');
-        if (h === '/comprar/' && navT.comprar) a.textContent = navT.comprar;
-        if (h === '/alugar/' && navT.alugar) a.textContent = navT.alugar;
-        if (h === '/lancamentos/' && navT.lancamentos) a.textContent = navT.lancamentos;
-      });
-      // Search/filter placeholders and buttons (hard to use data-i18n for these)
-      var secT = _t('sections');
-      document.querySelectorAll('.section-search button[type="submit"]').forEach(function(b) { if (secT.filter) b.textContent = secT.filter; });
-      document.querySelectorAll('.section-search button[type="button"]').forEach(function(b) { if (secT.clear) b.textContent = secT.clear; });
-      document.querySelectorAll('.section-search input[type="number"]').forEach(function(i) { if (secT.priceMax) i.placeholder = secT.priceMax; });
-      document.querySelectorAll('.hero-search input[type="number"]').forEach(function(i) { if (secT.priceMax) i.placeholder = secT.priceMax; });
-      ['#search-type','#comprar-type','#alugar-type'].forEach(function(s) { var o = document.querySelector(s+' option[value=""]'); if (o && secT.type) o.textContent = secT.type; });
-      ['#search-location','#comprar-location','#alugar-location'].forEach(function(s) { var o = document.querySelector(s+' option[value=""]'); if (o && secT.location) o.textContent = secT.location; });
-      var purp = document.querySelector('#search-purpose option[value=""]');
-      if (purp) purp.textContent = secT.searchPurposeAll || secT.allProps || '';
-      var cta = document.querySelector('.nav-cta');
-      if (cta && navT.falemos) cta.textContent = navT.falemos;
-      // Gallery (aria-labels)
-      var cT2 = _t('cards');
-      var gModal = document.getElementById('galleryModal');
-      if (gModal && cT2.galleryAria) gModal.setAttribute('aria-label', cT2.galleryAria);
-      var gClose = document.querySelector('.gallery-close');
-      if (gClose && cT2.galleryClose) gClose.setAttribute('aria-label', cT2.galleryClose);
-      var gPrev = document.querySelector('.gallery-prev');
-      if (gPrev && cT2.galleryPrev) gPrev.setAttribute('aria-label', cT2.galleryPrev);
-      var gNext = document.querySelector('.gallery-next');
-      if (gNext && cT2.galleryNext) gNext.setAttribute('aria-label', cT2.galleryNext);
-      var gDetailsLink = document.getElementById('galleryDetailsLink');
-      if (gDetailsLink && cT2.galleryDetails) gDetailsLink.innerHTML = cT2.galleryDetails + ' \u2192';
-      // Map legend
-      document.querySelectorAll('.map-legend-item').forEach(function(item) {
-        var type = item.getAttribute('data-type');
-        var tMap = { sale: cT2.sale, rent: cT2.rent, empreendimento: cT2.launch };
-        if (type && tMap[type]) {
-          var tNode = item.childNodes[1];
-          if (tNode) tNode.textContent = ' ' + tMap[type];
-        }
-      });
-      // Footer copyright year
-      document.querySelectorAll('.footer-bottom span').forEach(function(span) {
-        var txt = span.textContent;
-        if (txt.indexOf('\u00A9') > -1 || txt.indexOf('Todos os direitos') > -1 || txt.indexOf('All rights') > -1 || txt.indexOf('reservados') > -1 || txt.indexOf('derechos reservados') > -1) {
-          span.textContent = '\u00A9 ' + new Date().getFullYear() + ' ' + SITE_NAME + '. ' + (cT2.copyright || '');
-        }
-      });
-      // Financing result obs
-      var finObs = document.querySelector('#finResult .fin-obs');
-      if (finObs && cT2.finObs) finObs.textContent = cT2.finObs;
-      // Lang button active state
-      document.querySelectorAll('.lang-btn').forEach(function(b) {
-        b.classList.toggle('active', b.getAttribute('data-lang') === window._lang);
-      });
-      // Re-render dynamic content
-      if (typeof renderFAQs === 'function') renderFAQs();
-      if (typeof renderDepoimentos === 'function') renderDepoimentos();
-      if (typeof renderParceiros === 'function') renderParceiros();
-      renderStatsWithLang();
-      if (typeof reTranslateCards === 'function') reTranslateCards();
-    } catch(e) { console.error('applyLang error', e); }
-  }
-  function renderStatsWithLang() {
-    var labels = _t('stats') || [];
-    var aboutStats = document.getElementById('aboutStats');
-    if (aboutStats) {
-      aboutStats.innerHTML = '';
-      var showCount = Math.min(3, STATS.length);
-      for (var si = 0; si < showCount; si++) {
-        var sd = document.createElement('div');
-        sd.innerHTML = '<p class="stat-num">' + STATS[si].value + '</p><p class="stat-label">' + (labels[si] || STATS[si].label) + '</p>';
-        aboutStats.appendChild(sd);
-      }
-    }
-    var statsGrid = document.getElementById('statsGrid');
-    if (statsGrid) {
-      statsGrid.innerHTML = '';
-      for (var sj = 0; sj < STATS.length; sj++) {
-        var sd2 = document.createElement('div');
-        sd2.innerHTML = '<p style="font-family:var(--font-serif);font-size:2.5rem;color:var(--gold);">' + STATS[sj].value + '</p><p style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.2em;color:rgba(255,255,255,0.7);">' + (labels[sj] || STATS[sj].label) + '</p>';
-        statsGrid.appendChild(sd2);
-      }
-    }
-  }
-  function buildLangToggle(containerId) {
-    var container = document.getElementById(containerId);
-    if (!container) return;
-    var h = '';
-    ['pt','en','es'].forEach(function(l) { h += '<button class="lang-btn" data-lang="'+l+'" aria-label="'+l.toUpperCase()+'">'+l.toUpperCase()+'</button>'; });
-    container.innerHTML = h;
-    container.addEventListener('click', function(e) {
-      var btn = e.target.closest('.lang-btn');
-      if (!btn) return;
-      var l = btn.getAttribute('data-lang');
-      if (l && l !== window._lang) applyLang(l);
-    });
-  }
-  buildLangToggle('langToggle');
-  var savedLang = localStorage.getItem('lang') || LANG_DEFAULT;
-  applyLang(savedLang);
-  var mobLang = document.getElementById('mobileLang');
-  if (mobLang) {
-    mobLang.innerHTML = '<div class="lang-toggle" id="langToggleMobile"></div>';
-    buildLangToggle('langToggleMobile');
-  }
+  // Render dynamic content
+  if (typeof renderFAQs === 'function') renderFAQs();
+  if (typeof renderDepoimentos === 'function') renderDepoimentos();
+  if (typeof renderParceiros === 'function') renderParceiros();
   // Populate search dropdowns from data
   function populateSelect(id, values) {
     var sel = document.getElementById(id);
@@ -901,6 +787,18 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   });
 </script>
+<script>
+function googleTranslateElementInit() {
+  if (typeof google !== 'undefined' && google.translate) {
+    new google.translate.TranslateElement({
+      pageLanguage: 'pt',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+      autoDisplay: false
+    }, 'google_translate_element');
+  }
+}
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
 <script src="js/app.js?v=2"></script>
 </body>
 </html>
