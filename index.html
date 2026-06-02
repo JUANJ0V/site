@@ -16,6 +16,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%230e142e'/><text x='16' y='22' text-anchor='middle' font-size='18' fill='%23d4af37'>S</text></svg>" />
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -45,9 +47,16 @@
       <li class="nav-dropdown" id="navDropAlugar"><a href="#alugar">Alugar</a><div class="dd-menu" id="ddAlugar"></div></li>
       <li class="nav-dropdown" id="navDropLanc"><a href="#lancamentos">Lançamentos</a><div class="dd-menu" id="ddLanc"></div></li>
       <li><a href="#financiamento">Financiamento</a></li>
+      <li><a href="#mapa">Mapa</a></li>
+      <li><a href="#blog">Blog</a></li>
+      <li><a href="#favoritos">Favoritos</a></li>
     </ul>
     <a href="#contato" class="nav-cta nav-whatsapp-cta" data-whatsapp-msg="Olá, gostaria de falar com a Su Imobiliária.">Fale conosco</a>
-    <div class="nav-actions"><div class="nav-social" id="navSocial"></div><button class="theme-toggle" aria-label="Alternar modo escuro">🌙</button></div>
+    <div class="nav-actions">
+      <div class="nav-social" id="navSocial"></div>
+      <button class="theme-toggle" aria-label="Alternar modo escuro">🌙</button>
+      <div class="lang-toggle" id="langToggle"></div>
+    </div>
     <span class="menu-btn" role="button" tabindex="0" aria-label="Abrir menu">☰</span>
   </nav>
   <div class="nav-overlay" id="mobileNav" role="dialog" aria-label="Menu de navegação">
@@ -57,7 +66,11 @@
     <div class="mob-drop-wrap" id="mobDropAlugar"><a href="#alugar">Alugar</a><div class="mob-dd-body" id="mobDdAlugar"></div></div>
     <div class="mob-drop-wrap" id="mobDropLanc"><a href="#lancamentos">Lançamentos</a><div class="mob-dd-body" id="mobDdLanc"></div></div>
     <a href="#financiamento">Financiamento</a>
+    <a href="#mapa">Mapa</a>
+    <a href="#blog">Blog</a>
+    <a href="#favoritos">Favoritos</a>
     <div class="mobile-social" id="mobileSocial"></div>
+    <div class="mobile-lang" id="mobileLang"></div>
   </div>
 </header>
 
@@ -168,7 +181,6 @@
       </form>
       <div class="grid-3" id="lanc-cards"></div>
     </div>
-
   </section>
 
   <!-- SERVIÇOS -->
@@ -232,6 +244,48 @@
         <h2>Instituições que confiam em nós</h2>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:2rem;align-items:center;justify-items:center;padding:2rem 0;" id="parceiros-list"></div>
+    </div>
+  </section>
+
+  <!-- FAVORITOS -->
+  <section id="favoritos">
+    <div class="container">
+      <div class="section-header">
+        <p class="eyebrow" id="sectionFavEyebrow">Favoritos</p>
+        <div class="gold-rule"></div>
+        <h2 id="sectionFavTitle">Meus imóveis favoritos</h2>
+      </div>
+      <div class="grid-3" id="fav-cards">
+        <p class="fav-empty" id="favEmptyMsg" style="grid-column:1/-1;text-align:center;color:var(--text);padding:3rem 0;">Nenhum imóvel favoritado ainda.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG -->
+  <section id="blog">
+    <div class="container">
+      <div class="section-header">
+        <p class="eyebrow" id="sectionBlogEyebrow">Blog</p>
+        <div class="gold-rule"></div>
+        <h2 id="sectionBlogTitle">Últimas do blog</h2>
+      </div>
+      <div class="blog-grid" id="blog-cards"></div>
+    </div>
+  </section>
+
+  <!-- MAPA -->
+  <section id="mapa" class="section-mapa">
+    <div class="container">
+      <p class="eyebrow" id="sectionMapaEyebrow">Mapa de Imóveis</p>
+      <h2 class="section-title" id="sectionMapaTitle">Encontre no mapa</h2>
+    </div>
+    <div class="map-wrapper" id="mapWrapper">
+      <div id="map"></div>
+      <div class="map-legend">
+        <span class="map-legend-item" data-type="sale"><i class="dot dot-sale"></i> Venda</span>
+        <span class="map-legend-item" data-type="rent"><i class="dot dot-rent"></i> Aluguel</span>
+        <span class="map-legend-item" data-type="empreendimento"><i class="dot dot-lanc"></i> Lançamento</span>
+      </div>
     </div>
   </section>
 
@@ -439,12 +493,16 @@ document.addEventListener('DOMContentLoaded', function() {
   // Site name in logo and brand (first word plain, rest in gold span)
   document.querySelectorAll('.site-logo, .footer-brand .site-logo').forEach(function(el) {
     if (SITE_LOGO) {
-      el.innerHTML = '<img src="' + SITE_LOGO + '" alt="' + SITE_NAME.replace(/"/g, '&quot;') + '" style="height:2rem;width:auto;display:block;" />';
+      el.innerHTML = '<img src="' + SITE_LOGO + '" alt="' + SITE_NAME.replace(/"/g, '&quot;') + '" />';
     } else {
       var words = SITE_NAME.split(' ');
       el.innerHTML = words.length > 1 ? words[0] + ' <span>' + words.slice(1).join(' ') + '</span>' : SITE_NAME;
     }
   });
+  // Apply logo size/position config to CSS custom properties
+  if (typeof LOGO_MAX_HEIGHT !== 'undefined') document.documentElement.style.setProperty('--logo-max-height', LOGO_MAX_HEIGHT);
+  if (typeof LOGO_MAX_WIDTH !== 'undefined') document.documentElement.style.setProperty('--logo-max-width', LOGO_MAX_WIDTH);
+  if (typeof LOGO_MARGIN !== 'undefined') document.documentElement.style.setProperty('--logo-margin', LOGO_MARGIN);
   // Page title, meta tags (rebuild after " — ")
   function rebuildMeta(text, name) {
     var parts = text.split('\u2014');
@@ -560,7 +618,10 @@ document.addEventListener('DOMContentLoaded', function() {
     { id: 'parceiros', eyebrowSel: '#parceiros .eyebrow', eyebrow: SECTION_PARCEIROS_EYEBROW, titleSel: '#parceiros h2', title: SECTION_PARCEIROS_TITLE },
     { id: 'faq', eyebrowSel: '#faq .eyebrow', eyebrow: SECTION_FAQ_EYEBROW, titleSel: '#faq h2', title: SECTION_FAQ_TITLE },
     { id: 'financiamento', eyebrowSel: '#financiamento .eyebrow', eyebrow: SECTION_FINANCIAMENTO_EYEBROW, titleSel: '#financiamento h2', title: SECTION_FINANCIAMENTO_TITLE },
-    { id: 'contato', eyebrowSel: '#contato-form .eyebrow', eyebrow: SECTION_CONTATO_EYEBROW, titleSel: '#contato-form h2', title: SECTION_CONTATO_TITLE }
+    { id: 'contato', eyebrowSel: '#contato-form .eyebrow', eyebrow: SECTION_CONTATO_EYEBROW, titleSel: '#contato-form h2', title: SECTION_CONTATO_TITLE },
+    { id: 'mapa', eyebrowSel: '#sectionMapaEyebrow', eyebrow: SECTION_MAPA_EYEBROW, titleSel: '#sectionMapaTitle', title: SECTION_MAPA_TITLE },
+    { id: 'favoritos', eyebrowSel: '#sectionFavEyebrow', eyebrow: SECTION_FAVORITOS_EYEBROW, titleSel: '#sectionFavTitle', title: SECTION_FAVORITOS_TITLE },
+    { id: 'blog', eyebrowSel: '#sectionBlogEyebrow', eyebrow: SECTION_BLOG_EYEBROW, titleSel: '#sectionBlogTitle', title: SECTION_BLOG_TITLE }
   ];
   for (var st = 0; st < sectionTexts.length; st++) {
     var s = sectionTexts[st];
@@ -572,6 +633,95 @@ document.addEventListener('DOMContentLoaded', function() {
       var sub = document.querySelector(s.subtitleSel);
       if (sub) sub.textContent = s.subtitle;
     }
+  }
+  // ── Multi-idioma ──
+  function _t(section) {
+    try {
+      var tr = TRANSLATIONS[section];
+      return (tr && tr[window._lang]) ? tr[window._lang] : tr;
+    } catch(e) { return {}; }
+  }
+  function applyLang(lang) {
+    try {
+      window._lang = lang || LANG_DEFAULT;
+      localStorage.setItem('lang', window._lang);
+      // Nav
+      var navT = _t('nav');
+      document.querySelectorAll('.nav-list > li > a, .nav-overlay > a').forEach(function(a) {
+        var key = (a.getAttribute('href') || '').replace('#','');
+        var nk = {inicio:'topo',comprar:'comprar',alugar:'alugar',lancamentos:'lancamentos',financiamento:'financiamento',mapa:'mapa',blog:'blog',favoritos:'favoritos'}[key];
+        if (nk && navT[nk]) a.textContent = navT[nk];
+      });
+      document.querySelectorAll('.nav-dropdown > a, .mob-drop-wrap > a').forEach(function(a) {
+        var h = a.getAttribute('href');
+        if (h === '#comprar' && navT.comprar) a.textContent = navT.comprar;
+        if (h === '#alugar' && navT.alugar) a.textContent = navT.alugar;
+        if (h === '#lancamentos' && navT.lancamentos) a.textContent = navT.lancamentos;
+      });
+      // Hero
+      var heroT = _t('hero');
+      var he = document.querySelector('.hero-content .eyebrow');
+      if (he && heroT.eyebrow) he.textContent = heroT.eyebrow;
+      var ht = document.querySelector('.hero-content h1');
+      if (ht && heroT.title) ht.textContent = heroT.title;
+      var hs = document.querySelector('.hero-content p + p');
+      if (hs && heroT.subtitle) hs.textContent = heroT.subtitle;
+      var hSearch = document.querySelector('.hero-search button[type="submit"]');
+      if (hSearch && heroT.searchBtn) hSearch.textContent = heroT.searchBtn;
+      var hBtns = document.querySelectorAll('.hero-actions a');
+      if (hBtns[0] && heroT.seeProps) hBtns[0].textContent = heroT.seeProps;
+      if (hBtns[1] && heroT.consult) hBtns[1].textContent = heroT.consult;
+      // Sections
+      var secT = _t('sections');
+      for (var si = 0; si < sectionTexts.length; si++) {
+        var s = sectionTexts[si];
+        if (s.id === 'hero') continue;
+        var e = document.querySelector(s.eyebrowSel);
+        if (e && secT[s.id]) e.textContent = secT[s.id];
+        var ti = document.querySelector(s.titleSel);
+        if (ti && secT[s.id + 'Title']) ti.textContent = secT[s.id + 'Title'];
+        if (s.subtitleSel && secT[s.id + 'Sub']) {
+          var su = document.querySelector(s.subtitleSel);
+          if (su) su.textContent = secT[s.id + 'Sub'];
+        }
+      }
+      // Search
+      document.querySelectorAll('.section-search button[type="submit"]').forEach(function(b) { if (secT.filter) b.textContent = secT.filter; });
+      document.querySelectorAll('.section-search button[type="button"]').forEach(function(b) { if (secT.clear) b.textContent = secT.clear; });
+      document.querySelectorAll('.section-search input[type="number"]').forEach(function(i) { if (secT.priceMax) i.placeholder = secT.priceMax; });
+      ['#search-type','#comprar-type','#alugar-type'].forEach(function(s) { var o = document.querySelector(s+' option[value=""]'); if (o && secT.type) o.textContent = secT.type; });
+      ['#search-location','#comprar-location','#alugar-location'].forEach(function(s) { var o = document.querySelector(s+' option[value=""]'); if (o && secT.location) o.textContent = secT.location; });
+      var purp = document.querySelector('#search-purpose option[value=""]');
+      if (purp && secT.allProps) purp.textContent = secT.allProps;
+      var favMsg = document.getElementById('favEmptyMsg');
+      if (favMsg && secT.favEmpty) favMsg.textContent = secT.favEmpty;
+      var cta = document.querySelector('.nav-cta');
+      if (cta && navT.falemos) cta.textContent = navT.falemos;
+      document.querySelectorAll('.lang-btn').forEach(function(b) {
+        b.classList.toggle('active', b.getAttribute('data-lang') === window._lang);
+      });
+    } catch(e) { console.error('applyLang error', e); }
+  }
+  function buildLangToggle(containerId) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    var h = '';
+    ['pt','en','es'].forEach(function(l) { h += '<button class="lang-btn" data-lang="'+l+'" aria-label="'+l.toUpperCase()+'">'+l.toUpperCase()+'</button>'; });
+    container.innerHTML = h;
+    container.addEventListener('click', function(e) {
+      var btn = e.target.closest('.lang-btn');
+      if (!btn) return;
+      var l = btn.getAttribute('data-lang');
+      if (l && l !== window._lang) applyLang(l);
+    });
+  }
+  buildLangToggle('langToggle');
+  var savedLang = localStorage.getItem('lang') || LANG_DEFAULT;
+  applyLang(savedLang);
+  var mobLang = document.getElementById('mobileLang');
+  if (mobLang) {
+    mobLang.innerHTML = '<div class="lang-toggle" id="langToggleMobile"></div>';
+    buildLangToggle('langToggleMobile');
   }
   // Populate search dropdowns from data
   function populateSelect(id, values) {

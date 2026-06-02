@@ -10,6 +10,16 @@ const WHATSAPP_MSG      = "Olá, tenho interesse no {titulo} ({preco})";
 
 const SITE_NAME     = "Su Imobiliária";
 const SITE_LOGO     = ""; // URL do logo (SVG ou PNG) — se vazio, mostra o texto
+/* ── Ajustes do logo (imagem) ──────────────────────────────
+   LOGO_MAX_HEIGHT : altura máxima (ex: "2rem", "1.5rem", "40px")
+   LOGO_MAX_WIDTH  : largura máxima (ex: "200px", "180px", "auto")
+   LOGO_MARGIN     : margem ao redor (ex: "0" centraliza,
+                     "0 auto" centraliza horizontalmente,
+                     "0 0 0 0.5rem" empurra p/ direita)
+   ──────────────────────────────────────────────────────── */
+const LOGO_MAX_HEIGHT = "2rem";
+const LOGO_MAX_WIDTH  = "200px";
+const LOGO_MARGIN     = "0";
 const SITE_EMAIL    = "contato@suimobiliaria.com.br";
 const SITE_URL      = "https://suimobiliaria.com.br";
 const SITE_ADDRESS  = "Av. Atlântica, 1500 — Centro";
@@ -44,6 +54,166 @@ const SECTION_FINANCIAMENTO_EYEBROW = "Financiamento";
 const SECTION_FINANCIAMENTO_TITLE   = "Simule seu financiamento imobili\u00E1rio";
 const SECTION_CONTATO_EYEBROW     = "Envie sua mensagem";
 const SECTION_CONTATO_TITLE       = "Fale conosco";
+const SECTION_MAPA_EYEBROW        = "Mapa de Imóveis";
+const SECTION_MAPA_TITLE          = "Encontre no mapa";
+const SECTION_BLOG_EYEBROW        = "Blog";
+const SECTION_BLOG_TITLE          = "Últimas do blog";
+const SECTION_FAVORITOS_EYEBROW   = "Favoritos";
+const SECTION_FAVORITOS_TITLE     = "Meus imóveis favoritos";
+const SECTION_FAVORITOS_EMPTY     = "Nenhum imóvel favoritado ainda.";
+
+/* ===================================================================
+   TRADUÇÕES (PT / EN / ES)
+   ===================================================================
+   Adicione mais chaves conforme necessário. O sistema usa PT como padrão.
+   O idioma ativo fica salvo no localStorage (chave 'lang').
+   =================================================================== */
+const LANG_DEFAULT = "pt";
+const LANG_NAMES = { pt: "PT", en: "EN", es: "ES" };
+
+const TRANSLATIONS = {
+
+  nav: {
+    pt: { inicio: "Início", comprar: "Comprar", alugar: "Alugar", lancamentos: "Lançamentos", financiamento: "Financiamento", mapa: "Mapa", blog: "Blog", favoritos: "Favoritos", falemos: "Fale conosco" },
+    en: { inicio: "Home", comprar: "Buy", alugar: "Rent", lancamentos: "Developments", financiamento: "Financing", mapa: "Map", blog: "Blog", favoritos: "Favorites", falemos: "Contact us" },
+    es: { inicio: "Inicio", comprar: "Comprar", alugar: "Alquilar", lancamentos: "Lanzamientos", financiamento: "Financiamiento", mapa: "Mapa", blog: "Blog", favoritos: "Favoritos", falemos: "Contáctenos" }
+  },
+
+  hero: {
+    pt: { eyebrow: HERO_EYEBROW, title: HERO_TITLE, subtitle: HERO_SUBTITLE, searchBtn: "Buscar", seeProps: "Ver imóveis", consult: "Pedir consultoria" },
+    en: { eyebrow: "Your home starts here", title: "Find the perfect property for you.", subtitle: "Over 500 properties for sale and rent. We accompany you every step of the way to find the home you've always dreamed of.", searchBtn: "Search", seeProps: "See properties", consult: "Request consultation" },
+    es: { eyebrow: "Su hogar comienza aquí", title: "Encuentre la propiedad perfecta para usted.", subtitle: "Más de 500 propiedades en venta y alquiler. Le acompañamos en cada paso para encontrar el hogar que siempre soñó.", searchBtn: "Buscar", seeProps: "Ver propiedades", consult: "Solicitar consultoría" }
+  },
+
+  sections: {
+    pt: {
+      sobre: "Quem somos", sobreTitle: "Mais de 15 anos assessorando famílias e empresas.",
+      comprar: SECTION_COMPRAR_EYEBROW, comprarTitle: SECTION_COMPRAR_TITLE,
+      alugar: SECTION_ALUGAR_EYEBROW, alugarTitle: SECTION_ALUGAR_TITLE,
+      lancamentos: SECTION_LANCAMENTOS_EYEBROW, lancamentosTitle: SECTION_LANCAMENTOS_TITLE,
+      servicos: SECTION_SERVICOS_EYEBROW, servicosTitle: SECTION_SERVICOS_TITLE,
+      depoimentos: SECTION_DEPOIMENTOS_EYEBROW, depoimentosTitle: SECTION_DEPOIMENTOS_TITLE,
+      faq: SECTION_FAQ_EYEBROW, faqTitle: SECTION_FAQ_TITLE,
+      financiamento: SECTION_FINANCIAMENTO_EYEBROW, financiamentoTitle: SECTION_FINANCIAMENTO_TITLE,
+      contato: SECTION_CONTATO_EYEBROW, contatoTitle: SECTION_CONTATO_TITLE,
+      mapa: SECTION_MAPA_EYEBROW, mapaTitle: SECTION_MAPA_TITLE,
+      blog: SECTION_BLOG_EYEBROW, blogTitle: SECTION_BLOG_TITLE,
+      favoritos: SECTION_FAVORITOS_EYEBROW, favoritosTitle: SECTION_FAVORITOS_TITLE,
+      parceiros: SECTION_PARCEIROS_EYEBROW, parceirosTitle: SECTION_PARCEIROS_TITLE,
+      filter: "Filtrar", clear: "Limpar", priceMax: "Preço máx.", type: "Tipo", location: "Localização", purpose: "Finalidade", allProps: "Todos os imóveis",
+      readMore: "Ler mais", share: "Compartilhar", visit: "Agendar visita", viewMap: "Ver no mapa", otherProps: "Outros imóveis", back: "Voltar",
+      favEmpty: SECTION_FAVORITOS_EMPTY, favAdd: "Adicionar aos favoritos", favRemove: "Remover dos favoritos"
+    },
+    en: {
+      sobre: "About us", sobreTitle: "Over 15 years advising families and businesses.",
+      comprar: "Properties for sale", comprarTitle: "Find the ideal property to buy",
+      alugar: "Properties for rent", alugarTitle: "Best rental options",
+      lancamentos: "Developments", lancamentosTitle: "Exclusive developments",
+      servicos: "Services", servicosTitle: "Everything you need in one place",
+      depoimentos: "Testimonials", depoimentosTitle: "What our clients say",
+      faq: "FAQ", faqTitle: "Frequently asked questions",
+      financiamento: "Financing", financiamentoTitle: "Simulate your financing",
+      contato: "Send us a message", contatoTitle: "Contact us",
+      mapa: "Property Map", mapaTitle: "Find on the map",
+      blog: "Blog", blogTitle: "Latest from our blog",
+      favoritos: "Favorites", favoritosTitle: "My favorite properties",
+      parceiros: "Partners", parceirosTitle: "Institutions that trust us",
+      filter: "Filter", clear: "Clear", priceMax: "Max. price", type: "Type", location: "Location", purpose: "Purpose", allProps: "All properties",
+      readMore: "Read more", share: "Share", visit: "Schedule visit", viewMap: "View on map", otherProps: "Other properties", back: "Back",
+      favEmpty: "No favorite properties yet.", favAdd: "Add to favorites", favRemove: "Remove from favorites"
+    },
+    es: {
+      sobre: "Quiénes somos", sobreTitle: "Más de 15 años asesorando familias y empresas.",
+      comprar: "Propiedades en venta", comprarTitle: "Encuentre la propiedad ideal para comprar",
+      alugar: "Propiedades en alquiler", alugarTitle: "Mejores opciones de alquiler",
+      lancamentos: "Lanzamientos", lancamentosTitle: "Emprendimientos exclusivos",
+      servicos: "Servicios", servicosTitle: "Todo lo que necesita en un solo lugar",
+      depoimentos: "Testimonios", depoimentosTitle: "Lo que dicen nuestros clientes",
+      faq: "FAQ", faqTitle: "Preguntas frecuentes",
+      financiamento: "Financiamiento", financiamentoTitle: "Simule su financiamiento",
+      contato: "Envíe su mensaje", contatoTitle: "Contáctenos",
+      mapa: "Mapa de Propiedades", mapaTitle: "Encuentre en el mapa",
+      blog: "Blog", blogTitle: "Últimas del blog",
+      favoritos: "Favoritos", favoritosTitle: "Mis propiedades favoritas",
+      parceiros: "Socios", parceirosTitle: "Instituciones que confían en nosotros",
+      filter: "Filtrar", clear: "Limpiar", priceMax: "Precio máx.", type: "Tipo", location: "Ubicación", purpose: "Finalidad", allProps: "Todas las propiedades",
+      readMore: "Leer más", share: "Compartir", visit: "Agendar visita", viewMap: "Ver en mapa", otherProps: "Otras propiedades", back: "Volver",
+      favEmpty: "Aún no hay propiedades favoritas.", favAdd: "Agregar a favoritos", favRemove: "Quitar de favoritos"
+    }
+  },
+
+  cards: {
+    pt: {
+      sale: "Venda", rent: "Aluguel", launch: "Lançamento",
+      bedroom: "quarto", bedrooms: "quartos",
+      bathroom: "banheiro", bathrooms: "banheiros",
+      parking: "vaga", parkings: "vagas",
+      zone: "Zona", topography: "Topografia", sqm: "m²", perMonth: "/mês",
+      front: "Frente", backs: "Fundos",
+      favorite: "Favoritar", viewDetails: "Ver detalhes", wantToKnow: "Quero saber mais",
+      virtualTour: "Tour Virtual", learnMore: "Conheça o empreendimento",
+      aboutProperty: "Sobre este imóvel", features: "Características",
+      scheduleVisit: "Agendar visita", viewOnMap: "Ver no mapa",
+      share: "Compartilhar", otherProperties: "Outros imóveis",
+      loadMore: "Carregar mais", remaining: "restantes",
+      aboutDevelopment: "Sobre o empreendimento", floorPlans: "Plantas",
+      constructionTimeline: "Cronograma de obras",
+      amenities: "Lazer e amenities", priceTable: "Tabela de preços",
+      unit: "Unidade", area: "Área", value: "Valor",
+      paymentTerms: "Condições de pagamento",
+      readMore: "Ler mais", by: "Por",
+      backToBlog: "Voltar para o blog", sala: "Sala",
+      viewAll: "Ver todos", noneAvailable: "Nenhum disponível",
+      sold: "Vendido", rented: "Locado", available: "Disponível"
+    },
+    en: {
+      sale: "Sale", rent: "Rent", launch: "Launch",
+      bedroom: "bedroom", bedrooms: "bedrooms",
+      bathroom: "bathroom", bathrooms: "bathrooms",
+      parking: "parking", parkings: "parkings",
+      zone: "Zone", topography: "Topography", sqm: "sq ft", perMonth: "/month",
+      front: "Front", backs: "Back",
+      favorite: "Favorite", viewDetails: "View details", wantToKnow: "I want to know more",
+      virtualTour: "Virtual Tour", learnMore: "Learn about the development",
+      aboutProperty: "About this property", features: "Features",
+      scheduleVisit: "Schedule visit", viewOnMap: "View on map",
+      share: "Share", otherProperties: "Other properties",
+      loadMore: "Load more", remaining: "remaining",
+      aboutDevelopment: "About the development", floorPlans: "Floor plans",
+      constructionTimeline: "Construction timeline",
+      amenities: "Amenities", priceTable: "Price table",
+      unit: "Unit", area: "Area", value: "Value",
+      paymentTerms: "Payment terms",
+      readMore: "Read more", by: "By",
+      backToBlog: "Back to blog", sala: "Office",
+      viewAll: "View all", noneAvailable: "None available",
+      sold: "Sold", rented: "Rented", available: "Available"
+    },
+    es: {
+      sale: "Venta", rent: "Alquiler", launch: "Lanzamiento",
+      bedroom: "dormitorio", bedrooms: "dormitorios",
+      bathroom: "baño", bathrooms: "baños",
+      parking: "estacionamiento", parkings: "estacionamientos",
+      zone: "Zona", topography: "Topografía", sqm: "m²", perMonth: "/mes",
+      front: "Frente", backs: "Fondo",
+      favorite: "Favorito", viewDetails: "Ver detalles", wantToKnow: "Quiero saber más",
+      virtualTour: "Tour Virtual", learnMore: "Conozca el emprendimiento",
+      aboutProperty: "Sobre esta propiedad", features: "Características",
+      scheduleVisit: "Agendar visita", viewOnMap: "Ver en mapa",
+      share: "Compartir", otherProperties: "Otras propiedades",
+      loadMore: "Cargar más", remaining: "restantes",
+      aboutDevelopment: "Sobre el emprendimiento", floorPlans: "Planos",
+      constructionTimeline: "Cronograma de obras",
+      amenities: "Amenidades", priceTable: "Tabla de precios",
+      unit: "Unidad", area: "Área", value: "Valor",
+      paymentTerms: "Condiciones de pago",
+      readMore: "Leer más", by: "Por",
+      backToBlog: "Volver al blog", sala: "Oficina",
+      viewAll: "Ver todo", noneAvailable: "Ninguno disponible",
+      sold: "Vendido", rented: "Alquilado", available: "Disponible"
+    }
+  }
+};
 
 /* ===================================================================
    STATS — números que aparecen en "Quem somos" y en la sección STATS
@@ -66,7 +236,7 @@ const HERO_VIDEO = ""; // URL de un video MP4 (opcional — si se llena, aparece
 
 /* Secciones deshabilitadas — poné los IDs que NO querés mostrar en el menú ni en el SPA */
 /* IDs disponibles: "sobre", "stats", "servicos", "depoimentos", "parceiros", "faq", "financiamento" */
-const DISABLED_SECTIONS = ["alugar","stats"]; // ej: ["stats", "faq"]
+const DISABLED_SECTIONS = ["alugar","stats","favoritos"]; // ej: ["stats", "faq"]
 
 /* Redes sociales — aparecen en el footer. Dejá vacío si no tenés */
 const SOCIAL = {
@@ -93,8 +263,9 @@ const ENABLE_DROPDOWN_MENU = true; // cambiá a true para activar
      title      = Nome do imóvel
      price      = Texto do preço (ex: "R$ 1.250.000")
      priceNum   = Preço só números (ex: 1250000) — usado na busca
-     location   = Cidade (ex: "Balneário Camboriú")
-     maps       = URL do Google Maps (ex: "https://maps.app.goo.gl/...") — opcional
+      location   = Cidade (ex: "Balneário Camboriú")
+      maps       = URL do Google Maps (ex: "https://maps.app.goo.gl/...") — opcional
+      lat, lng   = Coordenadas para o mapa interativo (ex: lat: -26.9947, lng: -48.6353)
      desc       = Descrição curta (aparece na card)
      beds       = Quartos (0 se não aplicável)
      baths      = Banheiros
@@ -125,6 +296,7 @@ const PROPERTIES = [
     priceNum: 1250000,
     location: "Balneário Camboriú",
     maps: "https://maps.app.goo.gl/5qLkY3F5kNqB3aZJ8",
+    lat: -26.9920, lng: -48.6330,
     status: "disponivel",
     desc: "Amplo apartamento com acabamento premium na melhor região de Balneário Camboriú.",
     beds: 3,  baths: 2,  garage: 1,  area: 128,
@@ -163,6 +335,7 @@ const PROPERTIES = [
     priceNum: 890000,
     location: "Florianópolis",
     maps: "https://maps.app.goo.gl/8zFh3ZmqXcV6nQe28",
+    lat: -27.5940, lng: -48.5470,
     status: "disponivel",
     desc: "Casa moderna com piscina e área de lazer em condomínio fechado em Florianópolis.",
     beds: 4,  baths: 3,  garage: 2,  area: 210,
@@ -201,6 +374,7 @@ const PROPERTIES = [
     priceNum: 2100000,
     location: "Itapema",
     maps: "https://maps.app.goo.gl/1tF9mLN5tLhKd4Pc7",
+    lat: -27.1460, lng: -48.6090,
     status: "disponivel",
     desc: "Cobertura duplex com vista panorâmica para o mar, 2 vagas e terraço privativo em Itapema.",
     beds: 4,  baths: 4,  garage: 2,  area: 280,
@@ -239,6 +413,7 @@ const PROPERTIES = [
     priceNum: 380000,
     location: "Bombinhas",
     maps: "https://maps.app.goo.gl/7zGp2RmL9vNwXeD45",
+    lat: -27.1360, lng: -48.5150,
     status: "disponivel",
     desc: "Studio completo e mobiliado, ideal para investidores. Localização privilegiada em Bombinhas.",
     beds: 1,  baths: 1,  garage: 1,  area: 42,
@@ -276,6 +451,7 @@ const PROPERTIES = [
     priceNum: 450000,
     location: "Joinville",
     maps: "https://maps.app.goo.gl/3jKm8NvT5wByRfG92",
+    lat: -26.3020, lng: -48.8420,
     status: "disponivel",
     desc: "Terreno plano de 360 m² em loteamento aprovado, pronto para construir em Joinville.",
     beds: 0,  baths: 0,  garage: 0,  area: 360,
@@ -313,6 +489,7 @@ const PROPERTIES = [
     priceNum: 620000,
     location: "Balneário Camboriú",
     maps: "https://maps.app.goo.gl/5qLkY3F5kNqB3aZJ8",
+    lat: -26.9970, lng: -48.6370,
     status: "disponivel",
     desc: "Sala comercial em edifício corporativo com infraestrutura completa em Balneário Camboriú.",
     beds: 0,  baths: 1,  garage: 1,  area: 55,
@@ -354,6 +531,7 @@ const PROPERTIES = [
     priceNum: 3500,
     location: "Florianópolis",
     maps: "https://maps.app.goo.gl/8zFh3ZmqXcV6nQe28",
+    lat: -27.5990, lng: -48.5520,
     status: "disponivel",
     desc: "Apartamento bem localizado próximo a universidades, comércio e transporte público em Florianópolis.",
     beds: 2,  baths: 1,  garage: 1,  area: 68,
@@ -392,6 +570,7 @@ const PROPERTIES = [
     priceNum: 4800,
     location: "Bombinhas",
     maps: "https://maps.app.goo.gl/7zGp2RmL9vNwXeD45",
+    lat: -27.1400, lng: -48.5190,
     status: "disponivel",
     desc: "Casa ampla com piscina, churrasqueira e jardim, perfeita para temporada em Bombinhas.",
     beds: 3,  baths: 2,  garage: 2,  area: 160,
@@ -431,6 +610,7 @@ const PROPERTIES = [
     priceNum: 2200,
     location: "Balneário Camboriú",
     maps: "https://maps.app.goo.gl/5qLkY3F5kNqB3aZJ8",
+    lat: -26.9930, lng: -48.6380,
     status: "disponivel",
     desc: "Studio compacto e moderno, ideal para solteiros ou casais. Mobiliado e com condomínio incluso em Balneário Camboriú.",
     beds: 1,  baths: 1,  garage: 0,  area: 35,
@@ -470,6 +650,7 @@ const PROPERTIES = [
     priceNum: 2900,
     location: "Itapema",
     maps: "https://maps.app.goo.gl/1tF9mLN5tLhKd4Pc7",
+    lat: -27.1500, lng: -48.6140,
     status: "disponivel",
     desc: "Sala comercial pronta para uso em edifício corporativo com portaria 24h, em Itapema.",
     beds: 0,  baths: 1,  garage: 1,  area: 48,
@@ -535,6 +716,7 @@ const EMPREENDIMENTOS = [
     location: "Balneário Camboriú — SC",
     price: "A partir de R$ 850.000",
     priceNum: 850000,
+    lat: -26.9900, lng: -48.6320,
     description: "O Park Avenue Residence é um empreendimento de alto padrão localizado na Avenida Atlântica, a poucos passos da praia. Com 32 pavimentos e unidades de 2 a 4 suítes, o edifício oferece uma experiência única de morar à beira-mar.\n\nTodos os apartamentos contam com acabamento premium, piso porcelanato, bancadas de quartzo, armários planejados e sistema de automação residencial. As unidades possuem de 98 a 210 m², com varandas gourmet e churrasqueira.\n\nA torre única impõe presença na orla, com fachada em vidro e design assinado por arquitetos renomados. A entrega está prevista para junho de 2027.",
     img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",
     gallery: [
@@ -596,6 +778,7 @@ const EMPREENDIMENTOS = [
     location: "Florianópolis — SC",
     price: "A partir de R$ 620.000",
     priceNum: 620000,
+    lat: -27.5980, lng: -48.5500,
     description: "O Infinity Coast é um condomínio resort localizado em Jurerê Internacional, um dos bairros mais nobres de Florianópolis. Com 4 torres de 18 andares cada, o empreendimento oferece unidades de 2 a 4 quartos com plantas que variam de 72 a 185 m².\n\nInspirado na arquitetura contemporânea, o Infinity Coast combina design sofisticado com sustentabilidade. Todas as unidades contam com aquecimento solar, sistema de reuso de água e janelas com vidro duplo para isolamento térmico e acústico.\n\nO condomínio ocupa uma área de 45.000 m², com 70% de área permeável e preservação da vegetação nativa. Previsão de entrega para dezembro de 2027.",
     img: "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=800&q=80",
     gallery: [
@@ -657,6 +840,7 @@ const EMPREENDIMENTOS = [
     location: "Joinville — SC",
     price: "A partir de R$ 390.000",
     priceNum: 390000,
+    lat: -26.3060, lng: -48.8470,
     description: "O Green Life Park é um condomínio horizontal composto por 12 torres de 8 andares cada, inserido em um parque particular de 70.000 m². O projeto prioriza a sustentabilidade com painéis solares, captação de água da chuva, telhado verde e estações de recarga para veículos elétricos.\n\nAs unidades de 2 e 3 quartos variam de 58 a 110 m², todas com varanda, churrasqueira e acabamento ecológico de alta qualidade. O condomínio conta com mais de 20.000 m² de área verde preservada, com trilhas ecológicas e lagoa paisagística.\n\nLocalizado no bairro América, próximo a escolas, hospitais e shopping centers, o Green Life Park é a escolha ideal para quem busca qualidade de vida sem abrir mão da conveniência urbana. Previsão de entrega para março de 2028.",
     img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=800&q=80",
     gallery: [
@@ -796,4 +980,52 @@ const PARCEIROS = [
   { name: "Santander",       img: "https://logo.clearbit.com/santander.com.br", url: "https://www.santander.com.br" },
   { name: "Bradesco",        img: "https://logo.clearbit.com/bradesco.com.br", url: "https://www.bradesco.com.br" },
   { name: "Sicredi",         img: "https://logo.clearbit.com/sicredi.com.br", url: "https://www.sicredi.com.br" }
+];
+
+
+/* ===================================================================
+   TABELA: BLOG_POSTS
+   ===================================================================
+   Para adicionar um post, copie o bloco entre { } e altere os campos.
+   Campos:
+     id       = identificador único (ex: "post-1")
+     title    = Título do post
+     date     = Data (ex: "15/03/2026")
+     category = Categoria (ex: "Dicas", "Mercado", "Financiamento")
+     author   = Autor (opcional)
+     image    = URL da imagem principal
+     excerpt  = Resumo curto (aparece na card)
+     content  = Conteúdo completo. Use \n\n para separar parágrafos.
+   =================================================================== */
+const BLOG_POSTS = [
+  {
+    id: "post-1",
+    title: "Como escolher o imóvel ideal para sua família",
+    date: "15/03/2026",
+    category: "Dicas",
+    author: "Su Imobiliária",
+    image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80",
+    excerpt: "Descubra os fatores essenciais para escolher a casa ou apartamento perfeito para sua família, desde localização até infraestrutura do bairro.",
+    content: "Escolher o imóvel ideal para sua família é uma decisão que vai muito além do preço. É preciso considerar diversos fatores que impactarão o dia a dia de todos os moradores.\n\nO primeiro passo é definir a localização. Pense na proximidade com o trabalho dos adultos, escolas dos filhos, supermercados, farmácias e hospitais. Um imóvel bem localizado valoriza com o tempo e oferece mais qualidade de vida.\n\nEm segundo lugar, avalie o tamanho. Não adianta comprar uma casa enorme se vocês são uma família pequena, assim como um apartamento compacto pode ficar apertado para uma família com três filhos. Pense a médio e longo prazo.\n\nPor fim, verifique a infraestrutura do bairro e do condomínio. Segurança, áreas de lazer, transporte público e opções de comércio local fazem toda a diferença no custo de vida e na rotina da família."
+  },
+  {
+    id: "post-2",
+    title: "Financiamento imobiliário: tudo que você precisa saber",
+    date: "08/03/2026",
+    category: "Financiamento",
+    author: "Su Imobiliária",
+    image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&q=80",
+    excerpt: "Entenda as modalidades de financiamento, taxas de juros, prazos e documentos necessários para realizar o sonho da casa própria.",
+    content: "O financiamento imobiliário é o caminho mais comum para a aquisição da casa própria no Brasil. Mas é fundamental entender como funciona antes de assinar qualquer contrato.\n\nAs principais modalidades são o SFH (Sistema Financeiro de Habitação) e o SFI (Sistema Financeiro Imobiliário). O SFH tem juros mais baixos mas limite de valor, enquanto o SFI permite imóveis mais caros com taxas um pouco maiores.\n\nOs documentos básicos exigidos são: RG, CPF, comprovante de residência, comprovante de renda dos últimos 3 meses, declaração do Imposto de Renda e certidão de casamento (se aplicável). Para autônomos, também é necessário o DAS e extrato bancário.\n\nUma dica importante: use a calculadora de financiamento do nosso site para simular as parcelas antes de iniciar o processo. Isso ajuda a planejar seu orçamento e evita surpresas."
+  },
+  {
+    id: "post-3",
+    title: "Mercado imobiliário de SC: tendências para 2026",
+    date: "01/03/2026",
+    category: "Mercado",
+    author: "Su Imobiliária",
+    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80",
+    excerpt: "Análise completa do mercado imobiliário catarinense: bairros em alta, valorização por região e perspectivas para investidores.",
+    content: "Santa Catarina segue se destacando no cenário imobiliário nacional. Cidades como Balneário Camboriú, Florianópolis e Itapema continuam atraindo investidores de todo o Brasil.\n\nBalneário Camboriú mantém a liderança em valorização, com novos empreendimentos de alto padrão sendo lançados regularmente. A cidade oferece infraestrutura completa e qualidade de vida incomparável.\n\nFlorianópolis segue aquecida tanto para compra quanto para aluguel, especialmente nos bairros Jurerê Internacional e Santo Antônio de Lisboa. A demanda por imóveis sustentáveis e com áreas verdes está em alta.\n\nPara investidores, Bombinhas surge como uma excelente opção para aluguel por temporada, com retorno médio anual de 8% a 10%. Joinville também se destaca pelo custo-benefício e mercado corporativo aquecido.\n\nNossa recomendação para 2026: diversifique entre imóveis prontos e lançamentos, acompanhe as taxas de juros e conte com uma assessoria especializada para tomar as melhores decisões."
+  }
 ];
