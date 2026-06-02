@@ -55,14 +55,14 @@ var BASE_PATH = (function() {
   if (redirectPath) {
     sessionStorage.removeItem('redirect');
     if (BASE_PATH && redirectPath.indexOf(BASE_PATH) === 0) {
-      var afterBase = redirectPath.substring(BASE_PATH.length).replace(/\/$/g, '');
+      var afterBase = redirectPath.substring(BASE_PATH.length).replace(/^\/+|\/+$/g, '');
       if (afterBase && afterBase !== 'index.html') {
         var clean = BASE_PATH.replace(/\/$/, '') + '/' + afterBase + '/';
         history.replaceState(null, '', clean);
         window._redirectId = afterBase;
       }
     } else {
-      var rid = redirectPath.replace(/\/$/g, '').replace(/^\//, '');
+      var rid = redirectPath.replace(/^\/+|\/+$/g, '');
       if (rid && rid !== 'index.html') {
         history.replaceState(null, '', redirectPath);
         window._redirectId = rid;
