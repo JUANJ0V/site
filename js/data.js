@@ -32,7 +32,7 @@ const SECTION_PARCEIROS_TITLE   = "Instituições que confiam em nós";
 
 /* Hero — texto do banner principal */
 const HERO_EYEBROW  = "Seu lar começa aqui";
-const HERO_TITLE    = "Encontre o imóvel perfeito para você.";
+const HERO_TITLE    = "Su Imobiliária em Balneário Camboriú | Compra, Venda e Aluguel de Imóveis";
 const HERO_SUBTITLE = "Mais de 500 imóveis à venda e aluguel. Acompanhamos você em cada passo para encontrar o lar que sempre sonhou.";
 
 /* Títulos e subtítulos de cada seção */
@@ -86,8 +86,8 @@ const TRANSLATIONS = {
 
   hero: {
     pt: { eyebrow: HERO_EYEBROW, title: HERO_TITLE, subtitle: HERO_SUBTITLE, searchBtn: "Buscar", seeProps: "Ver imóveis", consult: "Pedir consultoria" },
-    en: { eyebrow: "Your home starts here", title: "Find the perfect property for you.", subtitle: "Over 500 properties for sale and rent. We accompany you every step of the way to find the home you've always dreamed of.", searchBtn: "Search", seeProps: "See properties", consult: "Request consultation" },
-    es: { eyebrow: "Su hogar comienza aquí", title: "Encuentre la propiedad perfecta para usted.", subtitle: "Más de 500 propiedades en venta y alquiler. Le acompañamos en cada paso para encontrar el hogar que siempre soñó.", searchBtn: "Buscar", seeProps: "Ver propiedades", consult: "Solicitar consultoría" }
+    en: { eyebrow: "Your home starts here", title: "Real Estate Agent in Balneário Camboriú | Buy, Sell & Rent Properties", subtitle: "Over 500 properties for sale and rent. We accompany you every step of the way to find the home you've always dreamed of.", searchBtn: "Search", seeProps: "See properties", consult: "Request consultation" },
+    es: { eyebrow: "Su hogar comienza aquí", title: "Inmobiliaria en Balneário Camboriú | Compra, Venta y Alquiler de Propiedades", subtitle: "Más de 500 propiedades en venta y alquiler. Le acompañamos en cada paso para encontrar el hogar que siempre soñó.", searchBtn: "Buscar", seeProps: "Ver propiedades", consult: "Solicitar consultoría" }
   },
 
   sections: {

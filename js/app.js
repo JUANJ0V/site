@@ -497,11 +497,14 @@ function renderBlogPost(postId) {
   var blogT = (typeof BLOG_TRANSLATIONS !== 'undefined' && BLOG_TRANSLATIONS[post.id] && BLOG_TRANSLATIONS[post.id][lang]) || null;
   var blogContent = (blogT && blogT.content) || post.content;
   var blogTitle = (blogT && blogT.title) || post.title;
-  var paragraphs = blogContent.split('\n\n');
-  var descHtml = '';
-  for (var d = 0; d < paragraphs.length; d++) {
-    descHtml += '<p>' + paragraphs[d] + '</p>';
+  function renderContent(text) {
+    return text.split('\n\n').map(function(b) {
+      if (/^###\s/.test(b)) return '<h3>' + b.replace(/^###\s+/, '') + '</h3>';
+      if (/^##\s/.test(b)) return '<h2>' + b.replace(/^##\s+/, '') + '</h2>';
+      return '<p>' + b + '</p>';
+    }).join('');
   }
+  var descHtml = renderContent(blogContent);
   var el = document.createElement('div');
   el.className = 'blog-detail';
   el.id = postId;
@@ -1214,7 +1217,12 @@ function reTranslateCards() {
           if (contentDiv) {
             var pars = blogT.content.split('\n\n');
             var dh = '';
-            for (var d = 0; d < pars.length; d++) { dh += '<p>' + pars[d] + '</p>'; }
+            for (var d = 0; d < pars.length; d++) {
+              var b = pars[d];
+              if (/^###\s/.test(b)) dh += '<h3>' + b.replace(/^###\s+/, '') + '</h3>';
+              else if (/^##\s/.test(b)) dh += '<h2>' + b.replace(/^##\s+/, '') + '</h2>';
+              else dh += '<p>' + b + '</p>';
+            }
             contentDiv.innerHTML = dh;
           }
         }
