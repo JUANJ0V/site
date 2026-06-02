@@ -6,10 +6,35 @@ function _cardT() {
     return ct[lang] || ct.pt || {};
   } catch(e) { return {}; }
 }
+function _transData(key) {
+  try {
+    var lang = window._lang || 'pt';
+    var d = (typeof TRANSLATIONS !== 'undefined' && TRANSLATIONS[key]) || {};
+    return d[lang] || d.pt || [];
+  } catch(e) { return []; }
+}
+function _propT(id) {
+  try {
+    var lang = window._lang || 'pt';
+    if (lang === 'pt') return null;
+    var pt = (typeof PROPERTIES_TRANSLATIONS !== 'undefined' && PROPERTIES_TRANSLATIONS[id]) || {};
+    return pt[lang] || null;
+  } catch(e) { return null; }
+}
+function _empT(id) {
+  try {
+    var lang = window._lang || 'pt';
+    if (lang === 'pt') return null;
+    var et = (typeof EMPREENDIMENTOS_TRANSLATIONS !== 'undefined' && EMPREENDIMENTOS_TRANSLATIONS[id]) || {};
+    return et[lang] || null;
+  } catch(e) { return null; }
+}
 
 /* ===== SHARED CARD HTML ===== */
 function buildPropertyCardHTML(p, badgeClass, badgeText) {
   var ct = _cardT();
+  var propT = _propT(p.id);
+  var desc = (propT && propT.desc) || p.desc;
   let propsHtml = "";
   if (p.category === "Terreno") {
     propsHtml = '<span>\uD83D\uDCD0 ' + p.area + ' m\u00B2</span>'
@@ -58,7 +83,7 @@ function buildPropertyCardHTML(p, badgeClass, badgeText) {
     + '<h3>' + p.title + '</h3>'
     + locationHtml
     + '<p class="price">' + priceDisplay + '</p>'
-    + '<p class="card-desc">' + p.desc + '</p>'
+    + '<p class="card-desc">' + desc + '</p>'
     + '<div class="props">' + propsHtml + '</div>'
     + '<span class="card-link">' + ct.viewDetails + ' \u2192</span>'
     + '</div></a>'
@@ -145,6 +170,9 @@ function renderDetailCard(propId) {
   updateMetaTags(p);
   const backSection = p.type === "sale" ? "comprar" : "alugar";
   var ct = _cardT();
+  var pT = _propT(propId);
+  var detailFeatures = (pT && pT.features) || p.features;
+  var detailDescription = (pT && pT.description) || p.description;
 
   let propsLgHtml = '';
   if (p.category === "Terreno") {
@@ -185,11 +213,11 @@ function renderDetailCard(propId) {
   }
 
   let featuresHtml = '';
-  for (let f = 0; f < p.features.length; f++) {
-    featuresHtml += '<li>' + p.features[f] + '</li>';
+  for (let f = 0; f < detailFeatures.length; f++) {
+    featuresHtml += '<li>' + detailFeatures[f] + '</li>';
   }
 
-  const paragraphs = p.description.split('\n\n');
+  const paragraphs = detailDescription.split('\n\n');
   let descHtml = '';
   for (let d = 0; d < paragraphs.length; d++) {
     descHtml += '<p>' + paragraphs[d] + '</p>';
@@ -265,11 +293,17 @@ function renderEmpreendimentoDetail(empId) {
   if (!emp) return;
   updateMetaTags(emp);
   var ct = _cardT();
+  var eT = _empT(empId);
+  var empTags = (eT && eT.tags) || emp.tags;
+  var empAmenities = (eT && eT.amenities) || emp.amenities;
+  var empTimeline = (eT && eT.timeline) || emp.timeline;
+  var empPayment = (eT && eT.payment) || emp.payment;
+  var empDesc = (eT && eT.description) || emp.description;
 
   let tagsHtml = '';
   const tagClasses = ['emp-tag-red', 'emp-tag-gold', 'emp-tag-deep'];
-  for (let t = 0; t < emp.tags.length; t++) {
-    tagsHtml += '<span class="emp-tag ' + tagClasses[t % 3] + '">' + emp.tags[t] + '</span>';
+  for (let t = 0; t < empTags.length; t++) {
+    tagsHtml += '<span class="emp-tag ' + tagClasses[t % 3] + '">' + empTags[t] + '</span>';
   }
 
   let thumbHtml = '';
@@ -283,8 +317,8 @@ function renderEmpreendimentoDetail(empId) {
   }
 
   let timelineHtml = '';
-  for (let tl = 0; tl < emp.timeline.length; tl++) {
-    const item = emp.timeline[tl];
+  for (let tl = 0; tl < empTimeline.length; tl++) {
+    const item = empTimeline[tl];
     timelineHtml += '<div class="tl-item">'
       + '<p class="tl-date">' + item.date + '</p>'
       + '<p class="tl-title">' + item.title + '</p>'
@@ -293,8 +327,8 @@ function renderEmpreendimentoDetail(empId) {
   }
 
   let amenitiesHtml = '';
-  for (let a = 0; a < emp.amenities.length; a++) {
-    amenitiesHtml += '<li>' + emp.amenities[a] + '</li>';
+  for (let a = 0; a < empAmenities.length; a++) {
+    amenitiesHtml += '<li>' + empAmenities[a] + '</li>';
   }
 
   let priceRowsHtml = '';
@@ -305,11 +339,11 @@ function renderEmpreendimentoDetail(empId) {
   }
 
   let paymentHtml = '';
-  for (let pp = 0; pp < emp.payment.length; pp++) {
-    paymentHtml += '<div><p class="pp-label">' + emp.payment[pp].label + '</p><p class="pp-value">' + emp.payment[pp].value + '</p></div>';
+  for (let pp = 0; pp < empPayment.length; pp++) {
+    paymentHtml += '<div><p class="pp-label">' + empPayment[pp].label + '</p><p class="pp-value">' + empPayment[pp].value + '</p></div>';
   }
 
-  const paragraphs = emp.description.split('\n\n');
+  const paragraphs = empDesc.split('\n\n');
   let descHtml = '';
   for (let d = 1; d < paragraphs.length; d++) {
     descHtml += '<p>' + paragraphs[d] + '</p>';
@@ -363,10 +397,12 @@ function renderFAQs() {
   const container = document.querySelector('.faq-section');
   if (!container) return;
   let html = "";
-  for (let i = 0; i < FAQS.length; i++) {
+  var items = _transData('faq');
+  if (!items || !items.length) items = FAQS;
+  for (let i = 0; i < items.length; i++) {
     html += '<details class="faq-item">'
-      + '<summary>' + FAQS[i].q + '</summary>'
-      + '<div class="faq-answer">' + FAQS[i].a + '</div>'
+      + '<summary>' + items[i].q + '</summary>'
+      + '<div class="faq-answer">' + items[i].a + '</div>'
       + '</details>';
   }
   container.innerHTML = html;
@@ -473,8 +509,10 @@ function renderDepoimentos() {
   const container = document.querySelector('#depoimentos .grid-3');
   if (!container) return;
   let html = "";
-  for (let i = 0; i < DEPOIMENTOS.length; i++) {
-    const d = DEPOIMENTOS[i];
+  var items = _transData('depoimentos');
+  if (!items || !items.length) items = DEPOIMENTOS;
+  for (let i = 0; i < items.length; i++) {
+    const d = items[i];
     html += '<div class="service-card">'
       + '<p style="font-size:1.25rem;color:var(--gold);margin-bottom:1rem;">\u2605\u2605\u2605\u2605\u2605</p>'
       + '<p style="font-style:italic;margin-bottom:1rem;">"' + d.text + '"</p>'
@@ -489,15 +527,17 @@ function renderParceiros() {
   const container = document.querySelector('#parceiros > .container > div:last-child');
   if (!container) return;
   let html = "";
+  var names = _transData('parceiros');
   for (let i = 0; i < PARCEIROS.length; i++) {
     const p = PARCEIROS[i];
+    var pName = names && names[i] ? names[i] : p.name;
     if (p.img) {
       html += '<a href="' + p.url + '" style="opacity:0.6;transition:opacity 0.2s;filter:grayscale(1);" onmouseover="this.style.opacity=\'1\'" onmouseout="this.style.opacity=\'0.6\'">'
-        + '<img src="' + p.img + '" alt="' + p.name.replace(/"/g, '&quot;') + '" style="max-height:60px;width:auto;" loading="lazy" />'
+        + '<img src="' + p.img + '" alt="' + pName.replace(/"/g, '&quot;') + '" style="max-height:60px;width:auto;" loading="lazy" />'
         + '</a>';
     } else {
       html += '<a href="' + p.url + '" style="display:flex;align-items:center;justify-content:center;opacity:0.6;transition:opacity 0.2s;filter:grayscale(1);padding:1rem;font-size:0.85rem;font-weight:500;color:var(--text);border:1px solid var(--border);border-radius:4px;text-decoration:none;" onmouseover="this.style.opacity=\'1\'" onmouseout="this.style.opacity=\'0.6\'">'
-        + p.name
+        + pName
         + '</a>';
     }
   }
@@ -1090,7 +1130,7 @@ function calcFinancing() {
     document.getElementById('fin-monthly').textContent = '\u2014';
     document.getElementById('fin-total').textContent = '\u2014';
     document.getElementById('fin-interest').textContent = '\u2014';
-    document.querySelector('#finResult .fin-obs').textContent = 'A entrada n\u00E3o pode ser maior ou igual ao valor do im\u00F3vel.';
+    document.querySelector('#finResult .fin-obs').textContent = _cardT().finError || 'A entrada n\u00E3o pode ser maior ou igual ao valor do im\u00F3vel.';
     return;
   }
 
@@ -1111,7 +1151,96 @@ function calcFinancing() {
   document.getElementById('fin-monthly').textContent = fmt(monthlyPayment);
   document.getElementById('fin-total').textContent = fmt(totalPaid);
   document.getElementById('fin-interest').textContent = fmt(totalInterest);
-  document.querySelector('#finResult .fin-obs').textContent = '* Simula\u00E7\u00E3o com taxa fixa de juros. Valores aproximados sujeitos a aprova\u00E7\u00E3o de cr\u00E9dito.';
+  document.querySelector('#finResult .fin-obs').textContent = _cardT().finObs || '* Simula\u00E7\u00E3o com taxa fixa de juros. Valores aproximados sujeitos a aprova\u00E7\u00E3o de cr\u00E9dito.';
+}
+
+function reTranslateCards() {
+  var hash = window.location.hash.replace('#', '');
+  if (hash === 'comprar' || (document.getElementById('comprar') && document.getElementById('comprar').classList.contains('active'))) {
+    renderPropertyCards('#comprar .grid-3', 'sale');
+    var ct = _cardT();
+    document.querySelectorAll('#comprar .section-search input[placeholder]').forEach(function(i) { if (ct.priceMax) i.placeholder = ct.priceMax; });
+  }
+  if (hash === 'alugar' || (document.getElementById('alugar') && document.getElementById('alugar').classList.contains('active'))) {
+    renderPropertyCards('#alugar .grid-2', 'rent');
+    var ct = _cardT();
+    document.querySelectorAll('#alugar .section-search input[placeholder]').forEach(function(i) { if (ct.priceMax) i.placeholder = ct.priceMax; });
+  }
+  if (hash === 'lancamentos' || (document.getElementById('lancamentos') && document.getElementById('lancamentos').classList.contains('active'))) {
+    renderEmpreendimentoCards();
+  }
+  if (hash === 'favoritos' || (document.getElementById('favoritos') && document.getElementById('favoritos').classList.contains('active'))) {
+    renderFavorites();
+  }
+  if (hash === 'blog' || (document.getElementById('blog') && document.getElementById('blog').classList.contains('active'))) {
+    renderBlogCards();
+  }
+  // Blog detail
+  if (hash.indexOf('post-') === 0) {
+    var blogDetail = document.getElementById(hash);
+    if (blogDetail) {
+      var ct = _cardT();
+      var backLink = blogDetail.querySelector('.blog-detail-back a');
+      if (backLink) backLink.innerHTML = '&larr; ' + ct.backToBlog;
+      var authorEl = blogDetail.querySelector('.blog-detail-author');
+      if (authorEl) {
+        var post = null;
+        for (var bi = 0; bi < BLOG_POSTS.length; bi++) {
+          if (BLOG_POSTS[bi].id === hash) { post = BLOG_POSTS[bi]; break; }
+        }
+        authorEl.textContent = ct.by + ' ' + (post ? post.author || 'Su Imobili\u00E1ria' : 'Su Imobili\u00E1ria');
+      }
+    }
+  }
+  // Detail card (property)
+  if (hash.indexOf('prop-') === 0) {
+    var detailEl = document.getElementById(hash);
+    if (detailEl) {
+      var ct = _cardT();
+      detailEl.querySelectorAll('.detail-back a').forEach(function(a) {
+        a.innerHTML = '&larr; ' + ct.otherProperties;
+      });
+      var bodyH2 = detailEl.querySelector('.detail-body h2');
+      if (bodyH2) bodyH2.textContent = ct.aboutProperty;
+      var featuresH3 = detailEl.querySelector('.detail-features h3');
+      if (featuresH3) featuresH3.textContent = ct.features;
+      var scheduleBtn = detailEl.querySelector('.detail-actions a.btn-primary');
+      if (scheduleBtn) scheduleBtn.textContent = ct.scheduleVisit;
+      detailEl.querySelectorAll('.detail-actions a.btn-gold-outline').forEach(function(a) {
+        if (a.getAttribute('target') === '_blank') {
+          if (a.textContent !== ct.otherProperties) a.textContent = ct.viewOnMap;
+        }
+      });
+      var shareBtn = detailEl.querySelector('.detail-actions .btn-share');
+      if (shareBtn) shareBtn.textContent = ct.share;
+      // Property stats labels
+      detailEl.querySelectorAll('.detail-rows .lbl').forEach(function(lbl) {
+        var txt = lbl.textContent.trim().toLowerCase();
+        var map = { quartos: ct.bedrooms, quarto: ct.bedroom, banheiros: ct.bathrooms, banheiro: ct.bathroom, vagas: ct.parkings, vaga: ct.parking, 'm\u00B2': ct.sqm, frente: ct.front, fundos: ct.backs, zona: ct.zone, \u00e1rea: ct.sqm };
+        if (map[txt]) lbl.textContent = map[txt].charAt(0).toUpperCase() + map[txt].slice(1);
+      });
+    }
+  }
+  // Empreendimento detail
+  if (hash.indexOf('emp-') === 0) {
+    var empEl = document.getElementById(hash);
+    if (empEl) {
+      var ct = _cardT();
+      var empBack = empEl.querySelector('.emp-header ~ .container a.btn-primary');
+      if (!empBack) empBack = empEl.querySelector('a.btn-primary');
+      if (empBack) empBack.textContent = ct.wantToKnow;
+      var h3s = empEl.querySelectorAll('.emp-info h3');
+      var h3Labels = [ct.aboutDevelopment, ct.floorPlans, ct.constructionTimeline, ct.amenities, ct.priceTable, ct.paymentTerms];
+      h3s.forEach(function(h3, idx) {
+        if (h3Labels[idx]) h3.textContent = h3Labels[idx];
+      });
+      var ths = empEl.querySelectorAll('.price-table thead th');
+      var thLabels = [ct.unit, ct.area, ct.value];
+      ths.forEach(function(th, idx) {
+        if (thLabels[idx]) th.textContent = thLabels[idx];
+      });
+    }
+  }
 }
 
 /* ===== SHARE ===== */
@@ -1130,7 +1259,7 @@ function shareProperty(propId) {
       var btn = document.querySelector('.btn-share');
       if (btn) {
         var orig = btn.textContent;
-        btn.textContent = 'Link copiado!';
+        btn.textContent = _cardT().linkCopied;
         setTimeout(function() { btn.textContent = orig; }, 2000);
       }
     });
