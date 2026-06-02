@@ -106,6 +106,7 @@ const TRANSLATIONS = {
       favoritos: SECTION_FAVORITOS_EYEBROW, favoritosTitle: SECTION_FAVORITOS_TITLE,
       parceiros: SECTION_PARCEIROS_EYEBROW, parceirosTitle: SECTION_PARCEIROS_TITLE,
       filter: "Filtrar", clear: "Limpar", priceMax: "Preço máx.", type: "Tipo", location: "Localização", purpose: "Finalidade", allProps: "Todos os imóveis",
+      noResultsSale: "Nenhum imóvel à venda encontrado", noResultsRent: "Nenhum imóvel para alugar encontrado", noResultsLanc: "Nenhum lançamento encontrado nesta região",
       readMore: "Ler mais", share: "Compartilhar", visit: "Agendar visita", viewMap: "Ver no mapa", otherProps: "Outros imóveis", back: "Voltar",
       favEmpty: SECTION_FAVORITOS_EMPTY, favAdd: "Adicionar aos favoritos", favRemove: "Remover dos favoritos",
       sobreP1: "A Su Imobiliária nasceu em Balneário Camboriú com uma missão clara: transformar a experiência de comprar, vender ou alugar um imóvel em algo transparente, seguro e humano.",
@@ -169,6 +170,7 @@ const TRANSLATIONS = {
       favoritos: "Favorites", favoritosTitle: "My favorite properties",
       parceiros: "Partners", parceirosTitle: "Institutions that trust us",
       filter: "Filter", clear: "Clear", priceMax: "Max. price", type: "Type", location: "Location", purpose: "Purpose", allProps: "All properties",
+      noResultsSale: "No properties for sale found", noResultsRent: "No properties for rent found", noResultsLanc: "No developments found in this region",
       readMore: "Read more", share: "Share", visit: "Schedule visit", viewMap: "View on map", otherProps: "Other properties", back: "Back",
       favEmpty: "No favorite properties yet.", favAdd: "Add to favorites", favRemove: "Remove from favorites",
       sobreP1: "Su Imobiliária was born in Balneário Camboriú with a clear mission: to transform the experience of buying, selling or renting a property into something transparent, safe and human.",
@@ -232,6 +234,7 @@ const TRANSLATIONS = {
       favoritos: "Favoritos", favoritosTitle: "Mis propiedades favoritas",
       parceiros: "Socios", parceirosTitle: "Instituciones que confían en nosotros",
       filter: "Filtrar", clear: "Limpiar", priceMax: "Precio máx.", type: "Tipo", location: "Ubicación", purpose: "Finalidad", allProps: "Todas las propiedades",
+      noResultsSale: "No se encontraron propiedades en venta", noResultsRent: "No se encontraron propiedades en alquiler", noResultsLanc: "No se encontraron lanzamientos en esta región",
       readMore: "Leer más", share: "Compartir", visit: "Agendar visita", viewMap: "Ver en mapa", otherProps: "Otras propiedades", back: "Volver",
       favEmpty: "Aún no hay propiedades favoritas.", favAdd: "Agregar a favoritos", favRemove: "Quitar de favoritos",
       sobreP1: "Su Imobiliária nació en Balneário Camboriú con una misión clara: transformar la experiencia de comprar, vender o alquilar un inmueble en algo transparente, seguro y humano.",
@@ -1268,16 +1271,40 @@ const BLOG_POSTS = [
    =================================================================== */
 const BLOG_TRANSLATIONS = {
   "post-1": {
-    en: { title: "How to choose the ideal home for your family", excerpt: "Discover the essential factors for choosing the perfect house or apartment for your family, from location to neighborhood infrastructure." },
-    es: { title: "Cómo elegir el hogar ideal para su familia", excerpt: "Descubra los factores esenciales para elegir la casa o apartamento perfecto para su familia, desde la ubicación hasta la infraestructura del barrio." }
+    en: {
+      title: "How to choose the ideal home for your family",
+      excerpt: "Discover the essential factors for choosing the perfect house or apartment for your family, from location to neighborhood infrastructure.",
+      content: "Choosing the ideal home for your family is a decision that goes far beyond price. It is necessary to consider several factors that will impact the daily lives of all residents.\n\nThe first step is to define the location. Think about proximity to adult workplaces, children's schools, supermarkets, pharmacies and hospitals. A well-located property appreciates over time and offers more quality of life.\n\nSecond, evaluate the size. There is no point in buying a huge house if you are a small family, just as a compact apartment can be cramped for a family with three children. Think medium and long term.\n\nFinally, check the infrastructure of the neighborhood and condominium. Security, leisure areas, public transportation and local commerce options make all the difference in the cost of living and family routine."
+    },
+    es: {
+      title: "Cómo elegir el hogar ideal para su familia",
+      excerpt: "Descubra los factores esenciales para elegir la casa o apartamento perfecto para su familia, desde la ubicación hasta la infraestructura del barrio.",
+      content: "Elegir el hogar ideal para su familia es una decisión que va mucho más allá del precio. Es necesario considerar diversos factores que impactarán el día a día de todos los residentes.\n\nEl primer paso es definir la ubicación. Piense en la proximidad al trabajo de los adultos, escuelas de los hijos, supermercados, farmacias y hospitales. Una propiedad bien ubicada se valoriza con el tiempo y ofrece más calidad de vida.\n\nEn segundo lugar, evalúe el tamaño. No sirve comprar una casa enorme si son una familia pequeña, así como un apartamento compacto puede quedar ajustado para una familia con tres hijos. Piense a mediano y largo plazo.\n\nPor último, verifique la infraestructura del barrio y del condominio. Seguridad, áreas de ocio, transporte público y opciones de comercio local hacen toda la diferencia en el costo de vida y en la rutina familiar."
+    }
   },
   "post-2": {
-    en: { title: "Real estate financing: everything you need to know", excerpt: "Understand financing options, interest rates, terms and required documents to achieve the dream of homeownership." },
-    es: { title: "Financiamiento inmobiliario: todo lo que necesita saber", excerpt: "Conozca las modalidades de financiamiento, tasas de interés, plazos y documentos necesarios para realizar el sueño de la casa propia." }
+    en: {
+      title: "Real estate financing: everything you need to know",
+      excerpt: "Understand financing options, interest rates, terms and required documents to achieve the dream of homeownership.",
+      content: "Real estate financing is the most common path to homeownership in Brazil. But it is essential to understand how it works before signing any contract.\n\nThe main modalities are SFH (Housing Finance System) and SFI (Real Estate Finance System). SFH has lower interest rates but a value limit, while SFI allows more expensive properties with slightly higher rates.\n\nThe basic required documents are: ID, CPF, proof of residence, proof of income for the last 3 months, Income Tax return and marriage certificate (if applicable). For self-employed workers, DAS and bank statement are also required.\n\nAn important tip: use our website's financing calculator to simulate the installments before starting the process. This helps plan your budget and avoid surprises."
+    },
+    es: {
+      title: "Financiamiento inmobiliario: todo lo que necesita saber",
+      excerpt: "Conozca las modalidades de financiamiento, tasas de interés, plazos y documentos necesarios para realizar el sueño de la casa propia.",
+      content: "El financiamiento inmobiliario es el camino más común para la adquisición de la casa propia en Brasil. Pero es fundamental entender cómo funciona antes de firmar cualquier contrato.\n\nLas principales modalidades son el SFH (Sistema de Financiamiento de Vivienda) y el SFI (Sistema de Financiamiento Inmobiliario). El SFH tiene intereses más bajos pero un límite de valor, mientras que el SFI permite inmuebles más caros con tasas un poco mayores.\n\nLos documentos básicos exigidos son: cédula de identidad, CPF, comprobante de residencia, comprobante de ingresos de los últimos 3 meses, declaración de impuesto a la renta y certificado de matrimonio (si aplica). Para autónomos, también se requiere el DAS y extracto bancario.\n\nUn consejo importante: use la calculadora de financiamiento de nuestro sitio para simular las cuotas antes de iniciar el proceso. Esto ayuda a planificar su presupuesto y evita sorpresas."
+    }
   },
   "post-3": {
-    en: { title: "SC real estate market: trends for 2026", excerpt: "Complete analysis of the Santa Catarina real estate market: trending neighborhoods, appreciation by region and prospects for investors." },
-    es: { title: "Mercado inmobiliario de SC: tendencias para 2026", excerpt: "Análisis completo del mercado inmobiliario catarinense: barrios en auge, valorización por región y perspectivas para inversores." }
+    en: {
+      title: "SC real estate market: trends for 2026",
+      excerpt: "Complete analysis of the Santa Catarina real estate market: trending neighborhoods, appreciation by region and prospects for investors.",
+      content: "Santa Catarina continues to stand out in the national real estate scene. Cities like Balneário Camboriú, Florianópolis and Itapema keep attracting investors from all over Brazil.\n\nBalneário Camboriú maintains its leadership in appreciation, with new high-standard developments being launched regularly. The city offers complete infrastructure and unmatched quality of life.\n\nFlorianópolis remains heated for both buying and renting, especially in Jurerê Internacional and Santo Antônio de Lisboa neighborhoods. The demand for sustainable properties with green areas is on the rise.\n\nFor investors, Bombinhas emerges as an excellent option for seasonal rentals, with an average annual return of 8% to 10%. Joinville also stands out for its cost-benefit and heated corporate market.\n\nOur recommendation for 2026: diversify between ready properties and new launches, monitor interest rates and rely on specialized advisors to make the best decisions."
+    },
+    es: {
+      title: "Mercado inmobiliario de SC: tendencias para 2026",
+      excerpt: "Análisis completo del mercado inmobiliario catarinense: barrios en auge, valorización por región y perspectivas para inversores.",
+      content: "Santa Catarina sigue destacándose en el escenario inmobiliario nacional. Ciudades como Balneário Camboriú, Florianópolis e Itapema continúan atrayendo inversores de todo Brasil.\n\nBalneário Camboriú mantiene el liderazgo en valorización, con nuevos emprendimientos de alto estándar siendo lanzados regularmente. La ciudad ofrece infraestructura completa y calidad de vida incomparable.\n\nFlorianópolis sigue caliente tanto para compra como para alquiler, especialmente en los barrios Jurerê Internacional y Santo Antônio de Lisboa. La demanda por inmuebles sostenibles y con áreas verdes está en alza.\n\nPara inversores, Bombinhas surge como una excelente opción para alquiler por temporada, con retorno promedio anual del 8% al 10%. Joinville también se destaca por su relación costo-beneficio y mercado corporativo caliente.\n\nNuestra recomendación para 2026: diversifique entre inmuebles listos y lanzamientos, acompañe las tasas de interés y cuente con asesoría especializada para tomar las mejores decisiones."
+    }
   }
 };
 

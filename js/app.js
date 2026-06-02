@@ -60,7 +60,7 @@ function buildPropertyCardHTML(p, badgeClass, badgeText) {
   var priceDisplay = p.price;
   if (p.type === 'rent' && p.price.indexOf('/m\u00EAs') === -1) priceDisplay += ' ' + ct.perMonth;
   var propUrl = window.location.origin + window.location.pathname + '#' + p.id;
-  var rawMsg = WHATSAPP_MSG.replace('{titulo}', p.title).replace('{preco}', priceDisplay) + '\n\n' + propUrl;
+  var rawMsg = WHATSAPP_MSG.replace('{titulo}', title).replace('{preco}', priceDisplay) + '\n\n' + propUrl;
   var whatsappUrl = WHATSAPP_URL + '?text=' + encodeURIComponent(rawMsg);
 
   var statusHtml = '';
@@ -72,7 +72,7 @@ function buildPropertyCardHTML(p, badgeClass, badgeText) {
 
   return '<div class="card-wrap reveal">'
     + '<a href="#' + p.id + '" class="card">'
-    + '<div class="card-img"><img src="' + p.img + '" alt="' + p.title.replace(/"/g, '&quot;') + '" loading="lazy" />'
+    + '<div class="card-img"><img src="' + p.img + '" alt="' + title.replace(/"/g, '&quot;') + '" loading="lazy" />'
     + '<button class="fav-btn" data-id="' + p.id + '" aria-label="' + ct.favorite + '" onclick="event.preventDefault();event.stopPropagation();toggleFav(\'' + p.id + '\');">' + (isFav(p.id) ? '\u2764' : '\u2661') + '</button>'
     + statusHtml
     + '</div>'
@@ -100,14 +100,15 @@ function buildLancCardHTML(e) {
   var ct = _cardT();
   var eT = _empT(e.id);
   var lancDesc = (eT && eT.description) ? eT.description.split('\n\n')[0] : e.description.split('\n\n')[0];
+  var lancTitle = (eT && eT.title) || e.title;
   return '<a href="#' + e.id + '" class="lanc-card">'
     + '<div class="card-img">'
-    + '<img src="' + e.img + '" alt="' + e.title.replace(/"/g, '&quot;') + '" loading="lazy" />'
+    + '<img src="' + e.img + '" alt="' + lancTitle.replace(/"/g, '&quot;') + '" loading="lazy" />'
     + '<span class="badge badge-lanc lanc-badge">' + ct.launch + '</span>'
     + '<span class="lanc-tag">' + e.price + '</span>'
     + '</div>'
     + '<div class="card-body">'
-    + '<h3>' + e.title + '</h3>'
+    + '<h3>' + lancTitle + '</h3>'
     + '<p>' + lancDesc + '</p>'
     + '<div class="lanc-progress">'
     + '<div class="lanc-progress-bar"><div class="lanc-progress-fill" style="width:' + e.progress + '%"></div></div>'
@@ -492,7 +493,11 @@ function renderBlogPost(postId) {
     if (BLOG_POSTS[bi].id === postId) { post = BLOG_POSTS[bi]; break; }
   }
   if (!post) return;
-  var paragraphs = post.content.split('\n\n');
+  var lang = window._lang || 'pt';
+  var blogT = (typeof BLOG_TRANSLATIONS !== 'undefined' && BLOG_TRANSLATIONS[post.id] && BLOG_TRANSLATIONS[post.id][lang]) || null;
+  var blogContent = (blogT && blogT.content) || post.content;
+  var blogTitle = (blogT && blogT.title) || post.title;
+  var paragraphs = blogContent.split('\n\n');
   var descHtml = '';
   for (var d = 0; d < paragraphs.length; d++) {
     descHtml += '<p>' + paragraphs[d] + '</p>';
@@ -503,10 +508,10 @@ function renderBlogPost(postId) {
   el.innerHTML = '<div class="blog-detail-inner">'
     + '<div class="blog-detail-header">'
     + '<p class="blog-detail-meta"><span>' + post.date + '</span> <span>' + post.category + '</span></p>'
-    + '<h1>' + post.title + '</h1>'
+    + '<h1>' + blogTitle + '</h1>'
     + '<p class="blog-detail-author">' + _cardT().by + ' ' + (post.author || 'Su Imobili\u00E1ria') + '</p>'
     + '</div>'
-    + '<div class="blog-detail-img"><img src="' + post.image + '" alt="' + post.title.replace(/"/g, '&quot;') + '" /></div>'
+    + '<div class="blog-detail-img"><img src="' + post.image + '" alt="' + blogTitle.replace(/"/g, '&quot;') + '" /></div>'
     + '<div class="blog-detail-content">' + descHtml + '</div>'
     + '<div class="blog-detail-back"><a href="#blog" class="btn-gold-outline">&larr; ' + _cardT().backToBlog + '</a></div>'
     + '</div>';
@@ -1198,6 +1203,22 @@ function reTranslateCards() {
         }
         authorEl.textContent = ct.by + ' ' + (post ? post.author || 'Su Imobili\u00E1ria' : 'Su Imobili\u00E1ria');
       }
+      // Translate title and content
+      var lang = window._lang || 'pt';
+      var blogT = (typeof BLOG_TRANSLATIONS !== 'undefined' && BLOG_TRANSLATIONS[hash] && BLOG_TRANSLATIONS[hash][lang]) || null;
+      if (blogT) {
+        var h1 = blogDetail.querySelector('.blog-detail-header h1');
+        if (h1 && blogT.title) h1.textContent = blogT.title;
+        if (blogT.content) {
+          var contentDiv = blogDetail.querySelector('.blog-detail-content');
+          if (contentDiv) {
+            var pars = blogT.content.split('\n\n');
+            var dh = '';
+            for (var d = 0; d < pars.length; d++) { dh += '<p>' + pars[d] + '</p>'; }
+            contentDiv.innerHTML = dh;
+          }
+        }
+      }
     }
   }
   // Detail card (property)
@@ -1227,6 +1248,31 @@ function reTranslateCards() {
         var map = { quartos: ct.bedrooms, quarto: ct.bedroom, banheiros: ct.bathrooms, banheiro: ct.bathroom, vagas: ct.parkings, vaga: ct.parking, 'm\u00B2': ct.sqm, frente: ct.front, fundos: ct.backs, zona: ct.zone, \u00e1rea: ct.sqm };
         if (map[txt]) lbl.textContent = map[txt].charAt(0).toUpperCase() + map[txt].slice(1);
       });
+      // Property title, description, features re-translation
+      var pT = _propT(hash);
+      if (pT) {
+        if (pT.title) {
+          var detailH1 = detailEl.querySelector('.detail-breadcrumb h1');
+          if (detailH1) detailH1.textContent = pT.title;
+        }
+        if (pT.description) {
+          var detailDesc = detailEl.querySelector('.detail-body');
+          if (detailDesc) {
+            var paras = pT.description.split('\n\n');
+            var dh = '';
+            for (var d = 0; d < paras.length; d++) { dh += '<p>' + paras[d] + '</p>'; }
+            detailDesc.innerHTML = dh;
+          }
+        }
+        if (pT.features) {
+          var featList = detailEl.querySelector('.detail-features ul');
+          if (featList) {
+            var fh = '';
+            for (var f = 0; f < pT.features.length; f++) { fh += '<li>' + pT.features[f] + '</li>'; }
+            featList.innerHTML = fh;
+          }
+        }
+      }
     }
   }
   // Empreendimento detail
@@ -1247,6 +1293,73 @@ function reTranslateCards() {
       ths.forEach(function(th, idx) {
         if (thLabels[idx]) th.textContent = thLabels[idx];
       });
+      // Re-translate description, tags, timeline, amenities, payment
+      var eT = _empT(hash);
+      if (eT) {
+        var empHeader = empEl.querySelector('.emp-header');
+        if (empHeader && eT.description) {
+          var paras = eT.description.split('\n\n');
+          var pEls = empHeader.querySelectorAll('p');
+          if (pEls.length > 0) pEls[pEls.length - 1].textContent = paras[0];
+        }
+        if (eT.description) {
+          var empInfo = empEl.querySelector('.emp-info > div:first-child');
+          if (empInfo) {
+            var descParas = eT.description.split('\n\n');
+            var descHtml = '';
+            for (var d = 1; d < descParas.length; d++) { descHtml += '<p>' + descParas[d] + '</p>'; }
+            var existingDesc = empInfo.querySelector('h3');
+            if (existingDesc) {
+              var next = existingDesc.nextElementSibling;
+              while (next && next.tagName !== 'H3') {
+                var toRemove = next;
+                next = next.nextElementSibling;
+                toRemove.remove();
+              }
+              existingDesc.insertAdjacentHTML('afterend', descHtml);
+            }
+          }
+        }
+        if (eT.tags) {
+          var tagContainer = empEl.querySelector('.emp-tags');
+          if (tagContainer) {
+            var tagClasses = ['emp-tag-red', 'emp-tag-gold', 'emp-tag-deep'];
+            var th = '';
+            for (var t = 0; t < eT.tags.length; t++) {
+              th += '<span class="emp-tag ' + tagClasses[t % 3] + '">' + eT.tags[t] + '</span>';
+            }
+            tagContainer.innerHTML = th;
+          }
+        }
+        if (eT.timeline) {
+          var tlContainer = empEl.querySelector('.timeline');
+          if (tlContainer) {
+            var tlh = '';
+            for (var tl = 0; tl < eT.timeline.length; tl++) {
+              tlh += '<div class="tl-item"><p class="tl-date">' + eT.timeline[tl].date + '</p><p class="tl-title">' + eT.timeline[tl].title + '</p><p class="tl-desc">' + eT.timeline[tl].desc + '</p></div>';
+            }
+            tlContainer.innerHTML = tlh;
+          }
+        }
+        if (eT.amenities) {
+          var amContainer = empEl.querySelector('.amenities');
+          if (amContainer) {
+            var amh = '';
+            for (var a = 0; a < eT.amenities.length; a++) { amh += '<li>' + eT.amenities[a] + '</li>'; }
+            amContainer.innerHTML = amh;
+          }
+        }
+        if (eT.payment) {
+          var pmContainer = empEl.querySelector('.payment-plan');
+          if (pmContainer) {
+            var pmh = '';
+            for (var pp = 0; pp < eT.payment.length; pp++) {
+              pmh += '<div><p class="pp-label">' + eT.payment[pp].label + '</p><p class="pp-value">' + eT.payment[pp].value + '</p></div>';
+            }
+            pmContainer.innerHTML = pmh;
+          }
+        }
+      }
     }
   }
 }
@@ -1322,13 +1435,15 @@ function handleComprarSearch() {
     }
     return true;
   });
+  var ct = _cardT();
+  var secT = _t('sections');
   let html = '';
   if (results.length === 0) {
-    html = '<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted-foreground);"><p style="font-size:1.25rem;">Nenhum im\u00F3vel \u00E0 venda encontrado</p></div>';
+    html = '<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted-foreground);"><p style="font-size:1.25rem;">' + (secT.noResultsSale || 'Nenhum im\u00F3vel \u00E0 venda encontrado') + '</p></div>';
   } else {
-    for (let i = 0; i < results.length; i++) html += buildPropertyCardHTML(results[i], 'badge-sale', 'Venda');
+    for (let i = 0; i < results.length; i++) html += buildPropertyCardHTML(results[i], 'badge-sale', ct.sale);
   }
-  html += '<div style="grid-column:1/-1;text-align:center;padding:1rem 0;"><button onclick="clearComprarSearch()" class="btn-gold-outline" style="font-size:0.7rem;padding:0.6rem 1.5rem;cursor:pointer;">Limpar filtros</button></div>';
+  html += '<div style="grid-column:1/-1;text-align:center;padding:1rem 0;"><button onclick="clearComprarSearch()" class="btn-gold-outline" style="font-size:0.7rem;padding:0.6rem 1.5rem;cursor:pointer;">' + (secT.clear || 'Limpar') + '</button></div>';
   container.innerHTML = html;
   if (typeof window._revealObserver !== 'undefined') container.querySelectorAll('.reveal').forEach(function(el) { window._revealObserver.observe(el); });
 }
@@ -1361,13 +1476,15 @@ function handleAlugarSearch() {
     }
     return true;
   });
+  var ct = _cardT();
+  var secT = _t('sections');
   let html = '';
   if (results.length === 0) {
-    html = '<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted-foreground);"><p style="font-size:1.25rem;">Nenhum im\u00F3vel para alugar encontrado</p></div>';
+    html = '<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted-foreground);"><p style="font-size:1.25rem;">' + (secT.noResultsRent || 'Nenhum im\u00F3vel para alugar encontrado') + '</p></div>';
   } else {
-    for (let i = 0; i < results.length; i++) html += buildPropertyCardHTML(results[i], 'badge-rent', 'Aluguel');
+    for (let i = 0; i < results.length; i++) html += buildPropertyCardHTML(results[i], 'badge-rent', ct.rent);
   }
-  html += '<div style="grid-column:1/-1;text-align:center;padding:1rem 0;"><button onclick="clearAlugarSearch()" class="btn-gold-outline" style="font-size:0.7rem;padding:0.6rem 1.5rem;cursor:pointer;">Limpar filtros</button></div>';
+  html += '<div style="grid-column:1/-1;text-align:center;padding:1rem 0;"><button onclick="clearAlugarSearch()" class="btn-gold-outline" style="font-size:0.7rem;padding:0.6rem 1.5rem;cursor:pointer;">' + (secT.clear || 'Limpar') + '</button></div>';
   container.innerHTML = html;
   if (typeof window._revealObserver !== 'undefined') container.querySelectorAll('.reveal').forEach(function(el) { window._revealObserver.observe(el); });
 }
@@ -1389,13 +1506,14 @@ function handleLancSearch() {
   if (!_origLancHTML) { const l = document.querySelector('#lancamentos .grid-3'); if (l) _origLancHTML = l.innerHTML; }
   if (!locationVal) { clearLancSearch(); return; }
   const results = EMPREENDIMENTOS.filter(function(e) { return e.location.indexOf(locationVal) !== -1; });
+  var secT = _t('sections');
   let html = '';
   if (results.length === 0) {
-    html = '<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted-foreground);"><p style="font-size:1.25rem;">Nenhum lan\u00E7amento encontrado nesta regi\u00E3o</p></div>';
+    html = '<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted-foreground);"><p style="font-size:1.25rem;">' + (secT.noResultsLanc || 'Nenhum lan\u00E7amento encontrado nesta regi\u00E3o') + '</p></div>';
   } else {
     for (let i = 0; i < results.length; i++) html += buildLancCardHTML(results[i]);
   }
-  html += '<div style="grid-column:1/-1;text-align:center;padding:1rem 0;"><button onclick="clearLancSearch()" class="btn-gold-outline" style="font-size:0.7rem;padding:0.6rem 1.5rem;cursor:pointer;">Limpar filtros</button></div>';
+  html += '<div style="grid-column:1/-1;text-align:center;padding:1rem 0;"><button onclick="clearLancSearch()" class="btn-gold-outline" style="font-size:0.7rem;padding:0.6rem 1.5rem;cursor:pointer;">' + (secT.clear || 'Limpar') + '</button></div>';
   container.innerHTML = html;
 }
 function clearLancSearch() {
