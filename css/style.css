@@ -1429,6 +1429,8 @@
     .blog-detail-img { aspect-ratio: 16/9; overflow: hidden; border-radius: 8px; margin-bottom: 2rem; }
     .blog-detail-img img { width: 100%; height: 100%; object-fit: cover; }
     .blog-detail-content p { font-size: 0.9rem; color: var(--text); line-height: 1.7; margin-bottom: 1.2rem; }
+    .blog-detail-content h2 { font-size: 1.4rem; color: var(--text); margin: 1.8rem 0 0.8rem; font-family: var(--font-serif); }
+    .blog-detail-content h3 { font-size: 1.15rem; color: var(--text); margin: 1.5rem 0 0.6rem; font-family: var(--font-serif); }
     .blog-detail-back { margin-top: 2rem; }
 
     .reveal {
