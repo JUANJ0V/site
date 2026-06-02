@@ -30,6 +30,35 @@ function _empT(id) {
   } catch(e) { return null; }
 }
 
+// Handle initial redirect from 404.html (GitHub Pages SPA fallback)
+(function() {
+  var redirectPath = sessionStorage.getItem('redirect');
+  if (redirectPath) {
+    sessionStorage.removeItem('redirect');
+    var rid = redirectPath.replace(/\/$/g, '').replace(/^\//, '');
+    if (rid && rid !== 'index.html') {
+      history.replaceState(null, '', redirectPath);
+      window._redirectId = rid;
+    }
+  }
+})();
+
+/* ===== SPA ROUTER HELPERS ===== */
+function getSectionId() {
+  if (window.location.protocol === 'file:') return 'inicio';
+  var p = window.location.pathname.replace(/\/$/g, '');
+  if (p === '' || p === '/index.html') return 'inicio';
+  return p.replace(/^\//, '');
+}
+function goTo(id) {
+  if (!id || id === 'topo') id = 'inicio';
+  var url = id === 'inicio' ? '/' : '/' + id + '/';
+  if (window.location.pathname !== url) {
+    try { history.pushState(null, '', url); } catch(e) {}
+  }
+  if (window._spaNavigate) window._spaNavigate(id);
+}
+
 /* ===== SHARED CARD HTML ===== */
 function buildPropertyCardHTML(p, badgeClass, badgeText) {
   var ct = _cardT();
@@ -59,7 +88,7 @@ function buildPropertyCardHTML(p, badgeClass, badgeText) {
 
   var priceDisplay = p.price;
   if (p.type === 'rent' && p.price.indexOf('/m\u00EAs') === -1) priceDisplay += ' ' + ct.perMonth;
-  var propUrl = window.location.origin + window.location.pathname + '#' + p.id;
+  var propUrl = window.location.origin + '/' + p.id + '/';
   var rawMsg = WHATSAPP_MSG.replace('{titulo}', title).replace('{preco}', priceDisplay) + '\n\n' + propUrl;
   var whatsappUrl = WHATSAPP_URL + '?text=' + encodeURIComponent(rawMsg);
 
@@ -71,7 +100,7 @@ function buildPropertyCardHTML(p, badgeClass, badgeText) {
   }
 
   return '<div class="card-wrap reveal">'
-    + '<a href="#' + p.id + '" class="card">'
+    + '<a href="/' + p.id + '/" class="card">'
     + '<div class="card-img"><img src="' + p.img + '" alt="' + title.replace(/"/g, '&quot;') + '" loading="lazy" />'
     + '<button class="fav-btn" data-id="' + p.id + '" aria-label="' + ct.favorite + '" onclick="event.preventDefault();event.stopPropagation();toggleFav(\'' + p.id + '\');">' + (isFav(p.id) ? '\u2764' : '\u2661') + '</button>'
     + statusHtml
@@ -101,7 +130,7 @@ function buildLancCardHTML(e) {
   var eT = _empT(e.id);
   var lancDesc = (eT && eT.description) ? eT.description.split('\n\n')[0] : e.description.split('\n\n')[0];
   var lancTitle = (eT && eT.title) || e.title;
-  return '<a href="#' + e.id + '" class="lanc-card">'
+  return '<a href="/' + e.id + '/" class="lanc-card">'
     + '<div class="card-img">'
     + '<img src="' + e.img + '" alt="' + lancTitle.replace(/"/g, '&quot;') + '" loading="lazy" />'
     + '<span class="badge badge-lanc lanc-badge">' + ct.launch + '</span>'
@@ -237,7 +266,7 @@ function renderDetailCard(propId) {
 
   var detailPriceDisplay = p.price;
   if (p.type === 'rent' && p.price.indexOf('/m\u00EAs') === -1) detailPriceDisplay += ' ' + ct.perMonth;
-  var detailPropUrl = window.location.origin + window.location.pathname + '#' + p.id;
+  var detailPropUrl = window.location.origin + '/' + p.id + '/';
   var detailRawMsg = WHATSAPP_MSG.replace('{titulo}', p.title).replace('{preco}', detailPriceDisplay) + '\n\n' + detailPropUrl;
   var detailWhatsUrl = WHATSAPP_URL + '?text=' + encodeURIComponent(detailRawMsg);
 
@@ -270,7 +299,7 @@ function renderDetailCard(propId) {
     + '<a href="' + detailWhatsUrl + '" class="btn-primary" target="_blank">' + ct.scheduleVisit + '</a>'
     + (p.maps ? '<a href="' + p.maps + '" class="btn-gold-outline" target="_blank">' + ct.viewOnMap + '</a>' : '')
     + '<button class="btn-gold-outline btn-share" onclick="shareProperty(\'' + p.id + '\')">' + ct.share + '</button>'
-    + '<a href="#' + backSection + '" class="btn-gold-outline">' + ct.otherProperties + '</a>'
+    + '<a href="/' + backSection + '/" class="btn-gold-outline">' + ct.otherProperties + '</a>'
     + '</div>'
     + '</div>';
 
@@ -390,7 +419,7 @@ function renderEmpreendimentoDetail(empId) {
     + '<table class="price-table"><thead><tr><th>' + ct.unit + '</th><th>' + ct.area + '</th><th>' + ct.value + '</th></tr></thead><tbody>' + priceRowsHtml + '</tbody></table>'
     + '<h3>' + ct.paymentTerms + '</h3>'
     + '<div class="payment-plan">' + paymentHtml + '</div>'
-    + '<a href="#contato" class="btn-primary" style="margin-top:1rem;">' + ct.wantToKnow + '</a>'
+    + '<a href="/contato/" class="btn-primary" style="margin-top:1rem;">' + ct.wantToKnow + '</a>'
     + '</div>'
     + '</div>'
     + '</div>';
@@ -470,7 +499,7 @@ function renderBlogCards() {
     var blogT = (typeof BLOG_TRANSLATIONS !== 'undefined' && BLOG_TRANSLATIONS[post.id] && BLOG_TRANSLATIONS[post.id][lang]) || null;
     var blogTitle = (blogT && blogT.title) || post.title;
     var blogExcerpt = (blogT && blogT.excerpt) || post.excerpt;
-    html += '<a href="#' + post.id + '" class="blog-card">'
+    html += '<a href="/' + post.id + '/" class="blog-card">'
       + '<div class="blog-img"><img src="' + post.image + '" alt="' + blogTitle.replace(/"/g, '&quot;') + '" loading="lazy" /></div>'
       + '<div class="blog-body">'
       + '<div class="blog-meta"><span class="blog-date">' + post.date + '</span><span class="blog-category">' + post.category + '</span></div>'
@@ -493,6 +522,11 @@ function renderBlogPost(postId) {
     if (BLOG_POSTS[bi].id === postId) { post = BLOG_POSTS[bi]; break; }
   }
   if (!post) return;
+  // Update meta tags for blog post
+  var ttl = document.querySelector('title');
+  if (ttl) ttl.textContent = blogTitle + ' \u2014 ' + SITE_NAME;
+  var ogU = document.querySelector('meta[property="og:url"]');
+  if (ogU) ogU.content = window.location.origin + '/' + postId + '/';
   var lang = window._lang || 'pt';
   var blogT = (typeof BLOG_TRANSLATIONS !== 'undefined' && BLOG_TRANSLATIONS[post.id] && BLOG_TRANSLATIONS[post.id][lang]) || null;
   var blogContent = (blogT && blogT.content) || post.content;
@@ -516,7 +550,7 @@ function renderBlogPost(postId) {
     + '</div>'
     + '<div class="blog-detail-img"><img src="' + post.image + '" alt="' + blogTitle.replace(/"/g, '&quot;') + '" /></div>'
     + '<div class="blog-detail-content">' + descHtml + '</div>'
-    + '<div class="blog-detail-back"><a href="#blog" class="btn-gold-outline">&larr; ' + _cardT().backToBlog + '</a></div>'
+    + '<div class="blog-detail-back"><a href="/blog/" class="btn-gold-outline">&larr; ' + _cardT().backToBlog + '</a></div>'
     + '</div>';
   document.body.appendChild(el);
 }
@@ -614,7 +648,7 @@ function updateGallery() {
   document.getElementById("galleryPrice").textContent = data.price || "";
 
   var link = document.getElementById("galleryDetailsLink");
-  link.href = "#" + data.id;
+  link.href = "/" + data.id + "/";
   link.style.display = data.description ? "" : "none";
 
   var thumbs = document.getElementById("galleryThumbs");
@@ -653,11 +687,12 @@ function buildDropdownMenus() {
 
   function catLink(sectionId, cat, count) {
     var a = document.createElement('a');
-    a.href = '#' + sectionId;
+    a.href = '/' + sectionId + '/';
     a.textContent = cat + ' (' + count + ')';
     a.addEventListener('click', function(e) {
       e.preventDefault();
-      window.location.hash = sectionId;
+      e.stopPropagation();
+      goTo(sectionId);
       var iv = setInterval(function() {
         var sel = document.getElementById(sectionId + '-type');
         if (sel) {
@@ -689,7 +724,7 @@ function buildDropdownMenus() {
     var sectionId = typeFilter === 'sale' ? 'comprar' : 'alugar';
     // "Ver todos" link at top
     var allLink = document.createElement('a');
-    allLink.href = '#' + sectionId;
+    allLink.href = '/' + sectionId + '/';
     allLink.textContent = _cardT().viewAll;
     allLink.style.borderBottom = '1px solid rgba(255,255,255,0.06)';
     allLink.style.marginBottom = '0.25rem';
@@ -724,7 +759,7 @@ function buildDropdownMenus() {
   }
   if (lancContainers.length && EMPREENDIMENTOS && EMPREENDIMENTOS.length) {
     var allLancLink = document.createElement('a');
-    allLancLink.href = '#lancamentos';
+    allLancLink.href = '/lancamentos/';
     allLancLink.textContent = _cardT().viewAll;
     allLancLink.style.borderBottom = '1px solid rgba(255,255,255,0.06)';
     allLancLink.style.marginBottom = '0.25rem';
@@ -735,7 +770,7 @@ function buildDropdownMenus() {
     for (var li = 0; li < EMPREENDIMENTOS.length; li++) {
       for (var lj = 0; lj < lancContainers.length; lj++) {
         var la = document.createElement('a');
-        la.href = '#' + EMPREENDIMENTOS[li].id;
+        la.href = '/' + EMPREENDIMENTOS[li].id + '/';
         la.textContent = EMPREENDIMENTOS[li].title;
         lancContainers[lj].appendChild(la);
       }
@@ -829,8 +864,8 @@ function setupMobileNav() {
   function updateNav(id) {
     const links = document.querySelectorAll(".nav-list a");
     for (let i = 0; i < links.length; i++) links[i].classList.remove("active");
-    var match = document.querySelector('.nav-list a[href="#' + id + '"]');
-    if (!match && id === "inicio") match = document.querySelector('.nav-list a[href="#topo"]');
+    var match = document.querySelector('.nav-list a[href="/' + id + '/"]');
+    if (!match && id === "inicio") match = document.querySelector('.nav-list a[href="/"]');
     if (match) match.classList.add("active");
   }
 
@@ -844,7 +879,6 @@ function setupMobileNav() {
     window.scrollTo(0, 0);
     if (!id || id === "topo") {
       id = "inicio";
-      window.location.hash = 'inicio';
     }
     // Guard: skip if already showing this section (prevents flash)
     if (groups[id]) {
@@ -923,6 +957,7 @@ function setupMobileNav() {
       }
     }
   }
+  window._spaNavigate = navigate;
 
   document.querySelector(".menu-btn").addEventListener("click", function() {
     document.getElementById("mobileNav").classList.add("open");
@@ -940,12 +975,20 @@ function setupMobileNav() {
     const a = e.target.closest("a");
     if (!a) return;
     const href = a.getAttribute("href");
-    if (!href || href.charAt(0) !== "#") return;
+    if (!href) return;
     if (a.hasAttribute("target")) return;
-    const id = href.slice(1);
-    if (!id) return;
-    e.preventDefault();
-    window.location.hash = id;
+    // Home link
+    if (href === '/' || href === '/index.html') {
+      e.preventDefault();
+      goTo('inicio');
+      return;
+    }
+    // Internal SPA route: /section/ or /section-id/
+    var match = href.match(/^\/([^\/]+)\/?$/);
+    if (match) {
+      e.preventDefault();
+      goTo(match[1]);
+    }
   });
 
   // Gallery: open from detail card / empreendimento image clicks
@@ -1060,7 +1103,7 @@ function setupMobileNav() {
       var title = p.title || '';
       var price = p.price || '';
       var img = p.img || '';
-      var link = '#' + p.id;
+      var link = '/' + p.id + '/';
       var popupHtml = '<div style="min-width:180px;font-family:Inter,sans-serif;">'
         + (img ? '<img src="' + img.replace('w=800', 'w=200') + '" alt="" style="width:100%;height:100px;object-fit:cover;border-radius:4px;margin-bottom:6px;" />' : '')
         + '<div style="font-size:0.8rem;font-weight:600;margin-bottom:2px;">' + title + '</div>'
@@ -1087,11 +1130,11 @@ function setupMobileNav() {
     if (_mapInstance) setTimeout(function() { _mapInstance.invalidateSize(); }, 150);
   }
 
-  window.addEventListener("hashchange", function() {
-    navigate(window.location.hash.slice(1));
+  window.addEventListener("popstate", function() {
+    navigate(getSectionId());
   });
 
-  navigate(window.location.hash.slice(1) || "inicio");
+  navigate(window._redirectId || getSectionId());
 
   // Auto-calc financiamento with defaults
   if (document.getElementById('finSimulator')) calcFinancing();
@@ -1171,7 +1214,7 @@ function calcFinancing() {
 }
 
 function reTranslateCards() {
-  var hash = window.location.hash.replace('#', '');
+  var hash = getSectionId();
   if (hash === 'comprar' || (document.getElementById('comprar') && document.getElementById('comprar').classList.contains('active'))) {
     renderPropertyCards('#comprar .grid-3', 'sale');
     var ct = _cardT();
@@ -1379,7 +1422,7 @@ function shareProperty(propId) {
     if (PROPERTIES[i].id === propId) { p = PROPERTIES[i]; break; }
   }
   if (!p) return;
-  var url = window.location.origin + window.location.pathname + '#' + propId;
+  var url = window.location.origin + '/' + propId + '/';
   var text = p.title + ' - ' + p.price + ' - ' + SITE_NAME;
   if (navigator.share) {
     navigator.share({ title: p.title, text: text, url: url }).catch(function() {});
@@ -1421,7 +1464,7 @@ function clearSearch() {
   document.getElementById('search-location').value = '';
   document.getElementById('search-price').value = '';
   document.getElementById('search-purpose').value = '';
-  window.location.hash = prevPurpose === 'rent' ? 'alugar' : 'comprar';
+  goTo(prevPurpose === 'rent' ? 'alugar' : 'comprar');
 }
 
 /* ===== SECTION-SPECIFIC SEARCH ===== */
@@ -1643,9 +1686,9 @@ function handleSearch() {
   }
 
   if (showSale) {
-    window.location.hash = 'comprar';
+    goTo('comprar');
   } else {
-    window.location.hash = 'alugar';
+    goTo('alugar');
   }
 }
 
@@ -1663,7 +1706,7 @@ function updateMetaTags(p) {
   var ogImg = document.querySelector('meta[property="og:image"]');
   if (ogImg && p.gallery && p.gallery.length) ogImg.content = p.gallery[0];
   var ogUrl = document.querySelector('meta[property="og:url"]');
-  if (ogUrl) ogUrl.content = window.location.origin + window.location.pathname + '#' + p.id;
+  if (ogUrl) ogUrl.content = window.location.origin + '/' + p.id + '/';
 }
 
 function resetMetaTags() {
@@ -1678,7 +1721,7 @@ function resetMetaTags() {
   var ogImg = document.querySelector('meta[property="og:image"]');
   if (ogImg) ogImg.content = 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80';
   var ogUrl = document.querySelector('meta[property="og:url"]');
-  if (ogUrl) ogUrl.content = SITE_URL;
+  if (ogUrl) ogUrl.content = window.location.origin + window.location.pathname;
 }
 
 
