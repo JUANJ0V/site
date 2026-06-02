@@ -35,6 +35,7 @@ function buildPropertyCardHTML(p, badgeClass, badgeText) {
   var ct = _cardT();
   var propT = _propT(p.id);
   var desc = (propT && propT.desc) || p.desc;
+  var title = (propT && propT.title) || p.title;
   let propsHtml = "";
   if (p.category === "Terreno") {
     propsHtml = '<span>\uD83D\uDCD0 ' + p.area + ' m\u00B2</span>'
@@ -80,7 +81,7 @@ function buildPropertyCardHTML(p, badgeClass, badgeText) {
     + '<span class="badge ' + badgeClass + '">' + badgeText + '</span>'
     + '<span class="card-tags">' + tagsHtml + '</span>'
     + '</div>'
-    + '<h3>' + p.title + '</h3>'
+    + '<h3>' + title + '</h3>'
     + locationHtml
     + '<p class="price">' + priceDisplay + '</p>'
     + '<p class="card-desc">' + desc + '</p>'
@@ -97,6 +98,8 @@ function buildPropertyCardHTML(p, badgeClass, badgeText) {
 /* ===== SHARED LANC CARD HTML ===== */
 function buildLancCardHTML(e) {
   var ct = _cardT();
+  var eT = _empT(e.id);
+  var lancDesc = (eT && eT.description) ? eT.description.split('\n\n')[0] : e.description.split('\n\n')[0];
   return '<a href="#' + e.id + '" class="lanc-card">'
     + '<div class="card-img">'
     + '<img src="' + e.img + '" alt="' + e.title.replace(/"/g, '&quot;') + '" loading="lazy" />'
@@ -105,7 +108,7 @@ function buildLancCardHTML(e) {
     + '</div>'
     + '<div class="card-body">'
     + '<h3>' + e.title + '</h3>'
-    + '<p>' + e.description.split('\n\n')[0] + '</p>'
+    + '<p>' + lancDesc + '</p>'
     + '<div class="lanc-progress">'
     + '<div class="lanc-progress-bar"><div class="lanc-progress-fill" style="width:' + e.progress + '%"></div></div>'
     + '<div class="lanc-progress-label"><span>' + e.progressLabel + '</span><span>' + e.delivery + '</span></div>'
@@ -173,6 +176,7 @@ function renderDetailCard(propId) {
   var pT = _propT(propId);
   var detailFeatures = (pT && pT.features) || p.features;
   var detailDescription = (pT && pT.description) || p.description;
+  var detailTitle = (pT && pT.title) || p.title;
 
   let propsLgHtml = '';
   if (p.category === "Terreno") {
@@ -243,7 +247,7 @@ function renderDetailCard(propId) {
     + '<div class="detail-header">'
     + '<div>'
     + '<p class="eyebrow">' + eyebrow + '</p>'
-    + '<h1>' + p.title + '</h1>'
+    + '<h1>' + detailTitle + '</h1>'
     + '<p class="price">' + (p.type === 'rent' && p.price.indexOf('/m\u00EAs') === -1 ? p.price + ' ' + ct.perMonth : p.price) + statusDetailHtml + '</p>'
     + '<div class="props-lg">' + propsLgHtml + '</div>'
     + '</div>'
@@ -461,12 +465,16 @@ function renderBlogCards() {
   var html = '';
   for (var bi = 0; bi < BLOG_POSTS.length; bi++) {
     var post = BLOG_POSTS[bi];
+    var lang = window._lang || 'pt';
+    var blogT = (typeof BLOG_TRANSLATIONS !== 'undefined' && BLOG_TRANSLATIONS[post.id] && BLOG_TRANSLATIONS[post.id][lang]) || null;
+    var blogTitle = (blogT && blogT.title) || post.title;
+    var blogExcerpt = (blogT && blogT.excerpt) || post.excerpt;
     html += '<a href="#' + post.id + '" class="blog-card">'
-      + '<div class="blog-img"><img src="' + post.image + '" alt="' + post.title.replace(/"/g, '&quot;') + '" loading="lazy" /></div>'
+      + '<div class="blog-img"><img src="' + post.image + '" alt="' + blogTitle.replace(/"/g, '&quot;') + '" loading="lazy" /></div>'
       + '<div class="blog-body">'
       + '<div class="blog-meta"><span class="blog-date">' + post.date + '</span><span class="blog-category">' + post.category + '</span></div>'
-      + '<h3>' + post.title + '</h3>'
-      + '<p>' + post.excerpt + '</p>'
+      + '<h3>' + blogTitle + '</h3>'
+      + '<p>' + blogExcerpt + '</p>'
       + '<span class="card-link">' + _cardT().readMore + ' &rarr;</span>'
       + '</div></a>';
   }

@@ -79,9 +79,9 @@ const LANG_NAMES = { pt: "PT", en: "EN", es: "ES" };
 const TRANSLATIONS = {
 
   nav: {
-    pt: { inicio: "Início", comprar: "Comprar", alugar: "Alugar", lancamentos: "Lançamentos", financiamento: "Financiamento", mapa: "Mapa", blog: "Blog", favoritos: "Favoritos", falemos: "Fale conosco" },
-    en: { inicio: "Home", comprar: "Buy", alugar: "Rent", lancamentos: "Developments", financiamento: "Financing", mapa: "Map", blog: "Blog", favoritos: "Favorites", falemos: "Contact us" },
-    es: { inicio: "Inicio", comprar: "Comprar", alugar: "Alquilar", lancamentos: "Lanzamientos", financiamento: "Financiamiento", mapa: "Mapa", blog: "Blog", favoritos: "Favoritos", falemos: "Contáctenos" }
+    pt: { inicio: "Início", comprar: "Comprar", alugar: "Alugar", lancamentos: "Lançamentos", financiamento: "Financiamento", mapa: "Mapa", blog: "Blog", favoritos: "Favoritos", servicos: "Serviços", faq: "FAQ", contato: "Contato", falemos: "Fale conosco" },
+    en: { inicio: "Home", comprar: "Buy", alugar: "Rent", lancamentos: "Developments", financiamento: "Financing", mapa: "Map", blog: "Blog", favoritos: "Favorites", servicos: "Services", faq: "FAQ", contato: "Contact", falemos: "Contact us" },
+    es: { inicio: "Inicio", comprar: "Comprar", alugar: "Alquilar", lancamentos: "Lanzamientos", financiamento: "Financiamiento", mapa: "Mapa", blog: "Blog", favoritos: "Favoritos", servicos: "Servicios", faq: "FAQ", contato: "Contacto", falemos: "Contáctenos" }
   },
 
   hero: {
@@ -1263,6 +1263,23 @@ const BLOG_POSTS = [
   }
 ];
 
+/* ===================================================================
+   BLOG_TRANSLATIONS (Traduções dos posts — EN / ES)
+   =================================================================== */
+const BLOG_TRANSLATIONS = {
+  "post-1": {
+    en: { title: "How to choose the ideal home for your family", excerpt: "Discover the essential factors for choosing the perfect house or apartment for your family, from location to neighborhood infrastructure." },
+    es: { title: "Cómo elegir el hogar ideal para su familia", excerpt: "Descubra los factores esenciales para elegir la casa o apartamento perfecto para su familia, desde la ubicación hasta la infraestructura del barrio." }
+  },
+  "post-2": {
+    en: { title: "Real estate financing: everything you need to know", excerpt: "Understand financing options, interest rates, terms and required documents to achieve the dream of homeownership." },
+    es: { title: "Financiamiento inmobiliario: todo lo que necesita saber", excerpt: "Conozca las modalidades de financiamiento, tasas de interés, plazos y documentos necesarios para realizar el sueño de la casa propia." }
+  },
+  "post-3": {
+    en: { title: "SC real estate market: trends for 2026", excerpt: "Complete analysis of the Santa Catarina real estate market: trending neighborhoods, appreciation by region and prospects for investors." },
+    es: { title: "Mercado inmobiliario de SC: tendencias para 2026", excerpt: "Análisis completo del mercado inmobiliario catarinense: barrios en auge, valorización por región y perspectivas para inversores." }
+  }
+};
 
 /* ===================================================================
    PROPERTIES_TRANSLATIONS (Traduções dos imóveis — EN / ES)
@@ -1270,11 +1287,13 @@ const BLOG_POSTS = [
 const PROPERTIES_TRANSLATIONS = {
   "prop-1": {
     en: {
+      title: "Luxury Apartment",
       desc: "Spacious luxury apartment with premium finishes in the best area of Balneário Camboriú.",
       description: "Stunning apartment located in the heart of Balneário Camboriú, just 200 meters from the beach. The property features premium finishes with porcelain tile flooring, granite countertops and custom cabinetry throughout.\n\nThe large living room integrates with a gourmet balcony with barbecue grill, providing unique moments of entertainment. The kitchen is equipped with state-of-the-art appliances and a separate pantry.\n\nThe condominium offers a swimming pool, gym, party hall and 24-hour concierge. A unique opportunity for those seeking quality of life and real estate appreciation.",
       features: ["3 bedrooms including 1 master suite with walk-in closet", "2 social bathrooms", "1 covered parking spot", "Gourmet balcony with barbecue", "Fitted kitchen with appliances", "Porcelain tile flooring throughout", "Split air conditioning", "24-hour concierge", "Swimming pool and gym in the condominium", "HOA: R$ 890/month", "Property tax: R$ 320/month"]
     },
     es: {
+      title: "Apartamento de Lujo",
       desc: "Amplio apartamento con acabados premium en la mejor zona de Balneário Camboriú.",
       description: "Impresionante apartamento ubicado en el corazón de Balneário Camboriú, a solo 200 metros de la playa. La propiedad cuenta con acabados premium, pisos de porcelanato, encimeras de granito y armarios personalizados en todos los ambientes.\n\nLa amplia sala de estar se integra con un balcón gourmet con parrilla, brindando momentos únicos de confraternización. La cocina está equipada con electrodomésticos de última generación y despensa separada.\n\nEl condominio ofrece piscina, gimnasio, salón de fiestas y conserjería 24 horas. Una oportunidad única para quienes buscan calidad de vida y valoración inmobiliaria.",
       features: ["3 dormitorios incluyendo 1 suite master con vestidor", "2 baños sociales", "1 estacionamiento cubierto", "Balcón gourmet con parrilla", "Cocina equipada con electrodomésticos", "Piso de porcelanato en todos los ambientes", "Aire acondicionado split", "Conserjería 24 horas", "Piscina y gimnasio en el condominio", "Condominio: R$ 890/mes", "IPTU: R$ 320/mes"]
@@ -1282,11 +1301,13 @@ const PROPERTIES_TRANSLATIONS = {
   },
   "prop-2": {
     en: {
+      title: "Contemporary House",
       desc: "Modern house with pool and leisure area in a gated community in Florianópolis.",
       description: "Contemporary house in an upscale gated community in Florianópolis. The property features bold design with large windows providing abundant natural light and integration with the outdoor area.\n\nOn the ground floor, there is a living room integrated with the dining room, a modern American kitchen and a social half-bath. The upper floor houses 4 bedrooms, including 2 suites with walk-in closets.\n\nThe backyard features a heated pool, barbecue grill and landscaped garden. Condominium with 24-hour concierge, security cameras and shared leisure area.",
       features: ["4 bedrooms including 2 suites", "3 bathrooms + social half-bath", "2 parking spots", "Heated pool", "Barbecue and gourmet area", "American-style fitted kitchen", "Landscaped garden", "Central air conditioning", "Alarm and cameras", "HOA: R$ 650/month", "Property tax: R$ 280/month"]
     },
     es: {
+      title: "Casa Contemporánea",
       desc: "Casa moderna con piscina y área de ocio en condominio cerrado en Florianópolis.",
       description: "Casa contemporánea en condominio cerrado de alto estándar en Florianópolis. La propiedad tiene un diseño audaz, con grandes ventanales que brindan abundante luz natural e integración con el área exterior.\n\nEn la planta baja encontramos sala de estar integrada con comedor, cocina americana moderna y medio baño social. La planta superior alberga 4 dormitorios, incluyendo 2 suites con vestidor.\n\nEl patio cuenta con piscina climatizada, parrilla y jardín paisajístico. Condominio con conserjería 24h, cámaras de seguridad y área de ocio compartida.",
       features: ["4 dormitorios incluyendo 2 suites", "3 baños + medio baño social", "2 estacionamientos", "Piscina climatizada", "Parrilla y área gourmet", "Cocina americana equipada", "Jardín paisajístico", "Aire acondicionado central", "Alarma y cámaras", "Condominio: R$ 650/mes", "IPTU: R$ 280/mes"]
@@ -1294,11 +1315,13 @@ const PROPERTIES_TRANSLATIONS = {
   },
   "prop-3": {
     en: {
+      title: "Duplex Penthouse",
       desc: "Duplex penthouse with panoramic sea view, 2 parking spots and private terrace in Itapema.",
       description: "Duplex penthouse with panoramic sea views in Itapema. With 280 m² of private area spread over two floors, featuring high-end finishes and exclusive design.\n\nThe first floor features a large living room with double-height ceiling, gourmet kitchen, half-bath and master suite. The second floor has 3 additional suites and a private terrace with hot tub and infinity-edge pool.\n\nBuilding with complete infrastructure: pool, gym, spa, party hall, playground and 24-hour concierge. A unique opportunity for those seeking the best of seaside living.",
       features: ["4 suites with walk-in closet", "4 bathrooms + half-bath", "2 parking spots", "Terrace with hot tub and pool", "Complete gourmet kitchen", "Double-height ceiling in living room", "Home automation", "Marble flooring", "24-hour concierge", "HOA: R$ 1,450/month", "Property tax: R$ 580/month"]
     },
     es: {
+      title: "Ático Dúplex",
       desc: "Ático dúplex con vista panorámica al mar, 2 estacionamientos y terraza privada en Itapema.",
       description: "Ático dúplex con vista panorámica al mar en Itapema. Son 280 m² de área privada distribuidos en dos plantas, con acabados de alto estándar y diseño exclusivo.\n\nLa primera planta cuenta con amplia sala de doble altura, cocina gourmet, medio baño y suite master. La segunda planta tiene 3 suites adicionales y una terraza privada con hidromasaje y piscina de borde infinito.\n\nEdificio con infraestructura completa: piscina, gimnasio, spa, salón de fiestas, playground y conserjería 24 horas. Una oportunidad única para quienes buscan lo mejor de la vida junto al mar.",
       features: ["4 suites con vestidor", "4 baños + medio baño", "2 estacionamientos", "Terraza con hidromasaje y piscina", "Cocina gourmet completa", "Doble altura en sala de estar", "Domótica", "Piso de mármol", "Conserjería 24 horas", "Condominio: R$ 1.450/mes", "IPTU: R$ 580/mes"]
@@ -1306,11 +1329,13 @@ const PROPERTIES_TRANSLATIONS = {
   },
   "prop-4": {
     en: {
+      title: "Furnished Studio",
       desc: "Fully furnished studio, ideal for investors. Prime location in Bombinhas.",
       description: "Fully furnished studio, ideal for investors seeking profitability with seasonal properties in Bombinhas. Located just 2 blocks from Bombas beach, one of the most beautiful in the region.\n\nThe property comes with custom furniture, appliances, air conditioning and complete decor. The condominium features a swimming pool, barbecue and party hall.\n\nExcellent seasonal rental potential, with an average return of 8% per year. Local management available for rental administration.",
       features: ["1 bedroom with queen bed", "1 social bathroom", "1 parking spot", "Fully furnished and decorated", "Equipped American kitchen", "Split air conditioning", "50-inch TV", "Swimming pool in condominium", "HOA: R$ 380/month", "Property tax: R$ 140/month"]
     },
     es: {
+      title: "Estudio Amueblado",
       desc: "Estudio completamente amueblado, ideal para inversores. Ubicación privilegiada en Bombinhas.",
       description: "Estudio completamente amueblado, ideal para inversores que buscan rentabilidad con propiedades de temporada en Bombinhas. Ubicado a 2 cuadras de la playa de Bombas, una de las más bellas de la región.\n\nLa propiedad se entrega con muebles personalizados, electrodomésticos, aire acondicionado y decoración completa. El condominio cuenta con piscina, parrilla y salón de fiestas.\n\nExcelente potencial de alquiler por temporada, con retorno promedio del 8% anual. Administración local disponible para la gestión del alquiler.",
       features: ["1 dormitorio con cama matrimonial", "1 baño social", "1 estacionamiento", "Completamente amueblado y decorado", "Cocina americana equipada", "Aire acondicionado split", "TV 50 pulgadas", "Piscina en el condominio", "Condominio: R$ 380/mes", "IPTU: R$ 140/mes"]
@@ -1318,11 +1343,13 @@ const PROPERTIES_TRANSLATIONS = {
   },
   "prop-5": {
     en: {
+      title: "Residential Lot",
       desc: "Flat 360 m² lot in an approved subdivision, ready to build in Joinville.",
       description: "Residential lot of 360 m² located in an approved subdivision in América neighborhood, one of the most valued areas of Joinville. Flat topography, firm soil and ready to build.\n\nThe subdivision has complete infrastructure: asphalt, water, sewage, electricity, public lighting and storm drainage. The area is served by schools, hospitals, supermarkets and public transportation within 1 km.\n\nIdeal for building a house or small residential condominium. Zoning allows up to 4 floors. Fully regularized documentation.",
       features: ["360 m² total area", "12 meters frontage", "30 meters depth", "Flat topography", "Approved subdivision", "Complete infrastructure", "Residential zoning R3", "Regular documentation", "Near shops and schools", "Property tax: R$ 180/month"]
     },
     es: {
+      title: "Terreno Residencial",
       desc: "Terreno plano de 360 m² en loteamiento aprobado, listo para construir en Joinville.",
       description: "Terreno residencial de 360 m² ubicado en loteamiento aprobado en el barrio América, una de las zonas más valoradas de Joinville. Topografía plana, suelo firme y listo para construir.\n\nEl loteamiento cuenta con infraestructura completa: asfalto, agua, alcantarillado, electricidad, alumbrado público y drenaje pluvial. La zona cuenta con escuelas, hospitales, supermercados y transporte público a menos de 1 km.\n\nIdeal para construir casa o pequeño condominio residencial. Zonificación permite hasta 4 pisos. Documentación totalmente regularizada.",
       features: ["360 m² de área total", "12 metros de frente", "30 metros de fondo", "Topografía plana", "Loteamiento aprobado", "Infraestructura completa", "Zonificación residencial R3", "Documentación regular", "Cerca de comercios y escuelas", "IPTU: R$ 180/mes"]
@@ -1330,11 +1357,13 @@ const PROPERTIES_TRANSLATIONS = {
   },
   "prop-6": {
     en: {
+      title: "Commercial Office",
       desc: "Commercial office in a corporate building with full infrastructure in Balneário Camboriú.",
       description: "Class A corporate office on the main commercial avenue of Balneário Camboriú. The property is in perfect condition, with raised flooring, acoustic ceiling and exposed electrical and data installations.\n\nThe building features 24-hour concierge, property security, backup generator, 4 elevators, imposing lobby and visitor parking. The office has glass partitions, kitchenette and private bathroom.\n\nStrategic location close to banks, restaurants, hotels and varied commerce. Ideal for law firms, medical practices, real estate agencies or corporate branches.",
       features: ["55 m² private area", "1 room with glass partitions", "1 private bathroom", "Integrated kitchenette", "1 parking spot", "Technical raised floor", "Acoustic ceiling", "Central air conditioning", "24-hour concierge", "Backup generator", "HOA: R$ 1,100/month", "Property tax: R$ 410/month"]
     },
     es: {
+      title: "Oficina Comercial",
       desc: "Oficina comercial en edificio corporativo con infraestructura completa en Balneário Camboriú.",
       description: "Oficina corporativa Clase A en la principal avenida comercial de Balneário Camboriú. La propiedad está en perfecto estado, con piso elevado, cielo raso acústico e instalaciones eléctricas y de datos expuestas.\n\nEl edificio cuenta con conserjería 24 horas, seguridad patrimonial, generador propio, 4 ascensores, vestíbulo imponente y estacionamiento para visitantes. La oficina tiene divisiones de vidrio, kitchenette y baño privado.\n\nUbicación estratégica cerca de bancos, restaurantes, hoteles y comercio variado. Ideal para despachos de abogados, consultorios, inmobiliarias o sucursales corporativas.",
       features: ["55 m² de área privada", "1 sala con divisiones de vidrio", "1 baño privado", "Kitchenette integrada", "1 estacionamiento", "Piso técnico elevado", "Cielo raso acústico", "Aire acondicionado central", "Conserjería 24 horas", "Generador propio", "Condominio: R$ 1.100/mes", "IPTU: R$ 410/mes"]
@@ -1342,11 +1371,13 @@ const PROPERTIES_TRANSLATIONS = {
   },
   "prop-7": {
     en: {
+      title: "Downtown Apartment",
       desc: "Well-located apartment near universities, shops and public transportation in Florianópolis.",
       description: "Well-located apartment in downtown Florianópolis, close to universities, shops, hospitals and public transportation. Ideal for students, professionals or young couples.\n\nThe property features a living room integrated with an American kitchen, 2 bedrooms including 1 suite, social bathroom, laundry area and parking spot. The condominium offers electronic concierge and security cameras.\n\nRental contract from 12 months with renewal possibility. Accepts guarantor, rental insurance or deposit.",
       features: ["2 bedrooms including 1 suite", "1 social bathroom", "1 parking spot", "American-style fitted kitchen", "Separate laundry area", "Electronic concierge", "Security cameras", "Near universities", "HOA: R$ 480/month", "Property tax: R$ 200/month", "Guarantee: guarantor or insurance"]
     },
     es: {
+      title: "Apartamento Centro",
       desc: "Apartamento bien ubicado cerca de universidades, comercios y transporte público en Florianópolis.",
       description: "Apartamento bien ubicado en el centro de Florianópolis, cerca de universidades, comercios, hospitales y transporte público. Ideal para estudiantes, profesionales o parejas jóvenes.\n\nLa propiedad cuenta con sala integrada a cocina americana, 2 dormitorios incluyendo 1 suite, baño social, lavandería y estacionamiento. El condominio ofrece conserjería electrónica y cámaras de seguridad.\n\nContrato de alquiler desde 12 meses con posibilidad de renovación. Acepta fiador, seguro de fianza o depósito.",
       features: ["2 dormitorios incluyendo 1 suite", "1 baño social", "1 estacionamiento", "Cocina americana equipada", "Lavandería separada", "Conserjería electrónica", "Cámaras de seguridad", "Cerca de universidades", "Condominio: R$ 480/mes", "IPTU: R$ 200/mes", "Garantía: fiador o seguro"]
@@ -1354,11 +1385,13 @@ const PROPERTIES_TRANSLATIONS = {
   },
   "prop-8": {
     en: {
+      title: "Seasonal House",
       desc: "Spacious house with pool, barbecue and garden, perfect for seasonal stays in Bombinhas.",
       description: "Spacious and comfortable house in Bombinhas, perfect for seasonal or annual rental. The house has 3 bedrooms, a large living room, complete kitchen and leisure area with pool and barbecue.\n\nThe property is furnished and equipped with all necessary utensils. The landscaped garden and grassy backyard are perfect for children and pets.\n\nPrime location 500 meters from Bombas beach, close to markets, pharmacies and restaurants. Seasonal rental (minimum 7 days) or annual contract.",
       features: ["3 bedrooms including 1 suite", "2 social bathrooms", "2 parking spots", "Pool with waterfall", "Fixed barbecue grill", "Complete equipped kitchen", "Furnished", "Garden with lawn", "500 m from beach", "Security alarm", "HOA: R$ 350/month", "Property tax: R$ 220/month"]
     },
     es: {
+      title: "Casa de Temporada",
       desc: "Casa amplia con piscina, parrilla y jardín, perfecta para temporada en Bombinhas.",
       description: "Casa amplia y confortable en Bombinhas, perfecta para alquiler de temporada o anual. La casa tiene 3 dormitorios, sala de estar amplia, cocina completa y área de ocio con piscina y parrilla.\n\nLa propiedad está amueblada y equipada con todos los utensilios necesarios. El jardín paisajístico y el patio con césped son perfectos para niños y mascotas.\n\nUbicación privilegiada a 500 metros de la playa de Bombas, cerca de mercados, farmacias y restaurantes. Alquiler por temporada (mínimo 7 días) o contrato anual.",
       features: ["3 dormitorios incluyendo 1 suite", "2 baños sociales", "2 estacionamientos", "Piscina con cascada", "Parrilla fija", "Cocina completa equipada", "Amueblado", "Jardín con césped", "500 m de la playa", "Alarma de seguridad", "Condominio: R$ 350/mes", "IPTU: R$ 220/mes"]
@@ -1366,11 +1399,13 @@ const PROPERTIES_TRANSLATIONS = {
   },
   "prop-9": {
     en: {
+      title: "Studio",
       desc: "Compact modern studio, ideal for singles or couples. Furnished with HOA included in Balneário Camboriú.",
       description: "Modern and compact studio, ideal for singles or young couples seeking practicality and prime location in Balneário Camboriú. The property is furnished and equipped, with HOA fees included in the rent.\n\nThe studio features a living room integrated with an American kitchen, bedroom with queen bed, social bathroom and half-bath. The building offers a gym, shared laundry and bike storage.\n\nLocated 3 blocks from the beach, close to bars, restaurants and supermarkets. Rental contract from 6 months.",
       features: ["1 bedroom with queen bed", "1 social bathroom", "HOA included", "Furnished and equipped", "American kitchen", "Split air conditioning", "43-inch TV", "Gym in building", "Bike storage", "Shared laundry", "3 blocks from beach", "Contract from 6 months"]
     },
     es: {
+      title: "Estudio",
       desc: "Estudio compacto y moderno, ideal para solteros o parejas. Amueblado con condominio incluido en Balneário Camboriú.",
       description: "Estudio moderno y compacto, ideal para solteros o parejas jóvenes que buscan practicidad y ubicación privilegiada en Balneário Camboriú. La propiedad está amueblada y equipada, con condominio incluido en el alquiler.\n\nEl estudio cuenta con sala integrada a cocina americana, dormitorio con cama matrimonial, baño social y medio baño. El edificio ofrece gimnasio, lavandería compartida y bicicletero.\n\nUbicado a 3 cuadras de la playa, cerca de bares, restaurantes y supermercados. Contrato de alquiler desde 6 meses.",
       features: ["1 dormitorio con cama matrimonial", "1 baño social", "Condominio incluido", "Amueblado y equipado", "Cocina americana", "Aire acondicionado split", "TV 43 pulgadas", "Gimnasio en el edificio", "Bicicletero", "Lavandería compartida", "3 cuadras de la playa", "Contrato desde 6 meses"]
@@ -1378,11 +1413,13 @@ const PROPERTIES_TRANSLATIONS = {
   },
   "prop-10": {
     en: {
+      title: "Commercial Office",
       desc: "Commercial office ready for use in a corporate building with 24-hour concierge in Itapema.",
       description: "Commercial office available for rent in a corporate building in Itapema. The property has an open layout, ideal for adaptation according to business needs. Porcelain tile flooring, fresh paint and electrical installations in good condition.\n\nThe building features 24-hour concierge, security cameras, 3 elevators and visitor parking. The location is prime, on the main avenue of the city with heavy foot and vehicle traffic.\n\nCommercial lease agreement with minimum term of 24 months. Guarantees: bank guarantee, rental insurance or letter of guarantee. Ready for immediate use.",
       features: ["48 m² usable area", "Open layout", "1 private bathroom", "1 parking spot", "Porcelain tile flooring", "Split air conditioning", "24-hour concierge", "3 elevators", "Near commerce", "HOA: R$ 680/month", "Property tax: R$ 290/month", "Minimum 24-month contract"]
     },
     es: {
+      title: "Oficina Comercial",
       desc: "Oficina comercial lista para usar en edificio corporativo con conserjería 24h en Itapema.",
       description: "Oficina comercial disponible para alquiler en edificio corporativo en Itapema. La propiedad tiene distribución abierta, ideal para adaptación según las necesidades del negocio. Piso de porcelanato, pintura nueva e instalaciones eléctricas en buen estado.\n\nEl edificio cuenta con conserjería 24 horas, cámaras de seguridad, 3 ascensores y estacionamiento para visitantes. La ubicación es privilegiada, en la principal avenida de la ciudad con gran flujo de personas y vehículos.\n\nContrato de alquiler comercial con plazo mínimo de 24 meses. Garantías: fianza bancaria, seguro de fianza o carta de fianza. Lista para uso inmediato.",
       features: ["48 m² de área útil", "Distribución abierta", "1 baño privado", "1 estacionamiento", "Piso de porcelanato", "Aire acondicionado split", "Conserjería 24 horas", "3 ascensores", "Cerca del comercio", "Condominio: R$ 680/mes", "IPTU: R$ 290/mes", "Contrato mínimo 24 meses"]
