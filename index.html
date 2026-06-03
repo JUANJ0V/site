@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%230e142e'/><text x='16' y='22' text-anchor='middle' font-size='18' fill='%23d4af37'>S</text></svg>" />
-  <link rel="stylesheet" href="css/style.css?v=3" />
+  <link rel="stylesheet" href="css/style.css?v=4" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script type="application/ld+json">
@@ -58,7 +58,11 @@
     <div class="nav-actions">
       <div class="nav-social" id="navSocial"></div>
       <button class="theme-toggle" aria-label="Alternar modo escuro">🌙</button>
-      <div id="google_translate_element"></div>
+      <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="pt" title="Português">PT</button>
+        <button class="lang-btn" data-lang="en" title="English">EN</button>
+        <button class="lang-btn" data-lang="es" title="Español">ES</button>
+      </div>
     </div>
     <span class="menu-btn" role="button" tabindex="0" aria-label="Abrir menu">☰</span>
   </nav>
@@ -73,6 +77,11 @@
     <a href="/blog/">Blog</a>
     <a href="/favoritos/">Favoritos</a>
     <div class="mobile-social" id="mobileSocial"></div>
+    <div class="mobile-lang">
+      <button class="lang-btn active" data-lang="pt" title="Português">PT</button>
+      <button class="lang-btn" data-lang="en" title="English">EN</button>
+      <button class="lang-btn" data-lang="es" title="Español">ES</button>
+    </div>
   </div>
 </header>
 
@@ -787,14 +796,30 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   });
 </script>
+<div id="google_translate_element" style="display:none"></div>
 <script>
 function googleTranslateElementInit() {
   if (typeof google !== 'undefined' && google.translate) {
     new google.translate.TranslateElement({
       pageLanguage: 'pt',
-      layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+      includedLanguages: 'pt,en,es',
       autoDisplay: false
     }, 'google_translate_element');
+    // Connect custom buttons to hidden Google Translate select
+    var checkCombo = setInterval(function() {
+      var combo = document.getElementById('google_translate_element').querySelector('.goog-te-combo');
+      if (combo) {
+        clearInterval(checkCombo);
+        document.querySelectorAll('.lang-btn').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            combo.value = this.dataset.lang;
+            combo.dispatchEvent(new Event('change'));
+            document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.remove('active'); });
+            this.classList.add('active');
+          });
+        });
+      }
+    }, 100);
   }
 }
 </script>
