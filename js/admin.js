@@ -111,22 +111,25 @@ const GITHUB_PATH   = "js/data.js";
       /* ── Mobile responsive ── */
       @media (max-width: 768px) {
         .admin-body { flex-direction:column; }
-        .admin-sidebar { width:100%; min-width:unset; display:flex; overflow-x:auto; padding:0; border-right:none; border-bottom:1px solid rgba(255,255,255,0.05); }
-        .admin-sidebar button { flex-shrink:0; padding:0.5rem 0.8rem; font-size:0.75rem; border-bottom:2px solid transparent; }
+        .admin-sidebar { width:100%; min-width:unset; display:flex; overflow-x:auto; padding:0; border-right:none; border-bottom:1px solid rgba(255,255,255,0.05); -webkit-overflow-scrolling:touch; }
+        .admin-sidebar button { flex-shrink:0; padding:0.5rem 0.8rem; font-size:0.75rem; border-bottom:2px solid transparent; white-space:nowrap; }
         .admin-sidebar button.active { border-right:none; border-bottom-color:#d4af37; background:rgba(212,175,55,0.08); }
-        .admin-content { padding:1rem; }
+        .admin-content { padding:1rem; overflow-x:auto; -webkit-overflow-scrolling:touch; }
         .admin-header { flex-wrap:wrap; gap:0.5rem; }
         .admin-header h1 { font-size:0.85rem; }
-        .admin-header .admin-actions { flex-wrap:wrap; }
         .admin-header .admin-actions button,
         .admin-header .admin-actions a { font-size:0.7rem; padding:0.3rem 0.6rem; }
         .admin-settings input,
         .admin-settings textarea { max-width:100%; }
-        .admin-table { font-size:0.7rem; }
+        .admin-table { font-size:0.7rem; display:block; overflow-x:auto; -webkit-overflow-scrolling:touch; white-space:nowrap; }
         .admin-table td, .admin-table th { padding:0.35rem 0.4rem; }
-        .admin-modal .modal-box { max-width:98vw; padding:1rem; }
+        .admin-modal .modal-box { max-width:98vw; padding:1rem; max-height:90vh; }
         .admin-modal .modal-box .row2,
         .admin-modal .modal-box .row3 { grid-template-columns:1fr; }
+        .admin-modal .modal-box input,
+        .admin-modal .modal-box textarea,
+        .admin-modal .modal-box select { font-size:16px; }
+        #adminFloatBtn { bottom:0.75rem; left:0.75rem; padding:0.4rem 0.8rem; font-size:0.75rem; }
       }
     `;
     document.head.appendChild(css);
@@ -189,6 +192,7 @@ const GITHUB_PATH   = "js/data.js";
   document.body.appendChild(adminFloat);
 
   window.adminToggleSite = function() {
+    syncToLive();
     panelEl.classList.remove('active');
     document.body.classList.remove('admin-mode');
     adminFloat.style.display = 'flex';
@@ -269,12 +273,19 @@ const GITHUB_PATH   = "js/data.js";
     map.DISABLED_SECTIONS = typeof DISABLED_SECTIONS !== 'undefined' ? DISABLED_SECTIONS.slice() : [];
     map.SOCIAL = typeof SOCIAL !== 'undefined' ? JSON.parse(JSON.stringify(SOCIAL)) : { instagram:'', facebook:'', youtube:'', linkedin:'' };
     map.PAGE_SIZE = typeof PAGE_SIZE !== 'undefined' ? PAGE_SIZE : 6;
+    map.FIN_DEFAULT_PRICE = typeof FIN_DEFAULT_PRICE !== 'undefined' ? FIN_DEFAULT_PRICE : 500000;
+    map.FIN_DEFAULT_DOWN  = typeof FIN_DEFAULT_DOWN  !== 'undefined' ? FIN_DEFAULT_DOWN  : 100000;
+    map.FIN_DEFAULT_RATE  = typeof FIN_DEFAULT_RATE  !== 'undefined' ? FIN_DEFAULT_RATE  : 8.5;
+    map.FIN_DEFAULT_TERM  = typeof FIN_DEFAULT_TERM  !== 'undefined' ? FIN_DEFAULT_TERM  : 240;
+    map.SECTION_FINANCIAMENTO_EYEBROW = typeof SECTION_FINANCIAMENTO_EYEBROW !== 'undefined' ? SECTION_FINANCIAMENTO_EYEBROW : 'Financiamento';
+    map.SECTION_FINANCIAMENTO_TITLE   = typeof SECTION_FINANCIAMENTO_TITLE   !== 'undefined' ? SECTION_FINANCIAMENTO_TITLE   : 'Simule seu financiamento imobiliário';
     return map;
   }
 
   function buildSidebar() {
     var tabs = [
       { id:'general', label:'⚙️ Geral' },
+      { id:'financiamento', label:'💰 Financiamento' },
       { id:'properties', label:'🏠 Imóveis' },
       { id:'empreendimentos', label:'🏗️ Lançamentos' },
       { id:'blog', label:'📝 Blog' },
@@ -326,6 +337,7 @@ const GITHUB_PATH   = "js/data.js";
     container.appendChild(div);
     switch (id) {
       case 'general': renderGeneral(div); break;
+      case 'financiamento': renderFinanciamento(div); break;
       case 'properties': renderProperties(div); break;
       case 'empreendimentos': renderEmpreendimentos(div); break;
       case 'blog': renderBlog(div); break;
@@ -386,7 +398,8 @@ const GITHUB_PATH   = "js/data.js";
     c.SOCIAL.linkedin = gv('cfg_li');
     c.DISABLED_SECTIONS = gv('cfg_disabled').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
     c.PAGE_SIZE = parseInt(gv('cfg_pageSize')) || 6;
-    adminToast('✅ Configurações salvas. Não esqueça de publicar!', 'success');
+    syncToLive();
+    adminToast('✅ Configurações salvas!', 'success');
   };
 
   /* =================================================================
@@ -465,6 +478,7 @@ const GITHUB_PATH   = "js/data.js";
         p.video = gv('prop_video');
         p.gallery = gv('prop_gallery').split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
         p.features = gv('prop_features').split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
+        syncToLive();
         adminToast('✅ Imóvel salvo', 'success');
         renderProperties(document.getElementById('adminSection_properties'));
       }
@@ -474,6 +488,7 @@ const GITHUB_PATH   = "js/data.js";
   window.delProperty = function(idx) {
     if (!confirm('Excluir "' + _data.PROPERTIES[idx].title + '"?')) return;
     _data.PROPERTIES.splice(idx, 1);
+    syncToLive();
     renderProperties(document.getElementById('adminSection_properties'));
     adminToast('🗑️ Imóvel removido', 'info');
   };
@@ -540,6 +555,7 @@ const GITHUB_PATH   = "js/data.js";
         e.tags = gv('emp_tags').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
         e.gallery = gv('emp_gallery').split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
         e.amenities = gv('emp_amenities').split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
+        syncToLive();
         adminToast('✅ Lançamento salvo', 'success');
         renderEmpreendimentos(document.getElementById('adminSection_empreendimentos'));
       }
@@ -549,6 +565,7 @@ const GITHUB_PATH   = "js/data.js";
   window.delEmp = function(idx) {
     if (!confirm('Excluir "' + _data.EMPREENDIMENTOS[idx].title + '"?')) return;
     _data.EMPREENDIMENTOS.splice(idx, 1);
+    syncToLive();
     renderEmpreendimentos(document.getElementById('adminSection_empreendimentos'));
     adminToast('🗑️ Lançamento removido', 'info');
   };
@@ -600,6 +617,7 @@ const GITHUB_PATH   = "js/data.js";
         b.image = gv('post_img');
         b.excerpt = gv('post_excerpt');
         b.content = gv('post_content');
+        syncToLive();
         adminToast('✅ Post salvo', 'success');
         renderBlog(document.getElementById('adminSection_blog'));
       }
@@ -609,6 +627,7 @@ const GITHUB_PATH   = "js/data.js";
   window.delPost = function(idx) {
     if (!confirm('Excluir "' + _data.BLOG_POSTS[idx].title + '"?')) return;
     _data.BLOG_POSTS.splice(idx, 1);
+    syncToLive();
     renderBlog(document.getElementById('adminSection_blog'));
     adminToast('🗑️ Post removido', 'info');
   };
@@ -641,6 +660,7 @@ const GITHUB_PATH   = "js/data.js";
       function() {
         f.q = gv('faq_q');
         f.a = gv('faq_a');
+        syncToLive();
         adminToast('✅ FAQ salva', 'success');
         renderFaq(document.getElementById('adminSection_faq'));
       }
@@ -650,6 +670,7 @@ const GITHUB_PATH   = "js/data.js";
   window.delFaq = function(idx) {
     if (!confirm('Excluir esta pergunta?')) return;
     _data.FAQS.splice(idx, 1);
+    syncToLive();
     renderFaq(document.getElementById('adminSection_faq'));
     adminToast('🗑️ FAQ removida', 'info');
   };
@@ -684,6 +705,7 @@ const GITHUB_PATH   = "js/data.js";
         d.name = gv('dep_name');
         d.role = gv('dep_role');
         d.text = gv('dep_text');
+        syncToLive();
         adminToast('✅ Depoimento salvo', 'success');
         renderDepoimentos(document.getElementById('adminSection_depoimentos'));
       }
@@ -693,6 +715,7 @@ const GITHUB_PATH   = "js/data.js";
   window.delDep = function(idx) {
     if (!confirm('Excluir depoimento de "' + _data.DEPOIMENTOS[idx].name + '"?')) return;
     _data.DEPOIMENTOS.splice(idx, 1);
+    syncToLive();
     renderDepoimentos(document.getElementById('adminSection_depoimentos'));
     adminToast('🗑️ Depoimento removido', 'info');
   };
@@ -727,6 +750,7 @@ const GITHUB_PATH   = "js/data.js";
         p.name = gv('par_name');
         p.img = gv('par_img');
         p.url = gv('par_url');
+        syncToLive();
         adminToast('✅ Parceiro salvo', 'success');
         renderParceiros(document.getElementById('adminSection_parceiros'));
       }
@@ -736,6 +760,7 @@ const GITHUB_PATH   = "js/data.js";
   window.delParceiro = function(idx) {
     if (!confirm('Excluir "' + _data.PARCEIROS[idx].name + '"?')) return;
     _data.PARCEIROS.splice(idx, 1);
+    syncToLive();
     renderParceiros(document.getElementById('adminSection_parceiros'));
     adminToast('🗑️ Parceiro removido', 'info');
   };
@@ -764,6 +789,52 @@ const GITHUB_PATH   = "js/data.js";
     localStorage.setItem('admin_github_token', token);
     ADMIN_TOKEN = token;
     adminToast('✅ Token salvo no navegador', 'success');
+  };
+
+  /* =================================================================
+     FINANCIAMENTO
+     ================================================================= */
+  function renderFinanciamento(container) {
+    var c = _data.constants;
+    container.innerHTML = '<h2>💰 Financiamento</h2><p class="desc">Texto e valores padrão do simulador.</p>'
+      + '<div class="admin-settings">'
+      + '<label>Título (eyebrow)</label><input id="fin_eye" value="' + esc(c.SECTION_FINANCIAMENTO_EYEBROW) + '">'
+      + '<label>Título principal</label><textarea id="fin_title" rows="2">' + esc(c.SECTION_FINANCIAMENTO_TITLE) + '</textarea>'
+      + '<hr style="border-color:rgba(255,255,255,0.06);margin:1rem 0;">'
+      + '<label>Valor padrão do imóvel (R$)</label><input id="fin_defPrice" type="number" value="' + (c.FIN_DEFAULT_PRICE||500000) + '">'
+      + '<label>Entrada padrão (R$)</label><input id="fin_defDown" type="number" value="' + (c.FIN_DEFAULT_DOWN||100000) + '">'
+      + '<label>Taxa de juros padrão (% a.a.)</label><input id="fin_defRate" type="number" step="0.1" value="' + (c.FIN_DEFAULT_RATE||8.5) + '">'
+      + '<label>Prazo padrão (meses)</label><select id="fin_defTerm"><option value="180"' + ((c.FIN_DEFAULT_TERM||240)==180?' selected':'') + '>15 anos (180 meses)</option><option value="240"' + ((c.FIN_DEFAULT_TERM||240)==240?' selected':'') + '>20 anos (240 meses)</option><option value="300"' + ((c.FIN_DEFAULT_TERM||240)==300?' selected':'') + '>25 anos (300 meses)</option><option value="360"' + ((c.FIN_DEFAULT_TERM||240)==360?' selected':'') + '>30 anos (360 meses)</option></select>'
+      + '<hr style="border-color:rgba(255,255,255,0.06);margin:1rem 0;">'
+      + '<button class="btn-save" onclick="saveFinanciamento()">💾 Salvar alterações</button>'
+      + '</div>';
+  }
+
+  window.saveFinanciamento = function() {
+    var c = _data.constants;
+    c.SECTION_FINANCIAMENTO_EYEBROW = gv('fin_eye');
+    c.SECTION_FINANCIAMENTO_TITLE   = gv('fin_title');
+    c.FIN_DEFAULT_PRICE = parseInt(gv('fin_defPrice')) || 500000;
+    c.FIN_DEFAULT_DOWN  = parseInt(gv('fin_defDown'))  || 100000;
+    c.FIN_DEFAULT_RATE  = parseFloat(gv('fin_defRate')) || 8.5;
+    c.FIN_DEFAULT_TERM  = parseInt(gv('fin_defTerm'))   || 240;
+    // Apply live to DOM
+    var priceEl = document.getElementById('fin-price');
+    var downEl  = document.getElementById('fin-down');
+    var rateEl  = document.getElementById('fin-rate');
+    var termEl  = document.getElementById('fin-term');
+    if (priceEl) priceEl.value = c.FIN_DEFAULT_PRICE;
+    if (downEl)  downEl.value  = c.FIN_DEFAULT_DOWN;
+    if (rateEl)  rateEl.value  = c.FIN_DEFAULT_RATE;
+    if (termEl)  termEl.value  = c.FIN_DEFAULT_TERM;
+    // Update eyebrow and title
+    var eyeEl = document.querySelector('#financiamento .eyebrow');
+    var titEl = document.querySelector('#financiamento h2');
+    if (eyeEl) eyeEl.textContent = c.SECTION_FINANCIAMENTO_EYEBROW;
+    if (titEl) titEl.textContent = c.SECTION_FINANCIAMENTO_TITLE;
+    // Recalculate
+    if (typeof calcFinancing === 'function') calcFinancing();
+    adminToast('✅ Financiamento salvo', 'success');
   };
 
   /* =================================================================
@@ -903,8 +974,13 @@ const GITHUB_PATH   = "js/data.js";
     out += strConst('SECTION_DEPOIMENTOS_TITLE', 'O que nossos clientes dizem');
     out += strConst('SECTION_FAQ_EYEBROW', 'FAQ');
     out += strConst('SECTION_FAQ_TITLE', 'Perguntas frequentes');
-    out += strConst('SECTION_FINANCIAMENTO_EYEBROW', 'Financiamento');
-    out += strConst('SECTION_FINANCIAMENTO_TITLE', 'Simule seu financiamento imobiliário');
+    out += strConst('SECTION_FINANCIAMENTO_EYEBROW', c.SECTION_FINANCIAMENTO_EYEBROW || 'Financiamento');
+    out += strConst('SECTION_FINANCIAMENTO_TITLE', c.SECTION_FINANCIAMENTO_TITLE || 'Simule seu financiamento imobiliário');
+    out += '\n';
+    out += 'const FIN_DEFAULT_PRICE = ' + (c.FIN_DEFAULT_PRICE || 500000) + ';\n';
+    out += 'const FIN_DEFAULT_DOWN  = ' + (c.FIN_DEFAULT_DOWN  || 100000) + ';\n';
+    out += 'const FIN_DEFAULT_RATE  = ' + (c.FIN_DEFAULT_RATE  || 8.5) + ';\n';
+    out += 'const FIN_DEFAULT_TERM  = ' + (c.FIN_DEFAULT_TERM  || 240) + ';\n';
     out += strConst('SECTION_CONTATO_EYEBROW', c.SECTION_CONTATO_EYEBROW || 'Fale conosco');
     out += strConst('SECTION_CONTATO_TITLE', c.SECTION_CONTATO_TITLE || '');
     out += strConst('SECTION_MAPA_EYEBROW', 'Mapa de Imóveis');
@@ -938,6 +1014,96 @@ const GITHUB_PATH   = "js/data.js";
     out += arrToJs('BLOG_POSTS', _data.BLOG_POSTS);
 
     return out;
+  }
+
+  /* =================================================================
+     SYNC _data → LIVE PAGE (preview sem publicar)
+     ================================================================= */
+  function syncToLive() {
+    // Constants → live DOM
+    var c = _data.constants;
+    // Hero
+    var heroEye = document.querySelector('#inicio .eyebrow');
+    var heroTit = document.querySelector('#inicio h1');
+    var heroSub = document.querySelector('#inicio .hero-content p');
+    if (heroEye) heroEye.textContent = c.HERO_EYEBROW || '';
+    if (heroTit) heroTit.textContent = c.HERO_TITLE || '';
+    if (heroSub) heroSub.textContent = c.HERO_SUBTITLE || '';
+    // WhatsApp FAB
+    var fab = document.querySelector('.whatsapp-fab');
+    if (fab) {
+      var num = (c.WHATSAPP_NUMBER || '').replace(/\D/g, '');
+      if (num) {
+        var msg = c.WHATSAPP_MSG || '';
+        fab.href = 'https://wa.me/' + num + '?text=' + encodeURIComponent(msg);
+      }
+    }
+    // Social links
+    if (c.SOCIAL) {
+      var ig = document.querySelector('.social-instagram');
+      var fb = document.querySelector('.social-facebook');
+      var yt = document.querySelector('.social-youtube');
+      if (ig && c.SOCIAL.instagram) ig.href = c.SOCIAL.instagram;
+      if (fb && c.SOCIAL.facebook) fb.href = c.SOCIAL.facebook;
+      if (yt && c.SOCIAL.youtube) yt.href = c.SOCIAL.youtube;
+    }
+    // STATS
+    if (typeof STATS !== 'undefined') {
+      STATS.length = 0;
+      _data.STATS.forEach(function(s) { STATS.push(s); });
+      if (typeof renderStatsWithLang === 'function') renderStatsWithLang();
+    }
+    // PROPERTIES — mutate live array and re-render cards
+    if (typeof PROPERTIES !== 'undefined') {
+      PROPERTIES.length = 0;
+      _data.PROPERTIES.forEach(function(p) { PROPERTIES.push(p); });
+      if (typeof renderPropertyCards === 'function') {
+        renderPropertyCards('#comprar .grid-3', 'sale');
+        renderPropertyCards('#alugar .grid-2', 'rent');
+      }
+    }
+    // EMPREENDIMENTOS
+    if (typeof EMPREENDIMENTOS !== 'undefined') {
+      EMPREENDIMENTOS.length = 0;
+      _data.EMPREENDIMENTOS.forEach(function(e) { EMPREENDIMENTOS.push(e); });
+      if (typeof renderEmpreendimentoCards === 'function') renderEmpreendimentoCards();
+    }
+    // FAQS
+    if (typeof FAQS !== 'undefined') {
+      FAQS.length = 0;
+      _data.FAQS.forEach(function(f) { FAQS.push(f); });
+      if (typeof renderFAQs === 'function') renderFAQs();
+    }
+    // DEPOIMENTOS
+    if (typeof DEPOIMENTOS !== 'undefined') {
+      DEPOIMENTOS.length = 0;
+      _data.DEPOIMENTOS.forEach(function(d) { DEPOIMENTOS.push(d); });
+      if (typeof renderDepoimentos === 'function') renderDepoimentos();
+    }
+    // PARCEIROS
+    if (typeof PARCEIROS !== 'undefined') {
+      PARCEIROS.length = 0;
+      _data.PARCEIROS.forEach(function(p) { PARCEIROS.push(p); });
+      if (typeof renderParceiros === 'function') renderParceiros();
+    }
+    // BLOG_POSTS
+    if (typeof BLOG_POSTS !== 'undefined') {
+      BLOG_POSTS.length = 0;
+      _data.BLOG_POSTS.forEach(function(b) { BLOG_POSTS.push(b); });
+      if (typeof renderBlogCards === 'function') renderBlogCards();
+    }
+    // Financiamento defaults
+    if (c.FIN_DEFAULT_PRICE || c.FIN_DEFAULT_DOWN || c.FIN_DEFAULT_RATE || c.FIN_DEFAULT_TERM) {
+      var priceEl = document.getElementById('fin-price');
+      var downEl  = document.getElementById('fin-down');
+      var rateEl  = document.getElementById('fin-rate');
+      var termEl  = document.getElementById('fin-term');
+      if (priceEl) priceEl.value = c.FIN_DEFAULT_PRICE;
+      if (downEl)  downEl.value  = c.FIN_DEFAULT_DOWN;
+      if (rateEl)  rateEl.value  = c.FIN_DEFAULT_RATE;
+      if (termEl)  termEl.value  = c.FIN_DEFAULT_TERM;
+      if (typeof calcFinancing === 'function') calcFinancing();
+    }
   }
 
   /* =================================================================
