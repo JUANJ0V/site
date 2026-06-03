@@ -252,9 +252,8 @@ const GITHUB_PATH   = "js/data.js";
 
   window.adminSaveServer = function() {
     try { saveFormsToData(); } catch(e) {}
-    var pass = document.getElementById('cfg_serverPass');
-    var pwd = pass ? pass.value.trim() : '';
-    if (!pwd) pwd = 'fp2026';
+    var pwd = localStorage.getItem('admin_server_pass');
+    if (!pwd) { adminToast('❌ Defina a senha do save.php na aba Config', 'error'); showTab('settings'); return; }
     var content = generateDataJs();
     fetch('save.php', {
       method: 'POST',
@@ -267,6 +266,30 @@ const GITHUB_PATH   = "js/data.js";
       else { adminToast('❌ ' + (res.error || 'Erro'), 'error'); }
     })
     .catch(function(err) { adminToast('❌ ' + err.message, 'error'); });
+  };
+
+  window.saveServerPass = function() {
+    var pwd = document.getElementById('cfg_serverPass').value.trim();
+    localStorage.setItem('admin_server_pass', pwd);
+    adminToast('✅ Senha salva no navegador', 'success');
+  };
+
+  window.saveToServer = function() {
+    try { saveFormsToData(); } catch(e) {}
+    var pwd = localStorage.getItem('admin_server_pass');
+    if (!pwd) { adminToast('❌ Defina a senha do save.php na aba Config', 'error'); return; }
+    var content = generateDataJs();
+    fetch('save.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: content, password: pwd })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (res.ok) { adminToast('✅ ' + (res.message || 'Salvo!'), 'success'); }
+      else { adminToast('❌ ' + (res.error || 'Erro'), 'error'); }
+    })
+    .catch(function(err) { adminToast('❌ Erro de conexão: ' + err.message, 'error'); });
   };
 
   window.adminLogout = function() {
@@ -945,8 +968,9 @@ const GITHUB_PATH   = "js/data.js";
       + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">💾 Salvar no servidor (PHP)</h3>'
       + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0 0 0.75rem;">Se o site está rodando em um host com PHP (ex: Hostinger), usa isso pra salvar as alterações direto no <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">js/data.js</code> do servidor.</p>'
       + '<label>Senha do save.php</label>'
-      + '<input id="cfg_serverPass" type="password" value="" placeholder="fp2026">'
-      + '<button class="btn-save" onclick="saveToServer()">💾 Salvar no servidor</button>'
+      + '<input id="cfg_serverPass" type="password" value="' + esc(localStorage.getItem('admin_server_pass') || '') + '" placeholder="Senha definida no save.php">'
+      + '<button class="btn-save" onclick="saveServerPass()">💾 Salvar senha</button>'
+      + '<button class="btn-save" onclick="saveToServer()" style="margin-left:0.5rem;">💾 Salvar no servidor</button>'
       + '<hr style="border-color:rgba(255,255,255,0.06);margin:1.5rem 0;">'
       + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">🔒 Desabilitar Painel</h3>'
       + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0;">Para desligar o painel, mude <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">ADMIN_ENABLED = false</code> no arquivo <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">js/admin.js</code> (linha 3) e publique.</p>'
