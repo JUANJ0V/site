@@ -43,8 +43,8 @@
 
 <header class="site-header" id="topo" role="banner">
   <nav class="container" role="navigation" aria-label="Navegação principal">
-    <a href="/" class="site-logo">Su <span>Imobiliária</span></a>
-    <ul class="nav-list" id="navList" notranslate>
+    <a href="/" class="site-logo" translate="no">Su <span>Imobiliária</span></a>
+    <ul class="nav-list" id="navList" translate="no">
       <li><a href="/" class="active" aria-current="page">Início</a></li>
       <li class="nav-dropdown" id="navDropComprar"><a href="/comprar/">Comprar</a><div class="dd-menu" id="ddComprar"></div></li>
       <li class="nav-dropdown" id="navDropAlugar"><a href="/alugar/">Alugar</a><div class="dd-menu" id="ddAlugar"></div></li>
@@ -54,7 +54,7 @@
       <li><a href="/blog/">Blog</a></li>
       <li><a href="/favoritos/">Favoritos</a></li>
     </ul>
-    <a href="/contato/" class="nav-cta nav-whatsapp-cta" data-whatsapp-msg="Olá, gostaria de falar com a Su Imobiliária.">Fale conosco</a>
+    <a href="/contato/" class="nav-cta nav-whatsapp-cta" data-whatsapp-msg="Olá, gostaria de falar com a Su Imobiliária." translate="no">Fale conosco</a>
     <div class="nav-actions">
       <div class="nav-social" id="navSocial"></div>
       <button class="theme-toggle" aria-label="Alternar modo escuro">🌙</button>
@@ -66,7 +66,7 @@
     </div>
     <span class="menu-btn" role="button" tabindex="0" aria-label="Abrir menu">☰</span>
   </nav>
-  <div class="nav-overlay" id="mobileNav" role="dialog" aria-label="Menu de navegação" notranslate>
+  <div class="nav-overlay" id="mobileNav" role="dialog" aria-label="Menu de navegação" translate="no">
     <button class="close-btn" onclick="document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''" aria-label="Fechar menu">✕</button>
     <a href="/">Início</a>
     <div class="mob-drop-wrap" id="mobDropComprar"><a href="/comprar/">Comprar</a><div class="mob-dd-body" id="mobDdComprar"></div></div>
@@ -497,7 +497,12 @@
 <script src="js/admin.js?v=1"></script>
 <script>
 // Auto-update site info from data.js constants
-document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function() {
+    // Set header height CSS variable dynamically
+    var headerEl = document.querySelector('.site-header');
+    if (headerEl) {
+      document.documentElement.style.setProperty('--header-height', headerEl.offsetHeight + 'px');
+    }
   // Site name in logo and brand (first word plain, rest in gold span)
   document.querySelectorAll('.site-logo, .footer-brand .site-logo').forEach(function(el) {
     if (SITE_LOGO) {
