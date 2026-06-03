@@ -163,6 +163,7 @@ const GITHUB_PATH   = "js/data.js";
     document.getElementById('adminPass').value = '';
     document.getElementById('adminLoginError').style.display = 'none';
     document.body.classList.remove('admin-mode');
+    window.location.href = window.location.href.split('?')[0];
   };
 
   window.adminToast = function(msg, type) {
@@ -260,13 +261,26 @@ const GITHUB_PATH   = "js/data.js";
     var btn = document.querySelector('#adminSidebar button[data-tab="' + id + '"]');
     if (btn) btn.classList.add('active');
     var section = document.getElementById('adminSection_' + id);
-    if (!section) renderTab(id);
+    if (!section) {
+      try { renderTab(id); } catch(e) {
+        console.error('Admin renderTab error:', e);
+        var container = document.getElementById('adminContent');
+        if (container) {
+          var fallback = document.createElement('div');
+          fallback.id = 'adminSection_' + id;
+          fallback.className = 'admin-section active';
+          fallback.innerHTML = '<p style="color:#ff6b6b;">Erro ao carregar: ' + e.message + '</p>';
+          container.appendChild(fallback);
+        }
+      }
+    }
     var el = document.getElementById('adminSection_' + id);
     if (el) el.classList.add('active');
   };
 
   function renderTab(id) {
     var container = document.getElementById('adminContent');
+    if (!container) return;
     var div = document.createElement('div');
     div.id = 'adminSection_' + id;
     div.className = 'admin-section';
