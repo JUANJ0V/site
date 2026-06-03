@@ -48,7 +48,20 @@ var _cardLabels = {
   sala: "Sala",
   virtualTour: "Tour Virtual",
   favorite: "Favoritar",
-  wantToKnow: "Quero saber mais"
+  wantToKnow: "Quero saber mais",
+  learnMore: "Saiba mais",
+  loadMore: "Carregar mais",
+  remaining: "restantes",
+  aboutDevelopment: "Sobre o empreendimento",
+  floorPlans: "Plantas",
+  constructionTimeline: "Cronograma de obras",
+  amenities: "Amenidades",
+  priceTable: "Tabela de preços",
+  unit: "Unidade",
+  area: "Área",
+  value: "Valor",
+  paymentTerms: "Condições de pagamento"
+
 };
 function _cardT() { return _cardLabels; }
 function _transData() { return []; }
@@ -326,6 +339,9 @@ function renderDetailCard(propId) {
   var detailRawMsg = WHATSAPP_MSG.replace('{titulo}', p.title).replace('{preco}', detailPriceDisplay) + '\n\n' + detailPropUrl;
   var detailWhatsUrl = WHATSAPP_URL + '?text=' + encodeURIComponent(detailRawMsg);
 
+  var videoEmbed = p.video
+    ? '<div class="video-wrapper"><iframe src="' + p.video + '" title="' + p.title.replace(/"/g, '&quot;') + '" allowfullscreen loading="lazy"></iframe></div>'
+    : '';
   var galleryMainImg = gallery[0] || '';
   const detailEl = document.createElement('div');
   detailEl.className = 'detail-card';
