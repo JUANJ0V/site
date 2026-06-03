@@ -2,7 +2,7 @@
    ADMIN PANEL — Configuração
    =================================================================== */
 
-const ADMIN_ENABLED = false; // ← Mude para true para ativar o painel
+const ADMIN_ENABLED = true; // ← Mude para true para ativar o painel
 const ADMIN_USER    = "admin";
 const ADMIN_PASS    = "admin123";
 const GITHUB_REPO   = "JUANJ0V/site";
