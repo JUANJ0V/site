@@ -270,6 +270,21 @@ const GITHUB_PATH   = "js/data.js";
     map.SECTION_LANCAMENTOS_TITLE   = typeof SECTION_LANCAMENTOS_TITLE !== 'undefined' ? SECTION_LANCAMENTOS_TITLE : '';
     map.SECTION_CONTATO_EYEBROW = typeof SECTION_CONTATO_EYEBROW !== 'undefined' ? SECTION_CONTATO_EYEBROW : 'Fale conosco';
     map.SECTION_CONTATO_TITLE   = typeof SECTION_CONTATO_TITLE !== 'undefined' ? SECTION_CONTATO_TITLE : '';
+    map.SECTION_PARCEIROS_EYEBROW = typeof SECTION_PARCEIROS_EYEBROW !== 'undefined' ? SECTION_PARCEIROS_EYEBROW : 'Parceiros';
+    map.SECTION_PARCEIROS_TITLE   = typeof SECTION_PARCEIROS_TITLE   !== 'undefined' ? SECTION_PARCEIROS_TITLE   : 'Instituições que confiam em nós';
+    map.SECTION_SERVICOS_EYEBROW  = typeof SECTION_SERVICOS_EYEBROW  !== 'undefined' ? SECTION_SERVICOS_EYEBROW  : 'Serviços';
+    map.SECTION_SERVICOS_TITLE    = typeof SECTION_SERVICOS_TITLE    !== 'undefined' ? SECTION_SERVICOS_TITLE    : 'Tudo que você precisa em um só lugar';
+    map.SECTION_DEPOIMENTOS_EYEBROW = typeof SECTION_DEPOIMENTOS_EYEBROW !== 'undefined' ? SECTION_DEPOIMENTOS_EYEBROW : 'Depoimentos';
+    map.SECTION_DEPOIMENTOS_TITLE   = typeof SECTION_DEPOIMENTOS_TITLE   !== 'undefined' ? SECTION_DEPOIMENTOS_TITLE   : 'O que nossos clientes dizem';
+    map.SECTION_FAQ_EYEBROW  = typeof SECTION_FAQ_EYEBROW  !== 'undefined' ? SECTION_FAQ_EYEBROW  : 'FAQ';
+    map.SECTION_FAQ_TITLE    = typeof SECTION_FAQ_TITLE    !== 'undefined' ? SECTION_FAQ_TITLE    : 'Perguntas frequentes';
+    map.SECTION_MAPA_EYEBROW = typeof SECTION_MAPA_EYEBROW !== 'undefined' ? SECTION_MAPA_EYEBROW : 'Mapa de Imóveis';
+    map.SECTION_MAPA_TITLE   = typeof SECTION_MAPA_TITLE   !== 'undefined' ? SECTION_MAPA_TITLE   : 'Encontre no mapa';
+    map.SECTION_BLOG_EYEBROW = typeof SECTION_BLOG_EYEBROW !== 'undefined' ? SECTION_BLOG_EYEBROW : 'Blog';
+    map.SECTION_BLOG_TITLE   = typeof SECTION_BLOG_TITLE   !== 'undefined' ? SECTION_BLOG_TITLE   : 'Últimas do blog';
+    map.SECTION_FAVORITOS_EYEBROW = typeof SECTION_FAVORITOS_EYEBROW !== 'undefined' ? SECTION_FAVORITOS_EYEBROW : 'Favoritos';
+    map.SECTION_FAVORITOS_TITLE   = typeof SECTION_FAVORITOS_TITLE   !== 'undefined' ? SECTION_FAVORITOS_TITLE   : 'Meus imóveis favoritos';
+    map.SECTION_FAVORITOS_EMPTY   = typeof SECTION_FAVORITOS_EMPTY   !== 'undefined' ? SECTION_FAVORITOS_EMPTY   : 'Nenhum imóvel favoritado ainda.';
     map.DISABLED_SECTIONS = typeof DISABLED_SECTIONS !== 'undefined' ? DISABLED_SECTIONS.slice() : [];
     map.SOCIAL = typeof SOCIAL !== 'undefined' ? JSON.parse(JSON.stringify(SOCIAL)) : { instagram:'', facebook:'', youtube:'', linkedin:'' };
     map.PAGE_SIZE = typeof PAGE_SIZE !== 'undefined' ? PAGE_SIZE : 6;
@@ -376,6 +391,24 @@ const GITHUB_PATH   = "js/data.js";
       + '<div class="note">Disponíveis: sobre, stats, servicos, depoimentos, parceiros, faq, financiamento, alugar, favoritos</div>'
       + '<label>Imóveis por página</label><input id="cfg_pageSize" value="' + (c.PAGE_SIZE || 6) + '" style="max-width:100px;">'
       + '<hr style="border-color:rgba(255,255,255,0.06);margin:1rem 0;">'
+      + '<h3 style="color:#d4af37;font-size:0.9rem;margin:0 0 1rem;">📝 Textos das Seções</h3>'
+      + '<div class="row2">'
+      + '<div><label>Serviços — Eyebrow</label><input id="cfg_servEye" value="' + esc(c.SECTION_SERVICOS_EYEBROW||'') + '"><label>Serviços — Título</label><input id="cfg_servTitle" value="' + esc(c.SECTION_SERVICOS_TITLE||'') + '"></div>'
+      + '<div><label>Parceiros — Eyebrow</label><input id="cfg_parcEye" value="' + esc(c.SECTION_PARCEIROS_EYEBROW||'') + '"><label>Parceiros — Título</label><input id="cfg_parcTitle" value="' + esc(c.SECTION_PARCEIROS_TITLE||'') + '"></div>'
+      + '</div>'
+      + '<div class="row2">'
+      + '<div><label>Depoimentos — Eyebrow</label><input id="cfg_depEye" value="' + esc(c.SECTION_DEPOIMENTOS_EYEBROW||'') + '"><label>Depoimentos — Título</label><input id="cfg_depTitle" value="' + esc(c.SECTION_DEPOIMENTOS_TITLE||'') + '"></div>'
+      + '<div><label>FAQ — Eyebrow</label><input id="cfg_faqEye" value="' + esc(c.SECTION_FAQ_EYEBROW||'') + '"><label>FAQ — Título</label><input id="cfg_faqTitle" value="' + esc(c.SECTION_FAQ_TITLE||'') + '"></div>'
+      + '</div>'
+      + '<div class="row2">'
+      + '<div><label>Mapa — Eyebrow</label><input id="cfg_mapEye" value="' + esc(c.SECTION_MAPA_EYEBROW||'') + '"><label>Mapa — Título</label><input id="cfg_mapTitle" value="' + esc(c.SECTION_MAPA_TITLE||'') + '"></div>'
+      + '<div><label>Blog — Eyebrow</label><input id="cfg_blogEye" value="' + esc(c.SECTION_BLOG_EYEBROW||'') + '"><label>Blog — Título</label><input id="cfg_blogTitle" value="' + esc(c.SECTION_BLOG_TITLE||'') + '"></div>'
+      + '</div>'
+      + '<div class="row2">'
+      + '<div><label>Favoritos — Eyebrow</label><input id="cfg_favEye" value="' + esc(c.SECTION_FAVORITOS_EYEBROW||'') + '"><label>Favoritos — Título</label><input id="cfg_favTitle" value="' + esc(c.SECTION_FAVORITOS_TITLE||'') + '"></div>'
+      + '<div><label>Favoritos — Texto vazio</label><input id="cfg_favEmpty" value="' + esc(c.SECTION_FAVORITOS_EMPTY||'') + '"></div>'
+      + '</div>'
+      + '<hr style="border-color:rgba(255,255,255,0.06);margin:1rem 0;">'
       + '<button class="btn-save" onclick="saveGeneral()">💾 Salvar alterações</button>'
       + '</div>';
   }
@@ -398,6 +431,21 @@ const GITHUB_PATH   = "js/data.js";
     c.SOCIAL.linkedin = gv('cfg_li');
     c.DISABLED_SECTIONS = gv('cfg_disabled').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
     c.PAGE_SIZE = parseInt(gv('cfg_pageSize')) || 6;
+    c.SECTION_SERVICOS_EYEBROW    = gv('cfg_servEye');
+    c.SECTION_SERVICOS_TITLE      = gv('cfg_servTitle');
+    c.SECTION_PARCEIROS_EYEBROW   = gv('cfg_parcEye');
+    c.SECTION_PARCEIROS_TITLE     = gv('cfg_parcTitle');
+    c.SECTION_DEPOIMENTOS_EYEBROW = gv('cfg_depEye');
+    c.SECTION_DEPOIMENTOS_TITLE   = gv('cfg_depTitle');
+    c.SECTION_FAQ_EYEBROW         = gv('cfg_faqEye');
+    c.SECTION_FAQ_TITLE           = gv('cfg_faqTitle');
+    c.SECTION_MAPA_EYEBROW        = gv('cfg_mapEye');
+    c.SECTION_MAPA_TITLE          = gv('cfg_mapTitle');
+    c.SECTION_BLOG_EYEBROW        = gv('cfg_blogEye');
+    c.SECTION_BLOG_TITLE          = gv('cfg_blogTitle');
+    c.SECTION_FAVORITOS_EYEBROW   = gv('cfg_favEye');
+    c.SECTION_FAVORITOS_TITLE     = gv('cfg_favTitle');
+    c.SECTION_FAVORITOS_EMPTY     = gv('cfg_favEmpty');
     syncToLive();
     adminToast('✅ Configurações salvas!', 'success');
   };
@@ -953,8 +1001,8 @@ const GITHUB_PATH   = "js/data.js";
     out += strConst('SITE_CITY', 'Balneário Camboriú');
     out += strConst('SITE_REGION', 'SC');
     out += '\n';
-    out += strConst('SECTION_PARCEIROS_EYEBROW', 'Parceiros');
-    out += strConst('SECTION_PARCEIROS_TITLE', 'Instituições que confiam em nós');
+    out += strConst('SECTION_PARCEIROS_EYEBROW', c.SECTION_PARCEIROS_EYEBROW || 'Parceiros');
+    out += strConst('SECTION_PARCEIROS_TITLE', c.SECTION_PARCEIROS_TITLE || 'Instituições que confiam em nós');
     out += '\n';
     out += strConst('HERO_EYEBROW', c.HERO_EYEBROW || '');
     out += strConst('HERO_TITLE', c.HERO_TITLE || '');
@@ -968,12 +1016,12 @@ const GITHUB_PATH   = "js/data.js";
     out += strConst('SECTION_ALUGAR_TITLE', c.SECTION_ALUGAR_TITLE || '');
     out += strConst('SECTION_LANCAMENTOS_EYEBROW', c.SECTION_LANCAMENTOS_EYEBROW || 'Lançamentos');
     out += strConst('SECTION_LANCAMENTOS_TITLE', c.SECTION_LANCAMENTOS_TITLE || '');
-    out += strConst('SECTION_SERVICOS_EYEBROW', 'Serviços');
-    out += strConst('SECTION_SERVICOS_TITLE', 'Tudo que você precisa em um só lugar');
-    out += strConst('SECTION_DEPOIMENTOS_EYEBROW', 'Depoimentos');
-    out += strConst('SECTION_DEPOIMENTOS_TITLE', 'O que nossos clientes dizem');
-    out += strConst('SECTION_FAQ_EYEBROW', 'FAQ');
-    out += strConst('SECTION_FAQ_TITLE', 'Perguntas frequentes');
+    out += strConst('SECTION_SERVICOS_EYEBROW', c.SECTION_SERVICOS_EYEBROW || 'Serviços');
+    out += strConst('SECTION_SERVICOS_TITLE', c.SECTION_SERVICOS_TITLE || 'Tudo que você precisa em um só lugar');
+    out += strConst('SECTION_DEPOIMENTOS_EYEBROW', c.SECTION_DEPOIMENTOS_EYEBROW || 'Depoimentos');
+    out += strConst('SECTION_DEPOIMENTOS_TITLE', c.SECTION_DEPOIMENTOS_TITLE || 'O que nossos clientes dizem');
+    out += strConst('SECTION_FAQ_EYEBROW', c.SECTION_FAQ_EYEBROW || 'FAQ');
+    out += strConst('SECTION_FAQ_TITLE', c.SECTION_FAQ_TITLE || 'Perguntas frequentes');
     out += strConst('SECTION_FINANCIAMENTO_EYEBROW', c.SECTION_FINANCIAMENTO_EYEBROW || 'Financiamento');
     out += strConst('SECTION_FINANCIAMENTO_TITLE', c.SECTION_FINANCIAMENTO_TITLE || 'Simule seu financiamento imobiliário');
     out += '\n';
@@ -983,13 +1031,13 @@ const GITHUB_PATH   = "js/data.js";
     out += 'const FIN_DEFAULT_TERM  = ' + (c.FIN_DEFAULT_TERM  || 240) + ';\n';
     out += strConst('SECTION_CONTATO_EYEBROW', c.SECTION_CONTATO_EYEBROW || 'Fale conosco');
     out += strConst('SECTION_CONTATO_TITLE', c.SECTION_CONTATO_TITLE || '');
-    out += strConst('SECTION_MAPA_EYEBROW', 'Mapa de Imóveis');
-    out += strConst('SECTION_MAPA_TITLE', 'Encontre no mapa');
-    out += strConst('SECTION_BLOG_EYEBROW', 'Blog');
-    out += strConst('SECTION_BLOG_TITLE', 'Últimas do blog');
-    out += strConst('SECTION_FAVORITOS_EYEBROW', 'Favoritos');
-    out += strConst('SECTION_FAVORITOS_TITLE', 'Meus imóveis favoritos');
-    out += strConst('SECTION_FAVORITOS_EMPTY', 'Nenhum imóvel favoritado ainda.');
+    out += strConst('SECTION_MAPA_EYEBROW', c.SECTION_MAPA_EYEBROW || 'Mapa de Imóveis');
+    out += strConst('SECTION_MAPA_TITLE', c.SECTION_MAPA_TITLE || 'Encontre no mapa');
+    out += strConst('SECTION_BLOG_EYEBROW', c.SECTION_BLOG_EYEBROW || 'Blog');
+    out += strConst('SECTION_BLOG_TITLE', c.SECTION_BLOG_TITLE || 'Últimas do blog');
+    out += strConst('SECTION_FAVORITOS_EYEBROW', c.SECTION_FAVORITOS_EYEBROW || 'Favoritos');
+    out += strConst('SECTION_FAVORITOS_TITLE', c.SECTION_FAVORITOS_TITLE || 'Meus imóveis favoritos');
+    out += strConst('SECTION_FAVORITOS_EMPTY', c.SECTION_FAVORITOS_EMPTY || 'Nenhum imóvel favoritado ainda.');
 
     out += '\n/* ===== STATS ===== */\n';
     out += arrToJs('STATS', _data.STATS);
@@ -1092,6 +1140,27 @@ const GITHUB_PATH   = "js/data.js";
       _data.BLOG_POSTS.forEach(function(b) { BLOG_POSTS.push(b); });
       if (typeof renderBlogCards === 'function') renderBlogCards();
     }
+    // Section eyebrow/title texts
+    var sectionTextMap = [
+      { sec:'servicos',   eye:'SECTION_SERVICOS_EYEBROW',   tit:'SECTION_SERVICOS_TITLE' },
+      { sec:'depoimentos',eye:'SECTION_DEPOIMENTOS_EYEBROW',tit:'SECTION_DEPOIMENTOS_TITLE' },
+      { sec:'faq',        eye:'SECTION_FAQ_EYEBROW',        tit:'SECTION_FAQ_TITLE' },
+      { sec:'parceiros',  eye:'SECTION_PARCEIROS_EYEBROW',  tit:'SECTION_PARCEIROS_TITLE' },
+      { sec:'mapa',       eye:'SECTION_MAPA_EYEBROW',       tit:'SECTION_MAPA_TITLE' },
+      { sec:'blog',       eye:'SECTION_BLOG_EYEBROW',       tit:'SECTION_BLOG_TITLE' },
+      { sec:'favoritos',  eye:'SECTION_FAVORITOS_EYEBROW',  tit:'SECTION_FAVORITOS_TITLE' }
+    ];
+    sectionTextMap.forEach(function(item) {
+      if (c[item.eye]) {
+        var eyeEl = document.querySelector('#' + item.sec + ' .eyebrow');
+        if (eyeEl) eyeEl.textContent = c[item.eye];
+      }
+      if (c[item.tit]) {
+        var titEl = document.querySelector('#' + item.sec + ' h2');
+        if (titEl) titEl.textContent = c[item.tit];
+      }
+    });
+
     // Financiamento defaults
     if (c.FIN_DEFAULT_PRICE || c.FIN_DEFAULT_DOWN || c.FIN_DEFAULT_RATE || c.FIN_DEFAULT_TERM) {
       var priceEl = document.getElementById('fin-price');
