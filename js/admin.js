@@ -53,6 +53,7 @@ const GITHUB_PATH   = "js/data.js";
       .admin-body { display:flex; flex:1; overflow:hidden; }
       .admin-sidebar { width:200px; min-width:200px; background:#0a0f24; border-right:1px solid rgba(255,255,255,0.05); padding:0.75rem 0; overflow-y:auto; }
       .admin-sidebar button { display:block; width:100%; text-align:left; padding:0.6rem 1.2rem; background:none; border:none; color:rgba(255,255,255,0.5); font-size:0.85rem; cursor:pointer; transition:all 0.15s; touch-action:manipulation; }
+      .admin-mobile-tab { display:none; width:100%; padding:0.6rem 0.8rem; background:#0a0f24; border:none; border-bottom:1px solid rgba(255,255,255,0.05); color:#fff; font-size:0.85rem; outline:none; cursor:pointer; }
       .admin-sidebar button:hover { background:rgba(255,255,255,0.03); color:#fff; }
       .admin-sidebar button.active { background:rgba(212,175,55,0.1); color:#d4af37; border-right:2px solid #d4af37; }
       .admin-content { flex:1; padding:1.5rem; overflow-y:auto; }
@@ -111,11 +112,10 @@ const GITHUB_PATH   = "js/data.js";
       /* ── Mobile responsive ── */
       @media (max-width: 768px) {
         .admin-body { flex-direction:column; }
-        .admin-sidebar { width:100%; min-width:unset; display:flex; overflow-x:auto; overflow-y:hidden; padding:0; border-right:none; border-bottom:1px solid rgba(255,255,255,0.05); -webkit-overflow-scrolling:touch; scrollbar-width:thin; }
-        .admin-sidebar::after { content:''; flex-shrink:0; width:0.5rem; }
-        .admin-sidebar button { flex-shrink:0; padding:0.6rem 0.9rem; font-size:0.8rem; border-bottom:2px solid transparent; white-space:nowrap; touch-action:manipulation; -webkit-tap-highlight-color:rgba(212,175,55,0.2); }
-        .admin-sidebar button.active { border-right:none; border-bottom-color:#d4af37; background:rgba(212,175,55,0.08); }
-        .admin-content { padding:1rem; overflow:auto; -webkit-overflow-scrolling:touch; }
+        .admin-sidebar { width:100%; min-width:unset; padding:0; border-right:none; border-bottom:1px solid rgba(255,255,255,0.05); }
+        .admin-desk-tab { display:none !important; }
+        .admin-mobile-tab { display:block; }
+        .admin-content { padding:1rem; overflow:auto; -webkit-overflow-scrolling:touch; flex:1; }
         .admin-header { flex-wrap:wrap; gap:0.5rem; }
         .admin-header h1 { font-size:0.85rem; }
         .admin-header .admin-actions button,
@@ -192,7 +192,59 @@ const GITHUB_PATH   = "js/data.js";
   };
   document.body.appendChild(adminFloat);
 
+  function saveFormsToData() {
+    var c = _data ? _data.constants : null;
+    if (!c) return;
+    // General tab
+    if (document.getElementById('cfg_siteName')) {
+      c.SITE_NAME = gv('cfg_siteName');
+      c.WHATSAPP_NUMBER = gv('cfg_whatsNum');
+      c.WHATSAPP_DISPLAY = gv('cfg_whatsDisp');
+      c.WHATSAPP_MSG = gv('cfg_whatsMsg');
+      c.SITE_EMAIL = gv('cfg_email');
+      c.SITE_ADDRESS = gv('cfg_address');
+      c.HERO_EYEBROW = gv('cfg_heroEye');
+      c.HERO_TITLE = gv('cfg_heroTitle');
+      c.HERO_SUBTITLE = gv('cfg_heroSub');
+      c.HERO_VIDEO = gv('cfg_heroVideo');
+      if (c.SOCIAL) {
+        c.SOCIAL.instagram = gv('cfg_ig');
+        c.SOCIAL.facebook = gv('cfg_fb');
+        c.SOCIAL.youtube = gv('cfg_yt');
+        c.SOCIAL.linkedin = gv('cfg_li');
+      }
+      c.DISABLED_SECTIONS = gv('cfg_disabled').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+      c.PAGE_SIZE = parseInt(gv('cfg_pageSize')) || 6;
+      c.SECTION_SERVICOS_EYEBROW    = gv('cfg_servEye');
+      c.SECTION_SERVICOS_TITLE      = gv('cfg_servTitle');
+      c.SECTION_PARCEIROS_EYEBROW   = gv('cfg_parcEye');
+      c.SECTION_PARCEIROS_TITLE     = gv('cfg_parcTitle');
+      c.SECTION_DEPOIMENTOS_EYEBROW = gv('cfg_depEye');
+      c.SECTION_DEPOIMENTOS_TITLE   = gv('cfg_depTitle');
+      c.SECTION_FAQ_EYEBROW         = gv('cfg_faqEye');
+      c.SECTION_FAQ_TITLE           = gv('cfg_faqTitle');
+      c.SECTION_MAPA_EYEBROW        = gv('cfg_mapEye');
+      c.SECTION_MAPA_TITLE          = gv('cfg_mapTitle');
+      c.SECTION_BLOG_EYEBROW        = gv('cfg_blogEye');
+      c.SECTION_BLOG_TITLE          = gv('cfg_blogTitle');
+      c.SECTION_FAVORITOS_EYEBROW   = gv('cfg_favEye');
+      c.SECTION_FAVORITOS_TITLE     = gv('cfg_favTitle');
+      c.SECTION_FAVORITOS_EMPTY     = gv('cfg_favEmpty');
+    }
+    // Financiamento tab
+    if (document.getElementById('fin_eye')) {
+      c.SECTION_FINANCIAMENTO_EYEBROW = gv('fin_eye');
+      c.SECTION_FINANCIAMENTO_TITLE   = gv('fin_title');
+      c.FIN_DEFAULT_PRICE = parseInt(gv('fin_defPrice')) || 500000;
+      c.FIN_DEFAULT_DOWN  = parseInt(gv('fin_defDown'))  || 100000;
+      c.FIN_DEFAULT_RATE  = parseFloat(gv('fin_defRate')) || 8.5;
+      c.FIN_DEFAULT_TERM  = parseInt(gv('fin_defTerm'))   || 240;
+    }
+  }
+
   window.adminToggleSite = function() {
+    try { saveFormsToData(); } catch(e) { console.warn('saveFormsToData error:', e); }
+    try { syncToLive(); } catch(e) { console.warn('syncToLive error:', e); }
     panelEl.classList.remove('active');
     document.body.classList.remove('admin-mode');
     adminFloat.style.display = 'flex';
@@ -297,8 +349,10 @@ const GITHUB_PATH   = "js/data.js";
     return map;
   }
 
+  var _adminTabs = [];
+
   function buildSidebar() {
-    var tabs = [
+    _adminTabs = [
       { id:'general', label:'⚙️ Geral' },
       { id:'financiamento', label:'💰 Financiamento' },
       { id:'properties', label:'🏠 Imóveis' },
@@ -311,13 +365,27 @@ const GITHUB_PATH   = "js/data.js";
     ];
     var sb = document.getElementById('adminSidebar');
     sb.innerHTML = '';
-    tabs.forEach(function(t) {
+    // Desktop buttons
+    _adminTabs.forEach(function(t) {
       var btn = document.createElement('button');
+      btn.className = 'admin-desk-tab';
       btn.textContent = t.label;
       btn.dataset.tab = t.id;
       btn.addEventListener('click', function() { showTab(t.id); });
       sb.appendChild(btn);
     });
+    // Mobile dropdown
+    var sel = document.createElement('select');
+    sel.id = 'adminMobileTab';
+    sel.className = 'admin-mobile-tab';
+    sel.addEventListener('change', function() { showTab(this.value); });
+    _adminTabs.forEach(function(t) {
+      var opt = document.createElement('option');
+      opt.value = t.id;
+      opt.textContent = t.label.replace(/[^\w\s]/g, '').trim();
+      sel.appendChild(opt);
+    });
+    sb.appendChild(sel);
   }
 
   window.showTab = function(id) {
@@ -325,6 +393,8 @@ const GITHUB_PATH   = "js/data.js";
     document.querySelectorAll('.admin-section').forEach(function(s) { s.classList.remove('active'); });
     var btn = document.querySelector('#adminSidebar button[data-tab="' + id + '"]');
     if (btn) btn.classList.add('active');
+    var mobSel = document.getElementById('adminMobileTab');
+    if (mobSel) mobSel.value = id;
     var section = document.getElementById('adminSection_' + id);
     if (!section) {
       try { renderTab(id); } catch(e) {
@@ -1068,7 +1138,7 @@ const GITHUB_PATH   = "js/data.js";
      SYNC _data → LIVE PAGE (preview sem publicar)
      ================================================================= */
   function syncToLive() {
-    // Constants → live DOM
+    try {
     var c = _data.constants;
     // Hero
     var heroEye = document.querySelector('#inicio .eyebrow');
@@ -1173,6 +1243,7 @@ const GITHUB_PATH   = "js/data.js";
       if (termEl)  termEl.value  = c.FIN_DEFAULT_TERM;
       if (typeof calcFinancing === 'function') calcFinancing();
     }
+    } catch(e) { console.warn('syncToLive error:', e); }
   }
 
   /* =================================================================
