@@ -295,9 +295,30 @@ const GITHUB_PATH   = "js/data.js";
         PARCEIROS:    JSON.parse(JSON.stringify(typeof PARCEIROS !== 'undefined' ? PARCEIROS : [])),
         BLOG_POSTS:   JSON.parse(JSON.stringify(typeof BLOG_POSTS !== 'undefined' ? BLOG_POSTS : []))
       };
+      var contentEl = document.getElementById('adminContent');
+      if (contentEl) contentEl.innerHTML = '<p style="color:rgba(255,255,255,0.3);padding:1rem;font-size:0.85rem;">Carregando…</p>';
       buildSidebar();
-      showTab('general');
+      var initialTab = window._redirectTab || 'general';
+      queueTabShow(initialTab);
     } catch(e) { console.error('Admin init error:', e); }
+  }
+
+  function queueTabShow(id, attempt) {
+    attempt = attempt || 0;
+    if (attempt > 15) {
+      var c = document.getElementById('adminContent');
+      if (c) c.innerHTML = '<div class="admin-section active" style="display:block;padding:2rem;text-align:center;"><p style="color:#ff6b6b;">⚠️ Erro ao carregar painel. <button onclick="location.reload()" style="background:#d4af37;border:none;color:#0e142e;padding:0.4rem 1rem;border-radius:5px;cursor:pointer;">Recarregar</button></p></div>';
+      return;
+    }
+    if (typeof window.showTab !== 'function') {
+      return setTimeout(function() { queueTabShow(id, attempt + 1); }, 50);
+    }
+    try {
+      window.showTab(id);
+      var el = document.getElementById('adminSection_' + id);
+      if (el && el.childNodes.length > 0) return;
+    } catch(e) {}
+    setTimeout(function() { queueTabShow(id, attempt + 1); }, 100);
   }
 
   function extractConstants() {
@@ -371,14 +392,14 @@ const GITHUB_PATH   = "js/data.js";
       btn.className = 'admin-desk-tab';
       btn.textContent = t.label;
       btn.dataset.tab = t.id;
-      btn.addEventListener('click', function() { showTab(t.id); });
+      btn.addEventListener('click', function() { window.showTab(t.id); });
       sb.appendChild(btn);
     });
     // Mobile dropdown
     var sel = document.createElement('select');
     sel.id = 'adminMobileTab';
     sel.className = 'admin-mobile-tab';
-    sel.addEventListener('change', function() { showTab(this.value); });
+    sel.addEventListener('change', function() { window.showTab(this.value); });
     _adminTabs.forEach(function(t) {
       var opt = document.createElement('option');
       opt.value = t.id;
@@ -420,16 +441,21 @@ const GITHUB_PATH   = "js/data.js";
     div.id = 'adminSection_' + id;
     div.className = 'admin-section';
     container.appendChild(div);
-    switch (id) {
-      case 'general': renderGeneral(div); break;
-      case 'financiamento': renderFinanciamento(div); break;
-      case 'properties': renderProperties(div); break;
-      case 'empreendimentos': renderEmpreendimentos(div); break;
-      case 'blog': renderBlog(div); break;
-      case 'faq': renderFaq(div); break;
-      case 'depoimentos': renderDepoimentos(div); break;
-      case 'parceiros': renderParceiros(div); break;
-      case 'settings': renderSettings(div); break;
+    try {
+      switch (id) {
+        case 'general': renderGeneral(div); break;
+        case 'financiamento': renderFinanciamento(div); break;
+        case 'properties': renderProperties(div); break;
+        case 'empreendimentos': renderEmpreendimentos(div); break;
+        case 'blog': renderBlog(div); break;
+        case 'faq': renderFaq(div); break;
+        case 'depoimentos': renderDepoimentos(div); break;
+        case 'parceiros': renderParceiros(div); break;
+        case 'settings': renderSettings(div); break;
+      }
+    } catch(e) {
+      console.error('Admin renderTab/' + id + ' error:', e);
+      div.innerHTML = '<p style="color:#ff6b6b;">Erro: ' + esc(e.message) + '</p>';
     }
   }
 
@@ -1138,16 +1164,18 @@ const GITHUB_PATH   = "js/data.js";
      SYNC _data → LIVE PAGE (preview sem publicar)
      ================================================================= */
   function syncToLive() {
-    try {
     var c = _data.constants;
     // Hero
+    try {
     var heroEye = document.querySelector('#inicio .eyebrow');
     var heroTit = document.querySelector('#inicio h1');
     var heroSub = document.querySelector('#inicio .hero-content p');
     if (heroEye) heroEye.textContent = c.HERO_EYEBROW || '';
     if (heroTit) heroTit.textContent = c.HERO_TITLE || '';
     if (heroSub) heroSub.textContent = c.HERO_SUBTITLE || '';
+    } catch(e) { console.warn('syncToLive hero:', e); }
     // Social links
+    try {
     if (c.SOCIAL) {
       var ig = document.querySelector('.social-instagram');
       var fb = document.querySelector('.social-facebook');
@@ -1156,13 +1184,17 @@ const GITHUB_PATH   = "js/data.js";
       if (fb && c.SOCIAL.facebook) fb.href = c.SOCIAL.facebook;
       if (yt && c.SOCIAL.youtube) yt.href = c.SOCIAL.youtube;
     }
+    } catch(e) { console.warn('syncToLive social:', e); }
     // STATS
+    try {
     if (typeof STATS !== 'undefined') {
       STATS.length = 0;
       _data.STATS.forEach(function(s) { STATS.push(s); });
       if (typeof renderStatsWithLang === 'function') renderStatsWithLang();
     }
+    } catch(e) { console.warn('syncToLive stats:', e); }
     // PROPERTIES — mutate live array and re-render cards
+    try {
     if (typeof PROPERTIES !== 'undefined') {
       PROPERTIES.length = 0;
       _data.PROPERTIES.forEach(function(p) { PROPERTIES.push(p); });
@@ -1171,37 +1203,49 @@ const GITHUB_PATH   = "js/data.js";
         renderPropertyCards('#alugar .grid-2', 'rent');
       }
     }
+    } catch(e) { console.warn('syncToLive properties:', e); }
     // EMPREENDIMENTOS
+    try {
     if (typeof EMPREENDIMENTOS !== 'undefined') {
       EMPREENDIMENTOS.length = 0;
       _data.EMPREENDIMENTOS.forEach(function(e) { EMPREENDIMENTOS.push(e); });
       if (typeof renderEmpreendimentoCards === 'function') renderEmpreendimentoCards();
     }
+    } catch(e) { console.warn('syncToLive empreendimentos:', e); }
     // FAQS
+    try {
     if (typeof FAQS !== 'undefined') {
       FAQS.length = 0;
       _data.FAQS.forEach(function(f) { FAQS.push(f); });
       if (typeof renderFAQs === 'function') renderFAQs();
     }
+    } catch(e) { console.warn('syncToLive faq:', e); }
     // DEPOIMENTOS
+    try {
     if (typeof DEPOIMENTOS !== 'undefined') {
       DEPOIMENTOS.length = 0;
       _data.DEPOIMENTOS.forEach(function(d) { DEPOIMENTOS.push(d); });
       if (typeof renderDepoimentos === 'function') renderDepoimentos();
     }
+    } catch(e) { console.warn('syncToLive depoimentos:', e); }
     // PARCEIROS
+    try {
     if (typeof PARCEIROS !== 'undefined') {
       PARCEIROS.length = 0;
       _data.PARCEIROS.forEach(function(p) { PARCEIROS.push(p); });
       if (typeof renderParceiros === 'function') renderParceiros();
     }
+    } catch(e) { console.warn('syncToLive parceiros:', e); }
     // BLOG_POSTS
+    try {
     if (typeof BLOG_POSTS !== 'undefined') {
       BLOG_POSTS.length = 0;
       _data.BLOG_POSTS.forEach(function(b) { BLOG_POSTS.push(b); });
       if (typeof renderBlogCards === 'function') renderBlogCards();
     }
+    } catch(e) { console.warn('syncToLive blog:', e); }
     // Section eyebrow/title texts
+    try {
     var sectionTextMap = [
       { sec:'servicos',   eye:'SECTION_SERVICOS_EYEBROW',   tit:'SECTION_SERVICOS_TITLE' },
       { sec:'depoimentos',eye:'SECTION_DEPOIMENTOS_EYEBROW',tit:'SECTION_DEPOIMENTOS_TITLE' },
@@ -1221,8 +1265,9 @@ const GITHUB_PATH   = "js/data.js";
         if (titEl) titEl.textContent = c[item.tit];
       }
     });
-
+    } catch(e) { console.warn('syncToLive sectionText:', e); }
     // Financiamento defaults
+    try {
     if (c.FIN_DEFAULT_PRICE || c.FIN_DEFAULT_DOWN || c.FIN_DEFAULT_RATE || c.FIN_DEFAULT_TERM) {
       var priceEl = document.getElementById('fin-price');
       var downEl  = document.getElementById('fin-down');
@@ -1234,18 +1279,44 @@ const GITHUB_PATH   = "js/data.js";
       if (termEl)  termEl.value  = c.FIN_DEFAULT_TERM;
       if (typeof calcFinancing === 'function') calcFinancing();
     }
-    // WhatsApp — update all links with new number (after all re-renders)
-    var num = (c.WHATSAPP_NUMBER || '').replace(/\D/g, '');
-    if (num) {
-      var waUrl = 'https://wa.me/' + num;
-      document.querySelectorAll('a[href*="wa.me/"]').forEach(function(a) { a.href = a.href.replace(/https:\/\/wa\.me\/\d+/, waUrl); });
-      document.querySelectorAll('.nav-whatsapp-cta').forEach(function(a) {
+    } catch(e) { console.warn('syncToLive financiamento:', e); }
+    // WhatsApp — update all links with new number (always runs)
+    updateLiveWhatsApp(c.WHATSAPP_NUMBER, c.WHATSAPP_DISPLAY);
+  }
+
+  function updateLiveWhatsApp(number, display) {
+    try {
+    var num = (number || '').replace(/\D/g, '');
+    if (!num) return;
+    var waUrl = 'https://wa.me/' + num;
+    // Iterate ALL links, replace any wa.me/ pattern in href
+    document.querySelectorAll('a').forEach(function(a) {
+      try {
+        var href = a.getAttribute('href');
+        if (!href) return;
+        if (href.indexOf('wa.me/') > -1) {
+          a.setAttribute('href', href.replace(/wa\.me\/\d+/g, 'wa.me/' + num));
+        }
+      } catch(e) {}
+    });
+    // .nav-whatsapp-cta may have been set by page init; override completely
+    document.querySelectorAll('.nav-whatsapp-cta').forEach(function(a) {
+      try {
         var msg = a.getAttribute('data-whatsapp-msg') || 'Olá, gostaria de falar com a Su Imobiliária.';
-        a.href = waUrl + '?text=' + encodeURIComponent(msg);
-        a.target = '_blank';
+        a.setAttribute('href', waUrl + '?text=' + encodeURIComponent(msg));
+        a.setAttribute('target', '_blank');
+      } catch(e) {}
+    });
+    // Footer display text
+    if (display) {
+      document.querySelectorAll('.footer-col li a[href*="wa.me/"]').forEach(function(a) {
+        try { a.textContent = 'WhatsApp: ' + display; } catch(e) {}
       });
     }
-    } catch(e) { console.warn('syncToLive error:', e); }
+    // Structured data telephone
+    var telMeta = document.querySelector('[itemprop="telephone"]');
+    if (telMeta) try { telMeta.content = '+' + num; } catch(e) {}
+    } catch(e) { console.warn('updateLiveWhatsApp error:', e); }
   }
 
   /* =================================================================
