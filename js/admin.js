@@ -106,6 +106,27 @@ const GITHUB_PATH   = "js/data.js";
       /* ── Preview badge ── */
       .admin-preview-badge { position:fixed; top:0; left:0; right:0; z-index:2147483647; background:#d4af37; color:#0e142e; text-align:center; padding:0.25rem; font-size:0.75rem; font-weight:700; letter-spacing:0.05em; }
       body.admin-mode { padding-top:1.5rem; }
+
+      /* ── Mobile responsive ── */
+      @media (max-width: 768px) {
+        .admin-body { flex-direction:column; }
+        .admin-sidebar { width:100%; min-width:unset; display:flex; overflow-x:auto; padding:0; border-right:none; border-bottom:1px solid rgba(255,255,255,0.05); }
+        .admin-sidebar button { flex-shrink:0; padding:0.5rem 0.8rem; font-size:0.75rem; border-bottom:2px solid transparent; }
+        .admin-sidebar button.active { border-right:none; border-bottom-color:#d4af37; background:rgba(212,175,55,0.08); }
+        .admin-content { padding:1rem; }
+        .admin-header { flex-wrap:wrap; gap:0.5rem; }
+        .admin-header h1 { font-size:0.85rem; }
+        .admin-header .admin-actions { flex-wrap:wrap; }
+        .admin-header .admin-actions button,
+        .admin-header .admin-actions a { font-size:0.7rem; padding:0.3rem 0.6rem; }
+        .admin-settings input,
+        .admin-settings textarea { max-width:100%; }
+        .admin-table { font-size:0.7rem; }
+        .admin-table td, .admin-table th { padding:0.35rem 0.4rem; }
+        .admin-modal .modal-box { max-width:98vw; padding:1rem; }
+        .admin-modal .modal-box .row2,
+        .admin-modal .modal-box .row3 { grid-template-columns:1fr; }
+      }
     `;
     document.head.appendChild(css);
   })();
@@ -192,13 +213,13 @@ const GITHUB_PATH   = "js/data.js";
     try {
       _data = {
         constants: extractConstants(),
-        STATS:        JSON.parse(JSON.stringify(window.STATS || [])),
-        PROPERTIES:   JSON.parse(JSON.stringify(window.PROPERTIES || [])),
-        EMPREENDIMENTOS: JSON.parse(JSON.stringify(window.EMPREENDIMENTOS || [])),
-        FAQS:         JSON.parse(JSON.stringify(window.FAQS || [])),
-        DEPOIMENTOS:  JSON.parse(JSON.stringify(window.DEPOIMENTOS || [])),
-        PARCEIROS:    JSON.parse(JSON.stringify(window.PARCEIROS || [])),
-        BLOG_POSTS:   JSON.parse(JSON.stringify(window.BLOG_POSTS || []))
+        STATS:        JSON.parse(JSON.stringify(typeof STATS !== 'undefined' ? STATS : [])),
+        PROPERTIES:   JSON.parse(JSON.stringify(typeof PROPERTIES !== 'undefined' ? PROPERTIES : [])),
+        EMPREENDIMENTOS: JSON.parse(JSON.stringify(typeof EMPREENDIMENTOS !== 'undefined' ? EMPREENDIMENTOS : [])),
+        FAQS:         JSON.parse(JSON.stringify(typeof FAQS !== 'undefined' ? FAQS : [])),
+        DEPOIMENTOS:  JSON.parse(JSON.stringify(typeof DEPOIMENTOS !== 'undefined' ? DEPOIMENTOS : [])),
+        PARCEIROS:    JSON.parse(JSON.stringify(typeof PARCEIROS !== 'undefined' ? PARCEIROS : [])),
+        BLOG_POSTS:   JSON.parse(JSON.stringify(typeof BLOG_POSTS !== 'undefined' ? BLOG_POSTS : []))
       };
       buildSidebar();
       showTab('general');
@@ -213,23 +234,23 @@ const GITHUB_PATH   = "js/data.js";
     if (typeof SITE_NAME !== 'undefined') map.SITE_NAME = SITE_NAME;
     if (typeof SITE_EMAIL !== 'undefined') map.SITE_EMAIL = SITE_EMAIL;
     if (typeof SITE_ADDRESS !== 'undefined') map.SITE_ADDRESS = SITE_ADDRESS;
-    map.HERO_EYEBROW  = window.HERO_EYEBROW  || 'Seu lar começa aqui';
-    map.HERO_TITLE    = window.HERO_TITLE    || 'Su Imobiliária';
-    map.HERO_SUBTITLE = window.HERO_SUBTITLE || '';
-    map.HERO_VIDEO    = window.HERO_VIDEO    || '';
-    map.SECTION_SOBRE_EYEBROW   = window.SECTION_SOBRE_EYEBROW   || 'Quem somos';
-    map.SECTION_SOBRE_TITLE     = window.SECTION_SOBRE_TITLE     || '';
-    map.SECTION_COMPRAR_EYEBROW = window.SECTION_COMPRAR_EYEBROW || 'Imóveis à venda';
-    map.SECTION_COMPRAR_TITLE   = window.SECTION_COMPRAR_TITLE   || '';
-    map.SECTION_ALUGAR_EYEBROW  = window.SECTION_ALUGAR_EYEBROW  || 'Imóveis para alugar';
-    map.SECTION_ALUGAR_TITLE    = window.SECTION_ALUGAR_TITLE    || '';
-    map.SECTION_LANCAMENTOS_EYEBROW = window.SECTION_LANCAMENTOS_EYEBROW || 'Lançamentos';
-    map.SECTION_LANCAMENTOS_TITLE   = window.SECTION_LANCAMENTOS_TITLE   || '';
-    map.SECTION_CONTATO_EYEBROW = window.SECTION_CONTATO_EYEBROW || 'Fale conosco';
-    map.SECTION_CONTATO_TITLE   = window.SECTION_CONTATO_TITLE   || '';
-    map.DISABLED_SECTIONS = window.DISABLED_SECTIONS ? window.DISABLED_SECTIONS.slice() : [];
-    map.SOCIAL = window.SOCIAL ? JSON.parse(JSON.stringify(window.SOCIAL)) : { instagram:'', facebook:'', youtube:'', linkedin:'' };
-    map.PAGE_SIZE = window.PAGE_SIZE || 6;
+    map.HERO_EYEBROW  = typeof HERO_EYEBROW !== 'undefined' ? HERO_EYEBROW : 'Seu lar começa aqui';
+    map.HERO_TITLE    = typeof HERO_TITLE !== 'undefined' ? HERO_TITLE : 'Su Imobiliária';
+    map.HERO_SUBTITLE = typeof HERO_SUBTITLE !== 'undefined' ? HERO_SUBTITLE : '';
+    map.HERO_VIDEO    = typeof HERO_VIDEO !== 'undefined' ? HERO_VIDEO : '';
+    map.SECTION_SOBRE_EYEBROW   = typeof SECTION_SOBRE_EYEBROW !== 'undefined' ? SECTION_SOBRE_EYEBROW : 'Quem somos';
+    map.SECTION_SOBRE_TITLE     = typeof SECTION_SOBRE_TITLE !== 'undefined' ? SECTION_SOBRE_TITLE : '';
+    map.SECTION_COMPRAR_EYEBROW = typeof SECTION_COMPRAR_EYEBROW !== 'undefined' ? SECTION_COMPRAR_EYEBROW : 'Imóveis à venda';
+    map.SECTION_COMPRAR_TITLE   = typeof SECTION_COMPRAR_TITLE !== 'undefined' ? SECTION_COMPRAR_TITLE : '';
+    map.SECTION_ALUGAR_EYEBROW  = typeof SECTION_ALUGAR_EYEBROW !== 'undefined' ? SECTION_ALUGAR_EYEBROW : 'Imóveis para alugar';
+    map.SECTION_ALUGAR_TITLE    = typeof SECTION_ALUGAR_TITLE !== 'undefined' ? SECTION_ALUGAR_TITLE : '';
+    map.SECTION_LANCAMENTOS_EYEBROW = typeof SECTION_LANCAMENTOS_EYEBROW !== 'undefined' ? SECTION_LANCAMENTOS_EYEBROW : 'Lançamentos';
+    map.SECTION_LANCAMENTOS_TITLE   = typeof SECTION_LANCAMENTOS_TITLE !== 'undefined' ? SECTION_LANCAMENTOS_TITLE : '';
+    map.SECTION_CONTATO_EYEBROW = typeof SECTION_CONTATO_EYEBROW !== 'undefined' ? SECTION_CONTATO_EYEBROW : 'Fale conosco';
+    map.SECTION_CONTATO_TITLE   = typeof SECTION_CONTATO_TITLE !== 'undefined' ? SECTION_CONTATO_TITLE : '';
+    map.DISABLED_SECTIONS = typeof DISABLED_SECTIONS !== 'undefined' ? DISABLED_SECTIONS.slice() : [];
+    map.SOCIAL = typeof SOCIAL !== 'undefined' ? JSON.parse(JSON.stringify(SOCIAL)) : { instagram:'', facebook:'', youtube:'', linkedin:'' };
+    map.PAGE_SIZE = typeof PAGE_SIZE !== 'undefined' ? PAGE_SIZE : 6;
     return map;
   }
 
