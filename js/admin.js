@@ -3,8 +3,6 @@
    =================================================================== */
 
 const ADMIN_ENABLED = true; // ← Mude para true para ativar o painel
-const ADMIN_USER    = "admin";
-const ADMIN_PASS    = "admin123";
 const GITHUB_REPO   = "JUANJ0V/site";
 const GITHUB_BRANCH = "main";
 const GITHUB_PATH   = "js/data.js";
@@ -170,7 +168,24 @@ const GITHUB_PATH   = "js/data.js";
   window.adminLogin = function() {
     var u = document.getElementById('adminUser').value;
     var p = document.getElementById('adminPass').value;
-    if (u === ADMIN_USER && p === ADMIN_PASS) {
+    var storedUser = localStorage.getItem('admin_user');
+    var storedPass = localStorage.getItem('admin_pass');
+    var errEl = document.getElementById('adminLoginError');
+    if (!storedUser || !storedPass) {
+      if (u && p) {
+        localStorage.setItem('admin_user', u);
+        localStorage.setItem('admin_pass', p);
+        sessionStorage.setItem('admin_logged', '1');
+        loginEl.classList.add('hidden');
+        panelEl.classList.add('active');
+        document.body.classList.add('admin-mode');
+        adminFloat.style.display = 'none';
+        initAdminPanel();
+      } else {
+        errEl.textContent = 'Primeiro acesso: defina um usuário e senha.';
+        errEl.style.display = 'block';
+      }
+    } else if (u === storedUser && p === storedPass) {
       sessionStorage.setItem('admin_logged', '1');
       loginEl.classList.add('hidden');
       panelEl.classList.add('active');
@@ -178,7 +193,8 @@ const GITHUB_PATH   = "js/data.js";
       adminFloat.style.display = 'none';
       initAdminPanel();
     } else {
-      document.getElementById('adminLoginError').style.display = 'block';
+      errEl.textContent = 'Usuário ou senha incorretos';
+      errEl.style.display = 'block';
     }
   };
 
@@ -271,7 +287,16 @@ const GITHUB_PATH   = "js/data.js";
   window.saveServerPass = function() {
     var pwd = document.getElementById('cfg_serverPass').value.trim();
     localStorage.setItem('admin_server_pass', pwd);
-    adminToast('✅ Senha salva no navegador', 'success');
+    adminToast('✅ Senha do servidor salva no navegador', 'success');
+  };
+
+  window.saveAdminCreds = function() {
+    var u = document.getElementById('cfg_adminUser').value.trim();
+    var p = document.getElementById('cfg_adminPass').value.trim();
+    if (!u || !p) { adminToast('❌ Preencha usuário e senha', 'error'); return; }
+    localStorage.setItem('admin_user', u);
+    localStorage.setItem('admin_pass', p);
+    adminToast('✅ Credenciais salvas no navegador', 'success');
   };
 
   window.saveToServer = function() {
@@ -971,6 +996,14 @@ const GITHUB_PATH   = "js/data.js";
       + '<input id="cfg_serverPass" type="password" value="' + esc(localStorage.getItem('admin_server_pass') || '') + '" placeholder="Senha definida no save.php">'
       + '<button class="btn-save" onclick="saveServerPass()">💾 Salvar senha</button>'
       + '<button class="btn-save" onclick="saveToServer()" style="margin-left:0.5rem;">💾 Salvar no servidor</button>'
+      + '<hr style="border-color:rgba(255,255,255,0.06);margin:1.5rem 0;">'
+      + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">🔐 Credenciais do Admin</h3>'
+      + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0 0 0.75rem;">As credenciais ficam salvas só no seu navegador (localStorage).</p>'
+      + '<label>Novo usuário</label>'
+      + '<input id="cfg_adminUser" type="text" value="' + esc(localStorage.getItem('admin_user') || '') + '" placeholder="admin">'
+      + '<label>Nova senha</label>'
+      + '<input id="cfg_adminPass" type="password" value="' + esc(localStorage.getItem('admin_pass') || '') + '" placeholder="••••••">'
+      + '<button class="btn-save" onclick="saveAdminCreds()">💾 Salvar credenciais</button>'
       + '<hr style="border-color:rgba(255,255,255,0.06);margin:1.5rem 0;">'
       + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">🔒 Desabilitar Painel</h3>'
       + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0;">Para desligar o painel, mude <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">ADMIN_ENABLED = false</code> no arquivo <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">js/admin.js</code> (linha 3) e publique.</p>'
