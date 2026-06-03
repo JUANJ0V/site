@@ -111,11 +111,11 @@ const GITHUB_PATH   = "js/data.js";
 
       /* ── Mobile responsive ── */
       @media (max-width: 768px) {
-        .admin-body { flex-direction:column; }
+        .admin-body { display:block; overflow:visible; }
         .admin-sidebar { width:100%; min-width:unset; padding:0; border-right:none; border-bottom:1px solid rgba(255,255,255,0.05); }
         .admin-desk-tab { display:none !important; }
-        .admin-mobile-tab { display:block; }
-        .admin-content { padding:1rem; overflow:auto; -webkit-overflow-scrolling:touch; flex:1; }
+        .admin-mobile-tab { display:block; width:100%; padding:0.75rem 1rem; font-size:0.9rem; }
+        .admin-content { padding:1rem; overflow:visible; min-height:60vh; }
         .admin-header { flex-wrap:wrap; gap:0.5rem; }
         .admin-header h1 { font-size:0.85rem; }
         .admin-header .admin-actions button,
