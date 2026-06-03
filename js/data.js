@@ -33,7 +33,7 @@ const SECTION_PARCEIROS_TITLE   = "Instituições que confiam em nós";
 /* Hero — texto do banner principal */
 const HERO_EYEBROW  = "Seu lar começa aqui";
 const HERO_TITLE    = "Su Imobiliária em Balneário Camboriú | Compra, Venda e Aluguel de Imóveis";
-const HERO_SUBTITLE = "Mais de 500 imóveis à venda e aluguel. Acompanhamos você em cada passo para encontrar o lar que sempre sonhou.";
+const HERO_SUBTITLE = "";
 
 /* Títulos e subtítulos de cada seção */
 const SECTION_SOBRE_EYEBROW       = "Quem somos";
