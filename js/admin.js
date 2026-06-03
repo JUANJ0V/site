@@ -39,6 +39,7 @@ const GITHUB_PATH   = "js/data.js";
       #adminLogin input:focus { border-color:#d4af37; }
       #adminLogin button { width:100%; padding:0.7rem; background:#d4af37; border:none; border-radius:6px; color:#0e142e; font-weight:700; font-size:0.9rem; cursor:pointer; }
       #adminLogin .error { color:#ff6b6b; font-size:0.8rem; margin-top:0.5rem; display:none; }
+      #adminFloatBtn { display:none; position:fixed; z-index:2147483647; bottom:1.2rem; left:1.2rem; background:#d4af37; color:#0e142e; padding:0.5rem 1rem; border-radius:8px; font-size:0.85rem; font-weight:700; cursor:pointer; box-shadow:0 2px 12px rgba(0,0,0,0.3); align-items:center; gap:0.4rem; }
 
       /* ── Header ── */
       .admin-header { display:flex; align-items:center; justify-content:space-between; padding:0.75rem 1.5rem; background:#0e142e; border-bottom:1px solid rgba(255,255,255,0.06); }
@@ -139,7 +140,7 @@ const GITHUB_PATH   = "js/data.js";
 
   var panelEl = document.createElement('div');
   panelEl.id = 'adminPanel';
-  panelEl.innerHTML = '<div class="admin-header"><h1>⚙️ Su Imobiliária — Admin</h1><div class="admin-actions"><a href="' + window.location.pathname.replace(/\/+$/,'') + '/" style="color:rgba(255,255,255,0.4);font-size:0.8rem;">Ver site →</a><button onclick="adminPublish()" class="btn-publish" id="adminPublishBtn">📦 Publicar no GitHub</button><button onclick="adminLogout()">Sair</button></div></div><div class="admin-body"><div class="admin-sidebar" id="adminSidebar"></div><div class="admin-content" id="adminContent"></div></div>';
+  panelEl.innerHTML = '<div class="admin-header"><h1>⚙️ Su Imobiliária — Admin</h1><div class="admin-actions"><button onclick="adminToggleSite()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);">👁 Ver site</button><button onclick="adminPublish()" class="btn-publish" id="adminPublishBtn">📦 Publicar no GitHub</button><button onclick="adminLogout()">Sair</button></div></div><div class="admin-body"><div class="admin-sidebar" id="adminSidebar"></div><div class="admin-content" id="adminContent"></div></div>';
   document.body.appendChild(panelEl);
 
   var toastEl = document.createElement('div');
@@ -170,10 +171,27 @@ const GITHUB_PATH   = "js/data.js";
       loginEl.classList.add('hidden');
       panelEl.classList.add('active');
       document.body.classList.add('admin-mode');
+      adminFloat.style.display = 'none';
       initAdminPanel();
     } else {
       document.getElementById('adminLoginError').style.display = 'block';
     }
+  };
+
+  var adminFloat = document.createElement('div');
+  adminFloat.id = 'adminFloatBtn';
+  adminFloat.innerHTML = '⚙️ Admin';
+  adminFloat.onclick = function() {
+    panelEl.classList.add('active');
+    document.body.classList.add('admin-mode');
+    adminFloat.style.display = 'none';
+  };
+  document.body.appendChild(adminFloat);
+
+  window.adminToggleSite = function() {
+    panelEl.classList.remove('active');
+    document.body.classList.remove('admin-mode');
+    adminFloat.style.display = 'flex';
   };
 
   window.adminLogout = function() {
@@ -184,7 +202,7 @@ const GITHUB_PATH   = "js/data.js";
     document.getElementById('adminPass').value = '';
     document.getElementById('adminLoginError').style.display = 'none';
     document.body.classList.remove('admin-mode');
-    window.location.href = window.location.href.split('?')[0];
+    adminFloat.style.display = 'none';
   };
 
   window.adminToast = function(msg, type) {
