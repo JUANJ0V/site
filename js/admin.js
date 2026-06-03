@@ -1169,7 +1169,7 @@ const GITHUB_PATH   = "js/data.js";
     try {
     var heroEye = document.querySelector('#inicio .eyebrow');
     var heroTit = document.querySelector('#inicio h1');
-    var heroSub = document.querySelector('#inicio .hero-content p');
+    var heroSub = document.querySelector('#inicio .hero-content p:not(.eyebrow)');
     if (heroEye) heroEye.textContent = c.HERO_EYEBROW || '';
     if (heroTit) heroTit.textContent = c.HERO_TITLE || '';
     if (heroSub) heroSub.textContent = c.HERO_SUBTITLE || '';
