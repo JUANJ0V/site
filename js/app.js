@@ -157,8 +157,10 @@ function buildPropertyCardHTML(p, badgeClass, badgeText) {
   var priceDisplay = p.price;
   if (p.type === 'rent' && p.price.indexOf('/m\u00EAs') === -1) priceDisplay += ' ' + ct.perMonth;
   var propUrl = window.location.origin + BASE_PATH + p.id + '/';
-  var rawMsg = WHATSAPP_MSG.replace('{titulo}', title).replace('{preco}', priceDisplay) + '\n\n' + propUrl;
-  var whatsappUrl = WHATSAPP_URL + '?text=' + encodeURIComponent(rawMsg);
+  var _waMsg = window._waMsg || WHATSAPP_MSG;
+  var _waUrl = window._waURL || WHATSAPP_URL;
+  var rawMsg = _waMsg.replace('{titulo}', title).replace('{preco}', priceDisplay) + '\n\n' + propUrl;
+  var whatsappUrl = _waUrl + '?text=' + encodeURIComponent(rawMsg);
 
   var statusHtml = '';
   if (p.status && p.status !== 'disponivel') {
@@ -336,8 +338,10 @@ function renderDetailCard(propId) {
   var detailPriceDisplay = p.price;
   if (p.type === 'rent' && p.price.indexOf('/m\u00EAs') === -1) detailPriceDisplay += ' ' + ct.perMonth;
   var detailPropUrl = window.location.origin + BASE_PATH + p.id + '/';
-  var detailRawMsg = WHATSAPP_MSG.replace('{titulo}', p.title).replace('{preco}', detailPriceDisplay) + '\n\n' + detailPropUrl;
-  var detailWhatsUrl = WHATSAPP_URL + '?text=' + encodeURIComponent(detailRawMsg);
+  var _detWaMsg = window._waMsg || WHATSAPP_MSG;
+  var _detWaUrl = window._waURL || WHATSAPP_URL;
+  var detailRawMsg = _detWaMsg.replace('{titulo}', p.title).replace('{preco}', detailPriceDisplay) + '\n\n' + detailPropUrl;
+  var detailWhatsUrl = _detWaUrl + '?text=' + encodeURIComponent(detailRawMsg);
 
   var videoEmbed = p.video
     ? '<div class="video-wrapper"><iframe src="' + p.video + '" title="' + p.title.replace(/"/g, '&quot;') + '" allowfullscreen loading="lazy"></iframe></div>'

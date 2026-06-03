@@ -1193,6 +1193,9 @@ const GITHUB_PATH   = "js/data.js";
       if (typeof renderStatsWithLang === 'function') renderStatsWithLang();
     }
     } catch(e) { console.warn('syncToLive stats:', e); }
+    // Set dynamic WhatsApp overrides BEFORE rendering (app.js checks window._waURL / _waMsg)
+    window._waURL = 'https://wa.me/' + (c.WHATSAPP_NUMBER || '').replace(/\D/g, '');
+    window._waMsg = c.WHATSAPP_MSG || 'Olá, tenho interesse no {titulo} ({preco})';
     // PROPERTIES — mutate live array and re-render cards
     try {
     if (typeof PROPERTIES !== 'undefined') {
