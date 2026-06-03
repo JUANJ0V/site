@@ -70,6 +70,10 @@
       line-height: 1.5;
       transition: background-color 0.4s ease, color 0.4s ease;
     }
+
+    /* Hide Google Translate top banner that covers our fixed header */
+    .goog-te-banner-frame { display: none !important; }
+    body { top: 0 !important; position: static !important; }
     section[id],
     .site-header,
     .site-footer,

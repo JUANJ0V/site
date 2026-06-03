@@ -503,6 +503,15 @@
     if (headerEl) {
       document.documentElement.style.setProperty('--header-height', headerEl.offsetHeight + 'px');
     }
+    // Prevent Google Translate banner from pushing/shifting the page
+    function cleanTranslateBanner() {
+      if (document.body.style.top) document.body.style.top = '';
+      if (document.body.style.position) document.body.style.position = '';
+      var banner = document.querySelector('.goog-te-banner-frame');
+      if (banner) banner.style.display = 'none';
+    }
+    cleanTranslateBanner();
+    setInterval(cleanTranslateBanner, 200);
   // Site name in logo and brand (first word plain, rest in gold span)
   document.querySelectorAll('.site-logo, .footer-brand .site-logo').forEach(function(el) {
     if (SITE_LOGO) {
