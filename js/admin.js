@@ -25,7 +25,7 @@ const GITHUB_PATH   = "js/data.js";
     var css = document.createElement('style');
     css.textContent = `
       /* ── Panel backdrop ── */
-      #adminPanel { display:none; position:fixed; z-index:2147483647; inset:0; background:rgba(0,0,0,0.85); font-family:system-ui,sans-serif; color:#fff; overflow:auto; }
+      #adminPanel { display:none; position:fixed; z-index:2147483647; inset:0; background:rgba(0,0,0,0.85); font-family:system-ui,sans-serif; color:#fff; overflow:auto; -webkit-overflow-scrolling:touch; }
       #adminPanel.active { display:flex; flex-direction:column; }
       #adminPanel * { box-sizing:border-box; }
 
@@ -45,14 +45,14 @@ const GITHUB_PATH   = "js/data.js";
       .admin-header { display:flex; align-items:center; justify-content:space-between; padding:0.75rem 1.5rem; background:#0e142e; border-bottom:1px solid rgba(255,255,255,0.06); }
       .admin-header h1 { margin:0; font-size:1rem; color:#d4af37; }
       .admin-header .admin-actions { display:flex; gap:0.5rem; align-items:center; }
-      .admin-header .admin-actions button, .admin-header .admin-actions a { padding:0.4rem 0.9rem; border-radius:5px; border:1px solid rgba(255,255,255,0.1); background:transparent; color:#fff; font-size:0.8rem; cursor:pointer; text-decoration:none; transition:all 0.15s; }
+      .admin-header .admin-actions button, .admin-header .admin-actions a { padding:0.4rem 0.9rem; border-radius:5px; border:1px solid rgba(255,255,255,0.1); background:transparent; color:#fff; font-size:0.8rem; cursor:pointer; text-decoration:none; transition:all 0.15s; touch-action:manipulation; }
       .admin-header .admin-actions .btn-publish { background:#d4af37; color:#0e142e; border:none; font-weight:700; }
       .admin-header .admin-actions .btn-publish:hover { background:#c5a030; }
 
       /* ── Body ── */
       .admin-body { display:flex; flex:1; overflow:hidden; }
       .admin-sidebar { width:200px; min-width:200px; background:#0a0f24; border-right:1px solid rgba(255,255,255,0.05); padding:0.75rem 0; overflow-y:auto; }
-      .admin-sidebar button { display:block; width:100%; text-align:left; padding:0.6rem 1.2rem; background:none; border:none; color:rgba(255,255,255,0.5); font-size:0.85rem; cursor:pointer; transition:all 0.15s; }
+      .admin-sidebar button { display:block; width:100%; text-align:left; padding:0.6rem 1.2rem; background:none; border:none; color:rgba(255,255,255,0.5); font-size:0.85rem; cursor:pointer; transition:all 0.15s; touch-action:manipulation; }
       .admin-sidebar button:hover { background:rgba(255,255,255,0.03); color:#fff; }
       .admin-sidebar button.active { background:rgba(212,175,55,0.1); color:#d4af37; border-right:2px solid #d4af37; }
       .admin-content { flex:1; padding:1.5rem; overflow-y:auto; }
@@ -111,10 +111,11 @@ const GITHUB_PATH   = "js/data.js";
       /* ── Mobile responsive ── */
       @media (max-width: 768px) {
         .admin-body { flex-direction:column; }
-        .admin-sidebar { width:100%; min-width:unset; display:flex; overflow-x:auto; padding:0; border-right:none; border-bottom:1px solid rgba(255,255,255,0.05); -webkit-overflow-scrolling:touch; }
-        .admin-sidebar button { flex-shrink:0; padding:0.5rem 0.8rem; font-size:0.75rem; border-bottom:2px solid transparent; white-space:nowrap; }
+        .admin-sidebar { width:100%; min-width:unset; display:flex; overflow-x:auto; overflow-y:hidden; padding:0; border-right:none; border-bottom:1px solid rgba(255,255,255,0.05); -webkit-overflow-scrolling:touch; scrollbar-width:thin; }
+        .admin-sidebar::after { content:''; flex-shrink:0; width:0.5rem; }
+        .admin-sidebar button { flex-shrink:0; padding:0.6rem 0.9rem; font-size:0.8rem; border-bottom:2px solid transparent; white-space:nowrap; touch-action:manipulation; -webkit-tap-highlight-color:rgba(212,175,55,0.2); }
         .admin-sidebar button.active { border-right:none; border-bottom-color:#d4af37; background:rgba(212,175,55,0.08); }
-        .admin-content { padding:1rem; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+        .admin-content { padding:1rem; overflow:auto; -webkit-overflow-scrolling:touch; }
         .admin-header { flex-wrap:wrap; gap:0.5rem; }
         .admin-header h1 { font-size:0.85rem; }
         .admin-header .admin-actions button,
@@ -315,7 +316,7 @@ const GITHUB_PATH   = "js/data.js";
       var btn = document.createElement('button');
       btn.textContent = t.label;
       btn.dataset.tab = t.id;
-      btn.onclick = function() { showTab(t.id); };
+      btn.addEventListener('click', function() { showTab(t.id); });
       sb.appendChild(btn);
     });
   }
