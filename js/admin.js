@@ -174,6 +174,9 @@ const GITHUB_PATH   = "js/data.js";
     t._timeout = setTimeout(function() { t.classList.remove('show'); }, 3500);
   };
 
+  // ── Dados editáveis (cópia de trabalho) ──
+  var _data = null;
+
   // ── Verificar login ──
   if (!ADMIN_LOGGED) {
     loginEl.classList.remove('hidden');
@@ -184,9 +187,6 @@ const GITHUB_PATH   = "js/data.js";
   panelEl.classList.add('active');
   document.body.classList.add('admin-mode');
   initAdminPanel();
-
-  // ── Dados editáveis (cópia de trabalho) ──
-  var _data = null;
 
   function initAdminPanel() {
     try {
@@ -269,7 +269,7 @@ const GITHUB_PATH   = "js/data.js";
           var fallback = document.createElement('div');
           fallback.id = 'adminSection_' + id;
           fallback.className = 'admin-section active';
-          fallback.innerHTML = '<p style="color:#ff6b6b;">Erro ao carregar: ' + e.message + '</p>';
+          fallback.innerHTML = '<p style="color:#ff6b6b;">Erro: ' + e.message + '</p><pre style="color:rgba(255,255,255,0.5);font-size:0.75rem;max-width:100%;overflow:auto;">' + esc(e.stack) + '</pre>';
           container.appendChild(fallback);
         }
       }
