@@ -144,7 +144,7 @@ const GITHUB_PATH   = "js/data.js";
 
   var panelEl = document.createElement('div');
   panelEl.id = 'adminPanel';
-  panelEl.innerHTML = '<div class="admin-header"><h1>⚙️ Su Imobiliária — Admin</h1><div class="admin-actions"><button onclick="adminToggleSite()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);">👁 Ver site</button><button onclick="adminPublish()" class="btn-publish" id="adminPublishBtn">📦 Publicar no GitHub</button><button onclick="adminLogout()">Sair</button></div></div><div class="admin-body"><div class="admin-sidebar" id="adminSidebar"></div><div class="admin-content" id="adminContent"></div></div>';
+  panelEl.innerHTML = '<div class="admin-header"><h1>⚙️ Su Imobiliária — Admin</h1><div class="admin-actions"><button onclick="adminToggleSite()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);">👁 Ver site</button><button onclick="adminSaveServer()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);">💾 Salvar</button><button onclick="adminPublish()" class="btn-publish" id="adminPublishBtn">📦 Publicar no GitHub</button><button onclick="adminLogout()">Sair</button></div></div><div class="admin-body"><div class="admin-sidebar" id="adminSidebar"></div><div class="admin-content" id="adminContent"></div></div>';
   document.body.appendChild(panelEl);
 
   var toastEl = document.createElement('div');
@@ -248,6 +248,25 @@ const GITHUB_PATH   = "js/data.js";
     panelEl.classList.remove('active');
     document.body.classList.remove('admin-mode');
     adminFloat.style.display = 'flex';
+  };
+
+  window.adminSaveServer = function() {
+    try { saveFormsToData(); } catch(e) {}
+    var pass = document.getElementById('cfg_serverPass');
+    var pwd = pass ? pass.value.trim() : '';
+    if (!pwd) pwd = 'fp2026';
+    var content = generateDataJs();
+    fetch('save.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: content, password: pwd })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (res.ok) { adminToast('✅ ' + (res.message || 'Salvo!'), 'success'); }
+      else { adminToast('❌ ' + (res.error || 'Erro'), 'error'); }
+    })
+    .catch(function(err) { adminToast('❌ ' + err.message, 'error'); });
   };
 
   window.adminLogout = function() {
@@ -923,6 +942,12 @@ const GITHUB_PATH   = "js/data.js";
       + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">📦 Publicar no GitHub</h3>'
       + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0 0 0.75rem;">Depois de editar os dados, clique no botão "Publicar no GitHub" no topo da página. Isso faz um commit direto no repositório e o site atualiza em minutos.</p>'
       + '<hr style="border-color:rgba(255,255,255,0.06);margin:1.5rem 0;">'
+      + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">💾 Salvar no servidor (PHP)</h3>'
+      + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0 0 0.75rem;">Se o site está rodando em um host com PHP (ex: Hostinger), usa isso pra salvar as alterações direto no <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">js/data.js</code> do servidor.</p>'
+      + '<label>Senha do save.php</label>'
+      + '<input id="cfg_serverPass" type="password" value="" placeholder="fp2026">'
+      + '<button class="btn-save" onclick="saveToServer()">💾 Salvar no servidor</button>'
+      + '<hr style="border-color:rgba(255,255,255,0.06);margin:1.5rem 0;">'
       + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">🔒 Desabilitar Painel</h3>'
       + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0;">Para desligar o painel, mude <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">ADMIN_ENABLED = false</code> no arquivo <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">js/admin.js</code> (linha 3) e publique.</p>'
       + '</div>';
@@ -933,6 +958,28 @@ const GITHUB_PATH   = "js/data.js";
     localStorage.setItem('admin_github_token', token);
     ADMIN_TOKEN = token;
     adminToast('✅ Token salvo no navegador', 'success');
+  };
+
+  window.saveToServer = function() {
+    var pass = document.getElementById('cfg_serverPass').value.trim() || 'fp2026';
+    try { saveFormsToData(); } catch(e) {}
+    var content = generateDataJs();
+    fetch('save.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: content, password: pass })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (res.ok) {
+        adminToast('✅ ' + (res.message || 'Salvo no servidor!'), 'success');
+      } else {
+        adminToast('❌ ' + (res.error || 'Erro ao salvar'), 'error');
+      }
+    })
+    .catch(function(err) {
+      adminToast('❌ Erro de conexão: ' + err.message, 'error');
+    });
   };
 
   /* =================================================================
