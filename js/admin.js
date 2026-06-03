@@ -1147,14 +1147,6 @@ const GITHUB_PATH   = "js/data.js";
     if (heroEye) heroEye.textContent = c.HERO_EYEBROW || '';
     if (heroTit) heroTit.textContent = c.HERO_TITLE || '';
     if (heroSub) heroSub.textContent = c.HERO_SUBTITLE || '';
-    // WhatsApp FAB — generic message, NOT the property template
-    var fab = document.querySelector('.whatsapp-fab');
-    if (fab) {
-      var num = (c.WHATSAPP_NUMBER || '').replace(/\D/g, '');
-      if (num) {
-        fab.href = 'https://wa.me/' + num + '?text=' + encodeURIComponent('Olá, gostaria de falar com a Su Imobiliária.');
-      }
-    }
     // Social links
     if (c.SOCIAL) {
       var ig = document.querySelector('.social-instagram');
@@ -1241,6 +1233,17 @@ const GITHUB_PATH   = "js/data.js";
       if (rateEl)  rateEl.value  = c.FIN_DEFAULT_RATE;
       if (termEl)  termEl.value  = c.FIN_DEFAULT_TERM;
       if (typeof calcFinancing === 'function') calcFinancing();
+    }
+    // WhatsApp — update all links with new number (after all re-renders)
+    var num = (c.WHATSAPP_NUMBER || '').replace(/\D/g, '');
+    if (num) {
+      var waUrl = 'https://wa.me/' + num;
+      document.querySelectorAll('a[href*="wa.me/"]').forEach(function(a) { a.href = a.href.replace(/https:\/\/wa\.me\/\d+/, waUrl); });
+      document.querySelectorAll('.nav-whatsapp-cta').forEach(function(a) {
+        var msg = a.getAttribute('data-whatsapp-msg') || 'Olá, gostaria de falar com a Su Imobiliária.';
+        a.href = waUrl + '?text=' + encodeURIComponent(msg);
+        a.target = '_blank';
+      });
     }
     } catch(e) { console.warn('syncToLive error:', e); }
   }
