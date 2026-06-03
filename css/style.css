@@ -1748,14 +1748,6 @@
       .hero-actions .btn-outline { padding: 0.75rem 1.25rem; font-size: 0.6875rem; }
     }
 
-    @media (max-height: 860px) {
-      .hero h1 { font-size: 2.5rem; }
-      .hero p { margin-top: 1rem; font-size: 1rem; }
-      .hero-search { margin-top: 1.5rem; }
-      .hero-actions { margin-top: 2rem; }
-      .hero-content { justify-content: center; }
-    }
-
     @media (max-height: 640px) {
       .hero { min-height: 100vh; }
       .hero h1 { font-size: 2rem; }

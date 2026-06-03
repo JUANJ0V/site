@@ -125,6 +125,22 @@ const GITHUB_PATH   = "js/data.js";
   toastEl.id = 'adminToast';
   document.body.appendChild(toastEl);
 
+  // ── Enter key support on login ──
+  setTimeout(function() {
+    var passInput = document.getElementById('adminPass');
+    if (passInput) {
+      passInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') adminLogin();
+      });
+    }
+    var userInput = document.getElementById('adminUser');
+    if (userInput) {
+      userInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') adminLogin();
+      });
+    }
+  }, 50);
+
   // ── Verificar login ──
   if (!ADMIN_LOGGED) {
     loginEl.classList.remove('hidden');
