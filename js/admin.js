@@ -1147,13 +1147,12 @@ const GITHUB_PATH   = "js/data.js";
     if (heroEye) heroEye.textContent = c.HERO_EYEBROW || '';
     if (heroTit) heroTit.textContent = c.HERO_TITLE || '';
     if (heroSub) heroSub.textContent = c.HERO_SUBTITLE || '';
-    // WhatsApp FAB
+    // WhatsApp FAB — generic message, NOT the property template
     var fab = document.querySelector('.whatsapp-fab');
     if (fab) {
       var num = (c.WHATSAPP_NUMBER || '').replace(/\D/g, '');
       if (num) {
-        var msg = c.WHATSAPP_MSG || '';
-        fab.href = 'https://wa.me/' + num + '?text=' + encodeURIComponent(msg);
+        fab.href = 'https://wa.me/' + num + '?text=' + encodeURIComponent('Olá, gostaria de falar com a Su Imobiliária.');
       }
     }
     // Social links
