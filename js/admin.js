@@ -141,17 +141,6 @@ const GITHUB_PATH   = "js/data.js";
     }
   }, 50);
 
-  // ── Verificar login ──
-  if (!ADMIN_LOGGED) {
-    loginEl.classList.remove('hidden');
-    panelEl.classList.remove('active');
-    return;
-  }
-  loginEl.classList.add('hidden');
-  panelEl.classList.add('active');
-  document.body.classList.add('admin-mode');
-  initAdminPanel();
-
   window.adminLogin = function() {
     var u = document.getElementById('adminUser').value;
     var p = document.getElementById('adminPass').value;
@@ -183,6 +172,17 @@ const GITHUB_PATH   = "js/data.js";
     clearTimeout(t._timeout);
     t._timeout = setTimeout(function() { t.classList.remove('show'); }, 3500);
   };
+
+  // ── Verificar login ──
+  if (!ADMIN_LOGGED) {
+    loginEl.classList.remove('hidden');
+    panelEl.classList.remove('active');
+    return;
+  }
+  loginEl.classList.add('hidden');
+  panelEl.classList.add('active');
+  document.body.classList.add('admin-mode');
+  initAdminPanel();
 
   // ── Dados editáveis (cópia de trabalho) ──
   var _data = null;
