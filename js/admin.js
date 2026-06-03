@@ -25,12 +25,12 @@ const GITHUB_PATH   = "js/data.js";
     var css = document.createElement('style');
     css.textContent = `
       /* ── Panel backdrop ── */
-      #adminPanel { display:none; position:fixed; z-index:99999; inset:0; background:rgba(0,0,0,0.85); font-family:system-ui,sans-serif; color:#fff; overflow:auto; }
+      #adminPanel { display:none; position:fixed; z-index:2147483647; inset:0; background:rgba(0,0,0,0.85); font-family:system-ui,sans-serif; color:#fff; overflow:auto; }
       #adminPanel.active { display:flex; flex-direction:column; }
       #adminPanel * { box-sizing:border-box; }
 
       /* ── Login ── */
-      #adminLogin { position:fixed; z-index:99999; inset:0; background:#0e142e; display:flex; align-items:center; justify-content:center; font-family:system-ui,sans-serif; }
+      #adminLogin { position:fixed; z-index:2147483647; inset:0; background:#0e142e; display:flex; align-items:center; justify-content:center; font-family:system-ui,sans-serif; }
       #adminLogin.hidden { display:none; }
       #adminLogin .box { background:#1a1f3a; padding:2.5rem; border-radius:12px; border:1px solid rgba(255,255,255,0.08); width:360px; max-width:90vw; }
       #adminLogin h2 { margin:0 0 0.25rem; color:#d4af37; font-size:1.25rem; }
@@ -74,7 +74,7 @@ const GITHUB_PATH   = "js/data.js";
       .btn-add:hover { background:rgba(212,175,55,0.08); }
 
       /* ── Modal ── */
-      .admin-modal { display:none; position:fixed; z-index:100000; inset:0; background:rgba(0,0,0,0.7); align-items:center; justify-content:center; }
+      .admin-modal { display:none; position:fixed; z-index:2147483647; inset:0; background:rgba(0,0,0,0.7); align-items:center; justify-content:center; }
       .admin-modal.active { display:flex; }
       .admin-modal .modal-box { background:#1a1f3a; border-radius:12px; border:1px solid rgba(255,255,255,0.08); width:700px; max-width:95vw; max-height:85vh; overflow-y:auto; padding:1.5rem; }
       .admin-modal .modal-box h3 { margin:0 0 1rem; color:#d4af37; font-size:1rem; }
@@ -97,14 +97,14 @@ const GITHUB_PATH   = "js/data.js";
       .admin-settings .btn-save { padding:0.45rem 1.2rem; border-radius:5px; background:#d4af37; color:#0e142e; border:none; font-weight:700; font-size:0.82rem; cursor:pointer; }
 
       /* ── Toast ── */
-      #adminToast { position:fixed; z-index:100001; bottom:1.5rem; right:1.5rem; padding:0.7rem 1.2rem; border-radius:8px; font-size:0.85rem; opacity:0; transition:opacity 0.3s; pointer-events:none; }
+      #adminToast { position:fixed; z-index:2147483647; bottom:1.5rem; right:1.5rem; padding:0.7rem 1.2rem; border-radius:8px; font-size:0.85rem; opacity:0; transition:opacity 0.3s; pointer-events:none; }
       #adminToast.show { opacity:1; }
       #adminToast.success { background:#1b5e20; color:#a5d6a7; }
       #adminToast.error { background:#b71c1c; color:#ef9a9a; }
       #adminToast.info { background:#1a237e; color:#9fa8da; }
 
       /* ── Preview badge ── */
-      .admin-preview-badge { position:fixed; top:0; left:0; right:0; z-index:99998; background:#d4af37; color:#0e142e; text-align:center; padding:0.25rem; font-size:0.75rem; font-weight:700; letter-spacing:0.05em; }
+      .admin-preview-badge { position:fixed; top:0; left:0; right:0; z-index:2147483647; background:#d4af37; color:#0e142e; text-align:center; padding:0.25rem; font-size:0.75rem; font-weight:700; letter-spacing:0.05em; }
       body.admin-mode { padding-top:1.5rem; }
     `;
     document.head.appendChild(css);
@@ -188,18 +188,20 @@ const GITHUB_PATH   = "js/data.js";
   var _data = null;
 
   function initAdminPanel() {
-    _data = {
-      constants: extractConstants(),
-      STATS:        JSON.parse(JSON.stringify(window.STATS || [])),
-      PROPERTIES:   JSON.parse(JSON.stringify(window.PROPERTIES || [])),
-      EMPREENDIMENTOS: JSON.parse(JSON.stringify(window.EMPREENDIMENTOS || [])),
-      FAQS:         JSON.parse(JSON.stringify(window.FAQS || [])),
-      DEPOIMENTOS:  JSON.parse(JSON.stringify(window.DEPOIMENTOS || [])),
-      PARCEIROS:    JSON.parse(JSON.stringify(window.PARCEIROS || [])),
-      BLOG_POSTS:   JSON.parse(JSON.stringify(window.BLOG_POSTS || []))
-    };
-    buildSidebar();
-    showTab('general');
+    try {
+      _data = {
+        constants: extractConstants(),
+        STATS:        JSON.parse(JSON.stringify(window.STATS || [])),
+        PROPERTIES:   JSON.parse(JSON.stringify(window.PROPERTIES || [])),
+        EMPREENDIMENTOS: JSON.parse(JSON.stringify(window.EMPREENDIMENTOS || [])),
+        FAQS:         JSON.parse(JSON.stringify(window.FAQS || [])),
+        DEPOIMENTOS:  JSON.parse(JSON.stringify(window.DEPOIMENTOS || [])),
+        PARCEIROS:    JSON.parse(JSON.stringify(window.PARCEIROS || [])),
+        BLOG_POSTS:   JSON.parse(JSON.stringify(window.BLOG_POSTS || []))
+      };
+      buildSidebar();
+      showTab('general');
+    } catch(e) { console.error('Admin init error:', e); }
   }
 
   function extractConstants() {

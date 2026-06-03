@@ -505,13 +505,24 @@
     }
     // Prevent Google Translate banner from pushing/shifting the page
     function cleanTranslateBanner() {
-      if (document.body.style.top) document.body.style.top = '';
-      if (document.body.style.position) document.body.style.position = '';
-      var banner = document.querySelector('.goog-te-banner-frame');
-      if (banner) banner.style.display = 'none';
+      document.body.style.removeProperty('top');
+      document.body.style.removeProperty('position');
+      document.querySelectorAll('.goog-te-banner-frame, iframe[src*="translate"], .skiptranslate iframe').forEach(function(f) {
+        f.style.display = 'none'; f.style.height = '0'; f.style.visibility = 'hidden';
+      });
     }
     cleanTranslateBanner();
-    setInterval(cleanTranslateBanner, 200);
+    setInterval(cleanTranslateBanner, 100);
+    // MutationObserver catches any inline style Google forces onto body immediately
+    var translateObs = new MutationObserver(function(muts) {
+      muts.forEach(function(m) {
+        if (m.type === 'attributes' && m.attributeName === 'style') {
+          m.target.style.removeProperty('top');
+          m.target.style.removeProperty('position');
+        }
+      });
+    });
+    translateObs.observe(document.body, { attributes: true, attributeFilter: ['style'] });
   // Site name in logo and brand (first word plain, rest in gold span)
   document.querySelectorAll('.site-logo, .footer-brand .site-logo').forEach(function(el) {
     if (SITE_LOGO) {

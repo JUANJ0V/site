@@ -72,7 +72,7 @@
     }
 
     /* Hide Google Translate top banner that covers our fixed header */
-    .goog-te-banner-frame { display: none !important; }
+    .goog-te-banner-frame, .goog-te-banner-frame *, .goog-te-balloon-frame, .goog-te-menu-frame, .skiptranslate { display: none !important; }
     body { top: 0 !important; position: static !important; }
     section[id],
     .site-header,
