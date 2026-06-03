@@ -1299,6 +1299,14 @@ const GITHUB_PATH   = "js/data.js";
         }
       } catch(e) {}
     });
+    // .card-whatsapp — property card WhatsApp links (re-rendered by app.js with old WHATSAPP_URL)
+    document.querySelectorAll('.card-whatsapp').forEach(function(a) {
+      try {
+        var href = a.getAttribute('href');
+        if (!href) return;
+        a.setAttribute('href', href.replace(/wa\.me\/\d+/g, 'wa.me/' + num));
+      } catch(e) {}
+    });
     // .nav-whatsapp-cta may have been set by page init; override completely
     document.querySelectorAll('.nav-whatsapp-cta').forEach(function(a) {
       try {
