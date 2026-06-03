@@ -193,7 +193,6 @@ const GITHUB_PATH   = "js/data.js";
   document.body.appendChild(adminFloat);
 
   window.adminToggleSite = function() {
-    syncToLive();
     panelEl.classList.remove('active');
     document.body.classList.remove('admin-mode');
     adminFloat.style.display = 'flex';
