@@ -26,7 +26,29 @@ var _cardLabels = {
   linkCopied: "Link copiado!",
   sale2: "Venda",
   rent2: "Aluguel",
-  copyright: "Todos os direitos reservados."
+  copyright: "Todos os direitos reservados.",
+  sqm: "m\u00B2",
+  front: "Frente",
+  backs: "Fundos",
+  bedroom: "quarto",
+  bedrooms: "quartos",
+  bathroom: "banheiro",
+  bathrooms: "banheiros",
+  parking: "vaga",
+  parkings: "vagas",
+  sold: "Vendido",
+  rented: "Alugado",
+  perMonth: "por m\u00EAs",
+  aboutProperty: "Sobre o im\u00F3vel",
+  scheduleVisit: "Agendar visita",
+  viewOnMap: "Ver no mapa",
+  share: "Compartilhar",
+  otherProperties: "Outros im\u00F3veis",
+  topography: "Topografia",
+  sala: "Sala",
+  virtualTour: "Tour Virtual",
+  favorite: "Favoritar",
+  wantToKnow: "Quero saber mais"
 };
 function _cardT() { return _cardLabels; }
 function _transData() { return []; }
@@ -232,14 +254,14 @@ function renderDetailCard(propId) {
   for (let i = 0; i < PROPERTIES.length; i++) {
     if (PROPERTIES[i].id === propId) { p = PROPERTIES[i]; break; }
   }
-  if (!p) return;
+  if (!p) { console.warn('Property not found:', propId); return; }
   updateMetaTags(p);
   const backSection = p.type === "sale" ? "comprar" : "alugar";
   var ct = _cardT();
   var pT = _propT(propId);
-  var detailFeatures = (pT && pT.features) || p.features;
-  var detailDescription = (pT && pT.description) || p.description;
-  var detailTitle = (pT && pT.title) || p.title;
+  var detailFeatures = (pT && pT.features) || p.features || [];
+  var detailDescription = (pT && pT.description) || p.description || '';
+  var detailTitle = (pT && pT.title) || p.title || '';
 
   let propsLgHtml = '';
   if (p.category === "Terreno") {
@@ -274,9 +296,10 @@ function renderDetailCard(propId) {
   };
   const eyebrow = eyebrowMap[locClean] || locClean;
 
+  var gallery = p.gallery || [p.img || ''];
   let thumbHtml = '';
-  for (let g = 1; g < p.gallery.length; g++) {
-    thumbHtml += '<img src="' + p.gallery[g].replace('w=1200', 'w=800') + '" alt="Galeria" class="gallery-trigger" data-idx="' + g + '" loading="lazy" />';
+  for (let g = 1; g < gallery.length; g++) {
+    thumbHtml += '<img src="' + gallery[g].replace('w=1200', 'w=800') + '" alt="Galeria" class="gallery-trigger" data-idx="' + g + '" loading="lazy" />';
   }
 
   let featuresHtml = '';
@@ -303,6 +326,7 @@ function renderDetailCard(propId) {
   var detailRawMsg = WHATSAPP_MSG.replace('{titulo}', p.title).replace('{preco}', detailPriceDisplay) + '\n\n' + detailPropUrl;
   var detailWhatsUrl = WHATSAPP_URL + '?text=' + encodeURIComponent(detailRawMsg);
 
+  var galleryMainImg = gallery[0] || '';
   const detailEl = document.createElement('div');
   detailEl.className = 'detail-card';
   detailEl.id = p.id;
@@ -317,13 +341,13 @@ function renderDetailCard(propId) {
     + '<div>'
     + '<div class="detail-gallery">'
     + '<div class="detail-gallery-main">'
-    + '<img src="' + p.gallery[0] + '" alt="' + p.title.replace(/"/g, '&quot;') + '" class="gallery-trigger" data-idx="0" loading="lazy" />'
+    + '<img src="' + galleryMainImg + '" alt="' + p.title.replace(/"/g, '&quot;') + '" class="gallery-trigger" data-idx="0" loading="lazy" />'
     + '</div>'
     + '<div class="detail-gallery-thumbs">' + thumbHtml + '</div>'
     + '</div>'
     + '</div>'
     + '</div>'
-    + '<div class="detail-video"><iframe src="' + p.video + '" title="Tour ' + p.title.replace(/"/g, '&quot;') + '" allowfullscreen loading="lazy"></iframe></div>'
+    + videoEmbed
     + '<div class="detail-description">'
     + '<div><h2>' + ct.aboutProperty + '</h2>' + descHtml + '</div>'
     + '<div class="detail-features"><h3>' + ct.features + '</h3><ul>' + featuresHtml + '</ul></div>'

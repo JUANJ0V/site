@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%230e142e'/><text x='16' y='22' text-anchor='middle' font-size='18' fill='%23d4af37'>S</text></svg>" />
-  <link rel="stylesheet" href="css/style.css?v=4" />
+  <link rel="stylesheet" href="css/style.css?v=5" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script type="application/ld+json">
@@ -44,7 +44,7 @@
 <header class="site-header" id="topo" role="banner">
   <nav class="container" role="navigation" aria-label="Navegação principal">
     <a href="/" class="site-logo">Su <span>Imobiliária</span></a>
-    <ul class="nav-list" id="navList">
+    <ul class="nav-list" id="navList" notranslate>
       <li><a href="/" class="active" aria-current="page">Início</a></li>
       <li class="nav-dropdown" id="navDropComprar"><a href="/comprar/">Comprar</a><div class="dd-menu" id="ddComprar"></div></li>
       <li class="nav-dropdown" id="navDropAlugar"><a href="/alugar/">Alugar</a><div class="dd-menu" id="ddAlugar"></div></li>
@@ -66,7 +66,7 @@
     </div>
     <span class="menu-btn" role="button" tabindex="0" aria-label="Abrir menu">☰</span>
   </nav>
-  <div class="nav-overlay" id="mobileNav" role="dialog" aria-label="Menu de navegação">
+  <div class="nav-overlay" id="mobileNav" role="dialog" aria-label="Menu de navegação" notranslate>
     <button class="close-btn" onclick="document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''" aria-label="Fechar menu">✕</button>
     <a href="/">Início</a>
     <div class="mob-drop-wrap" id="mobDropComprar"><a href="/comprar/">Comprar</a><div class="mob-dd-body" id="mobDdComprar"></div></div>
@@ -493,7 +493,7 @@
   </div>
 </div>
 
-<script src="js/data.js?v=2"></script>
+<script src="js/data.js?v=3"></script>
 <script>
 // Auto-update site info from data.js constants
 document.addEventListener('DOMContentLoaded', function() {
@@ -823,7 +823,7 @@ function googleTranslateElementInit() {
   }
 }
 </script>
+<script src="js/app.js?v=3"></script>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
-<script src="js/app.js?v=2"></script>
 </body>
 </html>
