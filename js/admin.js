@@ -625,8 +625,8 @@ const GITHUB_PATH   = "js/data.js";
         case 'empreendimentos': renderEmpreendimentos(div); break;
         case 'blog': renderBlog(div); break;
         case 'faq': renderFaq(div); break;
-        case 'depoimentos': renderDepoimentos(div); break;
-        case 'parceiros': renderParceiros(div); break;
+        case 'depoimentos': renderAdminDepoimentos(div); break;
+        case 'parceiros': renderAdminParceiros(div); break;
         case 'users': renderUsers(div); break;
         case 'settings': renderSettings(div); break;
       }
@@ -1054,7 +1054,7 @@ const GITHUB_PATH   = "js/data.js";
   /* =================================================================
      DEPOIMENTOS
      ================================================================= */
-  function renderDepoimentos(container) {
+  function renderAdminDepoimentos(container) {
     var html = '<h2>💬 Depoimentos (' + _data.DEPOIMENTOS.length + ')</h2><p class="desc">Depoimentos de clientes.</p>';
     html += '<button class="btn-add" onclick="addDep()">+ Novo Depoimento</button>';
     html += '<table class="admin-table"><thead><tr><th>Nome</th><th>Texto</th><th class="actions">Ações</th></tr></thead><tbody>';
@@ -1083,23 +1083,23 @@ const GITHUB_PATH   = "js/data.js";
         d.text = gv('dep_text');
         syncToLive();
         adminToast('✅ Depoimento salvo', 'success');
-        renderDepoimentos(document.getElementById('adminSection_depoimentos'));
-      }
-    );
+        renderAdminDepoimentos(document.getElementById('adminSection_depoimentos'));
+...skipping...
+        renderAdminDepoimentos(document.getElementById('adminSection_depoimentos'));
   };
 
   window.delDep = function(idx) {
     if (!confirm('Excluir depoimento de "' + _data.DEPOIMENTOS[idx].name + '"?')) return;
     _data.DEPOIMENTOS.splice(idx, 1);
     syncToLive();
-    renderDepoimentos(document.getElementById('adminSection_depoimentos'));
+    renderAdminDepoimentos(document.getElementById('adminSection_depoimentos'));
     adminToast('🗑️ Depoimento removido', 'info');
   };
 
   /* =================================================================
      PARCEIROS
      ================================================================= */
-  function renderParceiros(container) {
+  function renderAdminParceiros(container) {
     var html = '<h2>🤝 Parceiros (' + _data.PARCEIROS.length + ')</h2><p class="desc">Instituições parceiras.</p>';
     html += '<button class="btn-add" onclick="addParceiro()">+ Novo Parceiro</button>';
     html += '<table class="admin-table"><thead><tr><th>Nome</th><th>URL</th><th class="actions">Ações</th></tr></thead><tbody>';
@@ -1128,7 +1128,7 @@ const GITHUB_PATH   = "js/data.js";
         p.url = gv('par_url');
         syncToLive();
         adminToast('✅ Parceiro salvo', 'success');
-        renderParceiros(document.getElementById('adminSection_parceiros'));
+        renderAdminParceiros(document.getElementById('adminSection_parceiros'));
       }
     );
   };
@@ -1137,7 +1137,7 @@ const GITHUB_PATH   = "js/data.js";
     if (!confirm('Excluir "' + _data.PARCEIROS[idx].name + '"?')) return;
     _data.PARCEIROS.splice(idx, 1);
     syncToLive();
-    renderParceiros(document.getElementById('adminSection_parceiros'));
+    renderAdminParceiros(document.getElementById('adminSection_parceiros'));
     adminToast('🗑️ Parceiro removido', 'info');
   };
 
@@ -1756,6 +1756,23 @@ const GITHUB_PATH   = "js/data.js";
       if (typeof renderBlogCards === 'function') renderBlogCards();
     }
     } catch(e) { console.warn('syncToLive blog:', e); }
+    // DISABLED_SECTIONS — ocultar/mostrar nav links
+    try {
+    var allSections = ['sobre', 'servicos', 'stats', 'comprar', 'alugar', 'lancamentos', 'depoimentos', 'parceiros', 'faq', 'financiamento', 'mapa', 'blog', 'favoritos', 'contato'];
+    var disabled = c.DISABLED_SECTIONS || [];
+    allSections.forEach(function(sid) {
+      var show = disabled.indexOf(sid) === -1;
+      // Desktop nav
+      var navLi = document.querySelector('.nav-list a[href="/' + sid + '/"]');
+      if (navLi && navLi.parentElement) navLi.parentElement.style.display = show ? '' : 'none';
+      // Mobile nav
+      var mobA = document.querySelector('#mobileNav a[href="/' + sid + '/"]');
+      if (mobA) mobA.style.display = show ? '' : 'none';
+      // Footer
+      var footA = document.querySelector('.site-footer a[href="/' + sid + '/"]');
+      if (footA && footA.parentElement) footA.parentElement.style.display = show ? '' : 'none';
+    });
+    } catch(e) { console.warn('syncToLive disabledSections:', e); }
     // Section eyebrow/title texts
     try {
     var sectionTextMap = [
