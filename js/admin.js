@@ -88,6 +88,7 @@ const GITHUB_PATH   = "js/data.js";
       .admin-modal .modal-box textarea { min-height:80px; resize:vertical; font-family:system-ui,sans-serif; }
       .admin-modal .modal-box .row2 { display:grid; grid-template-columns:1fr 1fr; gap:0 1rem; }
       .admin-modal .modal-box .row3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0 1rem; }
+      .admin-modal .modal-box .row4 { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:0 1rem; }
       .admin-modal .modal-box .modal-actions { display:flex; gap:0.5rem; justify-content:flex-end; margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.06); }
       .admin-modal .modal-box .modal-actions button { padding:0.45rem 1.2rem; border-radius:5px; font-size:0.82rem; cursor:pointer; }
       .admin-modal .modal-box .modal-actions .btn-save { background:#d4af37; color:#0e142e; border:none; font-weight:700; }
@@ -128,7 +129,8 @@ const GITHUB_PATH   = "js/data.js";
         .admin-table td, .admin-table th { padding:0.35rem 0.4rem; }
         .admin-modal .modal-box { max-width:98vw; padding:1rem; max-height:90vh; }
         .admin-modal .modal-box .row2,
-        .admin-modal .modal-box .row3 { grid-template-columns:1fr; }
+        .admin-modal .modal-box .row3,
+        .admin-modal .modal-box .row4 { grid-template-columns:1fr; }
         .admin-modal .modal-box input,
         .admin-modal .modal-box textarea,
         .admin-modal .modal-box select { font-size:16px; }
@@ -598,30 +600,46 @@ const GITHUB_PATH   = "js/data.js";
     var c = _data.constants;
     container.innerHTML = '<h2>⚙️ Configurações Gerais</h2><p class="desc">Texto do site, redes sociais e seções visíveis.</p>'
       + '<div class="admin-settings">'
-      + '<label>Nome do site</label><input id="cfg_siteName" value="' + esc(c.SITE_NAME) + '">'
+      + '<div class="row2"><div><label>Nome do site</label><input id="cfg_siteName" value="' + esc(c.SITE_NAME) + '"></div>'
+      + '<div><label>URL do logo (imagem)</label><input id="cfg_logo" value="' + esc(c.SITE_LOGO||'') + '" placeholder="https://...svg ou png"></div></div>'
+      + '<div class="row3"><div><label>Logo — altura máx</label><input id="cfg_logoH" value="' + esc(c.LOGO_MAX_HEIGHT||'') + '" placeholder="2rem"></div>'
+      + '<div><label>Logo — largura máx</label><input id="cfg_logoW" value="' + esc(c.LOGO_MAX_WIDTH||'') + '" placeholder="200px"></div>'
+      + '<div><label>Logo — margem</label><input id="cfg_logoM" value="' + esc(c.LOGO_MARGIN||'') + '" placeholder="0"></div></div>'
       + '<label>WhatsApp — Número (só dígitos)</label><input id="cfg_whatsNum" value="' + esc(c.WHATSAPP_NUMBER) + '">'
       + '<label>WhatsApp — Display</label><input id="cfg_whatsDisp" value="' + esc(c.WHATSAPP_DISPLAY) + '">'
       + '<label>WhatsApp — Mensagem padrão (use {titulo} e {preco})</label><textarea id="cfg_whatsMsg" rows="2">' + esc(c.WHATSAPP_MSG) + '</textarea>'
-      + '<label>Email</label><input id="cfg_email" value="' + esc(c.SITE_EMAIL) + '">'
-      + '<label>Endereço</label><input id="cfg_address" value="' + esc(c.SITE_ADDRESS) + '">'
+      + '<div class="row3"><div><label>Email</label><input id="cfg_email" value="' + esc(c.SITE_EMAIL) + '"></div>'
+      + '<div><label>URL do site</label><input id="cfg_siteUrl" value="' + esc(c.SITE_URL||'') + '" placeholder="https://..."></div>'
+      + '<div><label>Cidade</label><input id="cfg_city" value="' + esc(c.SITE_CITY||'') + '"></div></div>'
+      + '<div class="row2"><div><label>Endereço</label><input id="cfg_address" value="' + esc(c.SITE_ADDRESS) + '"></div>'
+      + '<div><label>Estado</label><input id="cfg_region" value="' + esc(c.SITE_REGION||'') + '"></div></div>'
+      + '<label>URL do Maps (direção)</label><input id="cfg_maps" value="' + esc(c.SITE_MAPS||'') + '" placeholder="https://maps.app.goo.gl/...">'
       + '<hr style="border-color:rgba(255,255,255,0.06);margin:1rem 0;">'
       + '<label>Hero — Eyebrow</label><input id="cfg_heroEye" value="' + esc(c.HERO_EYEBROW) + '">'
       + '<label>Hero — Título</label><textarea id="cfg_heroTitle" rows="2">' + esc(c.HERO_TITLE) + '</textarea>'
       + '<label>Hero — Subtítulo</label><textarea id="cfg_heroSub" rows="2">' + esc(c.HERO_SUBTITLE) + '</textarea>'
       + '<label>Hero — URL do vídeo MP4 (opcional)' + uploadBtn('cfg_heroVideo', 'videos') + '</label><input id="cfg_heroVideo" value="' + esc(c.HERO_VIDEO) + '" placeholder="https://...mp4">'
       + '<hr style="border-color:rgba(255,255,255,0.06);margin:1rem 0;">'
-      + '<label>Instagram (URL)</label><input id="cfg_ig" value="' + esc(c.SOCIAL.instagram || '') + '">'
-      + '<label>Facebook (URL)</label><input id="cfg_fb" value="' + esc(c.SOCIAL.facebook || '') + '">'
-      + '<label>YouTube (URL)</label><input id="cfg_yt" value="' + esc(c.SOCIAL.youtube || '') + '">'
-      + '<label>LinkedIn (URL)</label><input id="cfg_li" value="' + esc(c.SOCIAL.linkedin || '') + '">'
-      + '<hr style="border-color:rgba(255,255,255,0.06);margin:1rem 0;">'
-      + '<label>Seções desabilitadas (IDs separados por vírgula)</label><input id="cfg_disabled" value="' + esc((c.DISABLED_SECTIONS||[]).join(', ')) + '">'
-      + '<div class="note">Disponíveis: sobre, stats, servicos, depoimentos, parceiros, faq, financiamento, alugar, favoritos</div>'
-      + '<label>Imóveis por página</label><input id="cfg_pageSize" value="' + (c.PAGE_SIZE || 6) + '" style="max-width:100px;">'
+      + '<div class="row2"><div><label>Instagram (URL)</label><input id="cfg_ig" value="' + esc(c.SOCIAL.instagram || '') + '"></div>'
+      + '<div><label>Facebook (URL)</label><input id="cfg_fb" value="' + esc(c.SOCIAL.facebook || '') + '"></div></div>'
+      + '<div class="row2"><div><label>YouTube (URL)</label><input id="cfg_yt" value="' + esc(c.SOCIAL.youtube || '') + '"></div>'
+      + '<div><label>LinkedIn (URL)</label><input id="cfg_li" value="' + esc(c.SOCIAL.linkedin || '') + '"></div></div>'
       + '<hr style="border-color:rgba(255,255,255,0.06);margin:1rem 0;">'
       + '<h3 style="color:#d4af37;font-size:0.9rem;margin:0 0 1rem;">📝 Textos das Seções</h3>'
       + '<div class="row2">'
+      + '<div><label>Sobre — Eyebrow</label><input id="cfg_sobreEye" value="' + esc(c.SECTION_SOBRE_EYEBROW||'') + '"><label>Sobre — Título</label><input id="cfg_sobreTitle" value="' + esc(c.SECTION_SOBRE_TITLE||'') + '"></div>'
       + '<div><label>Serviços — Eyebrow</label><input id="cfg_servEye" value="' + esc(c.SECTION_SERVICOS_EYEBROW||'') + '"><label>Serviços — Título</label><input id="cfg_servTitle" value="' + esc(c.SECTION_SERVICOS_TITLE||'') + '"></div>'
+      + '</div>'
+      + '<div class="row2">'
+      + '<div><label>Comprar — Eyebrow</label><input id="cfg_comprarEye" value="' + esc(c.SECTION_COMPRAR_EYEBROW||'') + '"><label>Comprar — Título</label><input id="cfg_comprarTitle" value="' + esc(c.SECTION_COMPRAR_TITLE||'') + '"></div>'
+      + '<div><label>Alugar — Eyebrow</label><input id="cfg_alugarEye" value="' + esc(c.SECTION_ALUGAR_EYEBROW||'') + '"><label>Alugar — Título</label><input id="cfg_alugarTitle" value="' + esc(c.SECTION_ALUGAR_TITLE||'') + '"></div>'
+      + '</div>'
+      + '<div class="row2">'
+      + '<div><label>Lançamentos — Eyebrow</label><input id="cfg_lancEye" value="' + esc(c.SECTION_LANCAMENTOS_EYEBROW||'') + '"><label>Lançamentos — Título</label><input id="cfg_lancTitle" value="' + esc(c.SECTION_LANCAMENTOS_TITLE||'') + '"></div>'
+      + '<div><label>Financiamento — Eyebrow</label><input id="cfg_finEye" value="' + esc(c.SECTION_FINANCIAMENTO_EYEBROW||'') + '"><label>Financiamento — Título</label><input id="cfg_finTitle" value="' + esc(c.SECTION_FINANCIAMENTO_TITLE||'') + '"></div>'
+      + '</div>'
+      + '<div class="row2">'
+      + '<div><label>Contato — Eyebrow</label><input id="cfg_contEye" value="' + esc(c.SECTION_CONTATO_EYEBROW||'') + '"><label>Contato — Título</label><input id="cfg_contTitle" value="' + esc(c.SECTION_CONTATO_TITLE||'') + '"></div>'
       + '<div><label>Parceiros — Eyebrow</label><input id="cfg_parcEye" value="' + esc(c.SECTION_PARCEIROS_EYEBROW||'') + '"><label>Parceiros — Título</label><input id="cfg_parcTitle" value="' + esc(c.SECTION_PARCEIROS_TITLE||'') + '"></div>'
       + '</div>'
       + '<div class="row2">'
@@ -637,6 +655,10 @@ const GITHUB_PATH   = "js/data.js";
       + '<div><label>Favoritos — Texto vazio</label><input id="cfg_favEmpty" value="' + esc(c.SECTION_FAVORITOS_EMPTY||'') + '"></div>'
       + '</div>'
       + '<hr style="border-color:rgba(255,255,255,0.06);margin:1rem 0;">'
+      + '<label>Seções desabilitadas (IDs separados por vírgula)</label><input id="cfg_disabled" value="' + esc((c.DISABLED_SECTIONS||[]).join(', ')) + '">'
+      + '<div class="note">Disponíveis: sobre, stats, servicos, depoimentos, parceiros, faq, financiamento, alugar, favoritos</div>'
+      + '<label>Imóveis por página</label><input id="cfg_pageSize" value="' + (c.PAGE_SIZE || 6) + '" style="max-width:100px;">'
+      + '<hr style="border-color:rgba(255,255,255,0.06);margin:1rem 0;">'
       + '<button class="btn-save" onclick="saveGeneral()">💾 Salvar alterações</button>'
       + '</div>';
   }
@@ -644,11 +666,19 @@ const GITHUB_PATH   = "js/data.js";
   window.saveGeneral = function() {
     var c = _data.constants;
     c.SITE_NAME = gv('cfg_siteName');
+    c.SITE_LOGO = gv('cfg_logo');
+    c.LOGO_MAX_HEIGHT = gv('cfg_logoH');
+    c.LOGO_MAX_WIDTH = gv('cfg_logoW');
+    c.LOGO_MARGIN = gv('cfg_logoM');
     c.WHATSAPP_NUMBER = gv('cfg_whatsNum');
     c.WHATSAPP_DISPLAY = gv('cfg_whatsDisp');
     c.WHATSAPP_MSG = gv('cfg_whatsMsg');
     c.SITE_EMAIL = gv('cfg_email');
+    c.SITE_URL = gv('cfg_siteUrl');
+    c.SITE_CITY = gv('cfg_city');
     c.SITE_ADDRESS = gv('cfg_address');
+    c.SITE_REGION = gv('cfg_region');
+    c.SITE_MAPS = gv('cfg_maps');
     c.HERO_EYEBROW = gv('cfg_heroEye');
     c.HERO_TITLE = gv('cfg_heroTitle');
     c.HERO_SUBTITLE = gv('cfg_heroSub');
@@ -659,21 +689,33 @@ const GITHUB_PATH   = "js/data.js";
     c.SOCIAL.linkedin = gv('cfg_li');
     c.DISABLED_SECTIONS = gv('cfg_disabled').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
     c.PAGE_SIZE = parseInt(gv('cfg_pageSize')) || 6;
-    c.SECTION_SERVICOS_EYEBROW    = gv('cfg_servEye');
-    c.SECTION_SERVICOS_TITLE      = gv('cfg_servTitle');
-    c.SECTION_PARCEIROS_EYEBROW   = gv('cfg_parcEye');
-    c.SECTION_PARCEIROS_TITLE     = gv('cfg_parcTitle');
-    c.SECTION_DEPOIMENTOS_EYEBROW = gv('cfg_depEye');
-    c.SECTION_DEPOIMENTOS_TITLE   = gv('cfg_depTitle');
-    c.SECTION_FAQ_EYEBROW         = gv('cfg_faqEye');
-    c.SECTION_FAQ_TITLE           = gv('cfg_faqTitle');
-    c.SECTION_MAPA_EYEBROW        = gv('cfg_mapEye');
-    c.SECTION_MAPA_TITLE          = gv('cfg_mapTitle');
-    c.SECTION_BLOG_EYEBROW        = gv('cfg_blogEye');
-    c.SECTION_BLOG_TITLE          = gv('cfg_blogTitle');
-    c.SECTION_FAVORITOS_EYEBROW   = gv('cfg_favEye');
-    c.SECTION_FAVORITOS_TITLE     = gv('cfg_favTitle');
-    c.SECTION_FAVORITOS_EMPTY     = gv('cfg_favEmpty');
+    c.SECTION_SOBRE_EYEBROW           = gv('cfg_sobreEye');
+    c.SECTION_SOBRE_TITLE             = gv('cfg_sobreTitle');
+    c.SECTION_SERVICOS_EYEBROW        = gv('cfg_servEye');
+    c.SECTION_SERVICOS_TITLE          = gv('cfg_servTitle');
+    c.SECTION_COMPRAR_EYEBROW         = gv('cfg_comprarEye');
+    c.SECTION_COMPRAR_TITLE           = gv('cfg_comprarTitle');
+    c.SECTION_ALUGAR_EYEBROW          = gv('cfg_alugarEye');
+    c.SECTION_ALUGAR_TITLE            = gv('cfg_alugarTitle');
+    c.SECTION_LANCAMENTOS_EYEBROW     = gv('cfg_lancEye');
+    c.SECTION_LANCAMENTOS_TITLE       = gv('cfg_lancTitle');
+    c.SECTION_FINANCIAMENTO_EYEBROW   = gv('cfg_finEye');
+    c.SECTION_FINANCIAMENTO_TITLE     = gv('cfg_finTitle');
+    c.SECTION_CONTATO_EYEBROW         = gv('cfg_contEye');
+    c.SECTION_CONTATO_TITLE           = gv('cfg_contTitle');
+    c.SECTION_PARCEIROS_EYEBROW       = gv('cfg_parcEye');
+    c.SECTION_PARCEIROS_TITLE         = gv('cfg_parcTitle');
+    c.SECTION_DEPOIMENTOS_EYEBROW     = gv('cfg_depEye');
+    c.SECTION_DEPOIMENTOS_TITLE       = gv('cfg_depTitle');
+    c.SECTION_FAQ_EYEBROW             = gv('cfg_faqEye');
+    c.SECTION_FAQ_TITLE               = gv('cfg_faqTitle');
+    c.SECTION_MAPA_EYEBROW            = gv('cfg_mapEye');
+    c.SECTION_MAPA_TITLE              = gv('cfg_mapTitle');
+    c.SECTION_BLOG_EYEBROW            = gv('cfg_blogEye');
+    c.SECTION_BLOG_TITLE              = gv('cfg_blogTitle');
+    c.SECTION_FAVORITOS_EYEBROW       = gv('cfg_favEye');
+    c.SECTION_FAVORITOS_TITLE         = gv('cfg_favTitle');
+    c.SECTION_FAVORITOS_EMPTY         = gv('cfg_favEmpty');
     syncToLive();
     adminToast('✅ Configurações salvas!', 'success');
   };
@@ -702,7 +744,8 @@ const GITHUB_PATH   = "js/data.js";
       img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80',
       gallery: ['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80'],
       video: '', features: [''],
-      description: '', maps: '', lat: -26.99, lng: -48.63
+      description: '', maps: '', lat: -26.99, lng: -48.63,
+      front: 0, back: 0, zone: '', topography: ''
     });
     editProperty(_data.PROPERTIES.length - 1);
   };
@@ -725,6 +768,10 @@ const GITHUB_PATH   = "js/data.js";
       + '<label>Localização</label><input id="prop_loc" value="' + esc(p.location) + '">'
       + '<div class="row2"><div><label>Latitude</label><input id="prop_lat" type="number" step="any" value="' + (p.lat||'') + '"></div>'
       + '<div><label>Longitude</label><input id="prop_lng" type="number" step="any" value="' + (p.lng||'') + '"></div></div>'
+      + '<div class="row4"><div><label>Metros frente (terreno)</label><input id="prop_front" type="number" step="any" value="' + (p.front||'') + '"></div>'
+      + '<div><label>Metros fundo (terreno)</label><input id="prop_back" type="number" step="any" value="' + (p.back||'') + '"></div>'
+      + '<div><label>Zona (terreno)</label><select id="prop_zone"><option value="" ' + (!p.zone?'selected':'') + '></option><option value="Urbana"' + (p.zone==='Urbana'?' selected':'') + '>Urbana</option><option value="Rural"' + (p.zone==='Rural'?' selected':'') + '>Rural</option></select></div>'
+      + '<div><label>Topografia (terreno)</label><select id="prop_topography"><option value="" ' + (!p.topography?'selected':'') + '></option><option value="Plana"' + (p.topography==='Plana'?' selected':'') + '>Plana</option><option value="Aclive"' + (p.topography==='Aclive'?' selected':'') + '>Aclive</option><option value="Declive"' + (p.topography==='Declive'?' selected':'') + '>Declive</option></select></div></div>'
       + '<label>URL do Maps</label><input id="prop_maps" value="' + esc(p.maps||'') + '">'
       + '<label>Descrição curta (card)</label><textarea id="prop_desc" rows="2">' + esc(p.desc||'') + '</textarea>'
       + '<label>Descrição longa (detalhes)</label><textarea id="prop_description" rows="4">' + esc(p.description||'') + '</textarea>'
@@ -748,6 +795,10 @@ const GITHUB_PATH   = "js/data.js";
         p.lat = parseFloat(gv('prop_lat')) || undefined;
         p.lng = parseFloat(gv('prop_lng')) || undefined;
         p.maps = gv('prop_maps');
+        p.front = parseFloat(gv('prop_front')) || undefined;
+        p.back = parseFloat(gv('prop_back')) || undefined;
+        p.zone = gv('prop_zone') || undefined;
+        p.topography = gv('prop_topography') || undefined;
         p.desc = gv('prop_desc');
         p.description = gv('prop_description');
         p.img = gv('prop_img');
@@ -804,13 +855,20 @@ const GITHUB_PATH   = "js/data.js";
     openModal('✏️ Editar Lançamento',
       '<div class="row2"><div><label>Título</label><input id="emp_title" value="' + esc(e.title) + '"></div>'
       + '<div><label>ID</label><input id="emp_id" value="' + esc(e.id) + '"></div></div>'
-      + '<div class="row2"><div><label>Preço (texto)</label><input id="emp_price" value="' + esc(e.price) + '"></div>'
-      + '<div><label>Preço (número)</label><input id="emp_priceNum" type="number" value="' + (e.priceNum||0) + '"></div></div>'
+      + '<div class="row3"><div><label>Preço (texto)</label><input id="emp_price" value="' + esc(e.price) + '"></div>'
+      + '<div><label>Preço (número)</label><input id="emp_priceNum" type="number" value="' + (e.priceNum||0) + '"></div>'
+      + '<div><label>Progresso %</label><input id="emp_prog" type="number" value="' + (e.progress||0) + '"></div></div>'
+      + '<div class="row3"><div><label>Progresso (rótulo)</label><input id="emp_progLabel" value="' + esc(e.progressLabel||'') + '" placeholder="ex: 72% vendidos">'
+      + '</div><div><label>Previsão entrega</label><input id="emp_delivery" value="' + esc(e.delivery||'') + '" placeholder="ex: jun/2027">'
+      + '</div><div><label>Tags (separadas por vírgula)</label><input id="emp_tags" value="' + esc((e.tags||[]).join(', ')) + '" placeholder="LANÇAMENTO, VISTA PARA O MAR"></div></div>'
       + '<label>Localização</label><input id="emp_loc" value="' + esc(e.location) + '">'
+      + '<div class="row2"><div><label>Latitude</label><input id="emp_lat" type="number" step="any" value="' + (e.lat||'') + '"></div>'
+      + '<div><label>Longitude</label><input id="emp_lng" type="number" step="any" value="' + (e.lng||'') + '"></div></div>'
       + '<label>Descrição</label><textarea id="emp_desc" rows="4">' + esc(e.description || '') + '</textarea>'
       + '<label>URL da imagem principal' + uploadBtn('emp_img', 'images') + '</label><input id="emp_img" value="' + esc(e.img) + '">'
       + '<label>URL do vídeo' + uploadBtn('emp_video', 'videos') + '</label><input id="emp_video" value="' + esc(e.video||'') + '">'
       + '<label>Galeria (URLs, uma por linha)' + uploadBtn('emp_gallery', 'images') + '</label><textarea id="emp_gallery" rows="3">' + ((e.gallery||[]).join('\n')) + '</textarea>'
+      + '<label>Plantas (URLs, uma por linha)' + uploadBtn('emp_plants', 'images') + '</label><textarea id="emp_plants" rows="3">' + ((e.plants||[]).join('\n')) + '</textarea>'
       + '<label>Comodidades (uma por linha)</label><textarea id="emp_amenities" rows="4">' + ((e.amenities||[]).join('\n')) + '</textarea>',
       function() {
         e.title = gv('emp_title');
@@ -818,6 +876,8 @@ const GITHUB_PATH   = "js/data.js";
         e.price = gv('emp_price');
         e.priceNum = parseFloat(gv('emp_priceNum')) || 0;
         e.location = gv('emp_loc');
+        e.lat = parseFloat(gv('emp_lat')) || -26.99;
+        e.lng = parseFloat(gv('emp_lng')) || -48.63;
         e.description = gv('emp_desc');
         e.img = gv('emp_img');
         e.video = gv('emp_video');
@@ -826,6 +886,7 @@ const GITHUB_PATH   = "js/data.js";
         e.delivery = gv('emp_delivery');
         e.tags = gv('emp_tags').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
         e.gallery = gv('emp_gallery').split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
+        e.plants = gv('emp_plants').split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
         e.amenities = gv('emp_amenities').split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
         syncToLive();
         adminToast('✅ Lançamento salvo', 'success');
@@ -1407,13 +1468,19 @@ const GITHUB_PATH   = "js/data.js";
     // Section eyebrow/title texts
     try {
     var sectionTextMap = [
-      { sec:'servicos',   eye:'SECTION_SERVICOS_EYEBROW',   tit:'SECTION_SERVICOS_TITLE' },
-      { sec:'depoimentos',eye:'SECTION_DEPOIMENTOS_EYEBROW',tit:'SECTION_DEPOIMENTOS_TITLE' },
-      { sec:'faq',        eye:'SECTION_FAQ_EYEBROW',        tit:'SECTION_FAQ_TITLE' },
-      { sec:'parceiros',  eye:'SECTION_PARCEIROS_EYEBROW',  tit:'SECTION_PARCEIROS_TITLE' },
-      { sec:'mapa',       eye:'SECTION_MAPA_EYEBROW',       tit:'SECTION_MAPA_TITLE' },
-      { sec:'blog',       eye:'SECTION_BLOG_EYEBROW',       tit:'SECTION_BLOG_TITLE' },
-      { sec:'favoritos',  eye:'SECTION_FAVORITOS_EYEBROW',  tit:'SECTION_FAVORITOS_TITLE' }
+      { sec:'sobre',       eye:'SECTION_SOBRE_EYEBROW',       tit:'SECTION_SOBRE_TITLE' },
+      { sec:'servicos',    eye:'SECTION_SERVICOS_EYEBROW',    tit:'SECTION_SERVICOS_TITLE' },
+      { sec:'comprar',     eye:'SECTION_COMPRAR_EYEBROW',     tit:'SECTION_COMPRAR_TITLE' },
+      { sec:'alugar',      eye:'SECTION_ALUGAR_EYEBROW',      tit:'SECTION_ALUGAR_TITLE' },
+      { sec:'lancamentos', eye:'SECTION_LANCAMENTOS_EYEBROW', tit:'SECTION_LANCAMENTOS_TITLE' },
+      { sec:'financiamento',eye:'SECTION_FINANCIAMENTO_EYEBROW',tit:'SECTION_FINANCIAMENTO_TITLE' },
+      { sec:'contato',     eye:'SECTION_CONTATO_EYEBROW',     tit:'SECTION_CONTATO_TITLE' },
+      { sec:'depoimentos', eye:'SECTION_DEPOIMENTOS_EYEBROW', tit:'SECTION_DEPOIMENTOS_TITLE' },
+      { sec:'faq',         eye:'SECTION_FAQ_EYEBROW',         tit:'SECTION_FAQ_TITLE' },
+      { sec:'parceiros',   eye:'SECTION_PARCEIROS_EYEBROW',   tit:'SECTION_PARCEIROS_TITLE' },
+      { sec:'mapa',        eye:'SECTION_MAPA_EYEBROW',        tit:'SECTION_MAPA_TITLE' },
+      { sec:'blog',        eye:'SECTION_BLOG_EYEBROW',        tit:'SECTION_BLOG_TITLE' },
+      { sec:'favoritos',   eye:'SECTION_FAVORITOS_EYEBROW',   tit:'SECTION_FAVORITOS_TITLE' }
     ];
     sectionTextMap.forEach(function(item) {
       if (c[item.eye]) {
