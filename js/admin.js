@@ -1204,6 +1204,10 @@ const GITHUB_PATH   = "js/data.js";
   };
 
   window.saveToApi = function() {
+    if (!DataProvider.isApi()) {
+      adminToast('⚠️ Modo BD não está ativo (Config > Modo Banco de Dados)', 'warning');
+      return;
+    }
     try { saveFormsToData(); } catch(e) {}
     var btn = document.getElementById('adminPublishBtn');
     var oldText = btn.textContent;

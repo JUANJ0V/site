@@ -1,4 +1,9 @@
 RewriteEngine On
+
+# API routing: /api/* -> api.php?action=*
+RewriteRule ^api/(.+)$ api.php?action=$1 [L,QSA]
+
+# SPA: all non-file requests go to index.html
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.html [L]
