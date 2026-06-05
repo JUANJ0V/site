@@ -148,7 +148,13 @@ const GITHUB_PATH   = "js/data.js";
 
   var panelEl = document.createElement('div');
   panelEl.id = 'adminPanel';
-  panelEl.innerHTML = '<div class="admin-header"><h1>⚙️ Su Imobiliária — Admin</h1><div class="admin-actions"><button onclick="adminToggleSite()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);">👁 Ver site</button><button onclick="adminSaveServer()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);">💾 Salvar</button><button onclick="adminPublish()" class="btn-publish" id="adminPublishBtn">📦 Publicar no GitHub</button><button onclick="adminLogout()">Sair</button></div></div><div class="admin-body"><div class="admin-sidebar" id="adminSidebar"></div><div class="admin-content" id="adminContent"></div></div>';
+  panelEl.innerHTML = '<div class="admin-header"><h1>⚙️ Su Imobiliária — Admin</h1><div class="admin-actions"><button onclick="adminToggleSite()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);">👁 Ver site</button><button onclick="adminSaveServer()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);" id="adminSaveBtn">💾 Salvar</button><button onclick="adminPublish()" class="btn-publish" id="adminPublishBtn">📦 Publicar no GitHub</button><button onclick="adminLogout()">Sair</button></div></div><div class="admin-body"><div class="admin-sidebar" id="adminSidebar"></div><div class="admin-content" id="adminContent"></div></div>';
+  // Update buttons if in API mode
+  if (DataProvider.isApi()) {
+    document.getElementById('adminSaveBtn').textContent = '💾 Salvar (BD)';
+    document.getElementById('adminPublishBtn').textContent = '☁️ Salvar na API';
+    document.getElementById('adminPublishBtn').className = 'btn-publish';
+  }
   document.body.appendChild(panelEl);
 
   var toastEl = document.createElement('div');
@@ -256,6 +262,11 @@ const GITHUB_PATH   = "js/data.js";
 
   window.adminSaveServer = function() {
     try { saveFormsToData(); } catch(e) {}
+    // API mode guarda via BD
+    if (DataProvider.isApi()) {
+      saveToApi();
+      return;
+    }
     var pwd = localStorage.getItem('admin_server_pass');
     if (!pwd) { adminToast('❌ Defina a senha do save.php na aba Config', 'error'); showTab('settings'); return; }
     var content = generateDataJs();
@@ -1119,6 +1130,13 @@ const GITHUB_PATH   = "js/data.js";
       + '<button class="btn-save" onclick="saveServerPass()">💾 Salvar senha</button>'
       + '<button class="btn-save" onclick="saveToServer()" style="margin-left:0.5rem;">💾 Salvar no servidor</button>'
       + '<hr style="border-color:rgba(255,255,255,0.06);margin:1.5rem 0;">'
+      + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">🗄️ Modo Banco de Dados (API)</h3>'
+      + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0 0 0.75rem;">Quando tiver um backend com BD, ative este modo. O painel vai ler e salvar os dados via API REST em vez de usar o <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">data.js</code> local.</p>'
+      + '<label><input type="checkbox" id="cfg_bdMode" ' + (DataProvider.isApi()?'checked':'') + ' onchange="toggleBdMode()"> Ativar modo BD</label>'
+      + '<label>URL base da API</label><input id="cfg_apiBase" type="url" value="' + esc(DataProvider.apiBase) + '" placeholder="/api">'
+      + '<button class="btn-save" onclick="saveBdConfig()">💾 Salvar Config BD</button>'
+      + '<button class="btn-save" onclick="testBdConnection()" style="margin-left:0.5rem;">🔌 Testar conexão</button>'
+      + '<hr style="border-color:rgba(255,255,255,0.06);margin:1.5rem 0;">'
       + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">🔒 Desabilitar Painel</h3>'
       + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0;">Para desligar o painel, mude <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">ADMIN_ENABLED = false</code> no arquivo <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">js/admin.js</code> (linha 3) e publique.</p>'
       + '</div>';
@@ -1151,6 +1169,73 @@ const GITHUB_PATH   = "js/data.js";
     .catch(function(err) {
       adminToast('❌ Erro de conexão: ' + err.message, 'error');
     });
+  };
+
+  /* ---- BD (API) helpers ---- */
+  window.toggleBdMode = function() {
+    // Just visual toggle — saveBdConfig() persists it
+  };
+
+  window.saveBdConfig = function() {
+    var enabled = document.getElementById('cfg_bdMode').checked;
+    var apiBase = document.getElementById('cfg_apiBase').value.trim() || '/api';
+    if (enabled) {
+      DataProvider.setMode('api', apiBase);
+      adminToast('✅ Modo BD ativado. Recarregando...', 'success');
+      setTimeout(function() { location.reload(); }, 1500);
+    } else {
+      DataProvider.setMode('frontend', '/api');
+      adminToast('✅ Modo frontend restaurado. Recarregando...', 'success');
+      setTimeout(function() { location.reload(); }, 1500);
+    }
+  };
+
+  window.testBdConnection = function() {
+    var apiBase = document.getElementById('cfg_apiBase').value.trim() || '/api';
+    adminToast('🔌 Testando conexão com ' + apiBase + '...', 'info');
+    fetch(apiBase + '/ping', { method: 'HEAD', cache: 'no-store' })
+      .then(function(r) {
+        if (r.ok) adminToast('✅ Conexão OK!', 'success');
+        else adminToast('⚠️ Respondeu com status ' + r.status, 'warning');
+      })
+      .catch(function(err) {
+        adminToast('❌ Sem conexão: ' + err.message, 'error');
+      });
+  };
+
+  window.saveToApi = function() {
+    try { saveFormsToData(); } catch(e) {}
+    var btn = document.getElementById('adminPublishBtn');
+    var oldText = btn.textContent;
+    btn.textContent = '⏳ Salvando...';
+    btn.disabled = true;
+
+    var data = {
+      constants: _data.constants,
+      stats: _data.STATS,
+      properties: _data.PROPERTIES,
+      empreendimentos: _data.EMPREENDIMENTOS,
+      faq: _data.FAQS,
+      depoimentos: _data.DEPOIMENTOS,
+      parceiros: _data.PARCEIROS,
+      blog: _data.BLOG_POSTS
+    };
+
+    DataProvider.saveAll(data)
+      .then(function(res) {
+        if (res && res.ok) {
+          adminToast('✅ Dados salvos no BD!', 'success');
+        } else {
+          adminToast('❌ ' + ((res && res.error) || 'Erro ao salvar no BD'), 'error');
+        }
+      })
+      .catch(function(err) {
+        adminToast('❌ Erro: ' + err.message, 'error');
+      })
+      .finally(function() {
+        btn.textContent = oldText;
+        btn.disabled = false;
+      });
   };
 
   /* =================================================================
@@ -1203,6 +1288,12 @@ const GITHUB_PATH   = "js/data.js";
      GitHub PUBLISH
      ================================================================= */
   window.adminPublish = function() {
+    try { saveFormsToData(); } catch(e) {}
+    // API mode guarda via BD
+    if (DataProvider.isApi()) {
+      saveToApi();
+      return;
+    }
     var token = ADMIN_TOKEN;
     if (!token) {
       adminToast('❌ Primeiro salve seu GitHub Token na aba "Config"', 'error');
