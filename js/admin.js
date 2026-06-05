@@ -601,7 +601,7 @@ const GITHUB_PATH   = "js/data.js";
     container.innerHTML = '<h2>⚙️ Configurações Gerais</h2><p class="desc">Texto do site, redes sociais e seções visíveis.</p>'
       + '<div class="admin-settings">'
       + '<div class="row2"><div><label>Nome do site</label><input id="cfg_siteName" value="' + esc(c.SITE_NAME) + '"></div>'
-      + '<div><label>URL do logo (imagem)</label><input id="cfg_logo" value="' + esc(c.SITE_LOGO||'') + '" placeholder="https://...svg ou png"></div></div>'
+      + '<div><label>URL do logo (imagem)' + uploadBtn('cfg_logo', 'images') + '</label><input id="cfg_logo" value="' + esc(c.SITE_LOGO||'') + '" placeholder="https://...svg ou png"></div></div>'
       + '<div class="row3"><div><label>Logo — altura máx</label><input id="cfg_logoH" value="' + esc(c.LOGO_MAX_HEIGHT||'') + '" placeholder="2rem"></div>'
       + '<div><label>Logo — largura máx</label><input id="cfg_logoW" value="' + esc(c.LOGO_MAX_WIDTH||'') + '" placeholder="200px"></div>'
       + '<div><label>Logo — margem</label><input id="cfg_logoM" value="' + esc(c.LOGO_MARGIN||'') + '" placeholder="0"></div></div>'
