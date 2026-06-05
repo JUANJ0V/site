@@ -178,6 +178,10 @@
       align-items: center;
       gap: 2rem;
     }
+    .nav-list li {
+      flex-shrink: 1;
+      min-width: 0;
+    }
 
     .nav-list a {
       font-size: 0.6875rem;
@@ -185,6 +189,7 @@
       letter-spacing: 0.2em;
       color: rgba(255,255,255,0.85);
       transition: color 0.2s;
+      white-space: nowrap;
     }
 
     .nav-list a:hover,
@@ -294,6 +299,7 @@
       letter-spacing: 0.2em;
       color: rgba(255,255,255,0.9);
       transition: background-color 0.2s, color 0.2s;
+      white-space: nowrap;
     }
 
     .nav-cta:hover {
@@ -356,6 +362,14 @@
       .nav-list { display: flex; }
       .nav-cta { display: inline-block; }
       .menu-btn { display: none; }
+      .nav-actions { gap: 0.75rem; margin-left: 2rem; }
+      .nav-social { display: flex; }
+      .site-logo { margin-left: -1rem; }
+    }
+
+    @media (min-width: 1024px) and (max-width: 1299px) {
+      .nav-list { gap: 1.5rem; }
+      .nav-list li:nth-child(n+6) { display: none; }
     }
 
     .nav-actions {
@@ -365,18 +379,10 @@
       margin-left: auto;
     }
 
-    @media (min-width: 1024px) {
-      .nav-actions { gap: 0.75rem; margin-left: 2rem; }
-    }
-
     .nav-social {
       display: none;
       align-items: center;
       gap: 0.3rem;
-    }
-
-    @media (min-width: 1024px) {
-      .nav-social { display: flex; }
     }
 
     .nav-social a,
