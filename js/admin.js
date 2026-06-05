@@ -1546,16 +1546,16 @@ const GITHUB_PATH   = "js/data.js";
     out += strConst('WHATSAPP_MSG', c.WHATSAPP_MSG || '');
     out += '\n';
     out += strConst('SITE_NAME', c.SITE_NAME || '');
-    out += strConst('SITE_LOGO', '');
-    out += strConst('LOGO_MAX_HEIGHT', '2rem');
-    out += strConst('LOGO_MAX_WIDTH', '200px');
-    out += strConst('LOGO_MARGIN', '0');
+    out += strConst('SITE_LOGO', c.SITE_LOGO || '');
+    out += strConst('LOGO_MAX_HEIGHT', c.LOGO_MAX_HEIGHT || '2rem');
+    out += strConst('LOGO_MAX_WIDTH', c.LOGO_MAX_WIDTH || '200px');
+    out += strConst('LOGO_MARGIN', c.LOGO_MARGIN || '0');
     out += strConst('SITE_EMAIL', c.SITE_EMAIL || '');
-    out += strConst('SITE_URL', 'https://suimobiliaria.com.br');
+    out += strConst('SITE_URL', c.SITE_URL || 'https://suimobiliaria.com.br');
     out += strConst('SITE_ADDRESS', c.SITE_ADDRESS || '');
-    out += strConst('SITE_MAPS', '');
-    out += strConst('SITE_CITY', 'Balneário Camboriú');
-    out += strConst('SITE_REGION', 'SC');
+    out += strConst('SITE_MAPS', c.SITE_MAPS || '');
+    out += strConst('SITE_CITY', c.SITE_CITY || 'Balneário Camboriú');
+    out += strConst('SITE_REGION', c.SITE_REGION || 'SC');
     out += '\n';
     out += strConst('SECTION_PARCEIROS_EYEBROW', c.SECTION_PARCEIROS_EYEBROW || 'Parceiros');
     out += strConst('SECTION_PARCEIROS_TITLE', c.SECTION_PARCEIROS_TITLE || 'Instituições que confiam em nós');
@@ -1634,6 +1634,55 @@ const GITHUB_PATH   = "js/data.js";
     if (heroTit) heroTit.textContent = c.HERO_TITLE || '';
     if (heroSub) heroSub.textContent = c.HERO_SUBTITLE || '';
     } catch(e) { console.warn('syncToLive hero:', e); }
+    // Site name & logo
+    try {
+    var cName = c.SITE_NAME || '';
+    document.querySelectorAll('.site-logo').forEach(function(el) {
+      if (c.SITE_LOGO) {
+        el.innerHTML = '<img src="' + esc(c.SITE_LOGO) + '" alt="' + cName.replace(/"/g, '&quot;') + '" />';
+      } else if (cName) {
+        var words = cName.split(' ');
+        el.innerHTML = words.length > 1 ? words[0] + ' <span>' + words.slice(1).join(' ') + '</span>' : cName;
+      }
+    });
+    // Logo CSS vars
+    if (c.LOGO_MAX_HEIGHT) document.documentElement.style.setProperty('--logo-max-height', c.LOGO_MAX_HEIGHT);
+    if (c.LOGO_MAX_WIDTH)  document.documentElement.style.setProperty('--logo-max-width', c.LOGO_MAX_WIDTH);
+    if (c.LOGO_MARGIN)     document.documentElement.style.setProperty('--logo-margin', c.LOGO_MARGIN);
+    // Footer copyright
+    var footerCopy = document.querySelector('.footer-bottom span, .footer-col:last-child span');
+    if (footerCopy && cName) {
+      footerCopy.textContent = '\u00A9 ' + new Date().getFullYear() + ' ' + cName + '. Todos os direitos reservados.';
+    }
+    // Title tag
+    if (cName) {
+      var titleTag = document.querySelector('title');
+      if (titleTag) titleTag.textContent = titleTag.textContent.replace(/\|.*$/, '| ' + cName);
+    }
+    } catch(e) { console.warn('syncToLive siteName:', e); }
+    // Email, address, city
+    try {
+    if (c.SITE_EMAIL) {
+      document.querySelectorAll('a[href*="mailto:"]').forEach(function(a) {
+        a.href = 'mailto:' + c.SITE_EMAIL;
+        if (a.textContent.indexOf('@') > -1) a.textContent = c.SITE_EMAIL;
+      });
+    }
+    if (c.SITE_ADDRESS) {
+      document.querySelectorAll('.footer-col li').forEach(function(li) {
+        if (li.textContent.indexOf('Av.') > -1) {
+          if (c.SITE_MAPS) {
+            li.innerHTML = '<a href="' + esc(c.SITE_MAPS) + '" target="_blank" style="text-decoration:underline;">' + esc(c.SITE_ADDRESS) + '</a>';
+          } else {
+            li.textContent = c.SITE_ADDRESS;
+          }
+        }
+        if (li.textContent.indexOf('—') > -1 || li.textContent.indexOf('SC') > -1) {
+          li.textContent = c.SITE_CITY + ' \u2014 ' + c.SITE_REGION;
+        }
+      });
+    }
+    } catch(e) { console.warn('syncToLive contactInfo:', e); }
     // Social links
     try {
     if (c.SOCIAL) {
