@@ -294,6 +294,94 @@ const GITHUB_PATH   = "js/data.js";
     .catch(function(err) { adminToast('❌ Erro de conexão: ' + err.message, 'error'); });
   };
 
+  function uploadBtn(inputId, folder) {
+    return ' <button type="button" onclick="adminUpload(\'' + inputId + '\',\'' + folder + '\')" style="font-size:0.7rem;padding:0.2rem 0.5rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:3px;color:#fff;cursor:pointer;vertical-align:middle;">📷 Upload</button>';
+  }
+
+  window.adminUpload = function(inputId, folder) {
+    var el = document.createElement('input');
+    el.type = 'file';
+    el.accept = folder === 'videos' ? 'video/mp4,video/webm,video/quicktime' : 'image/*';
+    el.onchange = function() {
+      var file = el.files[0];
+      if (!file) return;
+      adminToast('⏳ Enviando ' + file.name + '...', 'info');
+      uploadFile(file, folder, function(url) {
+        var target = document.getElementById(inputId);
+        if (!target) return;
+        if (target.tagName === 'TEXTAREA') {
+          target.value = target.value ? target.value.trim() + '\n' + url : url;
+        } else {
+          target.value = url;
+        }
+        adminToast('✅ URL copiada!', 'success');
+      });
+    };
+    el.click();
+  };
+
+  function uploadFile(file, folder, cb) {
+    var pwd = localStorage.getItem('admin_server_pass');
+    if (pwd) {
+      var fd = new FormData();
+      fd.append('file', file);
+      fd.append('password', pwd);
+      fd.append('folder', folder);
+      fetch('upload.php', { method: 'POST', body: fd })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+          if (res.ok && res.url) { cb(res.url); return; }
+          uploadViaGitHub(file, folder, cb);
+        })
+        .catch(function() { uploadViaGitHub(file, folder, cb); });
+    } else {
+      uploadViaGitHub(file, folder, cb);
+    }
+  }
+
+  function uploadViaGitHub(file, folder, cb) {
+    var token = ADMIN_TOKEN;
+    if (!token) { adminToast('❌ Configure o token do GitHub ou a senha do servidor', 'error'); return; }
+    var reader = new FileReader();
+    reader.onload = function() {
+      var base64 = reader.result.split(',')[1];
+      var name = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').toLowerCase();
+      name = name.replace(/\.[^.]+$/, function(m) { return m; });
+      name = Date.now() + '_' + name;
+      var path = folder + '/' + name;
+      var apiUrl = 'https://api.github.com/repos/' + GITHUB_REPO + '/contents/' + path;
+      fetch(apiUrl + '?ref=' + GITHUB_BRANCH, {
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(existing) {
+        var sha = existing.sha || null;
+        var body = {
+          message: 'Upload: ' + name,
+          content: base64,
+          branch: GITHUB_BRANCH
+        };
+        if (sha) body.sha = sha;
+        return fetch(apiUrl, {
+          method: 'PUT',
+          headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        if (res.content) {
+          var url = 'https://raw.githubusercontent.com/' + GITHUB_REPO + '/' + GITHUB_BRANCH + '/' + path;
+          cb(url);
+        } else {
+          adminToast('❌ Erro GitHub: ' + (res.message || 'desconhecido'), 'error');
+        }
+      })
+      .catch(function(err) { adminToast('❌ ' + err.message, 'error'); });
+    };
+    reader.readAsDataURL(file);
+  }
+
   window.adminLogout = function() {
     sessionStorage.removeItem('admin_logged');
     panelEl.classList.remove('active');
@@ -640,9 +728,9 @@ const GITHUB_PATH   = "js/data.js";
       + '<label>URL do Maps</label><input id="prop_maps" value="' + esc(p.maps||'') + '">'
       + '<label>Descrição curta (card)</label><textarea id="prop_desc" rows="2">' + esc(p.desc||'') + '</textarea>'
       + '<label>Descrição longa (detalhes)</label><textarea id="prop_description" rows="4">' + esc(p.description||'') + '</textarea>'
-      + '<label>URL da imagem principal</label><input id="prop_img" value="' + esc(p.img) + '">'
-      + '<label>URL do vídeo YouTube embed</label><input id="prop_video" value="' + esc(p.video||'') + '">'
-      + '<label>Galeria (URLs, uma por linha)</label><textarea id="prop_gallery" rows="3">' + ((p.gallery||[]).join('\n')) + '</textarea>'
+      + '<label>URL da imagem principal' + uploadBtn('prop_img', 'images') + '</label><input id="prop_img" value="' + esc(p.img) + '">'
+      + '<label>URL do vídeo' + uploadBtn('prop_video', 'videos') + '</label><input id="prop_video" value="' + esc(p.video||'') + '">'
+      + '<label>Galeria (URLs, uma por linha)' + uploadBtn('prop_gallery', 'images') + '</label><textarea id="prop_gallery" rows="3">' + ((p.gallery||[]).join('\n')) + '</textarea>'
       + '<label>Características (uma por linha)</label><textarea id="prop_features" rows="4">' + ((p.features||[]).join('\n')) + '</textarea>',
       function() {
         p.title = gv('prop_title');
@@ -720,13 +808,9 @@ const GITHUB_PATH   = "js/data.js";
       + '<div><label>Preço (número)</label><input id="emp_priceNum" type="number" value="' + (e.priceNum||0) + '"></div></div>'
       + '<label>Localização</label><input id="emp_loc" value="' + esc(e.location) + '">'
       + '<label>Descrição</label><textarea id="emp_desc" rows="4">' + esc(e.description || '') + '</textarea>'
-      + '<label>URL da imagem principal</label><input id="emp_img" value="' + esc(e.img) + '">'
-      + '<label>URL do vídeo YouTube embed</label><input id="emp_video" value="' + esc(e.video||'') + '">'
-      + '<div class="row2"><div><label>Progresso (%)</label><input id="emp_prog" type="number" value="' + (e.progress||0) + '"></div>'
-      + '<div><label>Label do progresso</label><input id="emp_progLabel" value="' + esc(e.progressLabel||'') + '"></div></div>'
-      + '<label>Previsão de entrega</label><input id="emp_delivery" value="' + esc(e.delivery||'') + '">'
-      + '<label>Tags (separadas por vírgula)</label><input id="emp_tags" value="' + esc((e.tags||[]).join(', ')) + '">'
-      + '<label>Galeria (URLs, uma por linha)</label><textarea id="emp_gallery" rows="3">' + ((e.gallery||[]).join('\n')) + '</textarea>'
+      + '<label>URL da imagem principal' + uploadBtn('emp_img', 'images') + '</label><input id="emp_img" value="' + esc(e.img) + '">'
+      + '<label>URL do vídeo' + uploadBtn('emp_video', 'videos') + '</label><input id="emp_video" value="' + esc(e.video||'') + '">'
+      + '<label>Galeria (URLs, uma por linha)' + uploadBtn('emp_gallery', 'images') + '</label><textarea id="emp_gallery" rows="3">' + ((e.gallery||[]).join('\n')) + '</textarea>'
       + '<label>Comodidades (uma por linha)</label><textarea id="emp_amenities" rows="4">' + ((e.amenities||[]).join('\n')) + '</textarea>',
       function() {
         e.title = gv('emp_title');
