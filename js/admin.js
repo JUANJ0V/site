@@ -180,6 +180,36 @@ const GITHUB_PATH   = "js/data.js";
   window.adminLogin = function() {
     var u = document.getElementById('adminUser').value;
     var p = document.getElementById('adminPass').value;
+    // BD mode: login via API
+    if (DataProvider.isApi()) {
+      fetch(DataProvider.apiBase + '/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: u, password: p })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        if (res.ok) {
+          sessionStorage.setItem('admin_logged', '1');
+          sessionStorage.setItem('admin_token', res.token);
+          sessionStorage.setItem('admin_user', JSON.stringify(res.user));
+          loginEl.classList.add('hidden');
+          panelEl.classList.add('active');
+          document.body.classList.add('admin-mode');
+          adminFloat.style.display = 'none';
+          initAdminPanel();
+        } else {
+          document.getElementById('adminLoginError').textContent = res.error || 'Usuário ou senha incorretos';
+          document.getElementById('adminLoginError').style.display = 'block';
+        }
+      })
+      .catch(function(err) {
+        document.getElementById('adminLoginError').textContent = 'Erro de conexão: ' + err.message;
+        document.getElementById('adminLoginError').style.display = 'block';
+      });
+      return;
+    }
+    // Frontend mode: hardcoded login
     if (u === ADMIN_USER && p === ADMIN_PASS) {
       sessionStorage.setItem('admin_logged', '1');
       loginEl.classList.add('hidden');
@@ -527,6 +557,7 @@ const GITHUB_PATH   = "js/data.js";
       { id:'faq', label:'❓ FAQ' },
       { id:'depoimentos', label:'💬 Depoimentos' },
       { id:'parceiros', label:'🤝 Parceiros' },
+      { id:'users', label:'👥 Usuários' },
       { id:'settings', label:'🔑 Config' }
     ];
     var sb = document.getElementById('adminSidebar');
@@ -596,6 +627,7 @@ const GITHUB_PATH   = "js/data.js";
         case 'faq': renderFaq(div); break;
         case 'depoimentos': renderDepoimentos(div); break;
         case 'parceiros': renderParceiros(div); break;
+        case 'users': renderUsers(div); break;
         case 'settings': renderSettings(div); break;
       }
     } catch(e) {
@@ -1107,6 +1139,121 @@ const GITHUB_PATH   = "js/data.js";
     syncToLive();
     renderParceiros(document.getElementById('adminSection_parceiros'));
     adminToast('🗑️ Parceiro removido', 'info');
+  };
+
+  /* =================================================================
+     USERS — gerenciamento de usuários (só no modo BD)
+     ================================================================= */
+  function renderUsers(container) {
+    if (!DataProvider.isApi()) {
+      container.innerHTML = '<h2>👥 Usuários</h2><p class="desc" style="color:rgba(255,255,255,0.5);">Disponível apenas no modo BD. Ative em <strong>Config → Modo Banco de Dados</strong>.</p>';
+      return;
+    }
+    var html = '<h2>👥 Usuários do Painel</h2><p class="desc">Gerencie quem pode acessar o admin.</p>';
+    html += '<button class="btn-add" onclick="addUser()">+ Novo Usuário</button>';
+    html += '<table class="admin-table"><thead><tr><th>Usuário</th><th>Função</th><th>Criado em</th><th class="actions">Ações</th></tr></thead><tbody id="usersTableBody"></tbody></table>';
+    container.innerHTML = html;
+    loadUsers();
+  }
+
+  function loadUsers() {
+    var tbody = document.getElementById('usersTableBody');
+    if (!tbody) return;
+    var token = sessionStorage.getItem('admin_token');
+    fetch(DataProvider.apiBase + '/users', {
+      headers: { 'X-Admin-Token': token || '' }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(users) {
+      if (!Array.isArray(users)) { tbody.innerHTML = '<tr><td colspan="4">Erro ao carregar</td></tr>'; return; }
+      tbody.innerHTML = users.map(function(u) {
+        var roleLabel = u.role === 'admin' ? '🔑 Admin' : '✏️ Editor';
+        var delBtn = u.id === 1 ? '' : '<button class="btn-del" onclick="delUser(' + u.id + ')">🗑️</button>';
+        return '<tr><td>' + esc(u.username) + '</td><td>' + roleLabel + '</td><td>' + (u.created_at || '') + '</td>'
+          + '<td class="actions"><button onclick="editUser(' + u.id + ')">✏️</button>' + delBtn + '</td></tr>';
+      }).join('');
+    })
+    .catch(function() {
+      if (tbody) tbody.innerHTML = '<tr><td colspan="4">Erro de conexão</td></tr>';
+    });
+  }
+
+  window.addUser = function() {
+    openModal('👤 Novo Usuário',
+      '<label>Usuário</label><input id="user_name" value="">'
+      + '<label>Senha</label><input id="user_pass" type="password" value="">'
+      + '<label>Função</label><select id="user_role"><option value="editor">✏️ Editor</option><option value="admin">🔑 Admin</option></select>',
+      function() {
+        var name = document.getElementById('user_name').value.trim();
+        var pass = document.getElementById('user_pass').value;
+        var role = document.getElementById('user_role').value;
+        if (!name || !pass) { adminToast('⚠️ Preencha usuário e senha', 'warning'); return; }
+        var token = sessionStorage.getItem('admin_token');
+        fetch(DataProvider.apiBase + '/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Admin-Token': token || '' },
+          body: JSON.stringify({ username: name, password: pass, role: role })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+          if (res.ok) { adminToast('✅ Usuário criado!', 'success'); loadUsers(); }
+          else { adminToast('❌ ' + (res.error || 'Erro'), 'error'); }
+        })
+        .catch(function(err) { adminToast('❌ ' + err.message, 'error'); });
+      }
+    );
+  };
+
+  window.editUser = function(id) {
+    var token = sessionStorage.getItem('admin_token');
+    fetch(DataProvider.apiBase + '/users', {
+      headers: { 'X-Admin-Token': token || '' }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(users) {
+      var u = users.find(function(x) { return x.id == id; });
+      if (!u) return;
+      openModal('✏️ Editar Usuário',
+        '<label>Usuário</label><input id="user_name" value="' + esc(u.username) + '">'
+        + '<label>Nova senha (deixe vazio para manter)</label><input id="user_pass" type="password" value="">'
+        + '<label>Função</label><select id="user_role"><option value="editor"' + (u.role==='editor'?' selected':'') + '>✏️ Editor</option><option value="admin"' + (u.role==='admin'?' selected':'') + '>🔑 Admin</option></select>',
+        function() {
+          var name = document.getElementById('user_name').value.trim();
+          var pass = document.getElementById('user_pass').value;
+          var role = document.getElementById('user_role').value;
+          if (!name) { adminToast('⚠️ Nome de usuário obrigatório', 'warning'); return; }
+          var body = { id: id, username: name, role: role };
+          if (pass) body.password = pass;
+          fetch(DataProvider.apiBase + '/users', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-Admin-Token': token || '' },
+            body: JSON.stringify(body)
+          })
+          .then(function(r) { return r.json(); })
+          .then(function(res) {
+            if (res.ok) { adminToast('✅ Usuário atualizado!', 'success'); loadUsers(); }
+            else { adminToast('❌ ' + (res.error || 'Erro'), 'error'); }
+          })
+          .catch(function(err) { adminToast('❌ ' + err.message, 'error'); });
+        }
+      );
+    })
+    .catch(function() { adminToast('❌ Erro ao carregar usuários', 'error'); });
+  };
+
+  window.delUser = function(id) {
+    if (!confirm('Excluir este usuário?')) return;
+    var token = sessionStorage.getItem('admin_token');
+    fetch(DataProvider.apiBase + '/users?id=' + id, {
+      method: 'DELETE',
+      headers: { 'X-Admin-Token': token || '' }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (res.ok) { adminToast('🗑️ Usuário excluído', 'info'); loadUsers(); }
+      else { adminToast('❌ ' + (res.error || 'Erro'), 'error'); }
+    })
+    .catch(function(err) { adminToast('❌ ' + err.message, 'error'); });
   };
 
   /* =================================================================

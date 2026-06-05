@@ -6,7 +6,9 @@
  *   HEAD /api.php?ping         → Teste de conexão
  *   GET  /api.php?all          → Retorna todos os dados
  *   GET  /api.php?collection   → Retorna uma coleção (properties, empreendimentos, etc.)
- *   POST /api.php               → Salva todos os dados
+ *   POST /api.php/login        → Login de usuário (retorna token)
+ *   GET  /api.php?users        → Lista usuários
+ *   POST /api.php              → Salva todos os dados
  * 
  * Modo de uso:
  *   1. Configure api-config.php com seus dados de MySQL
@@ -123,6 +125,118 @@ if ($method === 'GET' && $action) {
         echo json_encode(['ok' => false, 'error' => 'Coleção inválida']);
     }
     exit;
+}
+
+// ===================================================================
+// POST /api.php?login — Login de usuário
+// ===================================================================
+if ($method === 'POST' && $action === 'login') {
+    $input = json_decode(file_get_contents('php://input'), true);
+    $username = $input['username'] ?? '';
+    $password = $input['password'] ?? '';
+    if (!$username || !$password) {
+        http_response_code(400);
+        echo json_encode(['ok' => false, 'error' => 'Usuário e senha obrigatórios']);
+        exit;
+    }
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt->execute([$username]);
+    $user = $stmt->fetch();
+    if (!$user || !password_verify($password, $user['password_hash'])) {
+        http_response_code(401);
+        echo json_encode(['ok' => false, 'error' => 'Usuário ou senha incorretos']);
+        exit;
+    }
+    // Gera token simples (em produção, usar JWT)
+    $token = bin2hex(random_bytes(32));
+    echo json_encode([
+        'ok' => true,
+        'token' => $token,
+        'user' => [
+            'id' => $user['id'],
+            'username' => $user['username'],
+            'role' => $user['role']
+        ]
+    ]);
+    exit;
+}
+
+// ===================================================================
+// GET /api.php?users — Lista usuários
+// POST /api.php?users — Cria/atualiza usuário
+// DELETE /api.php?users — Exclui usuário
+// ===================================================================
+if ($action === 'users') {
+    // Validar token de admin (token simples via header)
+    $authToken = $_SERVER['HTTP_X_ADMIN_TOKEN'] ?? '';
+    if (!$authToken || $authToken !== getAdminToken($pdo)) {
+        http_response_code(403);
+        echo json_encode(['ok' => false, 'error' => 'Não autorizado']);
+        exit;
+    }
+
+    if ($method === 'GET') {
+        $stmt = $pdo->query("SELECT id, username, role, created_at FROM users ORDER BY id ASC");
+        echo json_encode($stmt->fetchAll());
+        exit;
+    }
+
+    if ($method === 'POST') {
+        $input = json_decode(file_get_contents('php://input'), true);
+        $id = $input['id'] ?? null;
+        $username = $input['username'] ?? '';
+        $password = $input['password'] ?? '';
+        $role = $input['role'] ?? 'editor';
+
+        if (!$username) {
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'error' => 'Nome de usuário obrigatório']);
+            exit;
+        }
+
+        if ($id) {
+            // Atualizar
+            if ($password) {
+                $hash = password_hash($password, PASSWORD_DEFAULT);
+                $stmt = $pdo->prepare("UPDATE users SET username=?, password_hash=?, role=? WHERE id=?");
+                $stmt->execute([$username, $hash, $role, $id]);
+            } else {
+                $stmt = $pdo->prepare("UPDATE users SET username=?, role=? WHERE id=?");
+                $stmt->execute([$username, $role, $id]);
+            }
+        } else {
+            // Criar
+            if (!$password) {
+                http_response_code(400);
+                echo json_encode(['ok' => false, 'error' => 'Senha obrigatória para novo usuário']);
+                exit;
+            }
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $pdo->prepare("INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)");
+            $stmt->execute([$username, $hash, $role]);
+        }
+        echo json_encode(['ok' => true, 'message' => 'Usuário salvo']);
+        exit;
+    }
+
+    if ($method === 'DELETE') {
+        $id = $_GET['id'] ?? null;
+        if (!$id) {
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'error' => 'ID obrigatório']);
+            exit;
+        }
+        // Não permite excluir admin ID 1
+        if ($id == 1) {
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'error' => 'Não é possível excluir o admin principal']);
+            exit;
+        }
+        $stmt = $pdo->prepare("DELETE FROM users WHERE id = ?");
+        $stmt->execute([$id]);
+        echo json_encode(['ok' => true, 'message' => 'Usuário excluído']);
+        exit;
+    }
 }
 
 // ===================================================================
@@ -357,6 +471,24 @@ function saveBlogPosts($pdo, $items) {
     }
 }
 
+// ─── Helpers de autenticação ──────────────────────────────────
+
+function getAdminToken($pdo) {
+    // Token de admin armazenado na tabela config
+    $cfg = getConstants($pdo);
+    return $cfg['ADMIN_API_TOKEN'] ?? '';
+}
+
+function requireAdminAuth($pdo) {
+    $token = $_SERVER['HTTP_X_ADMIN_TOKEN'] ?? $_GET['token'] ?? '';
+    $valid = getAdminToken($pdo);
+    if (!$valid || $token !== $valid) {
+        http_response_code(403);
+        echo json_encode(['ok' => false, 'error' => 'Não autorizado']);
+        exit;
+    }
+}
+
 /* ===================================================================
    SQL SCHEMA — Copie e execute no phpMyAdmin ou use /api.php?setup
    ===================================================================
@@ -478,4 +610,18 @@ CREATE TABLE IF NOT EXISTS blog_posts (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Users
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role ENUM('admin','editor') NOT NULL DEFAULT 'editor',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO users (username, password_hash, role) VALUES
+('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin')
+ON DUPLICATE KEY UPDATE username = username;
 */
