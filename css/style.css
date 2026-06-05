@@ -781,6 +781,9 @@
     @media (min-width: 768px) {
       .grid-2 { grid-template-columns: repeat(2, 1fr); }
     }
+    @media (min-width: 1024px) {
+      #alugar .grid-2 { grid-template-columns: repeat(3, 1fr); }
+    }
 
     @media (min-width: 1024px) {
       .grid-3 { grid-template-columns: repeat(3, 1fr); }
