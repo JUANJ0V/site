@@ -608,7 +608,7 @@ const GITHUB_PATH   = "js/data.js";
       + '<label>Hero — Eyebrow</label><input id="cfg_heroEye" value="' + esc(c.HERO_EYEBROW) + '">'
       + '<label>Hero — Título</label><textarea id="cfg_heroTitle" rows="2">' + esc(c.HERO_TITLE) + '</textarea>'
       + '<label>Hero — Subtítulo</label><textarea id="cfg_heroSub" rows="2">' + esc(c.HERO_SUBTITLE) + '</textarea>'
-      + '<label>Hero — URL do vídeo MP4 (opcional)</label><input id="cfg_heroVideo" value="' + esc(c.HERO_VIDEO) + '" placeholder="https://...mp4">'
+      + '<label>Hero — URL do vídeo MP4 (opcional)' + uploadBtn('cfg_heroVideo', 'videos') + '</label><input id="cfg_heroVideo" value="' + esc(c.HERO_VIDEO) + '" placeholder="https://...mp4">'
       + '<hr style="border-color:rgba(255,255,255,0.06);margin:1rem 0;">'
       + '<label>Instagram (URL)</label><input id="cfg_ig" value="' + esc(c.SOCIAL.instagram || '') + '">'
       + '<label>Facebook (URL)</label><input id="cfg_fb" value="' + esc(c.SOCIAL.facebook || '') + '">'
@@ -877,7 +877,7 @@ const GITHUB_PATH   = "js/data.js";
       + '<div class="row3"><div><label>Data</label><input id="post_date" value="' + esc(b.date) + '"></div>'
       + '<div><label>Categoria</label><input id="post_cat" value="' + esc(b.category) + '"></div>'
       + '<div><label>Autor</label><input id="post_author" value="' + esc(b.author||'') + '"></div></div>'
-      + '<label>URL da imagem</label><input id="post_img" value="' + esc(b.image) + '">'
+      + '<label>URL da imagem' + uploadBtn('post_img', 'images') + '</label><input id="post_img" value="' + esc(b.image) + '">'
       + '<label>Resumo (excerpt)</label><textarea id="post_excerpt" rows="2">' + esc(b.excerpt||'') + '</textarea>'
       + '<label>Conteúdo completo (use ## para subtítulos, \\n\\n para parágrafos)</label><textarea id="post_content" rows="8">' + esc(b.content) + '</textarea>',
       function() {
@@ -1016,7 +1016,7 @@ const GITHUB_PATH   = "js/data.js";
     var p = _data.PARCEIROS[idx];
     openModal('✏️ Editar Parceiro',
       '<label>Nome</label><input id="par_name" value="' + esc(p.name) + '">'
-      + '<label>URL do logo</label><input id="par_img" value="' + esc(p.img||'') + '">'
+      + '<label>URL do logo' + uploadBtn('par_img', 'images') + '</label><input id="par_img" value="' + esc(p.img||'') + '">'
       + '<label>Site</label><input id="par_url" value="' + esc(p.url||'') + '">',
       function() {
         p.name = gv('par_name');
