@@ -54,6 +54,7 @@ const GITHUB_PATH   = "js/data.js";
       .admin-sidebar { width:200px; min-width:200px; background:#0a0f24; border-right:1px solid rgba(255,255,255,0.05); padding:0.75rem 0; overflow-y:auto; }
       .admin-sidebar button { display:block; width:100%; text-align:left; padding:0.6rem 1.2rem; background:none; border:none; color:rgba(255,255,255,0.5); font-size:0.85rem; cursor:pointer; transition:all 0.15s; touch-action:manipulation; }
       .admin-mobile-tab { display:none; width:100%; padding:0.6rem 0.8rem; background:#0a0f24; border:none; border-bottom:1px solid rgba(255,255,255,0.05); color:#fff; font-size:0.85rem; outline:none; cursor:pointer; }
+      .admin-mobile-tab option { background:#0a0f24; color:#fff; }
       .admin-sidebar button:hover { background:rgba(255,255,255,0.03); color:#fff; }
       .admin-sidebar button.active { background:rgba(212,175,55,0.1); color:#d4af37; border-right:2px solid #d4af37; }
       .admin-content { flex:1; padding:1.5rem; overflow-y:auto; }
@@ -82,6 +83,7 @@ const GITHUB_PATH   = "js/data.js";
       .admin-modal .modal-box h3 { margin:0 0 1rem; color:#d4af37; font-size:1rem; }
       .admin-modal .modal-box label { display:block; margin:0.5rem 0 0.2rem; color:rgba(255,255,255,0.6); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; }
       .admin-modal .modal-box input, .admin-modal .modal-box textarea, .admin-modal .modal-box select { width:100%; padding:0.5rem 0.7rem; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:5px; color:#fff; font-size:0.85rem; outline:none; }
+      .admin-modal .modal-box select option { background:#1a1f3a; color:#fff; }
       .admin-modal .modal-box input:focus, .admin-modal .modal-box textarea:focus { border-color:#d4af37; }
       .admin-modal .modal-box textarea { min-height:80px; resize:vertical; font-family:system-ui,sans-serif; }
       .admin-modal .modal-box .row2 { display:grid; grid-template-columns:1fr 1fr; gap:0 1rem; }
