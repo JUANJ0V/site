@@ -1756,10 +1756,16 @@ const GITHUB_PATH   = "js/data.js";
       if (typeof renderBlogCards === 'function') renderBlogCards();
     }
     } catch(e) { console.warn('syncToLive blog:', e); }
-    // DISABLED_SECTIONS — ocultar/mostrar nav links
+    // DISABLED_SECTIONS — mutar o array global + ocultar/mostrar nav links
     try {
-    var allSections = ['sobre', 'servicos', 'stats', 'comprar', 'alugar', 'lancamentos', 'depoimentos', 'parceiros', 'faq', 'financiamento', 'mapa', 'blog', 'favoritos', 'contato'];
     var disabled = c.DISABLED_SECTIONS || [];
+    // Mutar o array global que app.js usa para bloquear navegação
+    if (typeof DISABLED_SECTIONS !== 'undefined') {
+      DISABLED_SECTIONS.length = 0;
+      disabled.forEach(function(s) { DISABLED_SECTIONS.push(s); });
+    }
+    // Atualizar visibilidade dos nav links
+    var allSections = ['sobre', 'servicos', 'stats', 'comprar', 'alugar', 'lancamentos', 'depoimentos', 'parceiros', 'faq', 'financiamento', 'mapa', 'blog', 'favoritos', 'contato'];
     allSections.forEach(function(sid) {
       var show = disabled.indexOf(sid) === -1;
       // Desktop nav
