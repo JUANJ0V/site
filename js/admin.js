@@ -1084,8 +1084,8 @@ const GITHUB_PATH   = "js/data.js";
         syncToLive();
         adminToast('✅ Depoimento salvo', 'success');
         renderAdminDepoimentos(document.getElementById('adminSection_depoimentos'));
-...skipping...
-        renderAdminDepoimentos(document.getElementById('adminSection_depoimentos'));
+      }
+    );
   };
 
   window.delDep = function(idx) {
