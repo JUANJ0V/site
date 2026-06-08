@@ -1498,34 +1498,34 @@ const GITHUB_PATH   = "js/data.js";
     });
   };
 
-  function generateDataJs() {
+   function generateDataJs() {
     var c = _data.constants;
-    // Helper: serialize a value to JS format
-    function jsVal(v, indent) {
-      var sp = '  ';
+    function indent(n) { return '  '.repeat(n); }
+    function jsVal(v, depth) {
       if (v === null || v === undefined) return 'null';
       if (typeof v === 'string') return JSON.stringify(v);
       if (typeof v === 'number' || typeof v === 'boolean') return String(v);
       if (Array.isArray(v)) {
         if (v.length === 0) return '[]';
-        var items = v.map(function(item) { return sp + indent + jsVal(item, indent + 1); });
-        return '[\n' + items.join(',\n') + '\n' + indent + ']';
+        var items = v.map(function(item) { return indent(depth + 1) + jsVal(item, depth + 1); });
+        return '[\n' + items.join(',\n') + '\n' + indent(depth) + ']';
       }
       if (typeof v === 'object') {
         var keys = Object.keys(v);
         if (keys.length === 0) return '{}';
         var pairs = keys.map(function(k) {
-          var val = jsVal(v[k], indent + 1);
-          return sp + indent + k + ': ' + val;
+          var val = jsVal(v[k], depth + 1);
+          return indent(depth + 1) + k + ': ' + val;
         });
-        return '{\n' + pairs.join(',\n') + '\n' + indent + '}';
+        return '{\n' + pairs.join(',\n') + '\n' + indent(depth) + '}';
       }
       return String(v);
     }
 
-    function arrToJs(name, arr, indent) {
-      var sp = indent || '';
-      return '\n' + sp + 'const ' + name + ' = ' + jsVal(arr, sp + '') + ';\n';
+    function arrToJs(name, arr, depth) {
+      depth = depth || 0;
+      var sp = indent(depth);
+      return '\n' + sp + 'const ' + name + ' = ' + jsVal(arr, depth + 1) + ';\n';
     }
 
     function strConst(name, val) {
