@@ -876,6 +876,10 @@ const FAQS = [
     {
       q: "Vocês atendem em quais regiões?",
       a: "Atendemos todo o litoral catarinense, com escritórios físicos em Balneário Camboriú, Florianópolis, Itapema, Bombinhas e Joinville. Também realizamos atendimento remoto para clientes de outras regiões interessados em investir em Santa Catarina."
+    },
+    {
+      q: "Say My Name",
+      a: "Your play, Walter. You're on your own\nThe methylamine isn't coming."
     }
   ];
 
