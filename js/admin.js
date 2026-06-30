@@ -238,11 +238,19 @@ const GITHUB_PATH   = "js/data.js";
     // General tab
     if (document.getElementById('cfg_siteName')) {
       c.SITE_NAME = gv('cfg_siteName');
+      c.SITE_LOGO = gv('cfg_logo');
+      c.LOGO_MAX_HEIGHT = gv('cfg_logoH');
+      c.LOGO_MAX_WIDTH = gv('cfg_logoW');
+      c.LOGO_MARGIN = gv('cfg_logoM');
       c.WHATSAPP_NUMBER = gv('cfg_whatsNum');
       c.WHATSAPP_DISPLAY = gv('cfg_whatsDisp');
       c.WHATSAPP_MSG = gv('cfg_whatsMsg');
       c.SITE_EMAIL = gv('cfg_email');
       c.SITE_ADDRESS = gv('cfg_address');
+      c.SITE_URL = gv('cfg_siteUrl');
+      c.SITE_CITY = gv('cfg_city');
+      c.SITE_REGION = gv('cfg_region');
+      c.SITE_MAPS = gv('cfg_maps');
       c.HERO_EYEBROW = gv('cfg_heroEye');
       c.HERO_TITLE = gv('cfg_heroTitle');
       c.HERO_SUBTITLE = gv('cfg_heroSub');
@@ -270,6 +278,16 @@ const GITHUB_PATH   = "js/data.js";
       c.SECTION_FAVORITOS_EYEBROW   = gv('cfg_favEye');
       c.SECTION_FAVORITOS_TITLE     = gv('cfg_favTitle');
       c.SECTION_FAVORITOS_EMPTY     = gv('cfg_favEmpty');
+      c.SECTION_SOBRE_EYEBROW      = gv('cfg_sobreEye');
+      c.SECTION_SOBRE_TITLE        = gv('cfg_sobreTitle');
+      c.SECTION_COMPRAR_EYEBROW    = gv('cfg_comprarEye');
+      c.SECTION_COMPRAR_TITLE      = gv('cfg_comprarTitle');
+      c.SECTION_ALUGAR_EYEBROW     = gv('cfg_alugarEye');
+      c.SECTION_ALUGAR_TITLE       = gv('cfg_alugarTitle');
+      c.SECTION_LANCAMENTOS_EYEBROW = gv('cfg_lancEye');
+      c.SECTION_LANCAMENTOS_TITLE  = gv('cfg_lancTitle');
+      c.SECTION_CONTATO_EYEBROW    = gv('cfg_contEye');
+      c.SECTION_CONTATO_TITLE      = gv('cfg_contTitle');
     }
     // Financiamento tab
     if (document.getElementById('fin_eye')) {
@@ -504,6 +522,14 @@ const GITHUB_PATH   = "js/data.js";
     if (typeof SITE_NAME !== 'undefined') map.SITE_NAME = SITE_NAME;
     if (typeof SITE_EMAIL !== 'undefined') map.SITE_EMAIL = SITE_EMAIL;
     if (typeof SITE_ADDRESS !== 'undefined') map.SITE_ADDRESS = SITE_ADDRESS;
+    if (typeof SITE_LOGO !== 'undefined') map.SITE_LOGO = SITE_LOGO;
+    if (typeof LOGO_MAX_HEIGHT !== 'undefined') map.LOGO_MAX_HEIGHT = LOGO_MAX_HEIGHT;
+    if (typeof LOGO_MAX_WIDTH !== 'undefined') map.LOGO_MAX_WIDTH = LOGO_MAX_WIDTH;
+    if (typeof LOGO_MARGIN !== 'undefined') map.LOGO_MARGIN = LOGO_MARGIN;
+    if (typeof SITE_URL !== 'undefined') map.SITE_URL = SITE_URL;
+    if (typeof SITE_CITY !== 'undefined') map.SITE_CITY = SITE_CITY;
+    if (typeof SITE_REGION !== 'undefined') map.SITE_REGION = SITE_REGION;
+    if (typeof SITE_MAPS !== 'undefined') map.SITE_MAPS = SITE_MAPS;
     map.HERO_EYEBROW  = typeof HERO_EYEBROW !== 'undefined' ? HERO_EYEBROW : 'Seu lar começa aqui';
     map.HERO_TITLE    = typeof HERO_TITLE !== 'undefined' ? HERO_TITLE : 'Su Imobiliária';
     map.HERO_SUBTITLE = typeof HERO_SUBTITLE !== 'undefined' ? HERO_SUBTITLE : '';
@@ -915,7 +941,10 @@ const GITHUB_PATH   = "js/data.js";
       + '<label>URL do vídeo' + uploadBtn('emp_video', 'videos') + '</label><input id="emp_video" value="' + esc(e.video||'') + '">'
       + '<label>Galeria (URLs, uma por linha)' + uploadBtn('emp_gallery', 'images') + '</label><textarea id="emp_gallery" rows="3">' + ((e.gallery||[]).join('\n')) + '</textarea>'
       + '<label>Plantas (URLs, uma por linha)' + uploadBtn('emp_plants', 'images') + '</label><textarea id="emp_plants" rows="3">' + ((e.plants||[]).join('\n')) + '</textarea>'
-      + '<label>Comodidades (uma por linha)</label><textarea id="emp_amenities" rows="4">' + ((e.amenities||[]).join('\n')) + '</textarea>',
+      + '<label>Comodidades (uma por linha)</label><textarea id="emp_amenities" rows="4">' + ((e.amenities||[]).join('\n')) + '</textarea>'
+      + '<label>Cronograma (JSON — array de objetos)</label><textarea id="emp_timeline" rows="3">' + esc(JSON.stringify(e.timeline||[], null, 2)) + '</textarea>'
+      + '<label>Tabela de preços (JSON — array de objetos)</label><textarea id="emp_prices" rows="3">' + esc(JSON.stringify(e.prices||[], null, 2)) + '</textarea>'
+      + '<label>Plano de pagamento (JSON — array de objetos)</label><textarea id="emp_payment" rows="3">' + esc(JSON.stringify(e.payment||[], null, 2)) + '</textarea>',
       function() {
         e.title = gv('emp_title');
         e.id = gv('emp_id');
@@ -937,6 +966,9 @@ const GITHUB_PATH   = "js/data.js";
         e.gallery = gv('emp_gallery').split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
         e.plants = gv('emp_plants').split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
         e.amenities = gv('emp_amenities').split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
+        try { e.timeline = JSON.parse(gv('emp_timeline') || '[]'); } catch(_) { e.timeline = []; }
+        try { e.prices = JSON.parse(gv('emp_prices') || '[]'); } catch(_) { e.prices = []; }
+        try { e.payment = JSON.parse(gv('emp_payment') || '[]'); } catch(_) { e.payment = []; }
         syncToLive();
         adminToast('✅ Lançamento salvo', 'success');
         renderEmpreendimentos(document.getElementById('adminSection_empreendimentos'));
