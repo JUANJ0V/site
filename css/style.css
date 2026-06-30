@@ -1929,6 +1929,10 @@
 
     @media (max-width: 767px) {
       #teamGrid { grid-template-columns: repeat(2, 1fr); gap: 1rem; padding: 0 1rem; }
+      .team-body { padding: 1rem 0.75rem 1.25rem; }
+      .team-name { font-size: 1rem; }
+      .team-role { font-size: 0.65rem; }
+      .team-desc { font-size: 0.75rem; }
       .hero h1 { font-size: 2.25rem; }
       .about-stats { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
       .about-stats .stat-num { font-size: 2rem; }
@@ -1954,6 +1958,11 @@
       .hero-search-inner button { padding: 0.55rem 0.85rem; font-size: 0.8rem; }
       .hero-actions .btn-primary,
       .hero-actions .btn-outline { padding: 0.7rem 1.2rem; font-size: 0.75rem; }
+    }
+
+    @media (max-width: 480px) {
+      #teamGrid { grid-template-columns: 1fr; gap: 1rem; padding: 0 1rem; }
+      .team-photo { aspect-ratio: 3/2; }
     }
 
     @media (max-width: 380px) {
