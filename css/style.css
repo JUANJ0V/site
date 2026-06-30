@@ -1085,7 +1085,7 @@
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 1.5rem;
       max-width: 960px;
-      margin: 0.75rem auto 0;
+      margin: -0.25rem auto 0;
       padding: 0 1.5rem;
     }
 
@@ -1928,7 +1928,7 @@
 
 
     @media (max-width: 767px) {
-      #teamGrid { grid-template-columns: repeat(2, 1fr); gap: 1rem; padding: 0 1rem; }
+      #teamGrid { grid-template-columns: repeat(2, 1fr); gap: 1rem; padding: 0 1rem; margin-top: 1rem; }
       .team-body { padding: 1rem 0.75rem 1.25rem; }
       .team-name { font-size: 1rem; }
       .team-role { font-size: 0.65rem; }
