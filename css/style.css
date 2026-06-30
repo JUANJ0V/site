@@ -1104,7 +1104,7 @@
 
     .team-photo {
       width: 100%;
-      aspect-ratio: 1;
+      aspect-ratio: 4/5;
       overflow: hidden;
       background: rgba(255,255,255,0.08);
     }
@@ -1962,7 +1962,6 @@
 
     @media (max-width: 480px) {
       #teamGrid { grid-template-columns: 1fr; gap: 1rem; padding: 0 1rem; }
-      .team-photo { aspect-ratio: 3/2; }
     }
 
     @media (max-width: 380px) {
