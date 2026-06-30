@@ -6,8 +6,6 @@ api-config.php
 # Uploaded files
 uploads/
 uploaded/
-video/*.mp4
-video/*.webm
 video/*.mov
 
 # OS
