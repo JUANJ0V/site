@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Su Imobiliária — Imóveis à venda e aluguel em SC</title>
-  <meta name="description" content="Su Imobiliária — mais de 15 anos no litoral catarinense. Imóveis à venda e aluguel em Balneário Camboriú, Florianópolis, Itapema, Bombinhas e Joinville." />
-  <meta property="og:title" content="Su Imobiliária — Imóveis à venda e aluguel" />
-  <meta property="og:description" content="Mais de 15 anos transformando sonhos em endereços no litoral catarinense." />
+  <title>Furpal Assessoria Imobiliária Internacional</title>
+  <meta name="description" content="Furpal — mais de 7 anos no Território Catarinense. Assessoria imobiliária completa em Balneário Camboriú, Florianópolis, Itapema, Bombinhas e Joinville." />
+  <meta property="og:title" content="Furpal — Assessoria Imobiliária Internacional" />
+  <meta property="og:description" content="Mais de 7 anos guiando pessoas ao redor do mundo rumo ao imóvel ideal no litoral catarinense." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://suimobiliaria.com.br" />
+  <meta property="og:url" content="https://furpal.com.br" />
   <meta property="og:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80" />
+  <meta name="keywords" content="assessoria imobiliária, Balneário Camboriú, comprar imóvel SC, alugar imóvel litoral, consultoria investimento imobiliário, Furpal, Território Catarinense, imóveis Florianópolis, Itapema, Bombinhas, Joinville" />
   <meta name="theme-color" content="#0e142e" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
@@ -17,16 +18,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%230e142e'/><text x='16' y='22' text-anchor='middle' font-size='18' fill='%23d4af37'>S</text></svg>" />
+  <link rel="icon" href="./images/favicon.svg" />
   <link rel="stylesheet" href="css/style.css?v=6" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
-    "name": "Su Imobiliária",
-    "url": "https://suimobiliaria.com.br",
+    "name": "Furpal",
+    "url": "https://furpal.com.br",
     "telephone": "+554788079254",
     "areaServed": ["Balneário Camboriú", "Florianópolis", "Itapema", "Bombinhas", "Joinville"],
     "address": {
@@ -43,7 +45,7 @@
 
 <header class="site-header" id="topo" role="banner">
   <nav class="container" role="navigation" aria-label="Navegação principal">
-    <a href="/" class="site-logo" translate="no">Su <span>Imobiliária</span></a>
+    <a href="/" class="site-logo" translate="no">Furpal</a>
     <ul class="nav-list" id="navList" translate="no">
       <li><a href="/" class="active" aria-current="page">Início</a></li>
       <li class="nav-dropdown" id="navDropComprar"><a href="/comprar/">Comprar</a><div class="dd-menu" id="ddComprar"></div></li>
@@ -93,9 +95,9 @@
     </div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
-      <p class="eyebrow" style="margin-bottom:1.5rem;">Seu lar começa aqui</p>
-      <h1>Encontre o imóvel perfeito para você.</h1>
-      <p>Mais de 500 imóveis à venda e aluguel. Acompanhamos você em cada passo para encontrar o lar que sempre sonhou.</p>
+      <p class="eyebrow" style="margin-bottom:1.5rem;">Sua jornada começa aqui</p>
+          <h1>Furpal em Balneário Camboriú | Assessoria Imobiliária Completa</h1>
+      <p>Mais de 500 imóveis no Território Catarinense. Te acompanhamos do início ao fim para você investir com segurança e confiança.</p>
       <div class="hero-search">
         <form class="hero-search-inner" onsubmit="handleSearch();return false;">
           <select id="search-type" aria-label="Tipo de imóvel">
@@ -113,10 +115,20 @@
       </div>
       <div class="hero-actions">
         <a href="/comprar/" class="btn-primary">Ver imóveis</a>
-        <a href="/contato/" class="btn-outline nav-whatsapp-cta" data-whatsapp-msg="Olá, gostaria de pedir uma consultoria sobre imóveis.">Pedir consultoria</a>
+        <a href="/contato/" class="btn-outline nav-whatsapp-cta" data-whatsapp-msg="Olá, gostaria de pedir uma assessoria sobre investimentos em imóveis.">Solicitar assessoria</a>
       </div>
     </div>
     <div class="hero-nav" id="heroNav"></div>
+  </section>
+
+  <!-- CONHECER A REGIÃO -->
+  <section id="location-info" class="location-info" style="display:none;">
+    <div class="container">
+      <div id="location-info-content"></div>
+      <div style="text-align:center;margin-top:2rem;">
+        <button onclick="closeLocationInfo()" class="btn-gold-outline" style="font-size:0.8rem;padding:0.75rem 2rem;cursor:pointer;">Fechar</button>
+      </div>
+    </div>
   </section>
 
   <!-- SOBRE -->
@@ -124,16 +136,19 @@
     <div class="container reveal">
       <div class="about-grid">
         <div>
-          <p class="eyebrow" style="margin-bottom:1.5rem;">Quem somos</p>
+          <p class="eyebrow" style="margin-top:1.5rem;margin-bottom:1.5rem;">Assessoria imobiliária</p>
           <div class="gold-rule" style="margin-bottom:2rem;"></div>
-          <h2 style="font-size:2.25rem;color:var(--text);line-height:1.2;">Mais de 15 anos assessorando famílias e empresas.</h2>
+          <h2 style="font-size:2.25rem;color:var(--text);line-height:1.2;">Mais de 7 anos guiando pessoas ao redor do mundo rumo ao imóvel ideal.</h2>
           <div class="about-stats" id="aboutStats"></div>
         </div>
         <div class="about-text">
-          <p>A <strong>Su Imobiliária</strong> nasceu em Balneário Camboriú com uma missão clara: transformar a experiência de comprar, vender ou alugar um imóvel em algo transparente, seguro e humano.</p>
-          <p>Ao longo de mais de 15 anos, construímos uma sólida trajetória assessorando famílias, investidores e empresas em todo o litoral catarinense. Cada operação é tratada com a dedicação e o profissionalismo que nos caracterizam.</p>
+          <p>A <strong>Furpal</strong> nasceu em Balneário Camboriú com uma missão clara: transformar a experiência de comprar, vender ou alugar um imóvel em algo transparente, seguro e humano.</p>
+          <video class="about-video" controls preload="metadata" poster="" style="margin:1.25rem 0;width:100%;max-width:480px;border-radius:12px;display:block;">
+            <source src="./video/sobre.mp4" type="video/mp4">
+          </video>
+          <p>Ao longo de mais de 7 anos, construímos uma sólida trajetória assessorando famílias, investidores e empresas em todo o Território Catarinense. Cada operação é tratada com a dedicação e o profissionalismo que nos caracterizam.</p>
           <p>Nossa equipe combina conhecimento profundo do mercado imobiliário local com uma rede consolidada de parceiros — bancos, cartórios, avaliadores e construtoras — para garantir resultados consistentes em qualquer tipo de operação.</p>
-          <a href="/contato/" class="about-link">Agende uma visita →</a>
+          <a href="/contato/" class="about-link" style="margin-bottom:2rem;">Agende uma visita →</a>
         </div>
       </div>
     </div>
@@ -155,6 +170,17 @@
         <button type="button" onclick="clearComprarSearch()">Limpar</button>
       </form>
       <div class="grid-3" id="compra-cards"></div>
+      <div class="request-form-wrap">
+        <div class="request-form">
+          <div class="section-header" style="margin-bottom:1.5rem;">
+            <p class="eyebrow">Não encontrou o imóvel ideal?</p>
+            <div class="gold-rule"></div>
+            <h2>Solicite uma busca personalizada</h2>
+            <p style="margin-top:0.5rem;color:var(--muted-foreground);font-size:0.85rem;">Conte o que você procura e vamos encontrar o imóvel perfeito para você.</p>
+          </div>
+          <div class="request-form-grid" data-purpose="comprar"></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -174,6 +200,17 @@
         <button type="button" onclick="clearAlugarSearch()">Limpar</button>
       </form>
       <div class="grid-2" id="aluga-cards"></div>
+      <div class="request-form-wrap">
+        <div class="request-form">
+          <div class="section-header" style="margin-bottom:1.5rem;">
+            <p class="eyebrow">Não encontrou o imóvel ideal?</p>
+            <div class="gold-rule"></div>
+            <h2>Solicite uma busca personalizada</h2>
+            <p style="margin-top:0.5rem;color:var(--muted-foreground);font-size:0.85rem;">Conte o que você procura e vamos encontrar o imóvel perfeito para você.</p>
+          </div>
+          <div class="request-form-grid" data-purpose="alugar"></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -200,33 +237,38 @@
       <div class="section-header">
         <p class="eyebrow">Serviços</p>
         <div class="gold-rule"></div>
-        <h2>Tudo que você precisa em um só lugar</h2>
+        <h2>Assessoria completa no Território Catarinense</h2>
       </div>
       <div class="grid-2" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));">
         <div class="service-card" data-service="0">
-          <h3>Comprar</h3>
-          <p>Assessoria completa para compra de imóveis residenciais e comerciais. Análise de documentação, negociação e financiamento.</p>
+          <h3>Compra com assessoria</h3>
+          <p>Te guiamos em cada etapa: da busca ao imóvel ideal até a assinatura do contrato. Análise documental, negociação de preço e condições, e acompanhamento do financiamento.</p>
         </div>
         <div class="service-card" data-service="1">
-          <h3>Alugar</h3>
-          <p>Gestão de locação com segurança jurídica. Seleção de inquilinos, contratos e acompanhamento durante todo o período.</p>
+          <h3>Aluguel inteligente</h3>
+          <p>Gestão completa de locação com foco em resultados. Seleção criteriosa de inquilinos, contratos sob medida e suporte contínuo durante todo o período locatício.</p>
         </div>
         <div class="service-card" data-service="2">
-          <h3>Vender</h3>
-          <p>Estratégias de marketing e precificação para vender seu imóvel mais rápido e pelo melhor valor de mercado.</p>
+          <h3>Venda estratégica</h3>
+          <p>Maximizamos o valor do seu imóvel com estratégias de marketing digital, precificação precisa e negociação qualificada. Venda mais rápido pelo melhor preço.</p>
         </div>
         <div class="service-card" data-service="3">
-          <h3>Avaliação</h3>
-          <p>Laudo de avaliação imobiliária com metodologia reconhecida pelo mercado. Ideal para financiamento, inventário ou venda.</p>
+          <h3>Consultoria para investidores</h3>
+          <p>Análise de viabilidade, projeção de retorno e identificação das melhores oportunidades do mercado catarinense para você investir com segurança e confiança.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- STATS -->
+  <!-- EQUIPE -->
   <section id="stats" class="bg-deep">
-    <div class="container reveal" style="padding:2rem 1.5rem;">
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1.5rem;text-align:center;max-width:960px;margin:0 auto;" id="statsGrid"></div>
+    <div class="container reveal">
+      <div class="section-header">
+        <p class="eyebrow" id="sectionStatsEyebrow">Equipe</p>
+        <div class="gold-rule"></div>
+        <h2 id="sectionStatsTitle">Conhe\u00E7a quem faz a Furpal</h2>
+      </div>
+      <div id="teamGrid"></div>
     </div>
   </section>
 
@@ -293,6 +335,7 @@
         <span class="map-legend-item" data-type="rent"><i class="dot dot-rent"></i> Aluguel</span>
         <span class="map-legend-item" data-type="empreendimento"><i class="dot dot-lanc"></i> Lançamento</span>
       </div>
+
     </div>
   </section>
 
@@ -365,8 +408,8 @@
     <div class="cta-band">
       <div class="container reveal">
         <div class="gold-rule"></div>
-        <h2>Pronto para encontrar seu imóvel dos sonhos?</h2>
-        <p>Solicite uma consultoria gratuita e descubra as melhores opções para você e sua família.</p>
+        <h2>Pronto para dar o próximo passo no mercado imobiliário?</h2>
+        <p>Solicite uma assessoria personalizada e descubra as melhores oportunidades para você investir com segurança.</p>
         <div class="cta-actions">
           <a href="https://wa.me/554788079254" class="btn-primary" target="_blank">Fale pelo WhatsApp</a>
           <a href="/contato/" class="btn-outline" onclick="setTimeout(function(){var f=document.getElementById('contato-form');if(f)f.scrollIntoView({behavior:'smooth'})},100);">Enviar mensagem</a>
@@ -382,7 +425,7 @@
         </div>
         <form id="contactForm" method="POST" style="max-width:640px;margin:0 auto;width:100%;">
           <input type="hidden" name="_captcha" value="false" />
-          <input type="hidden" name="_subject" value="Novo contato do site — Su Imobiliária" />
+          <input type="hidden" name="_subject" value="Novo contato do site — Furpal" />
           <input type="hidden" name="_template" value="table" />
           <div id="formFields" style="display:grid;gap:1rem;">
             <div style="display:grid;gap:0.5rem;">
@@ -403,7 +446,7 @@
             </div>
             <div style="display:flex;align-items:flex-start;gap:0.75rem;">
               <input type="checkbox" id="lgpd-consent" required style="margin-top:0.25rem;width:1rem;height:1rem;flex-shrink:0;" />
-              <label for="lgpd-consent" style="font-size:0.75rem;color:var(--muted-foreground);line-height:1.4;">Autorizo o tratamento dos meus dados pessoais conforme a Lei Geral de Proteção de Dados (LGPD) para fins de contato e resposta à minha solicitação. Para mais informações, consulte nossa <a href="/contato/" style="color:var(--gold);text-decoration:underline;">Política de Privacidade</a>.</label>
+               <label for="lgpd-consent" style="font-size:0.75rem;color:var(--muted-foreground);line-height:1.4;">Autorizo o tratamento dos meus dados pessoais conforme a Lei Geral de Proteção de Dados (LGPD) para fins de contato e resposta à minha solicitação. Para mais informações, consulte nossa <a href="/privacidade/" style="color:var(--gold);text-decoration:underline;">Política de Privacidade</a>.</label>
             </div>
             <button type="submit" class="btn-primary" style="justify-self:start;">Enviar mensagem</button>
           </div>
@@ -416,13 +459,50 @@
     </div>
   </section>
 
+  <!-- PRIVACIDADE -->
+  <section id="privacidade">
+    <div class="container">
+      <div class="section-header">
+        <p class="eyebrow">LGPD</p>
+        <div class="gold-rule"></div>
+        <h2>Política de Privacidade</h2>
+      </div>
+      <div style="max-width:720px;margin:0 auto;font-size:0.9rem;color:var(--text);line-height:1.7;">
+        <p>A <strong>Furpal</strong> está comprometida com a proteção dos seus dados pessoais. Esta Política de Privacidade explica como coletamos, usamos, armazenamos e protegemos as informações fornecidas por você.</p>
+
+        <h3 style="margin-top:2rem;font-family:var(--font-serif);font-size:1.25rem;">1. Dados coletados</h3>
+        <p>Coletamos os dados que você voluntariamente nos fornece por meio do formulário de contato: nome, e-mail, telefone e mensagem. Também podemos coletar dados de navegação como endereço IP, tipo de dispositivo e páginas acessadas, por meio de cookies e ferramentas de analytics.</p>
+
+        <h3 style="margin-top:1.5rem;font-family:var(--font-serif);font-size:1.25rem;">2. Finalidade do tratamento</h3>
+        <p>Seus dados são utilizados exclusivamente para: (a) responder às suas solicitações e mensagens; (b) enviar informações sobre imóveis e serviços relacionados; (c) melhorar a experiência de navegação no site; (d) cumprir obrigações legais e regulatórias.</p>
+
+        <h3 style="margin-top:1.5rem;font-family:var(--font-serif);font-size:1.25rem;">3. Compartilhamento de dados</h3>
+        <p>A Furpal não compartilha seus dados pessoais com terceiros sem o seu consentimento, exceto quando necessário para: (a) cumprimento de obrigação legal ou ordem judicial; (b) proteção de direitos da Furpal ou de terceiros; (c) prestação de serviços por parceiros contratualmente vinculados (como envio de e-mails).</p>
+
+        <h3 style="margin-top:1.5rem;font-family:var(--font-serif);font-size:1.25rem;">4. Armazenamento e segurança</h3>
+        <p>Seus dados são armazenados em servidores seguros, com medidas técnicas e administrativas para proteger contra acessos não autorizados, perda ou violação. Mantemos seus dados apenas pelo tempo necessário para cumprir as finalidades descritas ou por período exigido por lei.</p>
+
+        <h3 style="margin-top:1.5rem;font-family:var(--font-serif);font-size:1.25rem;">5. Seus direitos (LGPD)</h3>
+        <p>Nos termos da Lei nº 13.709/2018 (LGPD), você tem direito a: (a) confirmar a existência de tratamento de dados; (b) acessar seus dados pessoais; (c) corrigir dados incompletos ou desatualizados; (d) solicitar a anonimização ou eliminação de dados desnecessários; (e) revogar o consentimento a qualquer tempo; (f) solicitar a portabilidade dos dados.</p>
+
+        <h3 style="margin-top:1.5rem;font-family:var(--font-serif);font-size:1.25rem;">6. Cookies</h3>
+        <p>Este site utiliza cookies para melhorar a experiência do usuário e analisar o tráfego. Você pode configurar seu navegador para recusar cookies, mas isso pode afetar a funcionalidade do site.</p>
+
+        <h3 style="margin-top:1.5rem;font-family:var(--font-serif);font-size:1.25rem;">7. Contato do encarregado (DPO)</h3>
+        <p>Para exercer seus direitos ou esclarecer dúvidas sobre esta política, entre em contato conosco pelo e-mail <strong>contato@furpal.com.br</strong> ou pelo formulário disponível no site.</p>
+
+        <p style="margin-top:2rem;font-size:0.8rem;color:var(--muted-foreground);">Última atualização: junho de 2026. Esta política pode ser alterada a qualquer momento, recomendamos a consulta periódica.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer class="site-footer" role="contentinfo">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <a href="/" class="site-logo" style="font-size:1.25rem;">Su <span>Imobiliária</span></a>
-          <p>Referência em consultoria imobiliária no litoral catarinense. Mais de 15 anos transformando sonhos em endereços.</p>
+          <a href="/" class="site-logo" style="font-size:1.25rem;">Furpal</a>
+          <p>Referência em assessoria imobiliária no Território Catarinense. Mais de 7 anos guiando pessoas ao redor do mundo rumo ao imóvel ideal.</p>
         </div>
         <div class="footer-col">
           <p class="eyebrow">Navegação</p>
@@ -442,7 +522,7 @@
           <div class="gold-rule"></div>
           <ul>
             <li><a href="https://wa.me/554788079254" target="_blank">WhatsApp: +55 47 8807-9254</a></li>
-            <li><a href="mailto:contato@suimobiliaria.com.br">contato@suimobiliaria.com.br</a></li>
+            <li><a href="mailto:contato@furpal.com.br">contato@furpal.com.br</a></li>
             <li>Av. Atlântica, 1500 — Centro</li>
             <li>Balneário Camboriú — SC</li>
           </ul>
@@ -450,7 +530,7 @@
       </div>
       <div class="footer-bottom">
         <div class="footer-social" id="footerSocial"></div>
-        <span>&copy; 2026 Su Imobiliária. Todos os direitos reservados.</span>
+        <span>&copy; 2026 Furpal. Todos os direitos reservados.</span>
         <span>Feito com dedicação para nossos clientes.</span>
       </div>
     </div>
@@ -493,9 +573,9 @@
   </div>
 </div>
 
-<script src="js/data.js?v=3"></script>
-<script src="js/data-provider.js?v=1"></script>
-<script src="js/admin.js?v=1"></script>
+<script src="js/data.js?v=5"></script>
+<script src="js/data-provider.js?v=2"></script>
+<script src="js/admin.js?v=2"></script>
 <script>
 // Auto-update site info from data.js constants
   document.addEventListener('DOMContentLoaded', function() {
@@ -566,7 +646,7 @@
   });
   // WhatsApp CTAs com mensagem personalizada
   document.querySelectorAll('.nav-whatsapp-cta').forEach(function(a) {
-    var msg = a.getAttribute('data-whatsapp-msg') || 'Olá, gostaria de falar com a Su Imobiliária.';
+    var msg = a.getAttribute('data-whatsapp-msg') || 'Olá, gostaria de falar com a Furpal.';
     a.href = WHATSAPP_URL + '?text=' + encodeURIComponent(msg);
     a.target = '_blank';
   });
@@ -618,9 +698,37 @@
       if (footLink && footLink.parentElement) footLink.parentElement.style.display = 'none';
     }
   }
-  function renderStatsWithLang() {
+  function renderTeam() {
+    var teamGrid = document.getElementById('teamGrid');
+    if (!teamGrid) return;
+    if (typeof TEAM === 'undefined' || !TEAM.length) return;
+    teamGrid.innerHTML = '';
+    for (var ti = 0; ti < TEAM.length; ti++) {
+      var m = TEAM[ti];
+      var card = document.createElement('div');
+      card.className = 'team-card';
+      var photoHtml = m.photo
+        ? '<div class="team-photo"><img src="' + m.photo + '" alt="' + m.name + '" loading="lazy"></div>'
+        : '<div class="team-photo team-photo-initial"><span>' + m.name.charAt(0) + '</span></div>';
+      var socialHtml = '';
+      if (m.social) {
+        if (m.social.instagram) socialHtml += '<a href="' + m.social.instagram + '" target="_blank" rel="noopener" class="team-social" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>';
+        if (m.social.linkedin) socialHtml += '<a href="' + m.social.linkedin + '" target="_blank" rel="noopener" class="team-social" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>';
+        if (m.social.whatsapp) socialHtml += '<a href="' + m.social.whatsapp + '" target="_blank" rel="noopener" class="team-social" aria-label="WhatsApp"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>';
+        if (m.social.facebook) socialHtml += '<a href="' + m.social.facebook + '" target="_blank" rel="noopener" class="team-social" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>';
+        if (m.social.youtube) socialHtml += '<a href="' + m.social.youtube + '" target="_blank" rel="noopener" class="team-social" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.5 6.4a2.8 2.8 0 0 0-2-2C18.9 4 12 4 12 4s-6.9 0-8.5.4a2.8 2.8 0 0 0-2 2C1 8 1 12 1 12s0 4 .5 5.6a2.8 2.8 0 0 0 2 2C5.1 20 12 20 12 20s6.9 0 8.5-.4a2.8 2.8 0 0 0 2-2C23 16 23 12 23 12s0-4-.5-5.6z"/><polygon points="10 8 16 12 10 16 10 8"/></svg></a>';
+        if (m.social.site) socialHtml += '<a href="' + m.social.site + '" target="_blank" rel="noopener" class="team-social" aria-label="Site"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></a>';
+      }
+      card.innerHTML = photoHtml + '<div class="team-body"><h3 class="team-name">' + m.name + '</h3><p class="team-role">' + m.role + '</p><p class="team-desc">' + m.desc + '</p>' + (socialHtml ? '<div class="team-social-row">' + socialHtml + '</div>' : '') + '</div>';
+      teamGrid.appendChild(card);
+    }
+  }
+  // Team — render cards
+  renderTeam();
+  // Stats en "Quem somos"
+  (function() {
     var aboutStats = document.getElementById('aboutStats');
-    if (aboutStats) {
+    if (aboutStats && typeof STATS !== 'undefined' && STATS.length) {
       aboutStats.innerHTML = '';
       var showCount = Math.min(3, STATS.length);
       for (var si = 0; si < showCount; si++) {
@@ -629,20 +737,7 @@
         aboutStats.appendChild(sd);
       }
     }
-    var statsGrid = document.getElementById('statsGrid');
-    if (statsGrid) {
-      statsGrid.innerHTML = '';
-      for (var sj = 0; sj < STATS.length; sj++) {
-        var sd2 = document.createElement('div');
-        sd2.innerHTML = '<p style="font-family:var(--font-serif);font-size:2.5rem;color:var(--gold);">' + STATS[sj].value + '</p><p style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.2em;color:rgba(255,255,255,0.7);">' + STATS[sj].label + '</p>';
-        statsGrid.appendChild(sd2);
-      }
-    }
-  }
-  // Stats — populate from data.js
-  if (typeof STATS !== 'undefined' && STATS.length) {
-    renderStatsWithLang();
-  }
+  })();
   // Section texts — editable from data.js
   var sectionTexts = [
     { id: 'hero', eyebrowSel: '.hero-content .eyebrow', eyebrow: HERO_EYEBROW, titleSel: '.hero-content h1', title: HERO_TITLE, subtitleSel: '.hero-content p + p', subtitle: HERO_SUBTITLE },
@@ -652,10 +747,12 @@
     { id: 'lancamentos', eyebrowSel: '#lancamentos .eyebrow', eyebrow: SECTION_LANCAMENTOS_EYEBROW, titleSel: '#lancamentos h2', title: SECTION_LANCAMENTOS_TITLE },
     { id: 'servicos', eyebrowSel: '#servicos .eyebrow', eyebrow: SECTION_SERVICOS_EYEBROW, titleSel: '#servicos h2', title: SECTION_SERVICOS_TITLE },
     { id: 'depoimentos', eyebrowSel: '#depoimentos .eyebrow', eyebrow: SECTION_DEPOIMENTOS_EYEBROW, titleSel: '#depoimentos h2', title: SECTION_DEPOIMENTOS_TITLE },
+    { id: 'stats', eyebrowSel: '#sectionStatsEyebrow', eyebrow: SECTION_STATS_EYEBROW, titleSel: '#sectionStatsTitle', title: SECTION_STATS_TITLE },
     { id: 'parceiros', eyebrowSel: '#parceiros .eyebrow', eyebrow: SECTION_PARCEIROS_EYEBROW, titleSel: '#parceiros h2', title: SECTION_PARCEIROS_TITLE },
     { id: 'faq', eyebrowSel: '#faq .eyebrow', eyebrow: SECTION_FAQ_EYEBROW, titleSel: '#faq h2', title: SECTION_FAQ_TITLE },
     { id: 'financiamento', eyebrowSel: '#financiamento .eyebrow', eyebrow: SECTION_FINANCIAMENTO_EYEBROW, titleSel: '#financiamento h2', title: SECTION_FINANCIAMENTO_TITLE },
     { id: 'contato', eyebrowSel: '#contato-form .eyebrow', eyebrow: SECTION_CONTATO_EYEBROW, titleSel: '#contato-form h2', title: SECTION_CONTATO_TITLE },
+    { id: 'privacidade', eyebrowSel: '#privacidade .eyebrow', eyebrow: SECTION_PRIVACIDADE_EYEBROW, titleSel: '#privacidade h2', title: SECTION_PRIVACIDADE_TITLE },
     { id: 'mapa', eyebrowSel: '#sectionMapaEyebrow', eyebrow: SECTION_MAPA_EYEBROW, titleSel: '#sectionMapaTitle', title: SECTION_MAPA_TITLE },
     { id: 'favoritos', eyebrowSel: '#sectionFavEyebrow', eyebrow: SECTION_FAVORITOS_EYEBROW, titleSel: '#sectionFavTitle', title: SECTION_FAVORITOS_TITLE },
     { id: 'blog', eyebrowSel: '#sectionBlogEyebrow', eyebrow: SECTION_BLOG_EYEBROW, titleSel: '#sectionBlogTitle', title: SECTION_BLOG_TITLE }
@@ -693,6 +790,38 @@
   }
   categories.sort(); locations.sort();
   populateSelect('search-type', categories);
+  // Add "Conhecer a região" option
+  (function() {
+    var ts = document.getElementById('search-type');
+    var histOpt = document.createElement('option');
+    histOpt.value = 'history';
+    histOpt.textContent = 'Conhecer a região';
+    ts.insertBefore(histOpt, ts.options[1] || null);
+    var purposeEl = document.getElementById('search-purpose');
+    var priceEl = document.getElementById('search-price');
+    var btn = ts.closest('form').querySelector('button[type="submit"]');
+    var origBtnText = btn ? btn.textContent : 'Buscar';
+    function toggleHistoryMode(isHistory) {
+      purposeEl.style.display = isHistory ? 'none' : '';
+      priceEl.style.display = isHistory ? 'none' : '';
+      if (btn) btn.textContent = isHistory ? 'Conhecer' : origBtnText;
+    }
+    function handleTypeChange() {
+      var isHistory = ts.value === 'history';
+      toggleHistoryMode(isHistory);
+      if (!isHistory) {
+        var locSec = document.getElementById('location-info');
+        if (locSec && locSec.style.display !== 'none') {
+          locSec.style.display = 'none';
+          resetMetaTags();
+          document.getElementById('search-purpose').value = '';
+          document.getElementById('search-price').value = '';
+        }
+      }
+    }
+    ts.addEventListener('change', handleTypeChange);
+    window._toggleHistoryMode = toggleHistoryMode;
+  })();
   populateSelect('search-location', locations);
   populateSelect('comprar-type', categories);
   populateSelect('comprar-location', locations);
@@ -850,7 +979,9 @@ function googleTranslateElementInit() {
   }
 }
 </script>
-<script src="js/app.js?v=3"></script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
+<script src="js/app.js?v=5"></script>
+<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){var v=document.querySelector('.about-video');if(v)Plyr.setup(v);});</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
 </body>
 </html>

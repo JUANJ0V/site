@@ -50,7 +50,7 @@ try {
     ]);
 } catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode(['ok' => false, 'error' => 'Erro de conexão: ' . $e->getMessage()]);
+    echo json_encode(['ok' => false, 'error' => 'Erro de conexão com o banco de dados']);
     exit;
 }
 
@@ -74,7 +74,7 @@ if ($method === 'GET' && $action === 'setup') {
         echo json_encode(['ok' => true, 'message' => 'Tabelas criadas com sucesso!']);
     } catch (Exception $e) {
         http_response_code(500);
-        echo json_encode(['ok' => false, 'error' => $e->getMessage()]);
+        echo json_encode(['ok' => false, 'error' => 'Erro ao criar tabelas']);
     }
     exit;
 }
@@ -97,7 +97,7 @@ if ($method === 'GET' && $action === 'all') {
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
     } catch (Exception $e) {
         http_response_code(500);
-        echo json_encode(['error' => $e->getMessage()]);
+        echo json_encode(['error' => 'Erro ao carregar dados']);
     }
     exit;
 }
@@ -118,7 +118,7 @@ if ($method === 'GET' && $action) {
             echo json_encode($data, JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             http_response_code(500);
-            echo json_encode(['ok' => false, 'error' => $e->getMessage()]);
+            echo json_encode(['ok' => false, 'error' => 'Erro ao carregar coleção']);
         }
     } else {
         http_response_code(404);
@@ -127,6 +127,8 @@ if ($method === 'GET' && $action) {
     exit;
 }
 
+// ===================================================================
+// POST /api.php — Salva todos os dados
 // ===================================================================
 // POST /api.php?login — Login de usuário
 // ===================================================================
@@ -267,7 +269,7 @@ if ($method === 'POST') {
     } catch (Exception $e) {
         $pdo->rollBack();
         http_response_code(500);
-        echo json_encode(['ok' => false, 'error' => $e->getMessage()]);
+        echo json_encode(['ok' => false, 'error' => 'Erro ao salvar dados']);
     }
     exit;
 }

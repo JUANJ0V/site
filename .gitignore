@@ -1,1 +1,35 @@
-nul
+# Sensitive config
+api-config.php
+.env
+.env.local
+
+# Uploaded files
+uploads/
+uploaded/
+video/*.mp4
+video/*.webm
+video/*.mov
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Logs
+*.log
+
+# Temp
+tmp/
+temp/

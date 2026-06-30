@@ -1,7 +1,20 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 
-$password = 'fp2026';
+// Obtém a senha do api-config.php (DEVE estar configurado)
+$configFile = __DIR__ . '/api-config.php';
+if (!file_exists($configFile)) {
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'error' => 'api-config.php não encontrado. Crie o arquivo com define("API_PASSWORD", "sua_senha");']);
+    exit;
+}
+require_once $configFile;
+if (!defined('API_PASSWORD') || !API_PASSWORD) {
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'error' => 'API_PASSWORD não definida em api-config.php']);
+    exit;
+}
+$password = API_PASSWORD;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);

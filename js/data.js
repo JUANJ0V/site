@@ -8,8 +8,8 @@ const WHATSAPP_DISPLAY  = "+55 47 8807-9254";
 const WHATSAPP_URL      = "https://wa.me/" + WHATSAPP_NUMBER;
 const WHATSAPP_MSG      = "Olá, tenho interesse no {titulo} ({preco})";
 
-const SITE_NAME     = "Su Imobiliária";
-const SITE_LOGO     = ""; // URL do logo (SVG ou PNG) — se vazio, mostra o texto
+const SITE_NAME     = "";
+const SITE_LOGO     = "./images/fpaii.png"; // URL do logo (SVG ou PNG) — se vazio, mostra o texto
 /* ── Ajustes do logo (imagem) ──────────────────────────────
    LOGO_MAX_HEIGHT : altura máxima (ex: "2rem", "1.5rem", "40px")
    LOGO_MAX_WIDTH  : largura máxima (ex: "200px", "180px", "auto")
@@ -17,13 +17,13 @@ const SITE_LOGO     = ""; // URL do logo (SVG ou PNG) — se vazio, mostra o tex
                      "0 auto" centraliza horizontalmente,
                      "0 0 0 0.5rem" empurra p/ direita)
    ──────────────────────────────────────────────────────── */
-const LOGO_MAX_HEIGHT = "2rem";
+const LOGO_MAX_HEIGHT = "5rem";
 const LOGO_MAX_WIDTH  = "200px";
 const LOGO_MARGIN     = "0";
-const SITE_EMAIL    = "contato@suimobiliaria.com.br";
-const SITE_URL      = "https://suimobiliaria.com.br";
+const SITE_EMAIL    = "contato@furpal.com.br";
+const SITE_URL      = "https://furpal.com.br";
 const SITE_ADDRESS  = "Av. Atlântica, 1500 — Centro";
-const SITE_MAPS     = ""; // URL do Google Maps para a direção — se vazio, mostra só texto
+const SITE_MAPS     = "https://www.google.com/maps/@-26.9883172,-48.6330731,3a,75y,99.45h,90.34t/data=!3m7!1e1!3m5!1sTTt4H2Kpxa2oN7lYFDdBGg!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D-0.3428505543425473%26panoid%3DTTt4H2Kpxa2oN7lYFDdBGg%26yaw%3D99.44775548719348!7i13312!8i6656?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D"; // URL do Google Maps para a direção — se vazio, mostra só texto
 const SITE_CITY     = "Balneário Camboriú";
 const SITE_REGION   = "SC";
 
@@ -31,13 +31,13 @@ const SECTION_PARCEIROS_EYEBROW = "Parceiros";
 const SECTION_PARCEIROS_TITLE   = "Instituições que confiam em nós";
 
 /* Hero — texto do banner principal */
-const HERO_EYEBROW  = "Seu lar começa aqui";
-const HERO_TITLE    = "Su Imobiliária em Balneário Camboriú | Compra, Venda e Aluguel de Imóveis";
-const HERO_SUBTITLE = "Mais de 500 imóveis à venda e aluguel. Acompanhamos você em cada passo para encontrar o lar que sempre sonhou.";
+const HERO_EYEBROW  = "Sua jornada começa aqui";
+const HERO_TITLE    = "Furpal em Balneário Camboriú | Assessoria Imobiliária Completa";
+const HERO_SUBTITLE = "Mais de 500 imóveis no Território Catarinense. Te acompanhamos do início ao fim para você investir com segurança e confiança.";
 
 /* Títulos e subtítulos de cada seção */
-const SECTION_SOBRE_EYEBROW       = "Quem somos";
-const SECTION_SOBRE_TITLE         = "Mais de 15 anos assessorando famílias e empresas.";
+const SECTION_SOBRE_EYEBROW       = "Assessoria imobiliária";
+const SECTION_SOBRE_TITLE         = "Mais de 7 anos guiando pessoas ao redor do mundo rumo ao imóvel ideal.";
 const SECTION_COMPRAR_EYEBROW     = "Imóveis à venda";
 const SECTION_COMPRAR_TITLE       = "Encontre o imóvel ideal para comprar";
 const SECTION_ALUGAR_EYEBROW      = "Imóveis para alugar";
@@ -45,7 +45,7 @@ const SECTION_ALUGAR_TITLE        = "As melhores opções de aluguel";
 const SECTION_LANCAMENTOS_EYEBROW = "Lançamentos";
 const SECTION_LANCAMENTOS_TITLE   = "Empreendimentos exclusivos";
 const SECTION_SERVICOS_EYEBROW    = "Serviços";
-const SECTION_SERVICOS_TITLE      = "Tudo que você precisa em um só lugar";
+const SECTION_SERVICOS_TITLE      = "Assessoria completa no Território Catarinense";
 const SECTION_DEPOIMENTOS_EYEBROW = "Depoimentos";
 const SECTION_DEPOIMENTOS_TITLE   = "O que nossos clientes dizem";
 const SECTION_FAQ_EYEBROW         = "FAQ";
@@ -54,10 +54,14 @@ const SECTION_FINANCIAMENTO_EYEBROW = "Financiamento";
 const SECTION_FINANCIAMENTO_TITLE   = "Simule seu financiamento imobili\u00E1rio";
 const SECTION_CONTATO_EYEBROW     = "Envie sua mensagem";
 const SECTION_CONTATO_TITLE       = "Fale conosco";
-const SECTION_MAPA_EYEBROW        = "Mapa de Imóveis";
-const SECTION_MAPA_TITLE          = "Encontre no mapa";
+const SECTION_STATS_EYEBROW       = "Equipe";
+const SECTION_STATS_TITLE         = "Conhe\u00E7a quem faz a Furpal";
+const SECTION_MAPA_EYEBROW        = "Explore Santa Catarina";
+const SECTION_MAPA_TITLE          = "Imóveis com tudo perto";
 const SECTION_BLOG_EYEBROW        = "Blog";
 const SECTION_BLOG_TITLE          = "Últimas do blog";
+const SECTION_PRIVACIDADE_EYEBROW = "LGPD";
+const SECTION_PRIVACIDADE_TITLE   = "Política de Privacidade";
 const SECTION_FAVORITOS_EYEBROW   = "Favoritos";
 const SECTION_FAVORITOS_TITLE     = "Meus imóveis favoritos";
 const SECTION_FAVORITOS_EMPTY     = "Nenhum imóvel favoritado ainda.";
@@ -76,14 +80,53 @@ const SECTION_FAVORITOS_EMPTY     = "Nenhum imóvel favoritado ainda.";
 
 
 /* ===================================================================
-   STATS — números que aparecen en "Quem somos" y en la sección STATS
-   (sobre muestra los 3 primeros; stats muestra todos)
+   STATS — números que aparecen en "Quem somos"
    =================================================================== */
 const STATS = [
-  { value: "+500", label: "Im\u00F3veis comercializados" },
-  { value: "+15",  label: "Anos de experi\u00EAncia" },
-  { value: "+300", label: "Clientes satisfeitos" },
-  { value: "+50",  label: "Parceiros credenciados" }
+  { value: "+?", label: "Im\u00F3veis comercializados" },
+  { value: "+7",  label: "Anos de experi\u00EAncia" },
+  { value: "+?", label: "Clientes satisfeitos" },
+  { value: "+?",  label: "Parceiros credenciados" }
+];
+
+/* ===================================================================
+   TEAM — Miembros del equipo (sección stats/equipo)
+   Campos:
+     name    = Nombre del miembro
+     role    = Cargo (ej: "Corretor Sênior")
+     photo   = URL de la foto (o "" para avatar por inicial)
+     desc    = Breve descripción (1-2 líneas)
+     social  = { instagram, linkedin } — opcional
+   =================================================================== */
+const TEAM = [
+  {
+    name: "Carlos Mendes",
+    role: "Corretor Sênior",
+    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
+    desc: "Especialista em imóveis de alto padrão com mais de 12 anos de mercado em Balneário Camboriú.",
+    social: { instagram: "https://instagram.com/", whatsapp: "https://wa.me/554788079254" }
+  },
+  {
+    name: "Ana Beatriz",
+    role: "Consultora Imobiliária",
+    photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80",
+    desc: "Focada em atender clientes internacionais e investidores estrangeiros em todo o litoral catarinense.",
+    social: { instagram: "https://instagram.com/", whatsapp: "https://wa.me/554788079254", site:"https://google.com" }
+  },
+  {
+    name: "Rafael Oliveira",
+    role: "Analista de Financiamento",
+    photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80",
+    desc: "Responsável por viabilizar as melhores condições de financiamento para cada perfil de cliente.",
+    social: { instagram: "https://instagram.com/", whatsapp: "https://wa.me/554788079254" }
+  },
+  // {
+  //   name: "Juliana Costa",
+  //   role: "Marketing & Relacionamento",
+  //   photo: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80",
+  //   desc: "Cuida da experiência do cliente e da comunicação da marca, garantindo atendimento humanizado.",
+  //   social: { instagram: "https://instagram.com/", linkedin: "https://linkedin.com/" }
+  // }
 ];
 
 /* Hero slideshow — imágenes de fondo que rotan automáticamente */
@@ -96,14 +139,14 @@ const HERO_VIDEO = ""; // URL de un video MP4 (opcional — si se llena, aparece
 
 /* Secciones deshabilitadas — poné los IDs que NO querés mostrar en el menú ni en el SPA */
 /* IDs disponibles: "sobre", "stats", "servicos", "depoimentos", "parceiros", "faq", "financiamento" */
-const DISABLED_SECTIONS = ["alugar","stats","favoritos"]; // ej: ["stats", "faq"]
+const DISABLED_SECTIONS = ["favoritos"]; // ej: ["stats", "faq"]
 
 /* Redes sociales — aparecen en el footer. Dejá vacío si no tenés */
 const SOCIAL = {
-  instagram: "https://instagram.com/suimobiliaria",
-  facebook:  "https://facebook.com/suimobiliaria",
-  youtube:   "https://youtube.com/@suimobiliaria",
-  linkedin:  ""
+  instagram: "https://www.instagram.com/furpal.assesoriaimobiliaria",
+  // facebook:  "https://facebook.com/suimobiliaria",
+  // youtube:   "https://youtube.com/@suimobiliaria",
+  // linkedin:  ""
 };
 
 /* Paginación — cuántos imóveis mostrar por página */
@@ -119,7 +162,7 @@ const ENABLE_DROPDOWN_MENU = true; // cambiá a true para activar
    Campos:
      id         = identificador único (ex: "prop-1", "prop-11")
      type       = "sale" (venda) ou "rent" (aluguel)
-     category   = Apartamento | Casa | Cobertura | Kitnet/Studio | Terreno | Comercial
+      category   = Apartamento | Casa | Cobertura | Kitnet/Studio | Terreno/Lote | Comercial
      title      = Nome do imóvel
      price      = Texto do preço (ex: "R$ 1.250.000")
      priceNum   = Preço só números (ex: 1250000) — usado na busca
@@ -136,10 +179,10 @@ const ENABLE_DROPDOWN_MENU = true; // cambiá a true para activar
      video      = URL do YouTube embed (ex: "https://www.youtube.com/embed/...")
      features   = [ Lista de características ]
      description= Descrição longa. Use \n\n para separar parágrafos.
-     front      = Metros de frente (só para Terreno) — opcional
-     back       = Metros de fundo (só para Terreno) — opcional
-     zone       = Zona (só para Terreno, ex: "Urbana", "Rural") — opcional, padrão "Urbana"
-      topography = Topografia (só para Terreno, ex: "Plana", "Aclive") — opcional, padrão "Plana"
+     front      = Metros de frente (só para Terreno/Lote) — opcional
+     back       = Metros de fundo (só para Terreno/Lote) — opcional
+     zone       = Zona (só para Terreno/Lote, ex: "Urbana", "Rural") — opcional, padrão "Urbana"
+      topography = Topografia (só para Terreno/Lote, ex: "Plana", "Aclive") — opcional, padrão "Plana"
     =================================================================== */
 
 const PROPERTIES = [
@@ -159,6 +202,8 @@ const PROPERTIES = [
     lat: -26.9920, lng: -48.6330,
     status: "disponivel",
     desc: "Amplo apartamento com acabamento premium na melhor região de Balneário Camboriú.",
+    address: "Av. Atlântica, 1500 — Centro, Balneário Camboriú — SC",
+    beachDistance: "200 m",
     beds: 3,  baths: 2,  garage: 1,  area: 128,
     img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
     gallery: [
@@ -198,6 +243,8 @@ const PROPERTIES = [
     lat: -27.5940, lng: -48.5470,
     status: "disponivel",
     desc: "Casa moderna com piscina e área de lazer em condomínio fechado em Florianópolis.",
+    address: "Rua dos Búzios, 250 — Jurerê Internacional, Florianópolis — SC",
+    beachDistance: "600 m",
     beds: 4,  baths: 3,  garage: 2,  area: 210,
     img: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80",
     gallery: [
@@ -237,6 +284,8 @@ const PROPERTIES = [
     lat: -27.1460, lng: -48.6090,
     status: "disponivel",
     desc: "Cobertura duplex com vista panorâmica para o mar, 2 vagas e terraço privativo em Itapema.",
+    address: "Av. Beira Mar, 500 — Centro, Itapema — SC",
+    beachDistance: "100 m",
     beds: 4,  baths: 4,  garage: 2,  area: 280,
     img: "https://images.unsplash.com/photo-1600566753086-00f18f5b0042?w=800&q=80",
     gallery: [
@@ -276,6 +325,8 @@ const PROPERTIES = [
     lat: -27.1360, lng: -48.5150,
     status: "disponivel",
     desc: "Studio completo e mobiliado, ideal para investidores. Localização privilegiada em Bombinhas.",
+    address: "Rua das Flores, 80 — Bombas, Bombinhas — SC",
+    beachDistance: "200 m",
     beds: 1,  baths: 1,  garage: 1,  area: 42,
     img: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80",
     gallery: [
@@ -305,8 +356,8 @@ const PROPERTIES = [
   {
     id: "prop-5",
     type: "sale",
-    category: "Terreno",
-    title: "Terreno Residencial",
+    category: "Terreno/Lote",
+    title: "Terreno/Lote Residencial",
     price: "R$ 450.000",
     priceNum: 450000,
     location: "Joinville",
@@ -314,6 +365,8 @@ const PROPERTIES = [
     lat: -26.3020, lng: -48.8420,
     status: "disponivel",
     desc: "Terreno plano de 360 m² em loteamento aprovado, pronto para construir em Joinville.",
+    address: "Rua XV de Novembro, 1200 — América, Joinville — SC",
+    beachDistance: "",
     beds: 0,  baths: 0,  garage: 0,  area: 360,
     img: "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=800&q=80",
     gallery: [
@@ -352,6 +405,8 @@ const PROPERTIES = [
     lat: -26.9970, lng: -48.6370,
     status: "disponivel",
     desc: "Sala comercial em edifício corporativo com infraestrutura completa em Balneário Camboriú.",
+    address: "Av. Brasil, 950 — Centro, Balneário Camboriú — SC",
+    beachDistance: "400 m",
     beds: 0,  baths: 1,  garage: 1,  area: 55,
     img: "https://images.unsplash.com/photo-1600585152220-90363fe7e115?w=800&q=80",
     gallery: [
@@ -394,6 +449,8 @@ const PROPERTIES = [
     lat: -27.5990, lng: -48.5520,
     status: "disponivel",
     desc: "Apartamento bem localizado próximo a universidades, comércio e transporte público em Florianópolis.",
+    address: "Rua Felipe Schmidt, 300 — Centro, Florianópolis — SC",
+    beachDistance: "1,5 km",
     beds: 2,  baths: 1,  garage: 1,  area: 68,
     img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
     gallery: [
@@ -433,6 +490,8 @@ const PROPERTIES = [
     lat: -27.1400, lng: -48.5190,
     status: "disponivel",
     desc: "Casa ampla com piscina, churrasqueira e jardim, perfeita para temporada em Bombinhas.",
+    address: "Rua do Laçador, 50 — Bombas, Bombinhas — SC",
+    beachDistance: "500 m",
     beds: 3,  baths: 2,  garage: 2,  area: 160,
     img: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80",
     gallery: [
@@ -473,6 +532,8 @@ const PROPERTIES = [
     lat: -26.9930, lng: -48.6380,
     status: "disponivel",
     desc: "Studio compacto e moderno, ideal para solteiros ou casais. Mobiliado e com condomínio incluso em Balneário Camboriú.",
+    address: "Rua 3000, 150 — Centro, Balneário Camboriú — SC",
+    beachDistance: "300 m",
     beds: 1,  baths: 1,  garage: 0,  area: 35,
     img: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80",
     gallery: [
@@ -513,6 +574,8 @@ const PROPERTIES = [
     lat: -27.1500, lng: -48.6140,
     status: "disponivel",
     desc: "Sala comercial pronta para uso em edifício corporativo com portaria 24h, em Itapema.",
+    address: "Av. Nereu Ramos, 700 — Centro, Itapema — SC",
+    beachDistance: "800 m",
     beds: 0,  baths: 1,  garage: 1,  area: 48,
     img: "https://images.unsplash.com/photo-1600585152220-90363fe7e115?w=800&q=80",
     gallery: [
@@ -574,6 +637,9 @@ const EMPREENDIMENTOS = [
     id: "emp-parkavenue",
     title: "Park Avenue Residence",
     location: "Balneário Camboriú — SC",
+    address: "Av. Atlântica, 1500 — Centro, Balneário Camboriú — SC",
+    beachDistance: "50 m",
+    maps: "https://www.google.com/maps?q=-26.9900,-48.6320",
     price: "A partir de R$ 850.000",
     priceNum: 850000,
     lat: -26.9900, lng: -48.6320,
@@ -636,6 +702,9 @@ const EMPREENDIMENTOS = [
     id: "emp-infinitycoast",
     title: "Infinity Coast",
     location: "Florianópolis — SC",
+    address: "Av. dos Búzios, 250 — Jurerê Internacional, Florianópolis — SC",
+    beachDistance: "300 m",
+    maps: "https://www.google.com/maps?q=-27.5980,-48.5500",
     price: "A partir de R$ 620.000",
     priceNum: 620000,
     lat: -27.5980, lng: -48.5500,
@@ -698,6 +767,9 @@ const EMPREENDIMENTOS = [
     id: "emp-greenlife",
     title: "Green Life Park",
     location: "Joinville — SC",
+    address: "Rua XV de Novembro, 1200 — América, Joinville — SC",
+    beachDistance: "",
+    maps: "https://www.google.com/maps?q=-26.3060,-48.8470",
     price: "A partir de R$ 390.000",
     priceNum: 390000,
     lat: -26.3060, lng: -48.8470,
@@ -791,7 +863,7 @@ const FAQS = [
   },
   {
     q: "Vocês atendem em quais regiões?",
-    a: "Atendemos todo o litoral catarinense, com escritórios físicos em Balneário Camboriú, Florianópolis, Itapema, Bombinhas e Joinville. Também realizamos atendimento remoto para clientes de outras regiões interessados em investir em Santa Catarina."
+    a: "Atendemos todo o Território Catarinense, com escritórios físicos em Balneário Camboriú, Florianópolis, Itapema, Bombinhas e Joinville. Também realizamos atendimento remoto para clientes de outras regiões interessados em investir em Santa Catarina."
   }
 ];
 
@@ -807,7 +879,7 @@ const FAQS = [
 
 const DEPOIMENTOS = [
   {
-    text: "A Su Imobiliária fez toda a diferença na compra do nosso primeiro apartamento. Profissionais atenciosos, transparentes e extremamente competentes. Recomendo de olhos fechados!",
+    text: "A Furpal fez toda a diferença na compra do nosso primeiro apartamento. Profissionais atenciosos, transparentes e extremamente competentes. Recomendo de olhos fechados!",
     name: "Ana Carolina Silva",
     role: "Compradora • Apartamento 2 quartos • Balneário Camboriú"
   },
@@ -817,7 +889,7 @@ const DEPOIMENTOS = [
     role: "Vendedor • Cobertura • Florianópolis"
   },
   {
-    text: "Alugo um imóvel comercial há 3 anos com a Su Imobiliária. A gestão é impecável, os relatórios são mensais e qualquer manutenção é resolvida rapidamente. Parceria que dá certo.",
+    text: "Alugo um imóvel comercial há 3 anos com a Furpal. A gestão é impecável, os relatórios são mensais e qualquer manutenção é resolvida rapidamente. Parceria que dá certo.",
     name: "Roberta Oliveira",
     role: "Locatária • Sala comercial • Itapema"
   }
@@ -863,7 +935,7 @@ const BLOG_POSTS = [
     title: "Como escolher o imóvel ideal para sua família",
     date: "15/03/2026",
     category: "Dicas",
-    author: "Su Imobiliária",
+    author: "Furpal",
     image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80",
     excerpt: "Descubra os fatores essenciais para escolher a casa ou apartamento perfeito para sua família, desde localização até infraestrutura do bairro.",
     content: "Escolher o imóvel ideal para sua família é uma decisão que vai muito além do preço. É preciso considerar diversos fatores que impactarão o dia a dia de todos os moradores.\n\n## Localização\n\nO primeiro passo é definir a localização. Pense na proximidade com o trabalho dos adultos, escolas dos filhos, supermercados, farmácias e hospitais. Um imóvel bem localizado valoriza com o tempo e oferece mais qualidade de vida.\n\n## Tamanho\n\nEm segundo lugar, avalie o tamanho. Não adianta comprar uma casa enorme se vocês são uma família pequena, assim como um apartamento compacto pode ficar apertado para uma família com três filhos. Pense a médio e longo prazo.\n\n## Infraestrutura do bairro\n\nPor fim, verifique a infraestrutura do bairro e do condomínio. Segurança, áreas de lazer, transporte público e opções de comércio local fazem toda a diferença no custo de vida e na rotina da família."
@@ -873,7 +945,7 @@ const BLOG_POSTS = [
     title: "Financiamento imobiliário: tudo que você precisa saber",
     date: "08/03/2026",
     category: "Financiamento",
-    author: "Su Imobiliária",
+    author: "Furpal",
     image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&q=80",
     excerpt: "Entenda as modalidades de financiamento, taxas de juros, prazos e documentos necessários para realizar o sonho da casa própria.",
     content: "O financiamento imobiliário é o caminho mais comum para a aquisição da casa própria no Brasil. Mas é fundamental entender como funciona antes de assinar qualquer contrato.\n\n## Modalidades de financiamento\n\nAs principais modalidades são o SFH (Sistema Financeiro de Habitação) e o SFI (Sistema Financeiro Imobiliário). O SFH tem juros mais baixos mas limite de valor, enquanto o SFI permite imóveis mais caros com taxas um pouco maiores.\n\n## Documentos necessários\n\nOs documentos básicos exigidos são: RG, CPF, comprovante de residência, comprovante de renda dos últimos 3 meses, declaração do Imposto de Renda e certidão de casamento (se aplicável). Para autônomos, também é necessário o DAS e extrato bancário.\n\n## Dica importante\n\nUma dica importante: use a calculadora de financiamento do nosso site para simular as parcelas antes de iniciar o processo. Isso ajuda a planejar seu orçamento e evita surpresas."
@@ -883,7 +955,7 @@ const BLOG_POSTS = [
     title: "Mercado imobiliário de SC: tendências para 2026",
     date: "01/03/2026",
     category: "Mercado",
-    author: "Su Imobiliária",
+    author: "Furpal",
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80",
     excerpt: "Análise completa do mercado imobiliário catarinense: bairros em alta, valorização por região e perspectivas para investidores.",
     content: "Santa Catarina segue se destacando no cenário imobiliário nacional. Cidades como Balneário Camboriú, Florianópolis e Itapema continuam atraindo investidores de todo o Brasil.\n\n## Balneário Camboriú\n\nBalneário Camboriú mantém a liderança em valorização, com novos empreendimentos de alto padrão sendo lançados regularmente. A cidade oferece infraestrutura completa e qualidade de vida incomparável.\n\n## Florianópolis\n\nFlorianópolis segue aquecida tanto para compra quanto para aluguel, especialmente nos bairros Jurerê Internacional e Santo Antônio de Lisboa. A demanda por imóveis sustentáveis e com áreas verdes está em alta.\n\n## Bombinhas\n\nPara investidores, Bombinhas surge como uma excelente opção para aluguel por temporada, com retorno médio anual de 8% a 10%. Joinville também se destaca pelo custo-benefício e mercado corporativo aquecido.\n\n## Recomendação para 2026\n\nNossa recomendação para 2026: diversifique entre imóveis prontos e lançamentos, acompanhe as taxas de juros e conte com uma assessoria especializada para tomar as melhores decisões."
@@ -897,6 +969,164 @@ const BLOG_POSTS = [
 /* ===================================================================
    PROPERTIES_TRANSLATIONS (Traduções dos imóveis — EN / ES)
    =================================================================== */
+
+
+const LOCATIONS_INFO = {
+  "Balneário Camboriú": {
+    tagline: "A Miami Brasileira — referência em qualidade de vida e investimento imobiliário no litoral catarinense.",
+    images: [
+      "https://images.unsplash.com/photo-1564507592333-4b1d02b3f75a?w=800&q=80",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"
+    ],
+    beaches: [
+      { name: "Praia Central", desc: "Principal praia urbana de Balneário Camboriú, com 6 km de extensão, calçadão, quiosques e infraestrutura completa." },
+      { name: "Praia de Laranjeiras", desc: "Praia de águas calmas e cristalinas, cercada por morros e condomínios de alto padrão." },
+      { name: "Praia do Estaleiro", desc: "Praia mais tranquila, com areias claras e mar calmo, ideal para famílias." }
+    ],
+    intro: "Balneário Camboriú é o principal destino imobiliário do Sul do Brasil. Conhecida como a Miami Brasileira, a cidade combina arranha-céus imponentes com praias deslumbrantes e infraestrutura de primeiro mundo. O mercado imobiliário local é o mais aquecido de Santa Catarina, com imóveis que se valorizam acima da média nacional.",
+    history: "Balneário Camboriú foi fundada oficialmente em 1964, mas seu desenvolvimento acelerado começou nas décadas de 1970 e 1980 com a construção dos primeiros grandes edifícios. Desde então, a cidade não parou de crescer, tornando-se hoje o metro quadrado mais caro do Sul do Brasil e um polo de investimentos internacionais.",
+    safety: "Balneário Camboriú é considerada uma das cidades mais seguras do Brasil para se viver e investir. Conta com policiamento ostensivo na orla, sistema de monitoramento por câmeras em toda a cidade e índices de criminalidade abaixo da média nacional. A Guarda Municipal atua 24 horas na região central e balneária.",
+    highlights: [
+      "Cristo Luz — Monumento e complexo turístico com 40 metros de altura",
+      "Parque Unipraias — Complexo de bondinho que liga as praias Central e Laranjeiras",
+      "Molhe — Píer de 400 metros no final da Av. Atlântica",
+      "Ilha das Cabras — Cartão postal famoso em frente à praia Central",
+      "Avenida Atlântica — Principal via da orla, com bares, restaurantes e comércio"
+    ]
+  },
+  "Florianópolis": {
+    tagline: "A Ilha da Magia — qualidade de vida, natureza exuberante e mercado imobiliário em plena expansão.",
+    images: [
+      "https://images.unsplash.com/photo-1564507592333-4b1d02b3f75a?w=800&q=80",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"
+    ],
+    beaches: [
+      { name: "Praia de Jurerê Internacional", desc: "Praia sofisticada com águas calmas, quiosques modernos e público seleto. Referência em gastronomia e lazer." },
+      { name: "Praia Mole", desc: "Famosa entre surfistas e jovens, com ondas fortes, dunas e vista deslumbrante." },
+      { name: "Praia da Joaquina", desc: "Ícone do surfe nacional, com grandes dunas e estrutura completa para esportes." },
+      { name: "Lagoa da Conceição", desc: "Maior lagoa da ilha, ideal para esportes náuticos, com bairro boêmio e animado." }
+    ],
+    intro: "Florianópolis é uma das capitais com melhor qualidade de vida do Brasil. Cercada por 42 praias, a Ilha da Magia oferece um mercado imobiliário diversificado — desde coberturas de alto padrão em Jurerê até casas aconchegantes na Lagoa da Conceição. A cidade atrai investidores de todo o país em busca de qualidade de vida e valorização patrimonial.",
+    history: "Florianópolis foi fundada em 1726 pelos colonizadores açorianos. Sua arquitetura colonial, preservada no centro histórico, contrasta com o desenvolvimento acelerado das últimas décadas. A cidade se consolidou como polo tecnológico e turístico, com destaque para o setor imobiliário de alto padrão.",
+    safety: "Florianópolis possui índices de segurança variados por região. Bairros como Jurerê Internacional, Santo Antônio de Lisboa e Lagoa da Conceição são considerados seguros. A região central conta com policiamento frequente. Recomenda-se atenção em áreas mais afastadas durante a alta temporada.",
+    highlights: [
+      "Ponte Hercílio Luz — Cartão postal da cidade, ponte metálica centenária",
+      "Centro Histórico — Casario açoriano, catedral e museus no centro da cidade",
+      "Mercado Público — Gastronomia típica e artesanato local",
+      "Dunas da Joaquina — Paisagem deslumbrante e prática de sandboard",
+      "Projeto Tamar — Centro de preservação de tartarugas marinhas"
+    ]
+  },
+  "Itapema": {
+    tagline: "Cidade planejada com praias paradisíacas e o metro quadrado mais valorizado de Santa Catarina.",
+    images: [
+      "https://images.unsplash.com/photo-1564507592333-4b1d02b3f75a?w=800&q=80",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"
+    ],
+    beaches: [
+      { name: "Praia Central de Itapema", desc: "Praia de águas calmas e cristalinas com calçadão moderno e excelente infraestrutura." },
+      { name: "Meia Praia", desc: "Praia movimentada com grande concentração de bares, restaurantes e comércio." },
+      { name: "Praia do Cabeço", desc: "Praia pequena e tranquila, rodeada por vegetação nativa e condomínios." }
+    ],
+    intro: "Itapema é uma das cidades que mais cresce em Santa Catarina. Com um rigoroso plano diretor que limita a altura das construções, a cidade oferece qualidade de vida incomparável. O mercado imobiliário local é focado em imóveis de alto padrão, com destaque para condomínios fechados com vista para o mar.",
+    history: "Itapema foi emancipada de Porto Belo em 1962. Desde então, passou por um planejamento urbano rigoroso que a transformou em um dos destinos mais valorizados do litoral catarinense. O crescimento ordenado e a infraestrutura de qualidade atraem investidores que buscam imóveis de alto padrão.",
+    safety: "Itapema é reconhecida como uma das cidades mais seguras da região, com baixos índices de criminalidade. O policiamento é eficiente tanto na área central quanto nos bairros residenciais. A cidade conta com sistema de monitoramento e guarda municipal atuante.",
+    highlights: [
+      "Calçadão da Orla — Orla revitalizada com ciclovia, academia ao ar livre e quiosques",
+      "Praça da Paz — Principal praça da cidade, com eventos culturais e feiras",
+      "Morro do Calvário — Mirante com vista panorâmica da cidade e do mar",
+      "Capela São Pedro — Igreja histórica no centro da cidade"
+    ]
+  },
+  "Bombinhas": {
+    tagline: "Paraíso ecológico com as praias mais preservadas de Santa Catarina e alto potencial de locação por temporada.",
+    images: [
+      "https://images.unsplash.com/photo-1564507592333-4b1d02b3f75a?w=800&q=80",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"
+    ],
+    beaches: [
+      { name: "Praia de Bombas", desc: "Principal praia da cidade, com mar calmo e boa infraestrutura turística." },
+      { name: "Praia de Bombinhas", desc: "Praia de águas cristalinas e calmas, ideal para famílias e mergulho." },
+      { name: "Praia do Quatro Ilhas", desc: "Praia paradisíaca com costão rochoso, piscinas naturais e areia branca." },
+      { name: "Praia da Sepultura", desc: "Praia pequena e protegida, com águas transparentes — perfeita para snorkeling." }
+    ],
+    intro: "Bombinhas é um dos destinos mais procurados do Brasil para temporada. Suas praias de águas cristalinas e preservação ambiental fazem da cidade um paraíso ecológico. O mercado imobiliário local é ideal para investidores que buscam imóveis para locação por temporada, com retorno médio anual de 8% a 10%.",
+    history: "Bombinhas foi emancipada de Porto Belo em 1992. Seu nome vem de 'Bombas' e 'Bombinhas', pequenas embarcações usadas por pescadores locais. O turismo começou a se desenvolver nos anos 1990 e, desde então, a cidade se consolidou como um dos principais destinos de verão do Sul do Brasil.",
+    safety: "Bombinhas é considerada uma cidade tranquila e segura, especialmente durante a baixa temporada. Na alta temporada, o fluxo de turistas aumenta significativamente, mas a cidade mantém boa estrutura de segurança com policiamento ostensivo nas praias e áreas turísticas.",
+    highlights: [
+      "Mirante Eco 360 — Vista panorâmica de 360 graus da península de Bombinhas",
+      "Reserva Biológica Marinha — Área de preservação com rica vida marinha",
+      "Trilha do Macaco — Trilha ecológica com vista para as praias selvagens",
+      "Morro do Macaco — Mirante com uma das vistas mais bonitas da região"
+    ]
+  },
+  "Joinville": {
+    tagline: "A maior cidade de Santa Catarina — polo industrial com mercado imobiliário acessível e excelente custo-benefício.",
+    images: [
+      "https://images.unsplash.com/photo-1564507592333-4b1d02b3f75a?w=800&q=80",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"
+    ],
+    beaches: [
+      { name: "Praia do Vigorelli", desc: "Praia de água doce no rio Cachoeira, com área de lazer e quiosques." },
+      { name: "Praia de Itaguaçu", desc: "Praia fluvial às margens da Baía da Babitonga, com estrutura de lazer." }
+    ],
+    intro: "Joinville é a maior cidade de Santa Catarina e o principal polo industrial do estado. Com um mercado imobiliário mais acessível que o litoral, a cidade oferece excelente custo-benefício para quem busca imóveis residenciais ou comerciais. O mercado corporativo está aquecido, com demanda constante por salas comerciais e galpões industriais.",
+    history: "Joinville foi fundada em 1851 por imigrantes europeus, principalmente alemães e suíços. A cidade preserva forte herança cultural com festas típicas, arquitetura enxaimel e o maior acervo de museu de imigração do Brasil. Tornou-se o maior polo industrial de Santa Catarina, com destaque para os setores metal-mecânico, têxtil e de tecnologia.",
+    safety: "Joinville possui índices de segurança variados por bairro. Regiões como América, Atiradores, e Centro são consideradas seguras. A cidade conta com Guarda Municipal e sistema de monitoramento. Recomenda-se atenção em bairros periféricos durante a noite.",
+    highlights: [
+      "Museu Nacional de Imigração e Colonização — Maior museu sobre imigração do Brasil",
+      "Rua das Palmeiras — Cartão postal com 93 palmeiras imperiais centenárias",
+      "Expoville — Parque de exposições com eventos durante todo o ano",
+      "Catedral São Francisco Xavier — Igreja principal com arquitetura imponente",
+      "Escola do Artesanato — Centro de artesanato típico da região"
+    ]
+  },
+  "Balneário Camboriú — SC": {
+    tagline: "A Miami Brasileira — referência em qualidade de vida e investimento imobiliário no litoral catarinense.",
+    images: [
+      "https://images.unsplash.com/photo-1564507592333-4b1d02b3f75a?w=800&q=80"
+    ],
+    beaches: [
+      { name: "Praia Central", desc: "Principal praia urbana de Balneário Camboriú, com 6 km de extensão." }
+    ],
+    intro: "Balneário Camboriú é o principal destino imobiliário do Sul do Brasil.",
+    history: "Fundada em 1964, a cidade não parou de crescer, tornando-se o metro quadrado mais caro do Sul do Brasil.",
+    safety: "Considerada uma das cidades mais seguras do Brasil para se viver e investir.",
+    highlights: ["Cristo Luz — Monumento e complexo turístico", "Parque Unipraias — Complexo de bondinho"]
+  },
+  "Florianópolis — SC": {
+    tagline: "A Ilha da Magia — qualidade de vida e natureza exuberante.",
+    images: [
+      "https://images.unsplash.com/photo-1564507592333-4b1d02b3f75a?w=800&q=80"
+    ],
+    beaches: [
+      { name: "Praia de Jurerê Internacional", desc: "Praia sofisticada com águas calmas." }
+    ],
+    intro: "Florianópolis é uma das capitais com melhor qualidade de vida do Brasil.",
+    history: "Fundada em 1726 pelos colonizadores açorianos.",
+    safety: "Índices de segurança variados por região. Bairros nobres são considerados seguros.",
+    highlights: ["Ponte Hercílio Luz — Cartão postal da cidade", "Centro Histórico — Casario açoriano"]
+  },
+  "Joinville — SC": {
+    tagline: "Maior cidade de SC — polo industrial com mercado imobiliário acessível.",
+    images: [
+      "https://images.unsplash.com/photo-1564507592333-4b1d02b3f75a?w=800&q=80"
+    ],
+    beaches: [
+      { name: "Praia do Vigorelli", desc: "Praia de água doce no rio Cachoeira." }
+    ],
+    intro: "Joinville é a maior cidade de Santa Catarina e o principal polo industrial do estado.",
+    history: "Fundada em 1851 por imigrantes europeus.",
+    safety: "Índices de segurança variados por bairro. Regiões centrais são seguras.",
+    highlights: ["Museu Nacional de Imigração — Maior museu sobre imigração do Brasil"]
+  }
+};
+
 
 
 /* ===================================================================

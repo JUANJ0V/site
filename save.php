@@ -1,7 +1,20 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 
-$password = 'fp2026';
+// Obtém a senha do api-config.php (DEVE estar configurado)
+$configFile = __DIR__ . '/api-config.php';
+if (!file_exists($configFile)) {
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'error' => 'api-config.php não encontrado. Crie o arquivo com define("API_PASSWORD", "sua_senha");']);
+    exit;
+}
+require_once $configFile;
+if (!defined('API_PASSWORD') || !API_PASSWORD) {
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'error' => 'API_PASSWORD não definida em api-config.php']);
+    exit;
+}
+$password = API_PASSWORD;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -23,13 +36,40 @@ if (!isset($body['content'])) {
     exit;
 }
 
-$file = __DIR__ . '/js/data.js';
-$written = file_put_contents($file, $body['content']);
+$content = $body['content'];
 
-if ($written === false) {
-    http_response_code(500);
-    echo json_encode(['ok' => false, 'error' => 'Erro ao escrever o arquivo']);
+// ── Validação básica ──
+$trimmed = trim($content);
+if (strlen($trimmed) < 10) {
+    http_response_code(400);
+    echo json_encode(['ok' => false, 'error' => 'Conteúdo muito curto']);
     exit;
 }
+
+// Verifica se parece JS válido (const/var/let/function)
+if (!preg_match('/\b(const|var|let|function|window|document|\/\/|\/\*)\b/', $trimmed)) {
+    http_response_code(400);
+    echo json_encode(['ok' => false, 'error' => 'Conteúdo não parece JavaScript válido']);
+    exit;
+}
+
+// ── Validação com Node.js (se disponível) ──
+$tmpFile = __DIR__ . '/js/data.tmp.js';
+if (file_put_contents($tmpFile, $content) === false) {
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'error' => 'Erro ao escrever arquivo temporário']);
+    exit;
+}
+
+$nodeOutput = shell_exec('node --check ' . escapeshellarg($tmpFile) . ' 2>&1');
+if ($nodeOutput !== null && strpos($nodeOutput, 'SyntaxError') !== false) {
+    unlink($tmpFile);
+    http_response_code(400);
+    echo json_encode(['ok' => false, 'error' => 'Erro de sintaxe JavaScript: ' . trim($nodeOutput)]);
+    exit;
+}
+
+// ── Se passou, move para o definitivo ──
+rename($tmpFile, __DIR__ . '/js/data.js');
 
 echo json_encode(['ok' => true, 'message' => 'data.js salvo com sucesso!']);

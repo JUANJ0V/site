@@ -109,9 +109,10 @@ var BASE_PATH = (function() {
 
 /* ===== SPA ROUTER HELPERS ===== */
 function getSectionId() {
+  var hash = window.location.hash.replace(/^#/, '');
+  if (hash) return hash;
   if (window.location.protocol === 'file:') return 'inicio';
   var p = window.location.pathname.replace(/\/+$/, '') || '/';
-  // Strip BASE_PATH prefix (normalize: compare with or without trailing slash)
   var bp = BASE_PATH.replace(/\/+$/, '');
   if (bp && p.indexOf(bp) === 0) {
     p = p.substring(bp.length) || '/';
@@ -134,19 +135,23 @@ function buildPropertyCardHTML(p, badgeClass, badgeText) {
   var propT = _propT(p.id);
   var desc = (propT && propT.desc) || p.desc;
   var title = (propT && propT.title) || p.title;
+  var beachHtml = p.beachDistance ? '<span>\uD83C\uDFD6\uFE0F ' + p.beachDistance + '</span>' : '';
   let propsHtml = "";
-  if (p.category === "Terreno") {
+  if (p.category === "Terreno/Lote") {
     propsHtml = '<span>\uD83D\uDCD0 ' + p.area + ' m\u00B2</span>'
       + '<span>\uD83D\uDCCD ' + ct.zone + ' ' + (p.zone || 'Urbana') + '</span>'
-      + '<span>\uD83E\uDDF1 ' + ct.topography + ' ' + (p.topography || 'Plana') + '</span>';
+      + '<span>\uD83E\uDDF1 ' + ct.topography + ' ' + (p.topography || 'Plana') + '</span>'
+      + beachHtml;
   } else if (p.category === "Comercial") {
-    propsHtml = '<span>\uD83D\uDDA5\uFE0F ' + ct.sala + '</span><span>\uD83D\uDEC1 ' + p.baths + (p.baths === 1 ? ' ' + ct.bathroom : ' ' + ct.bathrooms) + '</span><span>\uD83D\uDCD0 ' + p.area + ' m\u00B2</span>';
+    propsHtml = '<span>\uD83D\uDDA5\uFE0F ' + ct.sala + '</span><span>\uD83D\uDEC1 ' + p.baths + (p.baths === 1 ? ' ' + ct.bathroom : ' ' + ct.bathrooms) + '</span><span>\uD83D\uDCD0 ' + p.area + ' m\u00B2</span>'
+      + beachHtml;
   } else {
     propsHtml = '';
     if (p.beds) propsHtml += '<span>\uD83D\uDECF\uFE0F ' + p.beds + (p.beds === 1 ? ' ' + ct.bedroom : ' ' + ct.bedrooms) + '</span>';
     if (p.baths) propsHtml += '<span>\uD83D\uDEC1 ' + p.baths + (p.baths === 1 ? ' ' + ct.bathroom : ' ' + ct.bathrooms) + '</span>';
     if (p.garage) propsHtml += '<span>\uD83D\uDE97 ' + p.garage + (p.garage === 1 ? ' ' + ct.parking : ' ' + ct.parkings) + '</span>';
-    propsHtml += '<span>\uD83D\uDCD0 ' + p.area + ' m\u00B2</span>';
+    propsHtml += '<span>\uD83D\uDCD0 ' + p.area + ' m\u00B2</span>'
+      + beachHtml;
   }
 
   var tagsHtml = '';
@@ -186,6 +191,7 @@ function buildPropertyCardHTML(p, badgeClass, badgeText) {
     + '<p class="price">' + priceDisplay + '</p>'
     + '<p class="card-desc">' + desc + '</p>'
     + '<div class="props">' + propsHtml + '</div>'
+    + (p.address ? '<p class="card-address">\uD83D\uDCCD ' + p.address + '</p>' : '')
     + '<span class="card-link">' + ct.viewDetails + ' \u2192</span>'
     + '</div></a>'
     + (p.status && p.status !== 'disponivel'
@@ -282,16 +288,17 @@ function renderDetailCard(propId) {
   var detailTitle = (pT && pT.title) || p.title || '';
 
   let propsLgHtml = '';
-  if (p.category === "Terreno") {
+  if (p.category === "Terreno/Lote") {
     var frontText = p.front ? p.front + ' m' : '\u2014';
     var backText = p.back ? p.back + ' m' : '\u2014';
     propsLgHtml = '<span><span class="num">' + p.area + '</span><span class="lbl">' + ct.sqm + '</span></span>'
       + '<span><span class="num">' + frontText + '</span><span class="lbl">' + ct.front + '</span></span>'
       + '<span><span class="num">' + backText + '</span><span class="lbl">' + ct.backs + '</span></span>'
-      + '<span><span class="num">' + (p.zone || 'Urbana') + '</span><span class="lbl">' + ct.zone + '</span></span>';
+      + '<span><span class="num">' + (p.zone || 'Urbana') + '</span><span class="lbl">' + ct.zone + '</span></span>'
+      + (p.beachDistance ? '<span><span class="num">' + p.beachDistance + '</span><span class="lbl">metros da praia</span></span>' : '');
   } else {
     propsLgHtml = '';
-    if (p.beds && p.category !== "Comercial") {
+    if (p.beds && p.category !== "Comercial" && p.category !== "Terreno/Lote") {
       propsLgHtml += '<span><span class="num">' + p.beds + '</span><span class="lbl">' + (p.beds === 1 ? ct.bedroom.charAt(0).toUpperCase() + ct.bedroom.slice(1) : ct.bedrooms.charAt(0).toUpperCase() + ct.bedrooms.slice(1)) + '</span></span>';
     }
     if (p.baths) {
@@ -301,6 +308,7 @@ function renderDetailCard(propId) {
       propsLgHtml += '<span><span class="num">' + p.garage + '</span><span class="lbl">' + (p.garage <= 1 ? ct.parking.charAt(0).toUpperCase() + ct.parking.slice(1) : ct.parkings.charAt(0).toUpperCase() + ct.parkings.slice(1)) + '</span></span>';
     }
     propsLgHtml += '<span><span class="num">' + p.area + '</span><span class="lbl">' + ct.sqm + '</span></span>';
+    if (p.beachDistance) propsLgHtml += '<span><span class="num">' + p.beachDistance + '</span><span class="lbl">metros da praia</span></span>';
   }
 
   const locClean = p.location;
@@ -360,6 +368,7 @@ function renderDetailCard(propId) {
     + '<h1>' + detailTitle + '</h1>'
     + '<p class="price">' + (p.type === 'rent' && p.price.indexOf('/m\u00EAs') === -1 ? p.price + ' ' + ct.perMonth : p.price) + statusDetailHtml + '</p>'
     + '<div class="props-lg">' + propsLgHtml + '</div>'
+    + (p.address ? '<p class="detail-address">\uD83D\uDCCD ' + p.address + '</p>' : '')
     + '</div>'
     + '<div>'
     + '<div class="detail-gallery">'
@@ -383,9 +392,29 @@ function renderDetailCard(propId) {
     + '<button class="btn-gold-outline btn-share" onclick="shareProperty(\'' + p.id + '\')">' + ct.share + '</button>'
     + '<a href="/' + backSection + '/" class="btn-gold-outline">' + ct.otherProperties + '</a>'
     + '</div>'
+    + '<div class="detail-request" style="margin-top:2rem;border-top:1px solid var(--border);padding-top:1.5rem;">'
+    + '<p class="eyebrow" style="margin-bottom:0.5rem;cursor:pointer;" id="detailRequestToggle">Não encontrou o que procura? Solicite uma busca personalizada +</p>'
+    + '<div id="detailRequestForm" style="display:none;"><div class="request-form-grid" data-purpose="' + backSection + '"></div></div>'
+    + '</div>'
     + '</div>';
 
   document.body.appendChild(detailEl);
+
+  var toggle = detailEl.querySelector('#detailRequestToggle');
+  var formWrap = detailEl.querySelector('#detailRequestForm');
+  if (toggle && formWrap) {
+    toggle.addEventListener('click', function() {
+      var isOpen = formWrap.style.display !== 'none';
+      formWrap.style.display = isOpen ? 'none' : '';
+      toggle.textContent = isOpen
+        ? 'Não encontrou o que procura? Solicite uma busca personalizada +'
+        : 'Não encontrou o que procura? Solicite uma busca personalizada −';
+      if (!isOpen && !formWrap.querySelector('.req-input')) {
+        var grid = formWrap.querySelector('.request-form-grid');
+        if (grid) renderRequestForm(grid, grid.getAttribute('data-purpose') || 'comprar');
+      }
+    });
+  }
 }
 
 function renderEmpreendimentoCards() {
@@ -465,6 +494,11 @@ function renderEmpreendimentoDetail(empId) {
     descHtml += '<p>' + paragraphs[d] + '</p>';
   }
 
+  let empInfoHtml = '';
+  if (emp.beachDistance) {
+    empInfoHtml += '<span><span class="num">' + emp.beachDistance + '</span><span class="lbl">metros da praia</span></span>';
+  }
+
   const empEl = document.createElement('div');
   empEl.className = 'empreendimento';
   empEl.id = emp.id;
@@ -476,6 +510,8 @@ function renderEmpreendimentoDetail(empId) {
     + '<p>' + paragraphs[0] + '</p>'
     + '<p class="price-lg">' + emp.price + '</p>'
     + '<div class="emp-tags" style="margin-top:1rem;">' + tagsHtml + '</div>'
+    + (emp.address ? '<p class="emp-address">\uD83D\uDCCD ' + emp.address + '</p>' : '')
+    + (empInfoHtml ? '<div class="emp-props">' + empInfoHtml + '</div>' : '')
     + '</div>'
     + '<div>'
     + '<div class="media-grid">'
@@ -501,7 +537,10 @@ function renderEmpreendimentoDetail(empId) {
     + '<table class="price-table"><thead><tr><th>' + ct.unit + '</th><th>' + ct.area + '</th><th>' + ct.value + '</th></tr></thead><tbody>' + priceRowsHtml + '</tbody></table>'
     + '<h3>' + ct.paymentTerms + '</h3>'
     + '<div class="payment-plan">' + paymentHtml + '</div>'
-    + '<a href="/contato/" class="btn-primary" style="margin-top:1rem;">' + ct.wantToKnow + '</a>'
+    + '<div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:1rem;">'
+    + '<a href="/contato/" class="btn-primary">' + ct.wantToKnow + '</a>'
+    + (emp.maps ? '<a href="' + emp.maps + '" class="btn-gold-outline" target="_blank">' + ct.viewOnMap + '</a>' : '')
+    + '</div>'
     + '</div>'
     + '</div>'
     + '</div>';
@@ -625,7 +664,7 @@ function renderBlogPost(postId) {
     + '<h1>' + blogTitle + '</h1>'
     + '<p class="blog-detail-author">' + _cardT().by + ' ' + (post.author || 'Su Imobili\u00E1ria') + '</p>'
     + '</div>'
-    + '<div class="blog-detail-img"><img src="' + post.image + '" alt="' + blogTitle.replace(/"/g, '&quot;') + '" /></div>'
+    + '<div class="blog-detail-img"><img src="' + post.image + '" alt="' + blogTitle.replace(/"/g, '&quot;') + '" loading="lazy" /></div>'
     + '<div class="blog-detail-content">' + descHtml + '</div>'
     + '<div class="blog-detail-back"><a href="/blog/" class="btn-gold-outline">&larr; ' + _cardT().backToBlog + '</a></div>'
     + '</div>';
@@ -951,23 +990,35 @@ function setupMobileNav() {
     financiamento: ["financiamento"]
   };
 
+  function showLoading() {
+    var bar = document.getElementById('loading-bar');
+    if (bar) bar.classList.add('active');
+  }
+  function hideLoading() {
+    var bar = document.getElementById('loading-bar');
+    if (bar) bar.classList.remove('active');
+  }
+
   function navigate(id) {
+    showLoading();
+    var _navId = id;
+    requestAnimationFrame(function() {
     closeGallery();
     window.scrollTo(0, 0);
-    if (!id || id === "topo") {
-      id = "inicio";
+    if (!_navId || _navId === "topo") {
+      _navId = "inicio";
     }
     // Guard: skip if already showing this section (prevents flash)
-    if (groups[id]) {
-      var gs = document.getElementById(groups[id][0]);
-      if (gs && gs.classList.contains('active')) return;
+    if (groups[_navId]) {
+      var gs = document.getElementById(groups[_navId][0]);
+      if (gs && gs.classList.contains('active')) { hideLoading(); return; }
     }
-    if (id !== 'comprar' && id !== 'alugar' && id !== 'lancamentos') {
-      var gt = document.getElementById(id);
-      if (gt && gt.classList.contains('active')) return;
+    if (_navId !== 'comprar' && _navId !== 'alugar' && _navId !== 'lancamentos') {
+      var gt = document.getElementById(_navId);
+      if (gt && gt.classList.contains('active')) { hideLoading(); return; }
     }
     hideAll();
-    if (id.indexOf("prop-") === 0) {
+    if (_navId.indexOf("prop-") === 0) {
       pageContent.style.display = "none";
       renderDetailCard(id);
       const card = document.getElementById(id);
@@ -1033,6 +1084,8 @@ function setupMobileNav() {
         _searchActive = false;
       }
     }
+    hideLoading();
+    });
   }
   window._spaNavigate = navigate;
 
@@ -1057,6 +1110,7 @@ function setupMobileNav() {
     // Home link
     if (href === '/' || href === '/index.html') {
       e.preventDefault();
+      e.stopPropagation();
       goTo('inicio');
       return;
     }
@@ -1064,6 +1118,7 @@ function setupMobileNav() {
     var match = href.match(/^\/([^\/]+)\/?$/);
     if (match) {
       e.preventDefault();
+      e.stopPropagation();
       goTo(match[1]);
     }
   });
@@ -1162,8 +1217,15 @@ function setupMobileNav() {
     var container = document.getElementById('map');
     if (!container) return;
     _mapInstance = L.map('map', {
-      center: [-27.0, -48.6],
-      zoom: 9,
+      center: [-27.3, -50.5],
+      zoom: 7,
+      minZoom: 7,
+      maxZoom: 17,
+      maxBounds: [
+        [-29.5, -53.5],
+        [-25.5, -47.5]
+      ],
+      maxBoundsViscosity: 1.0,
       zoomControl: true
     });
     window._mapInstance = _mapInstance;
@@ -1182,7 +1244,7 @@ function setupMobileNav() {
       var img = p.img || '';
       var link = '/' + p.id + '/';
       var popupHtml = '<div style="min-width:180px;font-family:Inter,sans-serif;">'
-        + (img ? '<img src="' + img.replace('w=800', 'w=200') + '" alt="" style="width:100%;height:100px;object-fit:cover;border-radius:4px;margin-bottom:6px;" />' : '')
+        + (img ? '<img src="' + img.replace('w=800', 'w=200') + '" alt="" loading="lazy" style="width:100%;height:100px;object-fit:cover;border-radius:4px;margin-bottom:6px;" />' : '')
         + '<div style="font-size:0.8rem;font-weight:600;margin-bottom:2px;">' + title + '</div>'
         + '<div style="font-size:0.75rem;color:#888;">' + price + '</div>'
         + '<a href="' + link + '" style="display:inline-block;margin-top:4px;font-size:0.7rem;color:#d4af37;text-decoration:none;font-weight:600;">' + _cardT().viewDetails + ' &rarr;</a>'
@@ -1200,6 +1262,7 @@ function setupMobileNav() {
       var em = EMPREENDIMENTOS[ei];
       if (em.lat && em.lng) addMarker(em, '#10b981', 'empreendimento');
     }
+
   }
 
   // Invalidate map size when section is shown
@@ -1340,6 +1403,7 @@ function clearSearch() {
   document.getElementById('search-location').value = '';
   document.getElementById('search-price').value = '';
   document.getElementById('search-purpose').value = '';
+  if (typeof window._toggleHistoryMode === 'function') window._toggleHistoryMode(false);
   var target = prevPurpose === 'rent' ? 'alugar' : 'comprar';
   if (DISABLED_SECTIONS && DISABLED_SECTIONS.indexOf(target) !== -1) target = 'comprar';
   goTo(target);
@@ -1452,126 +1516,247 @@ function clearLancSearch() {
 }
 
 function handleSearch() {
-  const typeVal = document.getElementById('search-type').value;
-  const locationVal = document.getElementById('search-location').value;
-  const priceText = document.getElementById('search-price').value;
-  const purposeVal = document.getElementById('search-purpose').value;
+  try {
+    var typeVal_ = document.getElementById('search-type').value;
+    var locationVal_ = document.getElementById('search-location').value;
+    var priceText_ = document.getElementById('search-price').value;
+    var purposeVal_ = document.getElementById('search-purpose').value;
 
-  if (!typeVal && !locationVal && !priceText && !purposeVal) {
-    clearSearch();
-    return;
-  }
-
-  if (!_origCompraHTML) {
-    const c = document.querySelector('#comprar .grid-3');
-    if (c) _origCompraHTML = c.innerHTML;
-  }
-  if (!_origAlugaHTML) {
-    const a = document.querySelector('#alugar .grid-2');
-    if (a) _origAlugaHTML = a.innerHTML;
-  }
-
-  _searchActive = true;
-
-  const results = PROPERTIES.filter(function(p) {
-    if (purposeVal && p.type !== purposeVal) return false;
-    if (typeVal && p.category !== typeVal) return false;
-    if (locationVal && p.location !== locationVal) return false;
-    if (priceText) {
-      const maxPrice = parseFloat(priceText.replace(/[^0-9]/g, ''));
-      if (!isNaN(maxPrice) && p.priceNum > maxPrice) return false;
+    if (typeVal_ === 'history') {
+      try {
+        if (!locationVal_) {
+          document.getElementById('search-location').focus();
+          return;
+        }
+        renderLocationInfo(locationVal_);
+      } catch(e) {
+        console.error('Erro ao carregar informações da região:', e);
+      }
+      return;
     }
-    // Skip types from disabled sections
-    if (DISABLED_SECTIONS && DISABLED_SECTIONS.length) {
-      var typeToSection = { sale: 'comprar', rent: 'alugar' };
-      if (DISABLED_SECTIONS.indexOf(typeToSection[p.type]) !== -1) return false;
+
+    if (!typeVal_ && !locationVal_ && !priceText_ && !purposeVal_) {
+      clearSearch();
+      return;
     }
-    return true;
+
+    if (!_origCompraHTML) {
+      var _c = document.querySelector('#comprar .grid-3');
+      if (_c) _origCompraHTML = _c.innerHTML;
+    }
+    if (!_origAlugaHTML) {
+      var _a = document.querySelector('#alugar .grid-2');
+      if (_a) _origAlugaHTML = _a.innerHTML;
+    }
+
+    _searchActive = true;
+
+    var results_ = PROPERTIES.filter(function(p) {
+      if (purposeVal_ && p.type !== purposeVal_) return false;
+      if (typeVal_ && p.category !== typeVal_) return false;
+      if (locationVal_ && p.location !== locationVal_) return false;
+      if (priceText_) {
+        var maxPrice_ = parseFloat(priceText_.replace(/[^0-9]/g, ''));
+        if (!isNaN(maxPrice_) && p.priceNum > maxPrice_) return false;
+      }
+      if (DISABLED_SECTIONS && DISABLED_SECTIONS.length) {
+        var typeToSection_ = { sale: 'comprar', rent: 'alugar' };
+        if (DISABLED_SECTIONS.indexOf(typeToSection_[p.type]) !== -1) return false;
+      }
+      return true;
+    });
+
+    var showSale_ = purposeVal_ !== 'rent';
+    var showRent_ = purposeVal_ !== 'sale';
+
+    if (showSale_) {
+      var container_ = document.querySelector('#comprar .grid-3');
+      if (container_) {
+        var saleResults_ = results_.filter(function(p) { return p.type === 'sale'; });
+        var html_ = '';
+        if (saleResults_.length === 0) {
+          html_ = '<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted-foreground);">'
+            + '<p style="font-size:1.25rem;margin-bottom:0.5rem;">Nenhum im\u00F3vel \u00E0 venda encontrado</p>'
+            + '</div>';
+        } else {
+          for (var i_ = 0; i_ < saleResults_.length; i_++) {
+            html_ += buildPropertyCardHTML(saleResults_[i_], 'badge-sale', 'Venda');
+          }
+        }
+        if (purposeVal_ !== 'rent') {
+          html_ += '<div style="grid-column:1/-1;text-align:center;padding:1rem 0;">'
+            + '<button onclick="clearSearch()" class="btn-gold-outline" style="font-size:0.7rem;padding:0.6rem 1.5rem;cursor:pointer;">Limpar busca</button></div>';
+        }
+        container_.innerHTML = html_;
+        if (typeof window._revealObserver !== 'undefined') {
+          container_.querySelectorAll('.reveal').forEach(function(el) { window._revealObserver.observe(el); });
+        }
+      }
+    }
+
+    if (showRent_) {
+      var container_ = document.querySelector('#alugar .grid-2');
+      if (container_) {
+        var rentResults_ = results_.filter(function(p) { return p.type === 'rent'; });
+        var html_ = '';
+        if (rentResults_.length === 0) {
+          html_ = '<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted-foreground);">'
+            + '<p style="font-size:1.25rem;margin-bottom:0.5rem;">Nenhum im\u00F3vel para alugar encontrado</p>'
+            + '</div>';
+        } else {
+          for (var i_ = 0; i_ < rentResults_.length; i_++) {
+            html_ += buildPropertyCardHTML(rentResults_[i_], 'badge-rent', 'Aluguel');
+          }
+        }
+        if (purposeVal_ !== 'sale') {
+          html_ += '<div style="grid-column:1/-1;text-align:center;padding:1rem 0;">'
+            + '<button onclick="clearSearch()" class="btn-gold-outline" style="font-size:0.7rem;padding:0.6rem 1.5rem;cursor:pointer;">Limpar busca</button></div>';
+        }
+        container_.innerHTML = html_;
+        if (typeof window._revealObserver !== 'undefined') {
+          container_.querySelectorAll('.reveal').forEach(function(el) { window._revealObserver.observe(el); });
+        }
+      }
+    }
+
+    if (!_origLancHTML) {
+      var _l = document.querySelector('#lancamentos .grid-3');
+      if (_l) _origLancHTML = _l.innerHTML;
+    }
+    var lancContainer_ = document.querySelector('#lancamentos .grid-3');
+    if (lancContainer_) {
+      if (locationVal_) {
+        var lancResults_ = EMPREENDIMENTOS.filter(function(e) {
+          return e.location.indexOf(locationVal_) !== -1;
+        });
+        var lancHtml_ = '';
+        for (var li_ = 0; li_ < lancResults_.length; li_++) {
+          lancHtml_ += buildLancCardHTML(lancResults_[li_]);
+        }
+        lancContainer_.innerHTML = lancHtml_ || '<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted-foreground);"><p style="font-size:1.25rem;">Nenhum lan\u00E7amento encontrado nesta regi\u00E3o</p></div>';
+      } else {
+        lancContainer_.innerHTML = _origLancHTML;
+      }
+    }
+
+    var target_ = showSale_ ? 'comprar' : 'alugar';
+    if (DISABLED_SECTIONS && DISABLED_SECTIONS.indexOf(target_) !== -1) target_ = 'comprar';
+    goTo(target_);
+    if (target_ !== 'inicio') {
+      setTimeout(function() {
+        var el = document.getElementById(target_);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  } catch(e) {
+    console.error('handleSearch error:', e);
+  }
+}
+
+/* ===== CONHECER A REGIÃO ===== */
+function renderLocationInfo(location) {
+  var info = typeof LOCATIONS_INFO !== 'undefined' ? LOCATIONS_INFO[location] : null;
+  if (!info) return;
+
+  var section = document.getElementById('location-info');
+  var content = document.getElementById('location-info-content');
+  if (!section || !content) return;
+
+  var imgHtml = '';
+  if (info.images && info.images.length) {
+    imgHtml = '<div class="loc-gallery">';
+    for (var gi = 0; gi < info.images.length; gi++) {
+      imgHtml += '<img src="' + info.images[gi] + '" alt="' + location + '" loading="lazy" />';
+    }
+    imgHtml += '</div>';
+  }
+
+  var beachesHtml = '';
+  if (typeof info.beaches === 'string') {
+    beachesHtml = '<p>' + info.beaches + '</p>';
+  } else if (info.beaches && info.beaches.length) {
+    beachesHtml = '<ul class="loc-beaches">';
+    for (var bi = 0; bi < info.beaches.length; bi++) {
+      beachesHtml += '<li><strong>' + info.beaches[bi].name + '</strong> — ' + info.beaches[bi].desc + '</li>';
+    }
+    beachesHtml += '</ul>';
+  }
+
+  var highlightsHtml = '';
+  if (info.highlights && info.highlights.length) {
+    highlightsHtml = '<ul class="loc-highlights">';
+    for (var hi = 0; hi < info.highlights.length; hi++) {
+      var parts = info.highlights[hi].split(' — ');
+      highlightsHtml += '<li' + (parts.length > 1 ? ' class="has-desc"' : '') + '><strong>' + parts[0] + '</strong>' + (parts.length > 1 ? '<span>' + parts[1] + '</span>' : '') + '</li>';
+    }
+    highlightsHtml += '</ul>';
+  }
+
+  var html = ''
+    + '<div class="loc-header">'
+    + '<p class="eyebrow">Conhecer a região</p>'
+    + '<div class="gold-rule"></div>'
+    + '<h2>' + location + '</h2>'
+    + '<p class="loc-tagline">' + info.tagline + '</p>'
+    + '</div>'
+    + imgHtml
+    + '<div class="loc-body">'
+    + '<div class="loc-section"><h3>Sobre ' + location + '</h3><p>' + info.intro + '</p></div>'
+    + '<div class="loc-section"><h3>Praias</h3>' + beachesHtml + '</div>'
+    + '<div class="loc-section"><h3>História</h3><p>' + info.history + '</p></div>'
+    + '<div class="loc-section"><h3>Segurança</h3><p>' + info.safety + '</p></div>'
+    + '<div class="loc-section"><h3>Pontos de Interesse</h3>' + highlightsHtml + '</div>'
+    + '</div>';
+
+  content.innerHTML = html;
+  document.querySelectorAll('.page-content > section[id]').forEach(function(s) {
+    s.classList.remove('active');
   });
+  section.style.display = '';
+  section.classList.add('active');
 
-  const showSale = purposeVal !== 'rent';
-  const showRent = purposeVal !== 'sale';
+  var title = document.querySelector('title');
+  if (title) title.textContent = 'Conhecer ' + location + ' — Furpal Assessoria Imobili\u00E1ria Internacional';
+  var desc = document.querySelector('meta[name="description"]');
+  if (desc) desc.content = 'Conheça ' + location + ': praias, história, segurança e pontos turísticos. ' + info.tagline + '.';
+  var ogTitle = document.querySelector('meta[property="og:title"]');
+  if (ogTitle) ogTitle.content = 'Conhecer ' + location + ' — ' + SITE_NAME;
+  var ogDesc = document.querySelector('meta[property="og:description"]');
+  if (ogDesc) ogDesc.content = 'Conheça ' + location + ': praias, história, segurança e pontos turísticos. ' + info.tagline + '.';
 
-  if (showSale) {
-    const container = document.querySelector('#comprar .grid-3');
-    if (container) {
-      const saleResults = results.filter(function(p) { return p.type === 'sale'; });
-      let html = '';
-      if (saleResults.length === 0) {
-        html = '<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted-foreground);">'
-          + '<p style="font-size:1.25rem;margin-bottom:0.5rem;">Nenhum im\u00F3vel \u00E0 venda encontrado</p>'
-          + '</div>';
-      } else {
-        for (let i = 0; i < saleResults.length; i++) {
-          html += buildPropertyCardHTML(saleResults[i], 'badge-sale', 'Venda');
-        }
-      }
-      if (purposeVal !== 'rent') {
-        html += '<div style="grid-column:1/-1;text-align:center;padding:1rem 0;">'
-          + '<button onclick="clearSearch()" class="btn-gold-outline" style="font-size:0.7rem;padding:0.6rem 1.5rem;cursor:pointer;">Limpar busca</button></div>';
-      }
-      container.innerHTML = html;
-      if (typeof window._revealObserver !== 'undefined') {
-        container.querySelectorAll('.reveal').forEach(function(el) { window._revealObserver.observe(el); });
-      }
-    }
+  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function closeLocationInfo() {
+  var section = document.getElementById('location-info');
+  if (section) {
+    section.style.display = 'none';
+    section.classList.remove('active');
+  }
+  var inicio = document.getElementById('inicio');
+  if (inicio) {
+    document.querySelectorAll('.page-content > section[id]').forEach(function(s) {
+      s.classList.remove('active');
+    });
+    inicio.classList.add('active');
+  }
+  resetMetaTags();
+
+  document.getElementById('search-type').value = '';
+  document.getElementById('search-location').value = '';
+  document.getElementById('search-purpose').value = '';
+  document.getElementById('search-price').value = '';
+  if (typeof window._toggleHistoryMode === 'function') {
+    window._toggleHistoryMode(false);
   }
 
-  if (showRent) {
-    const container = document.querySelector('#alugar .grid-2');
-    if (container) {
-      const rentResults = results.filter(function(p) { return p.type === 'rent'; });
-      let html = '';
-      if (rentResults.length === 0) {
-        html = '<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted-foreground);">'
-          + '<p style="font-size:1.25rem;margin-bottom:0.5rem;">Nenhum im\u00F3vel para alugar encontrado</p>'
-          + '</div>';
-      } else {
-        for (let i = 0; i < rentResults.length; i++) {
-          html += buildPropertyCardHTML(rentResults[i], 'badge-rent', 'Aluguel');
-        }
-      }
-      if (purposeVal !== 'sale') {
-        html += '<div style="grid-column:1/-1;text-align:center;padding:1rem 0;">'
-          + '<button onclick="clearSearch()" class="btn-gold-outline" style="font-size:0.7rem;padding:0.6rem 1.5rem;cursor:pointer;">Limpar busca</button></div>';
-      }
-      container.innerHTML = html;
-      if (typeof window._revealObserver !== 'undefined') {
-        container.querySelectorAll('.reveal').forEach(function(el) { window._revealObserver.observe(el); });
-      }
-    }
-  }
-
-  // Search lancamentos by location
-  if (!_origLancHTML) {
-    const l = document.querySelector('#lancamentos .grid-3');
-    if (l) _origLancHTML = l.innerHTML;
-  }
-  const lancContainer = document.querySelector('#lancamentos .grid-3');
-  if (lancContainer) {
-    if (locationVal) {
-      const lancResults = EMPREENDIMENTOS.filter(function(e) {
-        return e.location.indexOf(locationVal) !== -1;
-      });
-      let lancHtml = '';
-      for (let i = 0; i < lancResults.length; i++) {
-        lancHtml += buildLancCardHTML(lancResults[i]);
-      }
-      lancContainer.innerHTML = lancHtml || '<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted-foreground);"><p style="font-size:1.25rem;">Nenhum lan\u00E7amento encontrado nesta regi\u00E3o</p></div>';
-    } else {
-      lancContainer.innerHTML = _origLancHTML;
-    }
-  }
-
-  var target = showSale ? 'comprar' : 'alugar';
-  if (DISABLED_SECTIONS && DISABLED_SECTIONS.indexOf(target) !== -1) target = 'comprar';
-  goTo(target);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 /* ===== SEO META TAGS ===== */
 function updateMetaTags(p) {
   var title = document.querySelector('title');
-  if (title) title.textContent = p.title + ' \u2014 ' + SITE_NAME;
+  if (title) title.textContent = p.title + ' \u2014 Furpal Assessoria Imobili\u00E1ria Internacional';
   var pDesc = p.desc || (p.description ? p.description.split('\n\n')[0] : '');
   var desc = document.querySelector('meta[name="description"]');
   if (desc) desc.content = (pDesc || p.title) + ' \u2014 ' + SITE_NAME;
@@ -1587,18 +1772,113 @@ function updateMetaTags(p) {
 
 function resetMetaTags() {
   var title = document.querySelector('title');
-  if (title) title.textContent = SITE_NAME + ' \u2014 Im\u00F3veis \u00E0 venda e aluguel';
+  if (title) title.textContent = 'Furpal Assessoria Imobili\u00E1ria Internacional';
   var desc = document.querySelector('meta[name="description"]');
-  if (desc) desc.content = 'Su Imobili\u00E1ria \u2014 mais de 15 anos no litoral catarinense. Im\u00F3veis \u00E0 venda e aluguel em Balne\u00E1rio Cambori\u00FA, Florian\u00F3polis, Itapema, Bombinhas e Joinville.';
+  if (desc) desc.content = 'Furpal \u2014 Assessoria Imobili\u00E1ria Internacional. Im\u00F3veis \u00E0 venda e aluguel em Balne\u00E1rio Cambori\u00FA, Florian\u00F3polis, Itapema, Bombinhas e Joinville.';
   var ogTitle = document.querySelector('meta[property="og:title"]');
-  if (ogTitle) ogTitle.content = SITE_NAME + ' \u2014 Im\u00F3veis \u00E0 venda e aluguel';
+  if (ogTitle) ogTitle.content = 'Furpal Assessoria Imobili\u00E1ria Internacional';
   var ogDesc = document.querySelector('meta[property="og:description"]');
   if (ogDesc) ogDesc.content = 'Mais de 15 anos transformando sonhos em endere\u00E7os no litoral catarinense.';
   var ogImg = document.querySelector('meta[property="og:image"]');
   if (ogImg) ogImg.content = 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80';
-  var ogUrl = document.querySelector('meta[property="og:url"]');
-  if (ogUrl) ogUrl.content = window.location.origin + window.location.pathname;
+   var ogUrl = document.querySelector('meta[property="og:url"]');
+   if (ogUrl) ogUrl.content = window.location.origin + window.location.pathname;
+ }
+
+/* ===== LEAD CAPTURE — SOLICITAR IMÓVEL ===== */
+var REQUEST_FORM_TYPES = [
+  "Apartamento", "Casa", "Cobertura", "Kitnet/Studio", "Comercial", "Terreno/Lote"
+];
+var REQUEST_FORM_CITIES = [];
+
+(function() {
+  var citySet = {};
+  for (var ri = 0; ri < PROPERTIES.length; ri++) {
+    var loc = PROPERTIES[ri].location.replace(/ — SC$/, '');
+    citySet[loc] = true;
+  }
+  REQUEST_FORM_CITIES = Object.keys(citySet).sort();
+})();
+
+function renderRequestForm(container, purpose) {
+  if (!container) return;
+  var html = ''
+    + '<div style="display:grid;gap:0.75rem;grid-template-columns:1fr 1fr;">'
+    + '<div style="display:grid;gap:0.35rem;"><label class="req-label">Nome</label><input type="text" class="req-input rf-name" placeholder="Seu nome" /></div>'
+    + '<div style="display:grid;gap:0.35rem;"><label class="req-label">WhatsApp</label><input type="tel" class="req-input rf-phone" placeholder="(47) 99999-9999" /></div>'
+    + '<div style="display:grid;gap:0.35rem;"><label class="req-label">Tipo de imóvel</label><select class="req-input rf-type"><option value="">Qualquer</option>';
+  for (var ti = 0; ti < REQUEST_FORM_TYPES.length; ti++) {
+    html += '<option>' + REQUEST_FORM_TYPES[ti] + '</option>';
+  }
+  html += '</select></div>'
+    + '<div style="display:grid;gap:0.35rem;"><label class="req-label">Cidade</label><select class="req-input rf-city"><option value="">Qualquer</option>';
+  for (var ci = 0; ci < REQUEST_FORM_CITIES.length; ci++) {
+    html += '<option>' + REQUEST_FORM_CITIES[ci] + '</option>';
+  }
+  html += '</select></div>'
+    + '<div style="display:grid;gap:0.35rem;"><label class="req-label">Faixa de preço (min)</label><input type="number" class="req-input rf-price-min" placeholder="R$ 0" min="0" step="10000" /></div>'
+    + '<div style="display:grid;gap:0.35rem;"><label class="req-label">Faixa de preço (max)</label><input type="number" class="req-input rf-price-max" placeholder="R$ 5.000.000" min="0" step="10000" /></div>'
+    + '</div>'
+    + '<div style="display:grid;gap:0.35rem;margin-top:0.5rem;"><label class="req-label">Detalhes do que procura</label><textarea class="req-input rf-msg" rows="3" placeholder="Ex: 3 quartos, suíte, garagem, próximo à praia..."></textarea></div>'
+    + '<button class="btn-primary req-submit" style="margin-top:0.75rem;">Solicitar via WhatsApp</button>';
+  container.innerHTML = html;
+
+  var btn = container.querySelector('.req-submit');
+  if (btn) {
+    btn.addEventListener('click', function() {
+      submitRequestForm(container, purpose);
+    });
+  }
 }
+
+function submitRequestForm(container, purpose) {
+  var name = (container.querySelector('.rf-name') || {}).value || '';
+  var phone = (container.querySelector('.rf-phone') || {}).value || '';
+  var type = (container.querySelector('.rf-type') || {}).value || '';
+  var city = (container.querySelector('.rf-city') || {}).value || '';
+  var priceMin = (container.querySelector('.rf-price-min') || {}).value || '';
+  var priceMax = (container.querySelector('.rf-price-max') || {}).value || '';
+  var msg = (container.querySelector('.rf-msg') || {}).value || '';
+
+  if (!name || !phone) {
+    var err = container.querySelector('.rf-error');
+    if (!err) {
+      err = document.createElement('p');
+      err.className = 'rf-error';
+      err.style.cssText = 'color:#e74c3c;font-size:0.85rem;margin:0.5rem 0 0;';
+      container.querySelector('.req-submit').parentNode.appendChild(err);
+    }
+    err.textContent = 'Por favor, preencha seu nome e WhatsApp para receber a busca personalizada.';
+    return;
+  }
+
+  var purposeLabel = purpose === 'alugar' ? 'Aluguel' : 'Compra';
+  var lines = [
+    'Olá, gostaria de solicitar uma busca personalizada de imóveis!',
+    '',
+    'Nome: ' + name,
+    'WhatsApp: ' + phone,
+    'Finalidade: ' + purposeLabel,
+  ];
+  if (type) lines.push('Tipo: ' + type);
+  if (city) lines.push('Cidade: ' + city);
+  if (priceMin) lines.push('Preço mínimo: R$ ' + priceMin);
+  if (priceMax) lines.push('Preço máximo: R$ ' + priceMax);
+  if (msg) lines.push('Detalhes: ' + msg);
+
+  var fullMsg = lines.join('\n');
+  var url = WHATSAPP_URL + '?text=' + encodeURIComponent(fullMsg);
+  window.open(url, '_blank');
+}
+
+/* ===== INIT LEAD FORMS ===== */
+(function() {
+  var containers = document.querySelectorAll('.request-form-grid');
+  for (var ri2 = 0; ri2 < containers.length; ri2++) {
+    var c = containers[ri2];
+    renderRequestForm(c, c.getAttribute('data-purpose') || 'comprar');
+  }
+})();
 
 
 

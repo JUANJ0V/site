@@ -2,7 +2,7 @@
    ADMIN PANEL — Configuração
    =================================================================== */
 
-const ADMIN_ENABLED = true; // ← Mude para true para ativar o painel
+const ADMIN_ENABLED = true;
 const ADMIN_USER    = "admin";
 const ADMIN_PASS    = "admin123";
 const GITHUB_REPO   = "JUANJ0V/site";
@@ -800,7 +800,7 @@ const GITHUB_PATH   = "js/data.js";
       '<div class="row2"><div><label>Título</label><input id="prop_title" value="' + esc(p.title) + '"></div>'
       + '<div><label>ID (único)</label><input id="prop_id" value="' + esc(p.id) + '"></div></div>'
       + '<div class="row3"><div><label>Tipo</label><select id="prop_type"><option value="sale"' + (p.type==='sale'?' selected':'') + '>Venda</option><option value="rent"' + (p.type==='rent'?' selected':'') + '>Aluguel</option></select></div>'
-      + '<div><label>Categoria</label><select id="prop_cat"><option value="Apartamento"' + (p.category==='Apartamento'?' selected':'') + '>Apartamento</option><option value="Casa"' + (p.category==='Casa'?' selected':'') + '>Casa</option><option value="Cobertura"' + (p.category==='Cobertura'?' selected':'') + '>Cobertura</option><option value="Kitnet/Studio"' + (p.category==='Kitnet/Studio'?' selected':'') + '>Kitnet/Studio</option><option value="Comercial"' + (p.category==='Comercial'?' selected':'') + '>Comercial</option><option value="Terreno"' + (p.category==='Terreno'?' selected':'') + '>Terreno</option></select></div>'
+      + '<div><label>Categoria</label><select id="prop_cat"><option value="Apartamento"' + (p.category==='Apartamento'?' selected':'') + '>Apartamento</option><option value="Casa"' + (p.category==='Casa'?' selected':'') + '>Casa</option><option value="Cobertura"' + (p.category==='Cobertura'?' selected':'') + '>Cobertura</option><option value="Kitnet/Studio"' + (p.category==='Kitnet/Studio'?' selected':'') + '>Kitnet/Studio</option><option value="Comercial"' + (p.category==='Comercial'?' selected':'') + '>Comercial</option><option value="Terreno/Lote"' + (p.category==='Terreno/Lote'?' selected':'') + '>Terreno/Lote</option></select></div>'
       + '<div><label>Status</label><select id="prop_status"><option value="disponivel"' + ((p.status||'disponivel')==='disponivel'?' selected':'') + '>Disponível</option><option value="vendido"' + (p.status==='vendido'?' selected':'') + '>Vendido</option><option value="locado"' + (p.status==='locado'?' selected':'') + '>Locado</option></select></div></div>'
       + '<div class="row3"><div><label>Preço (texto)</label><input id="prop_price" value="' + esc(p.price) + '"></div>'
       + '<div><label>Preço (número)</label><input id="prop_priceNum" type="number" value="' + (p.priceNum||0) + '"></div>'
@@ -887,7 +887,7 @@ const GITHUB_PATH   = "js/data.js";
       gallery: ['https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=1200&q=80'],
       video: '', tags: ['LANÇAMENTO'], progress: 0, progressLabel: '0%',
       delivery: '', plants: [], timeline: [], amenities: [], prices: [], payment: [],
-      lat: -26.99, lng: -48.63
+      lat: -26.99, lng: -48.63, address: '', beachDistance: '', maps: ''
     });
     editEmp(_data.EMPREENDIMENTOS.length - 1);
   };
@@ -905,6 +905,9 @@ const GITHUB_PATH   = "js/data.js";
       + '</div><div><label>Previsão entrega</label><input id="emp_delivery" value="' + esc(e.delivery||'') + '" placeholder="ex: jun/2027">'
       + '</div><div><label>Tags (separadas por vírgula)</label><input id="emp_tags" value="' + esc((e.tags||[]).join(', ')) + '" placeholder="LANÇAMENTO, VISTA PARA O MAR"></div></div>'
       + '<label>Localização</label><input id="emp_loc" value="' + esc(e.location) + '">'
+      + '<label>Endereço</label><input id="emp_address" value="' + esc(e.address||'') + '" placeholder="Av. Atlântica, 1500 — Centro, Balneário Camboriú — SC">'
+      + '<div class="row2"><div><label>Distância da praia</label><input id="emp_beach" value="' + esc(e.beachDistance||'') + '" placeholder="200 m"></div>'
+      + '<div><label>URL do Maps</label><input id="emp_maps" value="' + esc(e.maps||'') + '" placeholder="https://www.google.com/maps?q=..."></div></div>'
       + '<div class="row2"><div><label>Latitude</label><input id="emp_lat" type="number" step="any" value="' + (e.lat||'') + '"></div>'
       + '<div><label>Longitude</label><input id="emp_lng" type="number" step="any" value="' + (e.lng||'') + '"></div></div>'
       + '<label>Descrição</label><textarea id="emp_desc" rows="4">' + esc(e.description || '') + '</textarea>'
@@ -919,6 +922,9 @@ const GITHUB_PATH   = "js/data.js";
         e.price = gv('emp_price');
         e.priceNum = parseFloat(gv('emp_priceNum')) || 0;
         e.location = gv('emp_loc');
+        e.address = gv('emp_address');
+        e.beachDistance = gv('emp_beach');
+        e.maps = gv('emp_maps');
         e.lat = parseFloat(gv('emp_lat')) || -26.99;
         e.lng = parseFloat(gv('emp_lng')) || -48.63;
         e.description = gv('emp_desc');
@@ -1639,7 +1645,7 @@ const GITHUB_PATH   = "js/data.js";
     var cName = c.SITE_NAME || '';
     document.querySelectorAll('.site-logo').forEach(function(el) {
       if (c.SITE_LOGO) {
-        el.innerHTML = '<img src="' + esc(c.SITE_LOGO) + '" alt="' + cName.replace(/"/g, '&quot;') + '" />';
+        el.innerHTML = '<img src="' + esc(c.SITE_LOGO) + '" alt="' + cName.replace(/"/g, '&quot;') + '" loading="lazy" />';
       } else if (cName) {
         var words = cName.split(' ');
         el.innerHTML = words.length > 1 ? words[0] + ' <span>' + words.slice(1).join(' ') + '</span>' : cName;
