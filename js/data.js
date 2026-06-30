@@ -113,13 +113,7 @@ const TEAM = [
     desc: "Focada em atender clientes internacionais e investidores estrangeiros em todo o litoral catarinense.",
     social: { instagram: "https://instagram.com/", whatsapp: "https://wa.me/554788079254", site:"https://google.com" }
   },
-  {
-    name: "Rafael Oliveira",
-    role: "Analista de Financiamento",
-    photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80",
-    desc: "Responsável por viabilizar as melhores condições de financiamento para cada perfil de cliente.",
-    social: { instagram: "https://instagram.com/", whatsapp: "https://wa.me/554788079254" }
-  },
+  
   // {
   //   name: "Juliana Costa",
   //   role: "Marketing & Relacionamento",
