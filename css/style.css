@@ -2494,16 +2494,16 @@
 
   .back-top {
     position: fixed;
-    bottom: 5rem;
-    left: 1.5rem;
+    bottom: 7rem;
+    right: 1.5rem;
     z-index: 999;
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
-    border: 1px solid var(--gold);
+    border: 2px solid var(--gold);
     background: var(--card);
     color: var(--gold);
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     cursor: pointer;
     opacity: 0;
     transform: translateY(20px);
@@ -2515,4 +2515,4 @@
   }
   .back-top.visible { opacity: 1; transform: translateY(0); }
   .back-top:hover { background: var(--gold); color: var(--card); }
-  @media (max-width: 768px) { .back-top { bottom: 5rem; left: 1rem; width: 36px; height: 36px; font-size: 1rem; } }
+  @media (max-width: 768px) { .back-top { bottom: 6.5rem; right: 1rem; width: 44px; height: 44px; font-size: 1.3rem; } }
