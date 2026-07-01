@@ -1140,14 +1140,14 @@
     }
 
     .team-body {
-      padding: 1rem 0.75rem 1.25rem;
+      padding: 1.25rem 0.75rem 1.25rem;
     }
 
     .team-name {
       font-family: var(--font-serif);
       font-size: 1rem;
       color: #fff;
-      margin-bottom: 0.2rem;
+      margin-bottom: 0.35rem;
     }
 
     .team-role {
@@ -1155,14 +1155,14 @@
       text-transform: uppercase;
       letter-spacing: 0.12em;
       color: var(--gold);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
     }
 
     .team-desc {
       font-size: 0.75rem;
       color: rgba(255,255,255,0.65);
       line-height: 1.4;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.75rem;
     }
 
     .team-social-row {
