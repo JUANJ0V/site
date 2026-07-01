@@ -486,7 +486,9 @@ const GITHUB_PATH   = "js/data.js";
         FAQS:         JSON.parse(JSON.stringify(typeof FAQS !== 'undefined' ? FAQS : [])),
         DEPOIMENTOS:  JSON.parse(JSON.stringify(typeof DEPOIMENTOS !== 'undefined' ? DEPOIMENTOS : [])),
         PARCEIROS:    JSON.parse(JSON.stringify(typeof PARCEIROS !== 'undefined' ? PARCEIROS : [])),
-        BLOG_POSTS:   JSON.parse(JSON.stringify(typeof BLOG_POSTS !== 'undefined' ? BLOG_POSTS : []))
+        BLOG_POSTS:   JSON.parse(JSON.stringify(typeof BLOG_POSTS !== 'undefined' ? BLOG_POSTS : [])),
+        TEAM:         JSON.parse(JSON.stringify(typeof TEAM !== 'undefined' ? TEAM : [])),
+        LOCATIONS_INFO: JSON.parse(JSON.stringify(typeof LOCATIONS_INFO !== 'undefined' ? LOCATIONS_INFO : {}))
       };
       var contentEl = document.getElementById('adminContent');
       if (contentEl) contentEl.innerHTML = '<p style="color:rgba(255,255,255,0.3);padding:1rem;font-size:0.85rem;">Carregando…</p>';
@@ -568,6 +570,10 @@ const GITHUB_PATH   = "js/data.js";
     map.FIN_DEFAULT_TERM  = typeof FIN_DEFAULT_TERM  !== 'undefined' ? FIN_DEFAULT_TERM  : 240;
     map.SECTION_FINANCIAMENTO_EYEBROW = typeof SECTION_FINANCIAMENTO_EYEBROW !== 'undefined' ? SECTION_FINANCIAMENTO_EYEBROW : 'Financiamento';
     map.SECTION_FINANCIAMENTO_TITLE   = typeof SECTION_FINANCIAMENTO_TITLE   !== 'undefined' ? SECTION_FINANCIAMENTO_TITLE   : 'Simule seu financiamento imobiliário';
+    map.SECTION_STATS_EYEBROW   = typeof SECTION_STATS_EYEBROW   !== 'undefined' ? SECTION_STATS_EYEBROW   : 'Equipe';
+    map.SECTION_STATS_TITLE     = typeof SECTION_STATS_TITLE     !== 'undefined' ? SECTION_STATS_TITLE     : '';
+    map.SECTION_PRIVACIDADE_EYEBROW = typeof SECTION_PRIVACIDADE_EYEBROW !== 'undefined' ? SECTION_PRIVACIDADE_EYEBROW : 'LGPD';
+    map.SECTION_PRIVACIDADE_TITLE   = typeof SECTION_PRIVACIDADE_TITLE   !== 'undefined' ? SECTION_PRIVACIDADE_TITLE   : 'Política de Privacidade';
     return map;
   }
 
@@ -583,6 +589,7 @@ const GITHUB_PATH   = "js/data.js";
       { id:'faq', label:'❓ FAQ' },
       { id:'depoimentos', label:'💬 Depoimentos' },
       { id:'parceiros', label:'🤝 Parceiros' },
+      { id:'team', label:'👥 Equipe' },
       { id:'users', label:'👥 Usuários' },
       { id:'settings', label:'🔑 Config' }
     ];
@@ -653,6 +660,7 @@ const GITHUB_PATH   = "js/data.js";
         case 'faq': renderFaq(div); break;
         case 'depoimentos': renderAdminDepoimentos(div); break;
         case 'parceiros': renderAdminParceiros(div); break;
+        case 'team': renderAdminTeam(div); break;
         case 'users': renderUsers(div); break;
         case 'settings': renderSettings(div); break;
       }
@@ -1180,6 +1188,69 @@ const GITHUB_PATH   = "js/data.js";
   };
 
   /* =================================================================
+     TEAM — Equipe
+     ================================================================= */
+  function renderAdminTeam(container) {
+    var html = '<h2>👥 Equipe (' + _data.TEAM.length + ')</h2><p class="desc">Membros da equipe Furpal.</p>';
+    html += '<button class="btn-add" onclick="addTeamMember()">+ Novo Membro</button>';
+    html += '<table class="admin-table"><thead><tr><th>Nome</th><th>Cargo</th><th class="actions">Ações</th></tr></thead><tbody>';
+    _data.TEAM.forEach(function(m, i) {
+      html += '<tr><td>' + esc(m.name) + '</td><td>' + esc(m.role) + '</td>'
+        + '<td class="actions"><button onclick="editTeamMember(' + i + ')">✏️</button><button class="btn-del" onclick="delTeamMember(' + i + ')">🗑️</button></td></tr>';
+    });
+    html += '</tbody></table>';
+    container.innerHTML = html;
+  }
+
+  window.addTeamMember = function() {
+    _data.TEAM.push({ name: 'Novo Membro', role: '', photo: '', desc: '', social: { instagram: '', whatsapp: '', linkedin: '', facebook: '', youtube: '', site: '' } });
+    editTeamMember(_data.TEAM.length - 1);
+  };
+
+  window.editTeamMember = function(idx) {
+    var m = _data.TEAM[idx];
+    var social = m.social || {};
+    openModal('✏️ Editar Membro',
+      '<label>Nome</label><input id="tm_name" value="' + esc(m.name) + '">'
+      + '<label>Cargo</label><input id="tm_role" value="' + esc(m.role || '') + '">'
+      + '<label>Foto (URL)' + uploadBtn('tm_photo', 'images') + '</label><input id="tm_photo" value="' + esc(m.photo || '') + '">'
+      + '<label>Descrição</label><textarea id="tm_desc" rows="3">' + esc(m.desc || '') + '</textarea>'
+      + '<hr><h4 style="margin:1rem 0 0.5rem;color:var(--gold);">Redes Sociais</h4>'
+      + '<label>Instagram</label><input id="tm_instagram" value="' + esc(social.instagram || '') + '">'
+      + '<label>WhatsApp</label><input id="tm_whatsapp" value="' + esc(social.whatsapp || '') + '">'
+      + '<label>LinkedIn</label><input id="tm_linkedin" value="' + esc(social.linkedin || '') + '">'
+      + '<label>Facebook</label><input id="tm_facebook" value="' + esc(social.facebook || '') + '">'
+      + '<label>YouTube</label><input id="tm_youtube" value="' + esc(social.youtube || '') + '">'
+      + '<label>Site</label><input id="tm_site" value="' + esc(social.site || '') + '">',
+      function() {
+        m.name = gv('tm_name');
+        m.role = gv('tm_role');
+        m.photo = gv('tm_photo');
+        m.desc = gv('tm_desc');
+        m.social = {
+          instagram: gv('tm_instagram'),
+          whatsapp: gv('tm_whatsapp'),
+          linkedin: gv('tm_linkedin'),
+          facebook: gv('tm_facebook'),
+          youtube: gv('tm_youtube'),
+          site: gv('tm_site')
+        };
+        syncToLive();
+        adminToast('✅ Membro salvo', 'success');
+        renderAdminTeam(document.getElementById('adminSection_team'));
+      }
+    );
+  };
+
+  window.delTeamMember = function(idx) {
+    if (!confirm('Excluir "' + _data.TEAM[idx].name + '"?')) return;
+    _data.TEAM.splice(idx, 1);
+    syncToLive();
+    renderAdminTeam(document.getElementById('adminSection_team'));
+    adminToast('🗑️ Membro removido', 'info');
+  };
+
+  /* =================================================================
      USERS — gerenciamento de usuários (só no modo BD)
      ================================================================= */
   function renderUsers(container) {
@@ -1407,6 +1478,7 @@ const GITHUB_PATH   = "js/data.js";
       faq: _data.FAQS,
       depoimentos: _data.DEPOIMENTOS,
       parceiros: _data.PARCEIROS,
+      team: _data.TEAM,
       blog: _data.BLOG_POSTS
     };
 
@@ -1632,9 +1704,15 @@ const GITHUB_PATH   = "js/data.js";
     out += strConst('SECTION_FAVORITOS_EYEBROW', c.SECTION_FAVORITOS_EYEBROW || 'Favoritos');
     out += strConst('SECTION_FAVORITOS_TITLE', c.SECTION_FAVORITOS_TITLE || 'Meus imóveis favoritos');
     out += strConst('SECTION_FAVORITOS_EMPTY', c.SECTION_FAVORITOS_EMPTY || 'Nenhum imóvel favoritado ainda.');
+    out += strConst('SECTION_STATS_EYEBROW', c.SECTION_STATS_EYEBROW || 'Equipe');
+    out += strConst('SECTION_STATS_TITLE', c.SECTION_STATS_TITLE || '');
+    out += strConst('SECTION_PRIVACIDADE_EYEBROW', c.SECTION_PRIVACIDADE_EYEBROW || 'LGPD');
+    out += strConst('SECTION_PRIVACIDADE_TITLE', c.SECTION_PRIVACIDADE_TITLE || 'Política de Privacidade');
 
     out += '\n/* ===== STATS ===== */\n';
     out += arrToJs('STATS', _data.STATS);
+    out += '\n/* ===== TEAM ===== */\n';
+    out += arrToJs('TEAM', _data.TEAM);
     out += '\nconst HERO_IMAGES = [\n  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80",\n  "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",\n  "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1920&q=80"\n];\n';
     out += strConst('HERO_VIDEO', c.HERO_VIDEO || '');
     out += '\nconst DISABLED_SECTIONS = ' + JSON.stringify(c.DISABLED_SECTIONS || []) + ';\n';
@@ -1654,6 +1732,8 @@ const GITHUB_PATH   = "js/data.js";
     out += arrToJs('PARCEIROS', _data.PARCEIROS);
     out += '\n/* ===== BLOG_POSTS ===== */\n';
     out += arrToJs('BLOG_POSTS', _data.BLOG_POSTS);
+    out += '\n/* ===== LOCATIONS_INFO ===== */\n';
+    out += 'const LOCATIONS_INFO = ' + jsVal(_data.LOCATIONS_INFO, 1) + ';\n';
 
     return out;
   }
@@ -1786,6 +1866,14 @@ const GITHUB_PATH   = "js/data.js";
       if (typeof renderParceiros === 'function') renderParceiros();
     }
     } catch(e) { console.warn('syncToLive parceiros:', e); }
+    // TEAM
+    try {
+    if (typeof TEAM !== 'undefined') {
+      TEAM.length = 0;
+      _data.TEAM.forEach(function(m) { TEAM.push(m); });
+      if (typeof renderTeam === 'function') renderTeam();
+    }
+    } catch(e) { console.warn('syncToLive team:', e); }
     // BLOG_POSTS
     try {
     if (typeof BLOG_POSTS !== 'undefined') {

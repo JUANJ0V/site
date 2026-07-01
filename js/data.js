@@ -56,6 +56,10 @@ const SECTION_BLOG_TITLE = "Últimas do blog";
 const SECTION_FAVORITOS_EYEBROW = "Favoritos";
 const SECTION_FAVORITOS_TITLE = "Meus imóveis favoritos";
 const SECTION_FAVORITOS_EMPTY = "Nenhum imóvel favoritado ainda.";
+const SECTION_STATS_EYEBROW = "Equipe";
+const SECTION_STATS_TITLE = "Conheça quem faz a Furpal";
+const SECTION_PRIVACIDADE_EYEBROW = "LGPD";
+const SECTION_PRIVACIDADE_TITLE = "Política de Privacidade";
 
 /* ===== STATS ===== */
 
@@ -77,6 +81,188 @@ const STATS = [
       label: "Parceiros credenciados"
     }
   ];
+
+/* ===== TEAM ===== */
+const TEAM = [
+  {
+    name: "Carlos Mendes",
+    role: "Corretor Sênior",
+    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
+    desc: "Especialista em imóveis de alto padrão com mais de 12 anos de mercado em Balneário Camboriú.",
+    social: { instagram: "https://instagram.com/", whatsapp: "https://wa.me/554788079254" }
+  },
+  {
+    name: "Ana Beatriz",
+    role: "Consultora Imobiliária",
+    photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80",
+    desc: "Focada em atender clientes internacionais e investidores estrangeiros em todo o litoral catarinense.",
+    social: { instagram: "https://instagram.com/", whatsapp: "https://wa.me/554788079254", site: "https://google.com" }
+  },
+  {
+    name: "Rafael Oliveira",
+    role: "Analista de Financiamento",
+    photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80",
+    desc: "Responsável por viabilizar as melhores condições de financiamento para cada perfil de cliente.",
+    social: { instagram: "https://instagram.com/", whatsapp: "https://wa.me/554788079254" }
+    }
+  ];
+
+/* ===== LOCATIONS_INFO ===== */
+const LOCATIONS_INFO = {
+  "Balneário Camboriú": {
+    tagline: "A Miami Brasileira — referência em qualidade de vida e investimento imobiliário no litoral catarinense.",
+    images: [
+      "https://images.unsplash.com/photo-1564507592333-4b1d02b3f75a?w=800&q=80",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"
+    ],
+    beaches: [
+      { name: "Praia Central", desc: "Principal praia urbana de Balneário Camboriú, com 6 km de extensão, calçadão, quiosques e infraestrutura completa." },
+      { name: "Praia de Laranjeiras", desc: "Praia de águas calmas e cristalinas, cercada por morros e condomínios de alto padrão." },
+      { name: "Praia do Estaleiro", desc: "Praia mais tranquila, com areias claras e mar calmo, ideal para famílias." }
+    ],
+    intro: "Balneário Camboriú é o principal destino imobiliário do Sul do Brasil. Conhecida como a Miami Brasileira, a cidade combina arranha-céus imponentes com praias deslumbrantes e infraestrutura de primeiro mundo. O mercado imobiliário local é o mais aquecido de Santa Catarina, com imóveis que se valorizam acima da média nacional.",
+    history: "Balneário Camboriú foi fundada oficialmente em 1964, mas seu desenvolvimento acelerado começou nas décadas de 1970 e 1980 com a construção dos primeiros grandes edifícios. Desde então, a cidade não parou de crescer, tornando-se hoje o metro quadrado mais caro do Sul do Brasil e um polo de investimentos internacionais.",
+    safety: "Balneário Camboriú é considerada uma das cidades mais seguras do Brasil para se viver e investir. Conta com policiamento ostensivo na orla, sistema de monitoramento por câmeras em toda a cidade e índices de criminalidade abaixo da média nacional. A Guarda Municipal atua 24 horas na região central e balneária.",
+    highlights: [
+      "Cristo Luz — Monumento e complexo turístico com 40 metros de altura",
+      "Parque Unipraias — Complexo de bondinho que liga as praias Central e Laranjeiras",
+      "Molhe — Píer de 400 metros no final da Av. Atlântica",
+      "Ilha das Cabras — Cartão postal famoso em frente à praia Central",
+      "Avenida Atlântica — Principal via da orla, com bares, restaurantes e comércio"
+    ]
+  },
+  "Florianópolis": {
+    tagline: "A Ilha da Magia — qualidade de vida, natureza exuberante e mercado imobiliário em plena expansão.",
+    images: [
+      "https://images.unsplash.com/photo-1564507592333-4b1d02b3f75a?w=800&q=80",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"
+    ],
+    beaches: [
+      { name: "Praia de Jurerê Internacional", desc: "Praia sofisticada com águas calmas, quiosques modernos e público seleto. Referência em gastronomia e lazer." },
+      { name: "Praia Mole", desc: "Famosa entre surfistas e jovens, com ondas fortes, dunas e vista deslumbrante." },
+      { name: "Praia da Joaquina", desc: "Ícone do surfe nacional, com grandes dunas e estrutura completa para esportes." },
+      { name: "Lagoa da Conceição", desc: "Maior lagoa da ilha, ideal para esportes náuticos, com bairro boêmio e animado." }
+    ],
+    intro: "Florianópolis é uma das capitais com melhor qualidade de vida do Brasil. Cercada por 42 praias, a Ilha da Magia oferece um mercado imobiliário diversificado — desde coberturas de alto padrão em Jurerê até casas aconchegantes na Lagoa da Conceição. A cidade atrai investidores de todo o país em busca de qualidade de vida e valorização patrimonial.",
+    history: "Florianópolis foi fundada em 1726 pelos colonizadores açorianos. Sua arquitetura colonial, preservada no centro histórico, contrasta com o desenvolvimento acelerado das últimas décadas. A cidade se consolidou como polo tecnológico e turístico, com destaque para o setor imobiliário de alto padrão.",
+    safety: "Florianópolis possui índices de segurança variados por região. Bairros como Jurerê Internacional, Santo Antônio de Lisboa e Lagoa da Conceição são considerados seguros. A região central conta com policiamento frequente. Recomenda-se atenção em áreas mais afastadas durante a alta temporada.",
+    highlights: [
+      "Ponte Hercílio Luz — Cartão postal da cidade, ponte metálica centenária",
+      "Centro Histórico — Casario açoriano, catedral e museus no centro da cidade",
+      "Mercado Público — Gastronomia típica e artesanato local",
+      "Dunas da Joaquina — Paisagem deslumbrante e prática de sandboard",
+      "Projeto Tamar — Centro de preservação de tartarugas marinhas"
+    ]
+  },
+  "Itapema": {
+    tagline: "Cidade planejada com praias paradisíacas e o metro quadrado mais valorizado de Santa Catarina.",
+    images: [
+      "https://images.unsplash.com/photo-1564507592333-4b1d02b3f75a?w=800&q=80",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"
+    ],
+    beaches: [
+      { name: "Praia Central de Itapema", desc: "Praia de águas calmas e cristalinas com calçadão moderno e excelente infraestrutura." },
+      { name: "Meia Praia", desc: "Praia movimentada com grande concentração de bares, restaurantes e comércio." },
+      { name: "Praia do Cabeço", desc: "Praia pequena e tranquila, rodeada por vegetação nativa e condomínios." }
+    ],
+    intro: "Itapema é uma das cidades que mais cresce em Santa Catarina. Com um rigoroso plano diretor que limita a altura das construções, a cidade oferece qualidade de vida incomparável. O mercado imobiliário local é focado em imóveis de alto padrão, com destaque para condomínios fechados com vista para o mar.",
+    history: "Itapema foi emancipada de Porto Belo em 1962. Desde então, passou por um planejamento urbano rigoroso que a transformou em um dos destinos mais valorizados do litoral catarinense. O crescimento ordenado e a infraestrutura de qualidade atraem investidores que buscam imóveis de alto padrão.",
+    safety: "Itapema é reconhecida como uma das cidades mais seguras da região, com baixos índices de criminalidade. O policiamento é eficiente tanto na área central quanto nos bairros residenciais. A cidade conta com sistema de monitoramento e guarda municipal atuante.",
+    highlights: [
+      "Calçadão da Orla — Orla revitalizada com ciclovia, academia ao ar livre e quiosques",
+      "Praça da Paz — Principal praça da cidade, com eventos culturais e feiras",
+      "Morro do Calvário — Mirante com vista panorâmica da cidade e do mar",
+      "Capela São Pedro — Igreja histórica no centro da cidade"
+    ]
+  },
+  "Bombinhas": {
+    tagline: "Paraíso ecológico com as praias mais preservadas de Santa Catarina e alto potencial de locação por temporada.",
+    images: [
+      "https://images.unsplash.com/photo-1564507592333-4b1d02b3f75a?w=800&q=80",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"
+    ],
+    beaches: [
+      { name: "Praia de Bombas", desc: "Principal praia da cidade, com mar calmo e boa infraestrutura turística." },
+      { name: "Praia de Bombinhas", desc: "Praia de águas cristalinas e calmas, ideal para famílias e mergulho." },
+      { name: "Praia do Quatro Ilhas", desc: "Praia paradisíaca com costão rochoso, piscinas naturais e areia branca." },
+      { name: "Praia da Sepultura", desc: "Praia pequena e protegida, com águas transparentes — perfeita para snorkeling." }
+    ],
+    intro: "Bombinhas é um dos destinos mais procurados do Brasil para temporada. Suas praias de águas cristalinas e preservação ambiental fazem da cidade um paraíso ecológico. O mercado imobiliário local é ideal para investidores que buscam imóveis para locação por temporada, com retorno médio anual de 8% a 10%.",
+    history: "Bombinhas foi emancipada de Porto Belo em 1992. Seu nome vem de 'Bombas' e 'Bombinhas', pequenas embarcações usadas por pescadores locais. O turismo começou a se desenvolver nos anos 1990 e, desde então, a cidade se consolidou como um dos principais destinos de verão do Sul do Brasil.",
+    safety: "Bombinhas é considerada uma cidade tranquila e segura, especialmente durante a baixa temporada. Na alta temporada, o fluxo de turistas aumenta significativamente, mas a cidade mantém boa estrutura de segurança com policiamento ostensivo nas praias e áreas turísticas.",
+    highlights: [
+      "Mirante Eco 360 — Vista panorâmica de 360 graus da península de Bombinhas",
+      "Reserva Biológica Marinha — Área de preservação com rica vida marinha",
+      "Trilha do Macaco — Trilha ecológica com vista para as praias selvagens",
+      "Morro do Macaco — Mirante com uma das vistas mais bonitas da região"
+    ]
+  },
+  "Joinville": {
+    tagline: "A maior cidade de Santa Catarina — polo industrial com mercado imobiliário acessível e excelente custo-benefício.",
+    images: [
+      "https://images.unsplash.com/photo-1564507592333-4b1d02b3f75a?w=800&q=80",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"
+    ],
+    beaches: [
+      { name: "Praia do Vigorelli", desc: "Praia de água doce no rio Cachoeira, com área de lazer e quiosques." },
+      { name: "Praia de Itaguaçu", desc: "Praia fluvial às margens da Baía da Babitonga, com estrutura de lazer." }
+    ],
+    intro: "Joinville é a maior cidade de Santa Catarina e o principal polo industrial do estado. Com um mercado imobiliário mais acessível que o litoral, a cidade oferece excelente custo-benefício para quem busca imóveis residenciais ou comerciais. O mercado corporativo está aquecido, com demanda constante por salas comerciais e galpões industriais.",
+    history: "Joinville foi fundada em 1851 por imigrantes europeus, principalmente alemães e suíços. A cidade preserva forte herança cultural com festas típicas, arquitetura enxaimel e o maior acervo de museu de imigração do Brasil. Tornou-se o maior polo industrial de Santa Catarina, com destaque para os setores metal-mecânico, têxtil e de tecnologia.",
+    safety: "Joinville possui índices de segurança variados por bairro. Regiões como América, Atiradores, e Centro são consideradas seguras. A cidade conta com Guarda Municipal e sistema de monitoramento. Recomenda-se atenção em bairros periféricos durante a noite.",
+    highlights: [
+      "Museu Nacional de Imigração e Colonização — Maior museu sobre imigração do Brasil",
+      "Rua das Palmeiras — Cartão postal com 93 palmeiras imperiais centenárias",
+      "Expoville — Parque de exposições com eventos durante todo o ano",
+      "Catedral São Francisco Xavier — Igreja principal com arquitetura imponente",
+      "Escola do Artesanato — Centro de artesanato típico da região"
+    ]
+  },
+  "Balneário Camboriú — SC": {
+    tagline: "A Miami Brasileira — referência em qualidade de vida e investimento imobiliário no litoral catarinense.",
+    images: [
+      "https://images.unsplash.com/photo-1564507592333-4b1d02b3f75a?w=800&q=80"
+    ],
+    beaches: [
+      { name: "Praia Central", desc: "Principal praia urbana de Balneário Camboriú, com 6 km de extensão." }
+    ],
+    intro: "Balneário Camboriú é o principal destino imobiliário do Sul do Brasil.",
+    history: "Fundada em 1964, a cidade não parou de crescer, tornando-se o metro quadrado mais caro do Sul do Brasil.",
+    safety: "Considerada uma das cidades mais seguras do Brasil para se viver e investir.",
+    highlights: ["Cristo Luz — Monumento e complexo turístico", "Parque Unipraias — Complexo de bondinho"]
+  },
+  "Florianópolis — SC": {
+    tagline: "A Ilha da Magia — qualidade de vida e natureza exuberante.",
+    images: [
+      "https://images.unsplash.com/photo-1564507592333-4b1d02b3f75a?w=800&q=80"
+    ],
+    beaches: [
+      { name: "Praia de Jurerê Internacional", desc: "Praia sofisticada com águas calmas." }
+    ],
+    intro: "Florianópolis é uma das capitais com melhor qualidade de vida do Brasil.",
+    history: "Fundada em 1726 pelos colonizadores açorianos.",
+    safety: "Índices de segurança variados por região. Bairros nobres são considerados seguros.",
+    highlights: ["Ponte Hercílio Luz — Cartão postal da cidade", "Centro Histórico — Casario açoriano"]
+  },
+  "Joinville — SC": {
+    tagline: "Maior cidade de SC — polo industrial com mercado imobiliário acessível.",
+    images: [
+      "https://images.unsplash.com/photo-1564507592333-4b1d02b3f75a?w=800&q=80"
+    ],
+    beaches: [
+      { name: "Praia do Vigorelli", desc: "Praia de água doce no rio Cachoeira." }
+    ],
+    intro: "Joinville é a maior cidade de Santa Catarina e o principal polo industrial do estado.",
+    history: "Fundada em 1851 por imigrantes europeus.",
+    safety: "Índices de segurança variados por bairro. Regiões centrais são seguras.",
+    highlights: ["Museu Nacional de Imigração — Maior museu sobre imigração do Brasil"]
+  }
+};
 
 const HERO_IMAGES = [
   "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80",
