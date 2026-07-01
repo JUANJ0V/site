@@ -995,12 +995,13 @@ function setupMobileNav() {
   const pageContent = document.querySelector(".page-content");
 
   function hideAll() {
-    for (let i = 0; i < sections.length; i++) sections[i].classList.remove("active");
+    for (let i = 0; i < sections.length; i++) {
+      sections[i].classList.remove("active");
+      sections[i].style.paddingTop = '';
+    }
     document.querySelectorAll(".detail-card").forEach(function(el) { el.classList.remove("active"); });
     document.querySelectorAll(".empreendimento").forEach(function(el) { el.classList.remove("active"); });
     document.querySelectorAll(".blog-detail").forEach(function(el) { el.classList.remove("active"); });
-    var se = document.getElementById('sobre');
-    if (se) se.style.paddingTop = '';
   }
 
   function updateNav(id) {
@@ -1058,9 +1059,6 @@ function setupMobileNav() {
     } else if (groups[id]) {
       _searchActive = false;
       pageContent.style.display = "";
-      // Clear standalone padding from sections that might have it
-      var sobreEl = document.getElementById('sobre');
-      if (sobreEl) sobreEl.style.paddingTop = '';
       const groupSections = groups[id].filter(function(sid) {
         return !DISABLED_SECTIONS || DISABLED_SECTIONS.indexOf(sid) === -1;
       });
@@ -1077,8 +1075,10 @@ function setupMobileNav() {
       }
       pageContent.style.display = "";
       const section = document.getElementById(id);
-      if (section) section.classList.add("active");
-      if (id === 'sobre' && section) section.style.paddingTop = 'var(--header-height, 3.5rem)';
+      if (section) {
+        section.classList.add("active");
+        section.style.paddingTop = 'var(--header-height, 3.5rem)';
+      }
       updateNav(id);
       resetMetaTags();
       if (id === 'mapa') { initMap(); invalidateMap(); }
