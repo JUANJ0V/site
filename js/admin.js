@@ -1959,9 +1959,10 @@ const GITHUB_PATH   = "js/data.js";
     var num = (number || '').replace(/\D/g, '');
     if (!num) return;
     var waUrl = 'https://wa.me/' + num;
-    // Iterate ALL links, replace any wa.me/ pattern in href
+    // Iterate ALL links, replace any wa.me/ pattern in href (skip .team-card — each member has their own number)
     document.querySelectorAll('a').forEach(function(a) {
       try {
+        if (a.closest('.team-card')) return;
         var href = a.getAttribute('href');
         if (!href) return;
         if (href.indexOf('wa.me/') > -1) {

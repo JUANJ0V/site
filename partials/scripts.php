@@ -61,8 +61,9 @@
       span.textContent = '\u00A9 ' + new Date().getFullYear() + ' ' + SITE_NAME + '. Todos os direitos reservados.';
     }
   });
-  // WhatsApp links
+  // WhatsApp links (skip team cards — each member has their own number)
   document.querySelectorAll('a[href*="wa.me/"]').forEach(function(a) {
+    if (a.closest('.team-card')) return;
     a.href = a.href.replace(/wa.me\/\d+/, 'wa.me/' + WHATSAPP_NUMBER);
   });
   // WhatsApp display text in footer
