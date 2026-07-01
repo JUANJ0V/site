@@ -1457,6 +1457,7 @@
     /* SPA � one section at a time (activated by JS) */
     .spa .page-content > section[id] {
       display: none;
+      scroll-margin-top: var(--header-height, 3.5rem);
     }
     .spa .page-content > section[id].active {
       display: block;
@@ -1464,9 +1465,7 @@
       padding-top: var(--header-height, 3.5rem);
     }
     .spa section#inicio.active,
-    .spa section#sobre.active {
-      padding-top: 0;
-    }
+    .spa section#sobre.active { padding-top: 0; }
     .spa section#stats.active,
     .spa section#servicos.active,
     .spa section#depoimentos.active,
