@@ -9,6 +9,13 @@
   <meta property="og:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80" />
   <meta name="keywords" content="assessoria imobiliária, Balneário Camboriú, comprar imóvel SC, alugar imóvel litoral, consultoria investimento imobiliário, Furpal, Território Catarinense, imóveis Florianópolis, Itapema, Bombinhas, Joinville" />
   <meta name="theme-color" content="#0e142e" />
+  <link rel="alternate" hreflang="pt" href="https://furpal.com.br/" />
+  <link rel="alternate" hreflang="en" href="https://furpal.com.br/en/" />
+  <link rel="alternate" hreflang="es" href="https://furpal.com.br/es/" />
+  <link rel="alternate" hreflang="x-default" href="https://furpal.com.br/" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
@@ -16,10 +23,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="icon" href="./images/favicon.svg" />
-  <link rel="stylesheet" href="css/style.css?v=6" />
+  <link rel="icon" type="image/x-icon" href="./images/favicon.ico" />
+  <link rel="apple-touch-icon" href="./images/favicon.svg" />
+  <link rel="stylesheet" href="css/style.min.css?v=6" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <link rel="manifest" href="manifest.json">
+  <script>if('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }</script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -27,6 +38,10 @@
     "name": "Furpal",
     "url": "https://furpal.com.br",
     "telephone": "+554788079254",
+    "email": "contato@furpal.com.br",
+    "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80",
+    "description": "Mais de 7 anos guiando pessoas ao redor do mundo rumo ao imóvel ideal no litoral catarinense.",
+    "priceRange": "$$",
     "areaServed": ["Balneário Camboriú", "Florianópolis", "Itapema", "Bombinhas", "Joinville"],
     "address": {
       "@type": "PostalAddress",
@@ -34,6 +49,10 @@
       "addressLocality": "Balneário Camboriú",
       "addressRegion": "SC",
       "addressCountry": "BR"
-    }
+    },
+    "sameAs": [
+      "https://www.instagram.com/furpal.assesoriaimobiliaria"
+    ],
+    "openingHours": "Mo-Fr 09:00-18:00"
   }
   </script>

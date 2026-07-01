@@ -400,6 +400,30 @@ function renderDetailCard(propId) {
 
   document.body.appendChild(detailEl);
 
+  // Structured data (JSON-LD) for this property
+  (function() {
+    var existing = document.getElementById('prop_sd_' + p.id);
+    if (existing) existing.remove();
+    var sd = document.createElement('script');
+    sd.id = 'prop_sd_' + p.id;
+    sd.type = 'application/ld+json';
+    sd.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": detailTitle,
+      "description": detailDescription || p.desc,
+      "image": p.gallery || [p.img],
+      "url": window.location.origin + BASE_PATH + p.id + '/',
+      "offers": {
+        "@type": "Offer",
+        "price": p.priceNum || p.price.replace(/[^0-9,]/g,'').replace(',','.'),
+        "priceCurrency": "BRL",
+        "availability": p.status === 'vendido' ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock'
+      }
+    });
+    document.head.appendChild(sd);
+  })();
+
   var toggle = detailEl.querySelector('#detailRequestToggle');
   var formWrap = detailEl.querySelector('#detailRequestForm');
   if (toggle && formWrap) {
@@ -1018,6 +1042,7 @@ function setupMobileNav() {
       if (gt && gt.classList.contains('active')) { hideLoading(); return; }
     }
     hideAll();
+    renderBreadcrumbs(_navId);
     if (_navId.indexOf("prop-") === 0) {
       pageContent.style.display = "none";
       renderDetailCard(id);
@@ -1087,6 +1112,22 @@ function setupMobileNav() {
     hideLoading();
     });
   }
+  function renderBreadcrumbs(id) {
+    var bc = document.getElementById('breadcrumbs');
+    if (!bc) {
+      bc = document.createElement('div');
+      bc.id = 'breadcrumbs';
+      bc.style.cssText = 'padding:0 1.5rem;font-size:0.8rem;color:var(--muted-foreground);margin-top:1rem;max-width:1280px;margin-left:auto;margin-right:auto;width:100%;box-sizing:border-box;';
+      var pc = document.querySelector('.page-content');
+      if (pc) pc.insertBefore(bc, pc.firstChild);
+    }
+    var map = { inicio:'Início', sobre:'Sobre', comprar:'Comprar', alugar:'Alugar', lancamentos:'Lançamentos', servicos:'Serviços', financiamento:'Financiamento', mapa:'Mapa', blog:'Blog', faq:'FAQ', favoritos:'Favoritos', contato:'Contato', privacidade:'Privacidade' };
+    var label = map[id] || id;
+    if (id === 'inicio' || !label) { bc.style.display = 'none'; return; }
+    bc.style.display = '';
+    bc.innerHTML = '<a href="/" style="color:var(--muted-foreground);text-decoration:none;">Início</a> <span style="margin:0 0.3rem;">›</span> <span>' + label + '</span>';
+  }
+
   window._spaNavigate = navigate;
 
   document.querySelector(".menu-btn").addEventListener("click", function() {
@@ -1878,6 +1919,19 @@ function submitRequestForm(container, purpose) {
     var c = containers[ri2];
     renderRequestForm(c, c.getAttribute('data-purpose') || 'comprar');
   }
+})();
+
+/* ===== SCROLL TO TOP ===== */
+(function() {
+  var btn = document.getElementById('backTop');
+  if (!btn) return;
+  function onScroll() {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  btn.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 })();
 
 

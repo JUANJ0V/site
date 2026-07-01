@@ -4,6 +4,7 @@
     <a href="/" class="site-logo" translate="no">Furpal</a>
     <ul class="nav-list" id="navList" translate="no">
       <li><a href="/" class="active" aria-current="page">Início</a></li>
+      <li><a href="/sobre/">Sobre</a></li>
       <li class="nav-dropdown" id="navDropComprar"><a href="/comprar/">Comprar</a><div class="dd-menu" id="ddComprar"></div></li>
       <li class="nav-dropdown" id="navDropAlugar"><a href="/alugar/">Alugar</a><div class="dd-menu" id="ddAlugar"></div></li>
       <li class="nav-dropdown" id="navDropLanc"><a href="/lancamentos/">Lançamentos</a><div class="dd-menu" id="ddLanc"></div></li>
@@ -27,6 +28,7 @@
   <div class="nav-overlay" id="mobileNav" role="dialog" aria-label="Menu de navegação" translate="no">
     <button class="close-btn" onclick="document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''" aria-label="Fechar menu">✕</button>
     <a href="/">Início</a>
+    <a href="/sobre/">Sobre</a>
     <div class="mob-drop-wrap" id="mobDropComprar"><a href="/comprar/">Comprar</a><div class="mob-dd-body" id="mobDdComprar"></div></div>
     <div class="mob-drop-wrap" id="mobDropAlugar"><a href="/alugar/">Alugar</a><div class="mob-dd-body" id="mobDdAlugar"></div></div>
     <div class="mob-drop-wrap" id="mobDropLanc"><a href="/lancamentos/">Lançamentos</a><div class="mob-dd-body" id="mobDdLanc"></div></div>

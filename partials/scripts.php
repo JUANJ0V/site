@@ -1,6 +1,6 @@
 <script src="js/data.js?v=5"></script>
 <script src="js/data-provider.js?v=2"></script>
-<script src="js/admin.js?v=2"></script>
+<script src="js/admin.min.js?v=2"></script>
 <script>
 // Auto-update site info from data.js constants
   document.addEventListener('DOMContentLoaded', function() {
@@ -404,7 +404,7 @@ function googleTranslateElementInit() {
   }
 }
 </script>
-<script src="js/app.js?v=5"></script>
+<script src="js/app.min.js?v=5"></script>
 <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 <script>document.addEventListener('DOMContentLoaded',function(){var v=document.querySelector('.about-video');if(v)Plyr.setup(v);});</script>
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>

@@ -7,7 +7,7 @@ const WHATSAPP_DISPLAY = "+55 47 8807-9254";
 const WHATSAPP_URL = "https://wa.me/" + WHATSAPP_NUMBER;
 const WHATSAPP_MSG = "Olá, tenho interesse no {titulo} ({preco})";
 
-const SITE_NAME = "Furpal - Assesoria Imobiliaria Internacional ";
+const SITE_NAME = "Furpal — Assessoria Imobiliária Internacional";
 const SITE_LOGO = "./images/fpaii.png";
 const LOGO_MAX_HEIGHT = "5rem";
 const LOGO_MAX_WIDTH = "200px";
