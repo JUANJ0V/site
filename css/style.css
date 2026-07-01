@@ -49,7 +49,7 @@
     #loading-screen {
       position: fixed;
       inset: 0;
-      z-index: 99999;
+      z-index: 2147483647;
       background: var(--deep);
       display: flex;
       align-items: center;

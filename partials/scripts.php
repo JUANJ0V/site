@@ -123,7 +123,7 @@
       if (footLink && footLink.parentElement) footLink.parentElement.style.display = 'none';
     }
   }
-  function renderTeam() {
+  window.renderTeam = function() {
     var teamGrid = document.getElementById('teamGrid');
     if (!teamGrid) return;
     if (typeof TEAM === 'undefined' || !TEAM.length) return;
