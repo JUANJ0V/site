@@ -1032,14 +1032,9 @@ function setupMobileNav() {
     if (!_navId || _navId === "topo") {
       _navId = "inicio";
     }
-    // Guard: skip if already showing this section (prevents flash)
     if (groups[_navId]) {
       var gs = document.getElementById(groups[_navId][0]);
       if (gs && gs.classList.contains('active')) { hideLoading(); return; }
-    }
-    if (_navId !== 'comprar' && _navId !== 'alugar' && _navId !== 'lancamentos') {
-      var gt = document.getElementById(_navId);
-      if (gt && gt.classList.contains('active')) { hideLoading(); return; }
     }
     hideAll();
     renderBreadcrumbs(_navId);
