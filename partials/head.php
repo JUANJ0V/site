@@ -1,5 +1,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>window._pageStart=Date.now();</script>
   <title>Furpal Assessoria Imobiliária Internacional</title>
   <meta name="description" content="Furpal — mais de 7 anos no Território Catarinense. Assessoria imobiliária completa em Balneário Camboriú, Florianópolis, Itapema, Bombinhas e Joinville." />
   <meta property="og:title" content="Furpal — Assessoria Imobiliária Internacional" />

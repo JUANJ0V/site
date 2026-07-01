@@ -1318,6 +1318,19 @@ function setupMobileNav() {
 
   navigate(window._redirectId || getSectionId());
 
+  // Hide initial loading screen
+  (function() {
+    var ls = document.getElementById('loading-screen');
+    if (ls) {
+      var elapsed = Date.now() - (window._pageStart || Date.now());
+      var delay = Math.max(0, 1200 - elapsed);
+      setTimeout(function() {
+        ls.classList.add('hidden');
+        setTimeout(function() { if (ls.parentNode) ls.parentNode.removeChild(ls); }, 600);
+      }, delay);
+    }
+  })();
+
   // Auto-calc financiamento with defaults
   if (document.getElementById('finSimulator')) calcFinancing();
 

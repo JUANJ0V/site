@@ -4,6 +4,15 @@
 <?php include 'partials/head.php'; ?>
 </head>
 <body>
+<div id="loading-screen" aria-hidden="true">
+  <div class="loading-content">
+    <div class="loading-brand">
+      <span class="loading-wordmark">Furpal</span>
+      <span class="loading-tagline">Assessoria Imobiliária Internacional</span>
+    </div>
+    <div class="loading-bar-track"><div class="loading-bar-fill"></div></div>
+  </div>
+</div>
 <?php include 'partials/header.php'; ?>
 <div class="page-content" role="main">
 <?php
