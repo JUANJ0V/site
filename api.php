@@ -86,12 +86,14 @@ if ($method === 'GET' && $action === 'all') {
     try {
         $data = [
             'constants'      => getConstants($pdo),
+            'locations_info' => getLocationsInfo($pdo),
             'stats'          => fetchAll($pdo, 'stats', 'sort_order ASC'),
             'properties'     => getProperties($pdo),
             'empreendimentos'=> getEmpreendimentos($pdo),
             'faq'            => fetchAll($pdo, 'faq', 'sort_order ASC'),
             'depoimentos'    => fetchAll($pdo, 'depoimentos', 'sort_order ASC'),
             'parceiros'      => fetchAll($pdo, 'parceiros', 'sort_order ASC'),
+            'team'           => getTeam($pdo),
             'blog'           => getBlogPosts($pdo),
         ];
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -256,12 +258,14 @@ if ($method === 'POST') {
         $pdo->beginTransaction();
 
         if (isset($input['constants'])) saveConstants($pdo, $input['constants']);
+        if (isset($input['locations_info'])) saveLocationsInfo($pdo, $input['locations_info']);
         if (isset($input['stats']))       saveStats($pdo, $input['stats']);
         if (isset($input['properties']))  saveProperties($pdo, $input['properties']);
         if (isset($input['empreendimentos'])) saveEmpreendimentos($pdo, $input['empreendimentos']);
         if (isset($input['faq']))         saveFaq($pdo, $input['faq']);
         if (isset($input['depoimentos'])) saveDepoimentos($pdo, $input['depoimentos']);
         if (isset($input['parceiros']))   saveParceiros($pdo, $input['parceiros']);
+        if (isset($input['team']))         saveTeam($pdo, $input['team']);
         if (isset($input['blog']))        saveBlogPosts($pdo, $input['blog']);
 
         $pdo->commit();
@@ -291,6 +295,17 @@ function getConstants($pdo) {
     $stmt = $pdo->query("SELECT data FROM config WHERE id = 1");
     $row = $stmt->fetch();
     return $row ? json_decode($row['data'], true) : [];
+}
+
+function getLocationsInfo($pdo) {
+    $stmt = $pdo->query("SELECT data FROM config WHERE id = 2");
+    $row = $stmt->fetch();
+    return $row ? json_decode($row['data'], true) : [];
+}
+
+function saveLocationsInfo($pdo, $data) {
+    $stmt = $pdo->prepare("INSERT INTO config (id, data) VALUES (2, ?) ON DUPLICATE KEY UPDATE data = VALUES(data)");
+    $stmt->execute([json_encode($data, JSON_UNESCAPED_UNICODE)]);
 }
 
 function getProperties($pdo) {
@@ -329,6 +344,15 @@ function getEmpreendimentos($pdo) {
 
 function getStats($pdo) {
     return fetchAll($pdo, 'stats', 'sort_order ASC');
+}
+
+function getTeam($pdo) {
+    $rows = fetchAll($pdo, 'team', 'id ASC');
+    return array_map(function($r) {
+        $r['social'] = json_decode($r['social'] ?? '{}', true);
+        unset($r['id'], $r['sort_order']);
+        return $r;
+    }, $rows);
 }
 
 function getBlogPosts($pdo) {
@@ -452,6 +476,22 @@ function saveParceiros($pdo, $items) {
     $stmt = $pdo->prepare("INSERT INTO parceiros (name, img, url, sort_order) VALUES (?, ?, ?, ?)");
     foreach ($items as $i => $p) {
         $stmt->execute([$p['name'] ?? '', $p['img'] ?? '', $p['url'] ?? '', $i]);
+    }
+}
+
+function saveTeam($pdo, $items) {
+    $pdo->exec("TRUNCATE TABLE team");
+    if (empty($items)) return;
+    $stmt = $pdo->prepare("INSERT INTO team (name, role, photo, `desc`, social, sort_order) VALUES (?, ?, ?, ?, ?, ?)");
+    foreach ($items as $i => $m) {
+        $stmt->execute([
+            $m['name'] ?? '',
+            $m['role'] ?? '',
+            $m['photo'] ?? '',
+            $m['desc'] ?? '',
+            json_encode($m['social'] ?? [], JSON_UNESCAPED_UNICODE),
+            $i
+        ]);
     }
 }
 
@@ -611,6 +651,17 @@ CREATE TABLE IF NOT EXISTS blog_posts (
     content TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Team
+CREATE TABLE IF NOT EXISTS team (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    role VARCHAR(255) DEFAULT '',
+    photo TEXT,
+    `desc` TEXT,
+    social JSON,
+    sort_order INT DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Users

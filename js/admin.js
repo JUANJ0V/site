@@ -1482,6 +1482,7 @@ const GITHUB_PATH   = "js/data.js";
       depoimentos: _data.DEPOIMENTOS,
       parceiros: _data.PARCEIROS,
       team: _data.TEAM,
+      locations_info: _data.LOCATIONS_INFO,
       blog: _data.BLOG_POSTS
     };
 

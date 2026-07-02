@@ -41,7 +41,8 @@
         faq:            'FAQS',
         depoimentos:    'DEPOIMENTOS',
         parceiros:      'PARCEIROS',
-        stats:          'STATS'
+        stats:          'STATS',
+        team:           'TEAM'
       };
       if (MODE === 'api') {
         return fetch(API_BASE + '/' + name).then(function(r) {
@@ -70,7 +71,8 @@
         faq:             window.FAQS || [],
         depoimentos:     window.DEPOIMENTOS || [],
         parceiros:       window.PARCEIROS || [],
-        stats:           window.STATS || []
+        stats:           window.STATS || [],
+        team:            window.TEAM || []
       };
     },
 
