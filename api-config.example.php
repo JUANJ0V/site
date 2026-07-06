@@ -18,6 +18,13 @@
 // Usada pelo save.php (modo simples) e como token de autenticação da api.php
 define('API_PASSWORD', 'suasenhaaqui');
 
+// ── Email para notificações de contato (opcional) ──
+// Se definido, o formulário de contato enviará emails para este endereço via PHP mail().
+// Se não definido, usa contato@furpal.com.br como fallback.
+// NOTA: muitos hosts gratuitos (InfinityFree free) bloqueiam PHP mail().
+// Nesse caso o formulário cai de fallback para FormSubmit.co.
+define('CONTACT_EMAIL', '');
+
 // ── MySQL (obrigatório apenas para o modo BD) ──
 define('DB_HOST',    'localhost');
 define('DB_NAME',    'seudb');

@@ -1514,6 +1514,12 @@ const GITHUB_PATH   = "js/data.js";
       + '<button class="btn-save" onclick="saveBdConfig()">💾 Salvar Config BD</button>'
       + '<button class="btn-save" onclick="testBdConnection()" style="margin-left:0.5rem;">🔌 Testar conexão</button>'
       + '<hr style="border-color:rgba(255,255,255,0.06);margin:1.5rem 0;">'
+      + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">📥 Export / Import Dados</h3>'
+      + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0 0 0.75rem;">Exporte todos os dados como JSON para backup, ou importe um backup anterior.</p>'
+      + '<button class="btn-save" onclick="exportData()">📤 Exportar dados (JSON)</button>'
+      + '<button class="btn-save" onclick="document.getElementById(\'importFileInput\').click()" style="margin-left:0.5rem;">📥 Importar dados (JSON)</button>'
+      + '<input type="file" id="importFileInput" accept=".json" style="display:none" onchange="importData(this)">'
+      + '<hr style="border-color:rgba(255,255,255,0.06);margin:1.5rem 0;">'
       + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">🔒 Desabilitar Painel</h3>'
       + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0;">Para desligar o painel, mude <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">ADMIN_ENABLED = false</code> no arquivo <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">js/admin.js</code> (linha 3) e publique.</p>'
       + '</div>';
@@ -1579,6 +1585,69 @@ const GITHUB_PATH   = "js/data.js";
         adminToast('❌ Sem conexão: ' + err.message, 'error');
       });
   };
+
+  /* ---- Export / Import ---- */
+  window.exportData = function() {
+    try { saveFormsToData(); } catch(e) {}
+    var data = {
+      constants: _data.constants,
+      stats: _data.STATS,
+      properties: _data.PROPERTIES,
+      empreendimentos: _data.EMPREENDIMENTOS,
+      faq: _data.FAQS,
+      depoimentos: _data.DEPOIMENTOS,
+      parceiros: _data.PARCEIROS,
+      team: _data.TEAM,
+      locations_info: _data.LOCATIONS_INFO,
+      blog: _data.BLOG_POSTS
+    };
+    var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'furpal-backup-' + new Date().toISOString().slice(0,10) + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    adminToast('✅ Dados exportados!', 'success');
+  };
+
+  window.importData = function(input) {
+    var file = input.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        var data = JSON.parse(e.target.result);
+        if (data.constants) Object.assign(_data.constants, data.constants);
+        if (data.stats) replaceArr(_data, 'STATS', data.stats);
+        if (data.properties) replaceArr(_data, 'PROPERTIES', data.properties);
+        if (data.empreendimentos) replaceArr(_data, 'EMPREENDIMENTOS', data.empreendimentos);
+        if (data.faq) replaceArr(_data, 'FAQS', data.faq);
+        if (data.depoimentos) replaceArr(_data, 'DEPOIMENTOS', data.depoimentos);
+        if (data.parceiros) replaceArr(_data, 'PARCEIROS', data.parceiros);
+        if (data.blog) replaceArr(_data, 'BLOG_POSTS', data.blog);
+        if (data.team) replaceArr(_data, 'TEAM', data.team);
+        if (data.locations_info) _data.LOCATIONS_INFO = data.locations_info;
+        syncToLive();
+        adminToast('✅ Dados importados com sucesso! Re-renderizando...', 'success');
+        reRenderAllTabs();
+      } catch(err) {
+        adminToast('❌ Erro ao importar: ' + err.message, 'error');
+      }
+    };
+    reader.readAsText(file);
+    input.value = '';
+  };
+
+  function reRenderAllTabs() {
+    var tabs = ['general','financiamento','properties','empreendimentos','blog','faq','depoimentos','parceiros','team','region'];
+    tabs.forEach(function(id) {
+      var div = document.querySelector('.admin-section[data-tab="' + id + '"]');
+      if (div) window['render' + id.charAt(0).toUpperCase() + id.slice(1)](div);
+    });
+  }
 
   window.saveToApi = function() {
     if (!DataProvider.isApi()) {

@@ -325,23 +325,33 @@
     }
     }
   }
-  // Contact form — set endpoint and handle submission
+  // Contact form — try our PHP endpoint first, fallback to formsubmit.co
   var form = document.getElementById('contactForm');
   if (form) {
-    form.action = 'https://formsubmit.co/' + SITE_EMAIL;
     form.addEventListener('submit', function(e) {
       e.preventDefault();
       var btn = form.querySelector('button[type="submit"]');
       var originalText = btn.textContent;
       btn.textContent = 'Enviando...';
       btn.disabled = true;
-      fetch(form.action, { method: 'POST', body: new FormData(form) })
-        .then(function() {
-          document.getElementById('formFields').style.display = 'none';
-          document.getElementById('formSuccess').style.display = 'block';
+      function showSuccess() {
+        document.getElementById('formFields').style.display = 'none';
+        document.getElementById('formSuccess').style.display = 'block';
+      }
+      fetch('send-contact.php', { method: 'POST', body: new FormData(form) })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+          if (res.ok) { showSuccess(); }
+          else { throw new Error(res.error || 'Erro'); }
         })
         .catch(function() {
-          // Fallback: submit normally (opens thank-you page)
+          // Fallback to formsubmit.co
+          form.action = 'https://formsubmit.co/' + SITE_EMAIL;
+          return fetch(form.action, { method: 'POST', body: new FormData(form) });
+        })
+        .then(function() { showSuccess(); })
+        .catch(function() {
+          // Last resort: native submit (opens formsubmit thank-you page)
           form.submit();
         })
         .finally(function() {
