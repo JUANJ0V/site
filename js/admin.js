@@ -1608,16 +1608,16 @@ const GITHUB_PATH   = "js/data.js";
       .then(function(res) {
         if (res && res.ok) {
           adminToast('✅ Dados salvos no BD!', 'success');
-          // Also update data.js so the public site shows the same data
           var pwd = localStorage.getItem('admin_server_pass');
           if (pwd) {
-            fetch('save.php', {
+            return fetch('save.php', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ content: generateDataJs(), password: pwd })
-            }).catch(function() {});
+            }).then(function(r) {
+              if (!r.ok) console.warn('[Admin] data.js não foi atualizado');
+            });
           }
-          setTimeout(function() { location.reload(); }, 1500);
         } else {
           adminToast('❌ ' + ((res && res.error) || 'Erro ao salvar no BD'), 'error');
         }
@@ -1628,6 +1628,7 @@ const GITHUB_PATH   = "js/data.js";
       .finally(function() {
         btn.textContent = oldText;
         btn.disabled = false;
+        setTimeout(function() { location.reload(); }, 1000);
       });
   };
 
