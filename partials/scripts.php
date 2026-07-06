@@ -11,14 +11,15 @@
     if (xhr.status === 200) {
       try {
         var d = JSON.parse(xhr.responseText);
-        if (d.properties && d.properties.length) window.PROPERTIES = d.properties;
-        if (d.empreendimentos && d.empreendimentos.length) window.EMPREENDIMENTOS = d.empreendimentos;
-        if (d.faq && d.faq.length) window.FAQS = d.faq;
-        if (d.depoimentos && d.depoimentos.length) window.DEPOIMENTOS = d.depoimentos;
-        if (d.parceiros && d.parceiros.length) window.PARCEIROS = d.parceiros;
-        if (d.blog && d.blog.length) window.BLOG_POSTS = d.blog;
-        if (d.team && d.team.length) window.TEAM = d.team;
-        if (d.stats && d.stats.length) window.STATS = d.stats;
+        if (d.properties && d.properties.length) { try { PROPERTIES.length=0; d.properties.forEach(function(p){PROPERTIES.push(p);}); } catch(e) { window.PROPERTIES = d.properties; } }
+        if (d.empreendimentos && d.empreendimentos.length) { try { EMPREENDIMENTOS.length=0; d.empreendimentos.forEach(function(e){EMPREENDIMENTOS.push(e);}); } catch(e) { window.EMPREENDIMENTOS = d.empreendimentos; } }
+        if (d.faq && d.faq.length) { try { FAQS.length=0; d.faq.forEach(function(f){FAQS.push(f);}); } catch(e) { window.FAQS = d.faq; } }
+        if (d.depoimentos && d.depoimentos.length) { try { DEPOIMENTOS.length=0; d.depoimentos.forEach(function(dd){DEPOIMENTOS.push(dd);}); } catch(e) { window.DEPOIMENTOS = d.depoimentos; } }
+        if (d.parceiros && d.parceiros.length) { try { PARCEIROS.length=0; d.parceiros.forEach(function(pp){PARCEIROS.push(pp);}); } catch(e) { window.PARCEIROS = d.parceiros; } }
+        if (d.blog && d.blog.length) { try { BLOG_POSTS.length=0; d.blog.forEach(function(b){BLOG_POSTS.push(b);}); } catch(e) { window.BLOG_POSTS = d.blog; } }
+        if (d.team && d.team.length) { try { TEAM.length=0; d.team.forEach(function(t){TEAM.push(t);}); } catch(e) { window.TEAM = d.team; } }
+        if (d.stats && d.stats.length) { try { STATS.length=0; d.stats.forEach(function(s){STATS.push(s);}); } catch(e) { window.STATS = d.stats; } }
+        if (d.locations_info && typeof d.locations_info === 'object' && !Array.isArray(d.locations_info)) { try { Object.keys(LOCATIONS_INFO).forEach(function(k){delete LOCATIONS_INFO[k];}); Object.keys(d.locations_info).forEach(function(k){LOCATIONS_INFO[k]=d.locations_info[k];}); } catch(e) { window.LOCATIONS_INFO = d.locations_info; } }
       } catch(e) { console.warn('[BD] Erro ao parsear dados:', e); }
     }
   }

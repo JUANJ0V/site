@@ -1017,6 +1017,20 @@ function setupMobileNav() {
         TEAM.length = 0;
         data.team.forEach(function(i) { TEAM.push(i); });
       }
+      // Re-build nav dropdowns with updated data
+      ['ddComprar','ddAlugar','ddLanc','mobDdComprar','mobDdAlugar','mobDdLanc'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.innerHTML = '';
+      });
+      buildDropdownMenus();
+      // Re-render property cards with BD data
+      renderPropertyCards('#comprar .grid-3', 'sale');
+      renderPropertyCards('#alugar .grid-2', 'rent');
+      renderEmpreendimentoCards();
+      renderFAQs();
+      renderDepoimentos();
+      renderParceiros();
+      renderBlogCards();
       // Apply constants from API to globals and DOM
       if (data.constants) {
         var _c = data.constants;
