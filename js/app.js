@@ -82,7 +82,7 @@ function _t(section) {
 // Handles subdirectory deployments (e.g. GitHub Pages /site/)
 var BASE_PATH = (function() {
   var p = window.location.pathname.replace(/\/index\.html$/, '').replace(/\/+$/, '');
-  return p === '' ? '' : p + '/';
+  return p === '' ? '/' : p + '/';
 })();
 
 // Handle initial redirect from 404.html (GitHub Pages SPA fallback)
@@ -984,6 +984,118 @@ function setupMobileNav() {
   renderParceiros();
   renderBlogCards();
   buildDropdownMenus();
+
+  // BD mode: load data from API and re-render
+  if (window.DataProvider && DataProvider.isApi()) {
+    DataProvider.getAll().then(function(data) {
+      if (!data) return;
+      if (data.depoimentos) {
+        DEPOIMENTOS.length = 0;
+        data.depoimentos.forEach(function(i) { DEPOIMENTOS.push(i); });
+      }
+      if (data.parceiros) {
+        PARCEIROS.length = 0;
+        data.parceiros.forEach(function(i) { PARCEIROS.push(i); });
+      }
+      if (data.faq) {
+        FAQS.length = 0;
+        data.faq.forEach(function(i) { FAQS.push(i); });
+      }
+      if (data.properties) {
+        PROPERTIES.length = 0;
+        data.properties.forEach(function(i) { PROPERTIES.push(i); });
+      }
+      if (data.empreendimentos) {
+        EMPREENDIMENTOS.length = 0;
+        data.empreendimentos.forEach(function(i) { EMPREENDIMENTOS.push(i); });
+      }
+      if (data.blog) {
+        BLOG_POSTS.length = 0;
+        data.blog.forEach(function(i) { BLOG_POSTS.push(i); });
+      }
+      if (data.team) {
+        TEAM.length = 0;
+        data.team.forEach(function(i) { TEAM.push(i); });
+      }
+      // Apply constants from API to globals and DOM
+      if (data.constants) {
+        var _c = data.constants;
+        if (_c.WHATSAPP_NUMBER) window._waURL = 'https://wa.me/' + String(_c.WHATSAPP_NUMBER).replace(/\D/g, '');
+        if (_c.WHATSAPP_MSG) window._waMsg = _c.WHATSAPP_MSG;
+          if (_c.SOCIAL && typeof SOCIAL !== 'undefined') {
+            for (var _sk in _c.SOCIAL) SOCIAL[_sk] = _c.SOCIAL[_sk];
+          }
+          (function() {
+            var sk = ['SITE_NAME','SITE_LOGO','LOGO_MAX_HEIGHT','LOGO_MAX_WIDTH','LOGO_MARGIN','WHATSAPP_NUMBER','WHATSAPP_DISPLAY','WHATSAPP_MSG','SITE_EMAIL','SITE_URL','SITE_ADDRESS','SITE_MAPS','SITE_CITY','SITE_REGION','HERO_EYEBROW','HERO_TITLE','HERO_SUBTITLE','SECTION_SOBRE_EYEBROW','SECTION_SOBRE_TITLE','SECTION_COMPRAR_EYEBROW','SECTION_COMPRAR_TITLE','SECTION_ALUGAR_EYEBROW','SECTION_ALUGAR_TITLE','SECTION_LANCAMENTOS_EYEBROW','SECTION_LANCAMENTOS_TITLE','SECTION_SERVICOS_EYEBROW','SECTION_SERVICOS_TITLE','SECTION_DEPOIMENTOS_EYEBROW','SECTION_DEPOIMENTOS_TITLE','SECTION_PARCEIROS_EYEBROW','SECTION_PARCEIROS_TITLE','SECTION_FAQ_EYEBROW','SECTION_FAQ_TITLE','SECTION_FINANCIAMENTO_EYEBROW','SECTION_FINANCIAMENTO_TITLE','SECTION_CONTATO_EYEBROW','SECTION_CONTATO_TITLE','SECTION_MAPA_EYEBROW','SECTION_MAPA_TITLE','SECTION_BLOG_EYEBROW','SECTION_BLOG_TITLE','SECTION_FAVORITOS_EYEBROW','SECTION_FAVORITOS_TITLE','SECTION_FAVORITOS_EMPTY','DISABLED_SECTIONS','PAGE_SIZE','ENABLE_DROPDOWN_MENU','FIN_DEFAULT_PRICE','FIN_DEFAULT_DOWN','FIN_DEFAULT_RATE','FIN_DEFAULT_TERM'];
+            for (var i = 0; i < sk.length; i++) { var k = sk[i]; if (_c[k] !== undefined) window[k] = _c[k]; }
+          })();
+          try {
+            var _cn = _c.SITE_NAME || '';
+            if (_c.HERO_EYEBROW) { var e = document.querySelector('#inicio .eyebrow'); if (e) e.textContent = _c.HERO_EYEBROW; }
+            if (_c.HERO_TITLE) { var e = document.querySelector('#inicio h1'); if (e) e.textContent = _c.HERO_TITLE; }
+            if (_c.HERO_SUBTITLE) { var e = document.querySelector('#inicio .hero-content p:not(.eyebrow)'); if (e) e.textContent = _c.HERO_SUBTITLE; }
+            var _smap = { HERO_EYEBROW:'.hero-content .eyebrow',HERO_TITLE:'.hero-content h1',HERO_SUBTITLE:'.hero-content p + p',SECTION_SOBRE_EYEBROW:'#sobre .eyebrow',SECTION_SOBRE_TITLE:'#sobre h2',SECTION_COMPRAR_EYEBROW:'#comprar .eyebrow',SECTION_COMPRAR_TITLE:'#comprar h2',SECTION_ALUGAR_EYEBROW:'#alugar .eyebrow',SECTION_ALUGAR_TITLE:'#alugar h2',SECTION_LANCAMENTOS_EYEBROW:'#lancamentos .eyebrow',SECTION_LANCAMENTOS_TITLE:'#lancamentos h2',SECTION_SERVICOS_EYEBROW:'#servicos .eyebrow',SECTION_SERVICOS_TITLE:'#servicos h2',SECTION_DEPOIMENTOS_EYEBROW:'#depoimentos .eyebrow',SECTION_DEPOIMENTOS_TITLE:'#depoimentos h2',SECTION_PARCEIROS_EYEBROW:'#parceiros .eyebrow',SECTION_PARCEIROS_TITLE:'#parceiros h2',SECTION_FAQ_EYEBROW:'#faq .eyebrow',SECTION_FAQ_TITLE:'#faq h2',SECTION_STATS_EYEBROW:'#sectionStatsEyebrow',SECTION_STATS_TITLE:'#sectionStatsTitle',SECTION_FINANCIAMENTO_EYEBROW:'#financiamento .eyebrow',SECTION_FINANCIAMENTO_TITLE:'#financiamento h2',SECTION_CONTATO_EYEBROW:'#contato-form .eyebrow',SECTION_CONTATO_TITLE:'#contato-form h2',SECTION_MAPA_EYEBROW:'#sectionMapaEyebrow',SECTION_MAPA_TITLE:'#sectionMapaTitle',SECTION_BLOG_EYEBROW:'#sectionBlogEyebrow',SECTION_BLOG_TITLE:'#sectionBlogTitle',SECTION_FAVORITOS_EYEBROW:'#sectionFavEyebrow',SECTION_FAVORITOS_TITLE:'#sectionFavTitle',SECTION_PRIVACIDADE_EYEBROW:'#privacidade .eyebrow',SECTION_PRIVACIDADE_TITLE:'#privacidade h2' };
+            for (var _sk in _smap) { if (_c[_sk]) { var el = document.querySelector(_smap[_sk]); if (el) el.textContent = _c[_sk]; } }
+            if (_cn) {
+              document.querySelectorAll('.site-logo').forEach(function(el) {
+                if (_c.SITE_LOGO) { el.innerHTML = '<img src="' + _c.SITE_LOGO.replace(/"/g,'&quot;') + '" alt="' + _cn.replace(/"/g,'&quot;') + '" loading="lazy" />'; }
+                else { var w = _cn.split(' '); el.innerHTML = w.length > 1 ? w[0] + ' <span>' + w.slice(1).join(' ') + '</span>' : _cn; }
+              });
+              if (_c.LOGO_MAX_HEIGHT) document.documentElement.style.setProperty('--logo-max-height', _c.LOGO_MAX_HEIGHT);
+              if (_c.LOGO_MAX_WIDTH) document.documentElement.style.setProperty('--logo-max-width', _c.LOGO_MAX_WIDTH);
+              if (_c.LOGO_MARGIN) document.documentElement.style.setProperty('--logo-margin', _c.LOGO_MARGIN);
+              var _fc = document.querySelector('.footer-bottom span, .footer-col:last-child span');
+              if (_fc) _fc.textContent = '\u00A9 ' + new Date().getFullYear() + ' ' + _cn + '. Todos os direitos reservados.';
+              var _tt = document.querySelector('title');
+              if (_tt) _tt.textContent = _tt.textContent.replace(/\|.*$/, '| ' + _cn);
+            }
+            if (_c.SITE_EMAIL) {
+              document.querySelectorAll('a[href*="mailto:"]').forEach(function(a) {
+                a.href = 'mailto:' + _c.SITE_EMAIL;
+                if (a.textContent.indexOf('@') > -1) a.textContent = _c.SITE_EMAIL;
+              });
+            }
+            if (_c.SITE_ADDRESS) {
+              document.querySelectorAll('.footer-col li').forEach(function(li) {
+                if (li.textContent.indexOf('Av.') > -1) {
+                  if (_c.SITE_MAPS) { li.innerHTML = '<a href="' + _c.SITE_MAPS.replace(/"/g,'&quot;') + '" target="_blank" style="text-decoration:underline;">' + _c.SITE_ADDRESS.replace(/"/g,'&quot;') + '</a>'; }
+                  else { li.textContent = _c.SITE_ADDRESS; }
+                }
+                if (li.textContent.indexOf('—') > -1 || li.textContent.indexOf('SC') > -1) {
+                  li.textContent = (_c.SITE_CITY || '') + ' \u2014 ' + (_c.SITE_REGION || '');
+                }
+              });
+            }
+            if (_c.SOCIAL) {
+              var _ig = document.querySelector('.social-instagram');
+              var _fb = document.querySelector('.social-facebook');
+              var _yt = document.querySelector('.social-youtube');
+              if (_ig && _c.SOCIAL.instagram) _ig.href = _c.SOCIAL.instagram;
+              if (_fb && _c.SOCIAL.facebook) _fb.href = _c.SOCIAL.facebook;
+              if (_yt && _c.SOCIAL.youtube) _yt.href = _c.SOCIAL.youtube;
+            }
+          } catch(e) { console.warn('[API] constants DOM update error:', e); }
+        }
+      renderPropertyCards('#comprar .grid-3', 'sale');
+      renderPropertyCards('#alugar .grid-2', 'rent');
+      renderEmpreendimentoCards();
+      renderFAQs();
+      renderDepoimentos();
+      renderParceiros();
+      renderBlogCards();
+    }).catch(function(e) {
+      console.warn('[API] Falha ao carregar dados:', e);
+      var _errDiv = document.createElement('div');
+      _errDiv.style.cssText = 'position:fixed;bottom:1rem;right:1rem;background:#c0392b;color:#fff;padding:1rem 1.5rem;border-radius:8px;z-index:99999;font-size:0.85rem;max-width:350px;box-shadow:0 4px 12px rgba(0,0,0,0.3);cursor:pointer;';
+      _errDiv.innerHTML = '<strong>⚠️ API offline</strong><br>Dados do BD não carregaram. <span style="opacity:0.7">(clique para fechar)</span>';
+      _errDiv.onclick = function() { _errDiv.remove(); };
+      document.body.appendChild(_errDiv);
+    });
+  }
+  // Show API base URL in console for debugging
+  if (window.DataProvider) {
+    console.log('[BD] API_BASE:', DataProvider.apiBase || '(unknown)', 'Mode:', DataProvider.mode || '(unknown)');
+  }
 
   // SPA router
   const EMPREENDIMENTO_IDS = {};

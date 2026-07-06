@@ -146,46 +146,52 @@ const GITHUB_PATH   = "js/data.js";
   // ── Criar elementos ──
   var loginEl = document.createElement('div');
   loginEl.id = 'adminLogin';
-  loginEl.innerHTML = '<div class="box"><h2>🔐 Painel Admin</h2><p>Entre para gerenciar o site</p><input type="text" id="adminUser" placeholder="Usuário" autocomplete="off"><input type="password" id="adminPass" placeholder="Senha"><button onclick="adminLogin()">Entrar</button><div class="error" id="adminLoginError">Usuário ou senha incorretos</div></div>';
+  loginEl.innerHTML = '<div class="box"><h2>🔐 Painel Admin</h2><p>Entre para gerenciar o site</p><form onsubmit="adminLogin();return false"><input type="text" id="adminUser" placeholder="Usuário" autocomplete="off"><input type="password" id="adminPass" placeholder="Senha"><button type="submit">Entrar</button></form><div class="error" id="adminLoginError">Usuário ou senha incorretos</div></div>';
   document.body.appendChild(loginEl);
 
   var panelEl = document.createElement('div');
   panelEl.id = 'adminPanel';
   panelEl.innerHTML = '<div class="admin-header"><h1>⚙️ Su Imobiliária — Admin</h1><div class="admin-actions"><button onclick="adminToggleSite()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);">👁 Ver site</button><button onclick="adminSaveServer()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);" id="adminSaveBtn">💾 Salvar</button><button onclick="adminPublish()" class="btn-publish" id="adminPublishBtn">📦 Publicar no GitHub</button><button onclick="adminLogout()">Sair</button></div></div><div class="admin-body"><div class="admin-sidebar" id="adminSidebar"></div><div class="admin-content" id="adminContent"></div></div>';
-  // Update buttons if in API mode
-  if (DataProvider.isApi()) {
+  document.body.appendChild(panelEl);
+
+  // Update buttons if in API mode (after appending to DOM)
+  if (typeof DataProvider !== 'undefined' && DataProvider.isApi()) {
     document.getElementById('adminSaveBtn').textContent = '💾 Salvar (BD)';
     document.getElementById('adminPublishBtn').textContent = '☁️ Salvar na API';
     document.getElementById('adminPublishBtn').className = 'btn-publish';
   }
-  document.body.appendChild(panelEl);
 
   var toastEl = document.createElement('div');
   toastEl.id = 'adminToast';
   document.body.appendChild(toastEl);
 
-  // ── Enter key support on login ──
-  setTimeout(function() {
-    var passInput = document.getElementById('adminPass');
-    if (passInput) {
-      passInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') adminLogin();
-      });
+  function tryFrontendLogin(u, p) {
+    if (u === ADMIN_USER && p === ADMIN_PASS) {
+      sessionStorage.setItem('admin_logged', '1');
+      loginEl.classList.add('hidden');
+      panelEl.classList.add('active');
+      document.body.classList.add('admin-mode');
+      adminFloat.style.display = 'none';
+      initAdminPanel();
+    } else {
+      document.getElementById('adminLoginError').style.display = 'block';
     }
-    var userInput = document.getElementById('adminUser');
-    if (userInput) {
-      userInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') adminLogin();
-      });
+  }
+
+  function fallbackFrontendLogin(u, p) {
+    // Si falla API login, forza modo frontend e intenta login directo
+    if (typeof DataProvider !== 'undefined') {
+      DataProvider.setMode('frontend', '/api');
     }
-  }, 50);
+    tryFrontendLogin(u, p);
+  }
 
   window.adminLogin = function() {
     var u = document.getElementById('adminUser').value;
     var p = document.getElementById('adminPass').value;
     // BD mode: login via API
-    if (DataProvider.isApi()) {
-      fetch(DataProvider.apiBase + '/login', {
+    if (typeof DataProvider !== 'undefined' && DataProvider.isApi()) {
+      fetch(DataProvider.apiBase + '?action=login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: u, password: p })
@@ -202,27 +208,18 @@ const GITHUB_PATH   = "js/data.js";
           adminFloat.style.display = 'none';
           initAdminPanel();
         } else {
-          document.getElementById('adminLoginError').textContent = res.error || 'Usuário ou senha incorretos';
-          document.getElementById('adminLoginError').style.display = 'block';
+          // Fallback: tenta login frontend se API falhar
+          fallbackFrontendLogin(u, p);
         }
       })
       .catch(function(err) {
-        document.getElementById('adminLoginError').textContent = 'Erro de conexão: ' + err.message;
-        document.getElementById('adminLoginError').style.display = 'block';
+        // Fallback: tenta login frontend se API não responder
+        fallbackFrontendLogin(u, p);
       });
       return;
     }
     // Frontend mode: hardcoded login
-    if (u === ADMIN_USER && p === ADMIN_PASS) {
-      sessionStorage.setItem('admin_logged', '1');
-      loginEl.classList.add('hidden');
-      panelEl.classList.add('active');
-      document.body.classList.add('admin-mode');
-      adminFloat.style.display = 'none';
-      initAdminPanel();
-    } else {
-      document.getElementById('adminLoginError').style.display = 'block';
-    }
+    tryFrontendLogin(u, p);
   };
 
   var adminFloat = document.createElement('div');
@@ -474,10 +471,13 @@ const GITHUB_PATH   = "js/data.js";
     panelEl.classList.remove('active');
     return;
   }
-  loginEl.classList.add('hidden');
-  panelEl.classList.add('active');
-  document.body.classList.add('admin-mode');
-  initAdminPanel();
+  // Defer to next tick so window.showTab & render functions are defined first
+  setTimeout(function() {
+    loginEl.classList.add('hidden');
+    panelEl.classList.add('active');
+    document.body.classList.add('admin-mode');
+    initAdminPanel();
+  }, 0);
 
   function initAdminPanel() {
     try {
@@ -498,7 +498,46 @@ const GITHUB_PATH   = "js/data.js";
       buildSidebar();
       var initialTab = window._redirectTab || 'general';
       queueTabShow(initialTab);
+      // Se estiver em modo BD, recarrega os dados da API
+      if (window.DataProvider && DataProvider.isApi()) {
+        DataProvider.getAll().then(function(apiData) {
+          if (!apiData) return;
+          var hasData = Object.keys(apiData).some(function(k) {
+            var v = apiData[k];
+            if (Array.isArray(v)) return v.length > 0;
+            if (typeof v === 'object' && v !== null) return Object.keys(v).length > 0;
+            return false;
+          });
+          if (!hasData) {
+            adminToast('ℹ️ BD vazio. Dados atuais mantidos. Salve na API para enviá-los.', 'info');
+            return;
+          }
+          if (apiData.constants) Object.assign(_data.constants, apiData.constants);
+          if (apiData.stats) replaceArr(_data, 'STATS', apiData.stats);
+          if (apiData.properties) replaceArr(_data, 'PROPERTIES', apiData.properties);
+          if (apiData.empreendimentos) replaceArr(_data, 'EMPREENDIMENTOS', apiData.empreendimentos);
+          if (apiData.faq) replaceArr(_data, 'FAQS', apiData.faq);
+          if (apiData.depoimentos) replaceArr(_data, 'DEPOIMENTOS', apiData.depoimentos);
+          if (apiData.parceiros) replaceArr(_data, 'PARCEIROS', apiData.parceiros);
+          if (apiData.blog) replaceArr(_data, 'BLOG_POSTS', apiData.blog);
+          if (apiData.team) replaceArr(_data, 'TEAM', apiData.team);
+          if (apiData.locations_info) _data.LOCATIONS_INFO = apiData.locations_info;
+          adminToast('✅ Dados carregados da API', 'success');
+          // Re-render current tab
+          var activeTab = document.querySelector('.sidebar-link.active');
+          if (activeTab) {
+            var tabId = activeTab.getAttribute('data-tab');
+            if (tabId && typeof window.showTab === 'function') window.showTab(tabId);
+          }
+        }).catch(function(e) {
+          adminToast('⚠️ API offline: ' + (e.message || 'erro'), 'error');
+        });
+      }
     } catch(e) { console.error('Admin init error:', e); }
+  }
+  function replaceArr(obj, key, arr) {
+    obj[key].length = 0;
+    arr.forEach(function(i) { obj[key].push(i); });
   }
 
   function queueTabShow(id, attempt) {
@@ -593,6 +632,7 @@ const GITHUB_PATH   = "js/data.js";
       { id:'depoimentos', label:'💬 Depoimentos' },
       { id:'parceiros', label:'🤝 Parceiros' },
       { id:'team', label:'👥 Equipe' },
+      { id:'region', label:'📍 Região' },
       { id:'users', label:'👥 Usuários' },
       { id:'settings', label:'🔑 Config' }
     ];
@@ -664,6 +704,7 @@ const GITHUB_PATH   = "js/data.js";
         case 'depoimentos': renderAdminDepoimentos(div); break;
         case 'parceiros': renderAdminParceiros(div); break;
         case 'team': renderAdminTeam(div); break;
+        case 'region': renderAdminRegion(div); break;
         case 'users': renderUsers(div); break;
         case 'settings': renderSettings(div); break;
       }
@@ -1290,6 +1331,82 @@ const GITHUB_PATH   = "js/data.js";
     });
   }
 
+  /* ─── Região (LOCATIONS_INFO) ─── */
+
+  window.renderAdminRegion = function(container) {
+    var keys = Object.keys(_data.LOCATIONS_INFO);
+    var html = '<h2>📍 Conhecer a Região (' + keys.length + ')</h2><p class="desc">Informações sobre cada cidade/região.</p>';
+    html += '<button class="btn-add" onclick="addRegionLocation()">+ Nova Região</button>';
+    html += '<table class="admin-table"><thead><tr><th>Nome</th><th>Praias</th><th class="actions">Ações</th></tr></thead><tbody>';
+    keys.forEach(function(k) {
+      var loc = _data.LOCATIONS_INFO[k];
+      html += '<tr><td>' + esc(k) + '</td><td>' + (loc.beaches ? loc.beaches.length : 0) + ' praias</td>'
+        + '<td class="actions"><button onclick="editRegionLocation(' + JSON.stringify(k) + ')">✏️</button><button class="btn-del" onclick="delRegionLocation(' + JSON.stringify(k) + ')">🗑️</button></td></tr>';
+    });
+    html += '</tbody></table>';
+    container.innerHTML = html;
+  };
+
+  window.addRegionLocation = function() {
+    var name = prompt('Nome da cidade/região:');
+    if (!name || _data.LOCATIONS_INFO[name]) return;
+    _data.LOCATIONS_INFO[name] = {
+      tagline: '',
+      images: [],
+      beaches: [],
+      intro: '',
+      history: '',
+      safety: '',
+      highlights: []
+    };
+    editRegionLocation(name);
+  };
+
+  window.editRegionLocation = function(key) {
+    var loc = _data.LOCATIONS_INFO[key];
+    if (!loc) return;
+    openModal('📍 Editar: ' + key,
+      '<label>Nome da região</label><input id="rl_key" value="' + esc(key) + '">'
+      + '<label>Tagline</label><input id="rl_tagline" value="' + esc(loc.tagline || '') + '">'
+      + '<label>Imagens (URLs, separadas por vírgula)</label><textarea id="rl_images" rows="2">' + esc((loc.images || []).join(', ')) + '</textarea>'
+      + '<label>Introdução</label><textarea id="rl_intro" rows="3">' + esc(loc.intro || '') + '</textarea>'
+      + '<label>História</label><textarea id="rl_history" rows="3">' + esc(loc.history || '') + '</textarea>'
+      + '<label>Segurança</label><textarea id="rl_safety" rows="3">' + esc(loc.safety || '') + '</textarea>'
+      + '<label>Praias (nome: descrição; separar com |)</label><textarea id="rl_beaches" rows="3">' + esc((loc.beaches || []).map(function(b) { return b.name + ': ' + b.desc; }).join(' | ')) + '</textarea>'
+      + '<label>Destaques (separados por |)</label><textarea id="rl_highlights" rows="3">' + esc((loc.highlights || []).join(' | ')) + '</textarea>',
+      function() {
+        var newKey = gv('rl_key').trim();
+        if (!newKey) return;
+        if (newKey !== key) {
+          _data.LOCATIONS_INFO[newKey] = _data.LOCATIONS_INFO[key];
+          delete _data.LOCATIONS_INFO[key];
+        }
+        var l = _data.LOCATIONS_INFO[newKey];
+        l.tagline = gv('rl_tagline');
+        l.images = gv('rl_images').split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+        l.intro = gv('rl_intro');
+        l.history = gv('rl_history');
+        l.safety = gv('rl_safety');
+        l.beaches = gv('rl_beaches').split('|').map(function(s) {
+          var parts = s.split(':');
+          return { name: (parts[0] || '').trim(), desc: (parts.slice(1).join(':') || '').trim() };
+        }).filter(function(b) { return b.name; });
+        l.highlights = gv('rl_highlights').split('|').map(function(s) { return s.trim(); }).filter(Boolean);
+        syncToLive();
+        adminToast('✅ Região salva', 'success');
+        renderAdminRegion(document.getElementById('adminSection_region'));
+      }
+    );
+  };
+
+  window.delRegionLocation = function(key) {
+    if (!confirm('Excluir região "' + key + '"?')) return;
+    delete _data.LOCATIONS_INFO[key];
+    syncToLive();
+    renderAdminRegion(document.getElementById('adminSection_region'));
+    adminToast('🗑️ Região removida', 'info');
+  };
+
   window.addUser = function() {
     openModal('👤 Novo Usuário',
       '<label>Usuário</label><input id="user_name" value="">'
@@ -1391,6 +1508,7 @@ const GITHUB_PATH   = "js/data.js";
       + '<hr style="border-color:rgba(255,255,255,0.06);margin:1.5rem 0;">'
       + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">🗄️ Modo Banco de Dados (API)</h3>'
       + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0 0 0.75rem;">Quando tiver um backend com BD, ative este modo. O painel vai ler e salvar os dados via API REST em vez de usar o <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">data.js</code> local.</p>'
+      + '<div class="note" style="margin:0 0 0.75rem;">Passo a passo para Hostinger:<br>1. Crie o banco MySQL no painel da Hostinger<br>2. Copie <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">api-config.example.php</code> como <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">api-config.php</code> e preencha os dados<br>3. Faça upload de <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">api.php</code> e <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">api-config.php</code> para a raiz do site<br>4. Acesse <strong>/api.php?action=setup</strong> uma vez para criar as tabelas<br>5. Volte aqui, ative o modo BD com URL base <strong>/api.php</strong> e clique em "Testar conexão"</div>'
       + '<label><input type="checkbox" id="cfg_bdMode" ' + (DataProvider.isApi()?'checked':'') + ' onchange="toggleBdMode()"> Ativar modo BD</label>'
       + '<label>URL base da API</label><input id="cfg_apiBase" type="url" value="' + esc(DataProvider.apiBase) + '" placeholder="/api">'
       + '<button class="btn-save" onclick="saveBdConfig()">💾 Salvar Config BD</button>'
@@ -1452,7 +1570,7 @@ const GITHUB_PATH   = "js/data.js";
   window.testBdConnection = function() {
     var apiBase = document.getElementById('cfg_apiBase').value.trim() || '/api';
     adminToast('🔌 Testando conexão com ' + apiBase + '...', 'info');
-    fetch(apiBase + '/ping', { method: 'HEAD', cache: 'no-store' })
+    fetch(apiBase + '?action=ping', { method: 'HEAD', cache: 'no-store' })
       .then(function(r) {
         if (r.ok) adminToast('✅ Conexão OK!', 'success');
         else adminToast('⚠️ Respondeu com status ' + r.status, 'warning');
@@ -1490,6 +1608,16 @@ const GITHUB_PATH   = "js/data.js";
       .then(function(res) {
         if (res && res.ok) {
           adminToast('✅ Dados salvos no BD!', 'success');
+          // Also update data.js so the public site shows the same data
+          var pwd = localStorage.getItem('admin_server_pass');
+          if (pwd) {
+            fetch('save.php', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ content: generateDataJs(), password: pwd })
+            }).catch(function() {});
+          }
+          setTimeout(function() { location.reload(); }, 1500);
         } else {
           adminToast('❌ ' + ((res && res.error) || 'Erro ao salvar no BD'), 'error');
         }
@@ -1643,11 +1771,11 @@ const GITHUB_PATH   = "js/data.js";
     }
 
     function strConst(name, val) {
-      return 'const ' + name + ' = ' + JSON.stringify(val) + ';\n';
+      return 'let ' + name + ' = ' + JSON.stringify(val) + ';\n';
     }
 
     function strExpr(name, expr) {
-      return 'const ' + name + ' = ' + expr + ';\n';
+      return 'let ' + name + ' = ' + expr + ';\n';
     }
 
     var out = '/* ===================================================================\n';
@@ -1953,6 +2081,14 @@ const GITHUB_PATH   = "js/data.js";
     } catch(e) { console.warn('syncToLive financiamento:', e); }
     // WhatsApp — update all links with new number (always runs)
     updateLiveWhatsApp(c.WHATSAPP_NUMBER, c.WHATSAPP_DISPLAY);
+    // LOCATIONS_INFO — sync region data back to live
+    try {
+      if (typeof LOCATIONS_INFO !== 'undefined') {
+        var li = _data.LOCATIONS_INFO;
+        Object.keys(li).forEach(function(k) { LOCATIONS_INFO[k] = li[k]; });
+        Object.keys(LOCATIONS_INFO).forEach(function(k) { if (!li[k]) delete LOCATIONS_INFO[k]; });
+      }
+    } catch(e) { console.warn('syncToLive locations:', e); }
   }
 
   function updateLiveWhatsApp(number, display) {

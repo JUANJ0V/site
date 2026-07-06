@@ -2,68 +2,68 @@
    CONFIGURAÇÃO DO SITE — GERADO PELO PAINEL ADMIN
    =================================================================== */
 
-const WHATSAPP_NUMBER = "554788079254";
-const WHATSAPP_DISPLAY = "+55 47 8807-9254";
-const WHATSAPP_URL = "https://wa.me/" + WHATSAPP_NUMBER;
-const WHATSAPP_MSG = "Olá, tenho interesse no {titulo} ({preco})";
+let WHATSAPP_NUMBER = "554788079254";
+let WHATSAPP_DISPLAY = "+55 47 8807-9254";
+let WHATSAPP_URL = "https://wa.me/" + WHATSAPP_NUMBER;
+let WHATSAPP_MSG = "Olá, tenho interesse no {titulo} ({preco})";
 
-const SITE_NAME = "Furpal — Assessoria Imobiliária Internacional";
-const SITE_LOGO = "./images/fpaii.png";
-const LOGO_MAX_HEIGHT = "5rem";
-const LOGO_MAX_WIDTH = "200px";
-const LOGO_MARGIN = "0";
-const SITE_EMAIL = "contato@furpal.com.br";
-const SITE_URL = "https://furpal.com.br";
-const SITE_ADDRESS = "Av. Atlântica, 1500 — Centro";
-const SITE_MAPS = "https://www.google.com/maps/@-26.9883172,-48.6330731,3a,75y,99.45h,90.34t/data=!3m7!1e1!3m5!1sTTt4H2Kpxa2oN7lYFDdBGg!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D-0.3428505543425473%26panoid%3DTTt4H2Kpxa2oN7lYFDdBGg%26yaw%3D99.44775548719348!7i13312!8i6656?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D";
-const SITE_CITY = "Balneário Camboriú";
-const SITE_REGION = "SC";
+let SITE_NAME = "Furpal — Assessoria Imobiliária Internacional";
+let SITE_LOGO = "/images/fpaii.png";
+let LOGO_MAX_HEIGHT = "5rem";
+let LOGO_MAX_WIDTH = "200px";
+let LOGO_MARGIN = "0";
+let SITE_EMAIL = "contato@furpal.com.br";
+let SITE_URL = "https://furpal.com.br";
+let SITE_ADDRESS = "Av. Atlântica, 1500 — Centro";
+let SITE_MAPS = "https://www.google.com/maps/@-26.9883172,-48.6330731,3a,75y,99.45h,90.34t/data=!3m7!1e1!3m5!1sTTt4H2Kpxa2oN7lYFDdBGg!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D-0.3428505543425473%26panoid%3DTTt4H2Kpxa2oN7lYFDdBGg%26yaw%3D99.44775548719348!7i13312!8i6656?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D";
+let SITE_CITY = "Balneário Camboriú";
+let SITE_REGION = "SC";
 
-const SECTION_PARCEIROS_EYEBROW = "Parceiros";
-const SECTION_PARCEIROS_TITLE = "Instituições que confiam em nós";
+let SECTION_PARCEIROS_EYEBROW = "Parceiros";
+let SECTION_PARCEIROS_TITLE = "Instituições que confiam em nós";
 
-const HERO_EYEBROW = "Sua jornada começa aqui";
-const HERO_TITLE = "Furpal em Balneário Camboriú | Assessoria Imobiliária Completa";
-const HERO_SUBTITLE = "Mais de 500 imóveis no Território Catarinense. Te acompanhamos do início ao fim para você investir com segurança e confiança.";
+let HERO_EYEBROW = "Sua jornada começa aqui";
+let HERO_TITLE = "Furpal em Balneário Camboriú | Assessoria Imobiliária Completa";
+let HERO_SUBTITLE = "Mais de 500 imóveis no Território Catarinense. Te acompanhamos do início ao fim para você investir com segurança e confiança.";
 
-const SECTION_SOBRE_EYEBROW = "Assessoria imobiliária";
-const SECTION_SOBRE_TITLE = "Mais de 7 anos guiando pessoas ao redor do mundo rumo ao imóvel ideal.";
-const SECTION_COMPRAR_EYEBROW = "Imóveis à venda";
-const SECTION_COMPRAR_TITLE = "Encontre o imóvel ideal para comprar";
-const SECTION_ALUGAR_EYEBROW = "Imóveis para alugar";
-const SECTION_ALUGAR_TITLE = "As melhores opções de aluguel";
-const SECTION_LANCAMENTOS_EYEBROW = "Lançamentos";
-const SECTION_LANCAMENTOS_TITLE = "Empreendimentos exclusivos";
-const SECTION_SERVICOS_EYEBROW = "Serviços";
-const SECTION_SERVICOS_TITLE = "Assessoria completa no Território Catarinense";
-const SECTION_DEPOIMENTOS_EYEBROW = "Depoimentos";
-const SECTION_DEPOIMENTOS_TITLE = "O que nossos clientes dizem";
-const SECTION_FAQ_EYEBROW = "FAQ";
-const SECTION_FAQ_TITLE = "Perguntas frequentes";
-const SECTION_FINANCIAMENTO_EYEBROW = "Financiamento";
-const SECTION_FINANCIAMENTO_TITLE = "Simule seu financiamento imobiliário";
+let SECTION_SOBRE_EYEBROW = "Assessoria imobiliária";
+let SECTION_SOBRE_TITLE = "Mais de 7 anos guiando pessoas ao redor do mundo rumo ao imóvel ideal.";
+let SECTION_COMPRAR_EYEBROW = "Imóveis à venda";
+let SECTION_COMPRAR_TITLE = "Encontre o imóvel ideal para comprar";
+let SECTION_ALUGAR_EYEBROW = "Imóveis para alugar";
+let SECTION_ALUGAR_TITLE = "As melhores opções de aluguel";
+let SECTION_LANCAMENTOS_EYEBROW = "Lançamentos";
+let SECTION_LANCAMENTOS_TITLE = "Empreendimentos exclusivos";
+let SECTION_SERVICOS_EYEBROW = "Serviços";
+let SECTION_SERVICOS_TITLE = "Assessoria completa no Território Catarinense";
+let SECTION_DEPOIMENTOS_EYEBROW = "Depoimentos";
+let SECTION_DEPOIMENTOS_TITLE = "O que nossos clientes dizem";
+let SECTION_FAQ_EYEBROW = "FAQ";
+let SECTION_FAQ_TITLE = "Perguntas frequentes";
+let SECTION_FINANCIAMENTO_EYEBROW = "Financiamento";
+let SECTION_FINANCIAMENTO_TITLE = "Simule seu financiamento imobiliário";
 
-const FIN_DEFAULT_PRICE = 500000;
-const FIN_DEFAULT_DOWN  = 100000;
-const FIN_DEFAULT_RATE  = 8.5;
-const FIN_DEFAULT_TERM  = 240;
-const SECTION_CONTATO_EYEBROW = "Envie sua mensagem";
-const SECTION_CONTATO_TITLE = "Fale conosco";
-const SECTION_MAPA_EYEBROW = "Explore Santa Catarina";
-const SECTION_MAPA_TITLE = "Imóveis com tudo perto";
-const SECTION_BLOG_EYEBROW = "Blog";
-const SECTION_BLOG_TITLE = "Últimas do blog";
-const SECTION_FAVORITOS_EYEBROW = "Favoritos";
-const SECTION_FAVORITOS_TITLE = "Meus imóveis favoritos";
-const SECTION_FAVORITOS_EMPTY = "Nenhum imóvel favoritado ainda.";
-const SECTION_STATS_EYEBROW = "Equipe";
-const SECTION_STATS_TITLE = "Conheça quem faz a Furpal";
-const SECTION_PRIVACIDADE_EYEBROW = "LGPD";
-const SECTION_PRIVACIDADE_TITLE = "Política de Privacidade";
+let FIN_DEFAULT_PRICE = 500000;
+let FIN_DEFAULT_DOWN  = 100000;
+let FIN_DEFAULT_RATE  = 8.5;
+let FIN_DEFAULT_TERM  = 240;
+let SECTION_CONTATO_EYEBROW = "Envie sua mensagem";
+let SECTION_CONTATO_TITLE = "Fale conosco";
+let SECTION_MAPA_EYEBROW = "Explore Santa Catarina";
+let SECTION_MAPA_TITLE = "Imóveis com tudo perto";
+let SECTION_BLOG_EYEBROW = "Blog";
+let SECTION_BLOG_TITLE = "Últimas do blog";
+let SECTION_FAVORITOS_EYEBROW = "Favoritos";
+let SECTION_FAVORITOS_TITLE = "Meus imóveis favoritos";
+let SECTION_FAVORITOS_EMPTY = "Nenhum imóvel favoritado ainda.";
+let SECTION_STATS_EYEBROW = "Equipe";
+let SECTION_STATS_TITLE = "Conheça quem faz a Furpal";
+let SECTION_PRIVACIDADE_EYEBROW = "LGPD";
+let SECTION_PRIVACIDADE_TITLE = "Política de Privacidade";
 
 /* ===== STATS ===== */
 
-const STATS = [
+let STATS = [
     {
       value: "+?",
       label: "Imóveis comercializados"
@@ -83,7 +83,7 @@ const STATS = [
   ];
 
 /* ===== TEAM ===== */
-const TEAM = [
+let TEAM = [
   {
     name: "Carlos Mendes",
     role: "Corretor Sênior",
@@ -101,7 +101,7 @@ const TEAM = [
   ];
 
 /* ===== LOCATIONS_INFO ===== */
-const LOCATIONS_INFO = {
+let LOCATIONS_INFO = {
   "Balneário Camboriú": {
     tagline: "A Miami Brasileira — referência em qualidade de vida e investimento imobiliário no litoral catarinense.",
     images: [
@@ -257,24 +257,24 @@ const LOCATIONS_INFO = {
   }
 };
 
-const HERO_IMAGES = [
+let HERO_IMAGES = [
   "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80",
   "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
   "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1920&q=80"
 ];
-const HERO_VIDEO = "";
+let HERO_VIDEO = "";
 
-const DISABLED_SECTIONS = ["favoritos"];
+let DISABLED_SECTIONS = ["favoritos"];
 
-const SOCIAL = {"instagram":"https://www.instagram.com/furpal.assesoriaimobiliaria","facebook":"","youtube":"","linkedin":""};
+let SOCIAL = {"instagram":"https://www.instagram.com/furpal.assesoriaimobiliaria","facebook":"","youtube":"","linkedin":""};
 
-const PAGE_SIZE = 6;
+let PAGE_SIZE = 6;
 
-const ENABLE_DROPDOWN_MENU = true;
+let ENABLE_DROPDOWN_MENU = true;
 
 /* ===== PROPERTIES ===== */
 
-const PROPERTIES = [
+let PROPERTIES = [
     {
       id: "prop-1",
       type: "sale",
@@ -711,7 +711,7 @@ const PROPERTIES = [
 
 /* ===== EMPREENDIMENTOS ===== */
 
-const EMPREENDIMENTOS = [
+let EMPREENDIMENTOS = [
     {
       id: "emp-parkavenue",
       title: "Park Avenue Residence",
@@ -1060,7 +1060,7 @@ const EMPREENDIMENTOS = [
 
 /* ===== FAQS ===== */
 
-const FAQS = [
+let FAQS = [
     {
       q: "Como funciona o processo de compra de um imóvel?",
       a: "O processo inicia com a visita ao imóvel e análise da documentação. Após a aprovação, realizamos uma proposta formal e, uma vez aceita, encaminhamos para a análise de crédito e financiamento bancário. Acompanhamos cada etapa até a assinatura da escritura e registro em cartório."
@@ -1089,7 +1089,7 @@ const FAQS = [
 
 /* ===== DEPOIMENTOS ===== */
 
-const DEPOIMENTOS = [
+let DEPOIMENTOS = [
     {
       text: "A Furpal fez toda a diferença na compra do nosso primeiro apartamento. Profissionais atenciosos, transparentes e extremamente competentes. Recomendo de olhos fechados!",
       name: "Ana Carolina Silva",
@@ -1109,7 +1109,7 @@ const DEPOIMENTOS = [
 
 /* ===== PARCEIROS ===== */
 
-const PARCEIROS = [
+let PARCEIROS = [
     {
       name: "Caixa Econômica",
       img: "https://logo.clearbit.com/caixa.gov.br",
@@ -1144,7 +1144,7 @@ const PARCEIROS = [
 
 /* ===== BLOG_POSTS ===== */
 
-const BLOG_POSTS = [
+let BLOG_POSTS = [
     {
       id: "post-1",
       title: "Como escolher o imóvel ideal para sua família",

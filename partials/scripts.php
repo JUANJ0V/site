@@ -1,6 +1,29 @@
 <script src="js/data.js?v=5"></script>
 <script src="js/data-provider.js?v=2"></script>
-<script src="js/admin.min.js?v=2"></script>
+<script src="js/admin.min.js?v=5"></script>
+<script>
+// If BD mode is active, load data from API BEFORE the page renders
+(function() {
+  if (window.DataProvider && DataProvider.isApi()) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', DataProvider.apiBase + '?action=all', false);
+    try { xhr.send(); } catch(e) {}
+    if (xhr.status === 200) {
+      try {
+        var d = JSON.parse(xhr.responseText);
+        if (d.properties && d.properties.length) window.PROPERTIES = d.properties;
+        if (d.empreendimentos && d.empreendimentos.length) window.EMPREENDIMENTOS = d.empreendimentos;
+        if (d.faq && d.faq.length) window.FAQS = d.faq;
+        if (d.depoimentos && d.depoimentos.length) window.DEPOIMENTOS = d.depoimentos;
+        if (d.parceiros && d.parceiros.length) window.PARCEIROS = d.parceiros;
+        if (d.blog && d.blog.length) window.BLOG_POSTS = d.blog;
+        if (d.team && d.team.length) window.TEAM = d.team;
+        if (d.stats && d.stats.length) window.STATS = d.stats;
+      } catch(e) { console.warn('[BD] Erro ao parsear dados:', e); }
+    }
+  }
+})();
+</script>
 <script>
 // Auto-update site info from data.js constants
   document.addEventListener('DOMContentLoaded', function() {
@@ -405,7 +428,7 @@ function googleTranslateElementInit() {
   }
 }
 </script>
-<script src="js/app.min.js?v=5"></script>
+<script src="js/app.min.js?v=9"></script>
 <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 <script>document.addEventListener('DOMContentLoaded',function(){var v=document.querySelector('.about-video');if(v)Plyr.setup(v);});</script>
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>

@@ -11,7 +11,7 @@
         <div class="about-text">
           <p>A <strong>Furpal</strong> nasceu em Balneário Camboriú com uma missão clara: transformar a experiência de comprar, vender ou alugar um imóvel em algo transparente, seguro e humano.</p>
           <video class="about-video" controls preload="metadata" style="margin:1.25rem 0;width:100%;max-width:480px;border-radius:12px;display:block;">
-            <source src="./video/sobre.mp4" type="video/mp4">
+            <source src="/video/sobre.mp4" type="video/mp4">
           </video>
           <p>Ao longo de mais de 7 anos, construímos uma sólida trajetória assessorando famílias, investidores e empresas em todo o Território Catarinense. Cada operação é tratada com a dedicação e o profissionalismo que nos caracterizam.</p>
           <p>Nossa equipe combina conhecimento profundo do mercado imobiliário local com uma rede consolidada de parceiros — bancos, cartórios, avaliadores e construtoras — para garantir resultados consistentes em qualquer tipo de operação.</p>

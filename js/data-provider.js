@@ -45,7 +45,7 @@
         team:           'TEAM'
       };
       if (MODE === 'api') {
-        return fetch(API_BASE + '/' + name).then(function(r) {
+        return fetch(API_BASE + '?action=' + name).then(function(r) {
           if (!r.ok) throw new Error('Erro ao carregar ' + name);
           return r.json();
         });
@@ -59,7 +59,7 @@
        En API: devuelve Promise */
     getAll: function() {
       if (MODE === 'api') {
-        return fetch(API_BASE + '/all').then(function(r) {
+        return fetch(API_BASE + '?action=all').then(function(r) {
           if (!r.ok) throw new Error('Erro ao carregar dados');
           return r.json();
         });
@@ -78,11 +78,12 @@
 
     /* Salva todas las colecciones.
        En frontend: llama al callback de publish existente
-       En API: POST /api/save con todo el JSON */
+       En API: POST /api.php con todo el JSON */
     saveAll: function(data, opts) {
       opts = opts || {};
       if (MODE === 'api') {
-        return fetch(API_BASE + '/save', {
+        data.password = localStorage.getItem('admin_server_pass') || '';
+        return fetch(API_BASE, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
@@ -108,7 +109,7 @@
     /* Intenta detectar si hay API disponible */
     ping: function() {
       if (MODE === 'api') {
-        return fetch(API_BASE + '/ping', { method: 'HEAD', cache: 'no-store' })
+        return fetch(API_BASE + '?action=ping', { method: 'HEAD', cache: 'no-store' })
           .then(function(r) { return r.ok; })
           .catch(function() { return false; });
       }
@@ -119,11 +120,12 @@
   window.DataProvider = DataProvider;
 
   // Auto-detect API si está configurado en localStorage
+  // NOTA: não desativamos o modo BD se o ping falhar,
+  // pois alguns servidores não respondem HEAD corretamente.
   if (MODE === 'api') {
     DataProvider.ping().then(function(online) {
       if (!online) {
-        console.warn('[DataProvider] Modo API ativo mas servidor não respondeu. Voltando para frontend.');
-        DataProvider.setMode('frontend', '/api');
+        console.warn('[DataProvider] Modo BD ativo mas ping não respondeu (HEAD pode não ser suportado). Mantendo modo BD.');
       }
     });
   }

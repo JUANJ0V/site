@@ -1,16 +1,7 @@
--- ================================================================
--- BD COMPLETO PARA IMOBILIÁRIA
--- Copie e cole no phpMyAdmin (SQL) do Hostinger
--- Todas as tabelas com todos os campos necessários
--- ================================================================
+-- CREATE DATABASE IF NOT EXISTS `{SEU_BANCO}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- USE `{SEU_BANCO}`;
 
--- Primeiro crie o banco (se ainda não existir):
--- CREATE DATABASE IF NOT EXISTS `seu_banco` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
--- USE `seu_banco`;
-
--- ================================================================
--- 1. CONFIG — Configurações do site (uma única linha)
--- ================================================================
+-- Configurações
 CREATE TABLE IF NOT EXISTS config (
     id INT PRIMARY KEY DEFAULT 1,
     data JSON NOT NULL,
@@ -19,9 +10,9 @@ CREATE TABLE IF NOT EXISTS config (
 
 INSERT INTO config (id, data) VALUES (1, '{}') ON DUPLICATE KEY UPDATE data = data;
 
--- ================================================================
--- 2. STATS — Números da seção "Quem somos"
--- ================================================================
+INSERT INTO config (id, data) VALUES (2, '{}') ON DUPLICATE KEY UPDATE data = data;
+
+-- Stats
 CREATE TABLE IF NOT EXISTS stats (
     id INT AUTO_INCREMENT PRIMARY KEY,
     label VARCHAR(255) NOT NULL,
@@ -30,9 +21,7 @@ CREATE TABLE IF NOT EXISTS stats (
     sort_order INT DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ================================================================
--- 3. PROPERTIES — Imóveis para venda / aluguel
--- ================================================================
+-- Properties
 CREATE TABLE IF NOT EXISTS properties (
     id VARCHAR(100) PRIMARY KEY,
     type ENUM('sale','rent') NOT NULL DEFAULT 'sale',
@@ -63,9 +52,7 @@ CREATE TABLE IF NOT EXISTS properties (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ================================================================
--- 4. EMPREENDIMENTOS — Lançamentos
--- ================================================================
+-- Empreendimentos
 CREATE TABLE IF NOT EXISTS empreendimentos (
     id VARCHAR(100) PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
@@ -91,9 +78,7 @@ CREATE TABLE IF NOT EXISTS empreendimentos (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ================================================================
--- 5. FAQ — Perguntas frequentes
--- ================================================================
+-- FAQ
 CREATE TABLE IF NOT EXISTS faq (
     id INT AUTO_INCREMENT PRIMARY KEY,
     q TEXT NOT NULL,
@@ -101,9 +86,7 @@ CREATE TABLE IF NOT EXISTS faq (
     sort_order INT DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ================================================================
--- 6. DEPOIMENTOS — Depoimentos de clientes
--- ================================================================
+-- Depoimentos
 CREATE TABLE IF NOT EXISTS depoimentos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -112,9 +95,7 @@ CREATE TABLE IF NOT EXISTS depoimentos (
     sort_order INT DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ================================================================
--- 7. PARCEIROS — Instituições parceiras
--- ================================================================
+-- Parceiros
 CREATE TABLE IF NOT EXISTS parceiros (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -123,9 +104,7 @@ CREATE TABLE IF NOT EXISTS parceiros (
     sort_order INT DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ================================================================
--- 8. BLOG_POSTS — Posts do blog
--- ================================================================
+-- Blog
 CREATE TABLE IF NOT EXISTS blog_posts (
     id VARCHAR(100) PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
@@ -139,9 +118,18 @@ CREATE TABLE IF NOT EXISTS blog_posts (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ================================================================
--- 9. USERS — Usuários do painel admin
--- ================================================================
+-- Team
+CREATE TABLE IF NOT EXISTS team (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    role VARCHAR(255) DEFAULT '',
+    photo TEXT,
+    `desc` TEXT,
+    social JSON,
+    sort_order INT DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Users
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(100) NOT NULL UNIQUE,
@@ -151,7 +139,6 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Usuário admin padrão (senha: admin123)
 INSERT INTO users (username, password_hash, role) VALUES
 ('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin')
 ON DUPLICATE KEY UPDATE username = username;

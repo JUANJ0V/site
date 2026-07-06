@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Requerimientos y Funcionalidades — Furpal</title>
+<style>
+  body { font-family: 'Calibri', 'Segoe UI', Arial, sans-serif; max-width: 1000px; margin: 40px auto; padding: 20px; color: #1e1e1e; line-height: 1.6; }
+  h1 { color: #b8860b; border-bottom: 4px solid #b8860b; padding-bottom: 12px; font-size: 26pt; margin-top: 30px; }
+  h2 { color: #8b6914; margin-top: 30px; font-size: 18pt; border-left: 6px solid #b8860b; padding-left: 12px; }
+  h3 { color: #333; margin-top: 20px; font-size: 14pt; }
+  p { font-size: 11pt; margin: 8px 0; }
+  ul { margin: 8px 0 15px; }
+  li { font-size: 11pt; margin-bottom: 4px; }
+  table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 10pt; }
+  th { background: #b8860b; color: #fff; padding: 10px; text-align: left; font-weight: bold; }
+  td { border: 1px solid #ddd; padding: 8px; vertical-align: top; }
+  tr:nth-child(even) { background: #fafafa; }
+  .pb { page-break-before: always; }
+  .cover { text-align: center; padding: 100px 0 80px; }
+  .cover h1 { font-size: 36pt; border: none; color: #b8860b; margin-bottom: 10px; }
+  .cover .sub { font-size: 18pt; color: #555; }
+  .cover .line { width: 120px; height: 3px; background: #b8860b; margin: 20px auto; }
+  .cover .version { font-size: 12pt; color: #999; margin-top: 50px; }
+  .info-box { background: #fffbe6; border-left: 6px solid #b8860b; padding: 12px 18px; margin: 15px 0; border-radius: 4px; }
+  .tag { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 9pt; font-weight: bold; margin-right: 5px; }
+  .tag-green { background: #e8f5e9; color: #2e7d32; }
+  .tag-yellow { background: #fff8e1; color: #f57f17; }
+  .tag-red { background: #ffebee; color: #c62828; }
+  .tag-blue { background: #e3f2fd; color: #1565c0; }
+  .footer { margin-top: 50px; padding-top: 20px; border-top: 2px solid #b8860b; font-size: 9pt; color: #888; text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>🏡 Furpal Inmobiliaria</h1>
+  <div class="line"></div>
+  <p class="sub">Requerimientos y Funcionalidades del Sistema</p>
+  <p class="version">Versión 1.0 &mdash; Julio 2026</p>
+</div>
+
+<div class="pb"></div>
+
+<h2>1. Requerimientos Técnicos</h2>
+
+<h3>1.1 Frontend (Navegador)</h3>
+<table>
+  <tr><th>Componente</th><th>Requerimiento</th></tr>
+  <tr><td>Navegador</td><td>Chrome 90+, Firefox 90+, Edge 90+, Safari 14+</td></tr>
+  <tr><td>JavaScript</td><td>ES6+ habilitado (no requiere polyfills)</td></tr>
+  <tr><td>CSS</td><td>CSS Grid, Flexbox, Custom Properties (variables CSS)</td></tr>
+  <tr><td>API requeridas</td><td>Fetch API, History API, Intersection Observer, localStorage</td></tr>
+  <tr><td>Mapas</td><td>Leaflet.js v1.9+ (cargado vía CDN)</td></tr>
+  <tr><td>Video</td><td>Plyr.js v3.7+ (reproductor, cargado vía CDN)</td></tr>
+</table>
+
+<h3>1.2 Backend (Servidor PHP)</h3>
+<table>
+  <tr><th>Componente</th><th>Requerimiento</th></tr>
+  <tr><td>Servidor web</td><td>Apache 2.4+ con mod_rewrite, o Nginx</td></tr>
+  <tr><td>PHP</td><td>PHP 7.4 o superior (recomendado PHP 8.1+)</td></tr>
+  <tr><td>Base de datos</td><td>MySQL 5.7+ o MariaDB 10.2+</td></tr>
+  <tr><td>Extensión PHP</td><td>PDO_MySQL habilitada</td></tr>
+  <tr><td>Seguridad</td><td>SSL/TLS (HTTPS) recomendado</td></tr>
+  <tr><td>Hosting compatible</td><td>Hostinger, InfinityFree, GoDaddy, SiteGround, cualquier shared hosting con PHP+MySQL</td></tr>
+</table>
+
+<h3>1.3 Desarrollo</h3>
+<table>
+  <tr><th>Herramienta</th><th>Uso</th></tr>
+  <tr><td>Node.js</td><td>Minificación de JS (terser) y CSS (clean-css)</td></tr>
+  <tr><td>Git</td><td>Control de versiones y publicación a GitHub Pages</td></tr>
+  <tr><td>GitHub Pages</td><td>Hosting del frontend (opcional — funciona con cualquier hosting estático)</td></tr>
+</table>
+
+<div class="pb"></div>
+
+<h2>2. Funcionalidades del Sistema</h2>
+
+<h3>2.1 Gestión de Inmuebles</h3>
+<p><span class="tag tag-green">Completo</span> <span class="tag tag-blue">CRUD</span></p>
+<ul>
+  <li>Registro de inmuebles para venta y alquiler</li>
+  <li>Campos: tipo, categoría, título, precio (texto y número), ubicación, mapa, coordenadas, estado, descripción corta y larga</li>
+  <li>Características: habitaciones, baños, garaje, área</li>
+  <li>Campos para terrenos: frente, fondos, zona, topografía</li>
+  <li>Imagen principal + galería múltiple de imágenes</li>
+  <li>Video embebido (YouTube/Vimeo)</li>
+  <li>Lista de características personalizadas</li>
+  <li>Ordenación por precio, tipo, ubicación</li>
+  <li>Visualización en tarjetas (compra y alquiler separados)</li>
+  <li>Página de detalle con galería en pantalla completa</li>
+  <li>Mapa interactivo con Leaflet + OpenStreetMap</li>
+</ul>
+
+<h3>2.2 Gestión de Emprendimientos</h3>
+<p><span class="tag tag-green">Completo</span> <span class="tag tag-blue">CRUD</span></p>
+<ul>
+  <li>Registro de emprendimientos inmobiliarios</li>
+  <li>Campos: nombre, descripción, ubicación, coordenadas, galería, video</li>
+  <li>Estado: Lanzamiento, En obras, Listo</li>
+  <li>Planta y diferenciales del proyecto</li>
+  <li>Página de detalle individual con mapa y galería</li>
+</ul>
+
+<h3>2.3 Blog</h3>
+<p><span class="tag tag-green">Completo</span> <span class="tag tag-blue">CRUD</span></p>
+<ul>
+  <li>Publicaciones con título, resumen, contenido HTML</li>
+  <li>Imagen destacada, categoría y fecha</li>
+  <li>Lista de artículos en sección blog</li>
+  <li>Página de detalle individual</li>
+</ul>
+
+<h3>2.4 Testimonios</h3>
+<p><span class="tag tag-green">Completo</span> <span class="tag tag-blue">CRUD</span></p>
+<ul>
+  <li>Nombre, descripción y texto del testimonio</li>
+  <li>Visualización con estrellas y formato destacado</li>
+</ul>
+
+<h3>2.5 FAQ</h3>
+<p><span class="tag tag-green">Completo</span> <span class="tag tag-blue">CRUD</span></p>
+<ul>
+  <li>Preguntas y respuestas en formato acordeón</li>
+  <li>Apertura/cierre con animación</li>
+</ul>
+
+<h3>2.6 Socios</h3>
+<p><span class="tag tag-green">Completo</span> <span class="tag tag-blue">CRUD</span></p>
+<ul>
+  <li>Nombre, logo, URL del sitio web</li>
+  <li>Logos en grid en la página principal</li>
+</ul>
+
+<h3>2.7 Región (LOCATIONS_INFO)</h3>
+<p><span class="tag tag-green">Completo</span> <span class="tag tag-yellow">Nuevo</span></p>
+<ul>
+  <li>Gestión por ciudad/región con múltiples campos</li>
+  <li>Tagline, imágenes, introducción, historia, seguridad</li>
+  <li>Playas con nombre y descripción</li>
+  <li>Destacados y puntos de interés</li>
+</ul>
+
+<h3>2.8 Equipo</h3>
+<p><span class="tag tag-green">Completo</span> <span class="tag tag-blue">CRUD</span></p>
+<ul>
+  <li>Corredores con nombre, cargo, foto, CRECI, teléfono, email</li>
+  <li>Visualización en tarjetas</li>
+</ul>
+
+<h3>2.9 Estadísticas</h3>
+<p><span class="tag tag-green">Completo</span> <span class="tag tag-blue">CRUD</span></p>
+<ul>
+  <li>Indicadores numéricos con etiqueta, valor e icono</li>
+  <li>Animación de conteo al hacer scroll</li>
+</ul>
+
+<h3>2.10 Panel Administrativo</h3>
+<p><span class="tag tag-green">Completo</span></p>
+<ul>
+  <li>Acceso vía parámetro ?edit=1 en URL</li>
+  <li>Login con usuario y contraseña (verificación cliente/servidor)</li>
+  <li>11 pestañas de gestión: General, Inmuebles, Emprendimientos, Blog, Testimonios, FAQ, Socios, Región, Equipo, Estadísticas, Config</li>
+  <li>Editor visual tipo formulario para cada tipo de contenido</li>
+  <li>Previsualización en tiempo real (syncToLive)</li>
+  <li>Modo Frontend: publicación directa a GitHub Pages</li>
+  <li>Modo BD: persistencia en MySQL vía API PHP</li>
+  <li>Minimización automática de JS/CSS para producción</li>
+</ul>
+
+<h3>2.11 Calculadora de Financiamiento</h3>
+<p><span class="tag tag-green">Completo</span></p>
+<ul>
+  <li>Cálculo de cuotas mensuales con tasa configurable</li>
+  <li>Campos: valor del inmueble, entrada, plazo, tasa de interés</li>
+  <li>Resultado en tiempo real al modificar valores</li>
+</ul>
+
+<h3>2.12 Mapa Interactivo</h3>
+<p><span class="tag tag-green">Completo</span></p>
+<ul>
+  <li>Integración con Leaflet + OpenStreetMap (gratuito, sin API key)</li>
+  <li>Marcadores para propiedades y emprendimientos</li>
+  <li>Popups con información y foto</li>
+  <li>Vista satelital y de calles</li>
+</ul>
+
+<h3>2.13 Modo Oscuro</h3>
+<p><span class="tag tag-green">Completo</span></p>
+<ul>
+  <li>Alternancia claro/oscuro con botón en navbar</li>
+  <li>Persistencia de preferencia en localStorage</li>
+  <li>Todas las secciones adaptadas al tema</li>
+</ul>
+
+<h3>2.14 Modo Base de Datos</h3>
+<p><span class="tag tag-green">Completo</span> <span class="tag tag-yellow">Nuevo</span></p>
+<ul>
+  <li>API REST en PHP puro (sin frameworks)</li>
+  <li>Endpoints: ping, all, collections, login, save, setup, users</li>
+  <li>PDO con prepared statements para seguridad SQL</li>
+  <li>Autenticación opcional vía Bearer token</li>
+  <li>Soporte para múltiples colecciones con tablas separadas</li>
+  <li>Esquema SQL exportable (schema.sql)</li>
+  <li>Setup automático vía endpoint</li>
+</ul>
+
+<h3>2.15 Traducción / i18n</h3>
+<p><span class="tag tag-yellow">Parcial</span></p>
+<ul>
+  <li>Interfaz del sitio preparada para traducción vía Google Translate</li>
+  <li>Widget de Google Translate embebido</li>
+  <li>Texto en tarjetas y secciones traducible</li>
+</ul>
+
+<div class="pb"></div>
+
+<h2>3. Arquitectura del Sistema</h2>
+
+<h3>3.1 Diagrama de Flujo</h3>
+<pre style="background:#f8f4ec;padding:20px;border-radius:8px;font-size:10pt;line-height:1.8;">
+
+                ┌─────────────┐
+                │  Navegador  │
+                │  (Usuario)  │
+                └──────┬──────┘
+                       │
+          ┌────────────┼────────────┐
+          │            │            │
+          ▼            ▼            ▼
+   ┌──────────┐ ┌──────────┐ ┌──────────┐
+   │ index.html│ │ ?edit=1 │ │ admin.js │
+   │ app.js   │ │ admin.js │ │ (panel)  │
+   │ (SPA)    │ │ (panel)  │ │          │
+   └────┬─────┘ └────┬─────┘ └────┬─────┘
+        │            │            │
+        │     ┌──────┴──────┐     │
+        │     │  data.js    │     │
+        │     │ (constantes)│     │
+        │     └──────┬──────┘     │
+        │            │            │
+        ▼            ▼            ▼
+  ┌─────────────────────────────────────┐
+  │       DataProvider.js                │
+  │  (frontend ↔ API abstraction layer)  │
+  └─────────┬──────────────────┬─────────┘
+            │                  │
+            ▼                  ▼
+   ┌──────────────┐   ┌──────────────┐
+   │ Frontend Mode│   │   API Mode   │
+   │ (GitHubPages)│   │  (PHP + MySQL)│
+   └──────────────┘   └──────┬───────┘
+                             │
+                             ▼
+                     ┌──────────────┐
+                     │   api.php    │
+                     │  (REST API)  │
+                     └──────┬───────┘
+                            │
+                            ▼
+                     ┌──────────────┐
+                     │    MySQL     │
+                     │  Base de     │
+                     │  Datos       │
+                     └──────────────┘
+</pre>
+
+<h3>3.2 Flujo de Datos — Modo Frontend</h3>
+<ol>
+  <li>Las constantes se definen en <strong>data.js</strong> (archivo estático)</li>
+  <li><strong>app.js</strong> renderiza el contenido usando estas constantes</li>
+  <li>El panel admin (<strong>admin.js</strong>) modifica una copia en memoria (_data)</li>
+  <li><strong>syncToLive()</strong> actualiza el DOM en tiempo real</li>
+  <li>Para publicar: se envía a GitHub Pages (sobrescribe data.js)</li>
+</ol>
+
+<h3>3.3 Flujo de Datos — Modo BD</h3>
+<ol>
+  <li>Admin edita → _data se actualiza → syncToLive() actualiza DOM</li>
+  <li>Admin hace clic en "💾 Guardar (BD)" → saveToApi()</li>
+  <li>POST a api.php con todo el JSON → se guarda en MySQL</li>
+  <li>Al recargar la página: <strong>app.js</strong> llama a DataProvider.getAll()</li>
+  <li>GET /api.php?action=all → reemplaza las constantes globales con datos de BD</li>
+  <li>Re-renderizado completo del sitio con datos frescos</li>
+</ol>
+
+<div class="pb"></div>
+
+<h2>4. Base de Datos</h2>
+
+<h3>4.1 Tablas del Sistema</h3>
+<table>
+  <tr><th>Tabla</th><th>Propósito</th><th>Columnas principales</th></tr>
+  <tr><td><strong>config</strong></td><td>Almacenamiento JSON para configuraciones generales (id=1) y locations_info (id=2)</td><td>id, data (JSON), updated_at</td></tr>
+  <tr><td><strong>properties</strong></td><td>Inmuebles para venta y alquiler</td><td>id, type, category, title, price, priceNum, location, maps, lat, lng, status, desc, beds, baths, garage, area, img, gallery, video, features, description</td></tr>
+  <tr><td><strong>empreendimentos</strong></td><td>Emprendimientos inmobiliarios</td><td>id, title, subtitle, desc, description, location, maps, lat, lng, img, gallery, video, status, features, highlights</td></tr>
+  <tr><td><strong>blog_posts</strong></td><td>Publicaciones del blog</td><td>id, title, excerpt, content, image, category, date</td></tr>
+  <tr><td><strong>faq</strong></td><td>Preguntas frecuentes</td><td>id, q, a, sort_order</td></tr>
+  <tr><td><strong>depoimentos</strong></td><td>Testimonios de clientes</td><td>id, name, role, text, sort_order</td></tr>
+  <tr><td><strong>parceiros</strong></td><td>Socios comerciales</td><td>id, name, img, url, sort_order</td></tr>
+  <tr><td><strong>stats</strong></td><td>Estadísticas numéricas</td><td>id, label, value, icon, sort_order</td></tr>
+  <tr><td><strong>team</strong></td><td>Equipo de corredores</td><td>id, name, role, img, creci, phone, email, sort_order</td></tr>
+  <tr><td><strong>users</strong></td><td>Usuarios del sistema</td><td>id, username, password_hash, role, created_at</td></tr>
+</table>
+
+<h3>4.2 API Endpoints</h3>
+<table>
+  <tr><th>Método</th><th>Endpoint</th><th>Descripción</th><th>Autenticación</th></tr>
+  <tr><td>HEAD</td><td>?action=ping</td><td>Prueba de conexión</td><td>No</td></tr>
+  <tr><td>GET</td><td>?action=all</td><td>Retorna todas las colecciones</td><td>No (lectura pública)</td></tr>
+  <tr><td>GET</td><td>?action=[colección]</td><td>Retorna una colección específica</td><td>No (lectura pública)</td></tr>
+  <tr><td>POST</td><td>/api.php</td><td>Guarda todas las colecciones (body JSON)</td><td>Opcional (Bearer token)</td></tr>
+  <tr><td>POST</td><td>?action=login</td><td>Inicio de sesión</td><td>No</td></tr>
+  <tr><td>GET</td><td>?action=setup</td><td>Setup automático de BD (crea tablas)</td><td>No</td></tr>
+  <tr><td>GET</td><td>?action=users</td><td>Lista de usuarios registrados</td><td>Sí (Bearer token)</td></tr>
+</table>
+
+<div class="pb"></div>
+
+<h2>5. Configuración y Despliegue</h2>
+
+<h3>5.1 GitHub Pages</h3>
+<ol>
+  <li>Crear repositorio en GitHub</li>
+  <li>Subir todos los archivos (index.html, js/, css/, images/, etc.)</li>
+  <li>Ir a Settings > Pages > Source: main branch / (root)</li>
+  <li>El archivo 404.html maneja la redirección SPA automáticamente</li>
+  <li>Opcional: configurar dominio personalizado</li>
+</ol>
+
+<h3>5.2 Hosting PHP/MySQL (Hostinger, InfinityFree, etc.)</h3>
+<ol>
+  <li>Subir todos los archivos vía FTP al servidor</li>
+  <li>Crear una base de datos MySQL desde el panel de control</li>
+  <li>Copiar <code>api-config.example.php</code> a <code>api-config.php</code> y completar credenciales</li>
+  <li>Importar <code>schema.sql</code> en la base de datos (phpMyAdmin)</li>
+  <li>O alternativamente, acceder a <code>/api.php?action=setup</code> para setup automático</li>
+  <li>Verificar que PHP tenga extensión PDO MySQL habilitada</li>
+  <li>Configurar SSL/HTTPS si está disponible</li>
+</ol>
+
+<h3>5.3 Variables de Configuración</h3>
+<table>
+  <tr><th>Variable</th><th>Archivo</th><th>Descripción</th></tr>
+  <tr><td>DB_HOST, DB_NAME, DB_USER, DB_PASS</td><td>api-config.php</td><td>Credenciales de la base de datos</td></tr>
+  <tr><td>API_PASSWORD</td><td>api-config.php</td><td>Token de autenticación para la API</td></tr>
+  <tr><td>DB_CHARSET</td><td>api-config.php</td><td>Juego de caracteres (utf8mb4)</td></tr>
+  <tr><td>ADMIN_ENABLED</td><td>data.js</td><td>Activar/desactivar panel admin</td></tr>
+  <tr><td>ADMIN_USER, ADMIN_PASS</td><td>data.js</td><td>Credenciales del admin</td></tr>
+  <tr><td>SITE_NAME</td><td>data.js</td><td>Nombre del sitio</td></tr>
+  <tr><td>BASE_PATH</td><td>app.js</td><td>Ruta base (para subdirectorios)</td></tr>
+</table>
+
+<h3>5.4 Estructura de Archivos</h3>
+<pre style="background:#f8f4ec;padding:15px;border-radius:8px;font-size:9pt;line-height:1.6;">
+raiz/
+├── index.html                  # Página principal del SPA
+├── index.php                   # Entry point PHP (para servidores con PHP)
+├── api.php                     # API REST para modo BD
+├── api-config.example.php      # Ejemplo de configuración de BD
+├── schema.sql                  # Esquema SQL de la base de datos
+├── .htaccess                   # Reglas Apache (redirección, hotlinking)
+├── 404.html                    # Página 404 (SPA fallback para GitHub Pages)
+├── js/
+│   ├── data.js                 # Constantes de datos del frontend
+│   ├── data-provider.js        # Capa de abstracción de datos
+│   ├── app.js                  # Lógica SPA y renderizado
+│   ├── app.min.js              # Versión minificada
+│   ├── admin.js                # Panel administrativo
+│   └── admin.min.js            # Versión minificada
+├── css/
+│   └── style.css / style.min.css
+├── images/                     # Imágenes del sitio
+├── video/                      # Videos del sitio
+├── partials/                   # Partials PHP (head, header, footer)
+└── docs/                       # Documentación
+</pre>
+
+<div class="pb"></div>
+
+<h2>6. Seguridad</h2>
+<ul>
+  <li><strong>Panel admin:</strong> Protegido por login (verificación cliente y servidor)</li>
+  <li><strong>API:</strong> Autenticación opcional vía Bearer token (API_PASSWORD)</li>
+  <li><strong>SQL:</strong> Prepared statements PDO contra inyección SQL</li>
+  <li><strong>Datos:</strong> Validación en frontend antes de enviar</li>
+  <li><strong>Hotlinking:</strong> Protección configurable en .htaccess</li>
+  <li><strong>HTTPS:</strong> Recomendado para producción</li>
+</ul>
+
+<h2>7. Mantenimiento</h2>
+<ul>
+  <li>Las tablas se limpian (TRUNCATE) antes de cada guardado completo</li>
+  <li>Las colecciones de BD mode aceptan arrays vacíos (limpia la tabla)</li>
+  <li>Minificar JS/CSS después de cada modificación</li>
+  <li>Actualizar números de versión (?v=N) para romper caché del navegador</li>
+</ul>
+
+<div class="footer">
+  <p>Furpal Inmobiliaria — Requerimientos y Funcionalidades — Versión 1.0 — Julio 2026</p>
+  <p>Para abrir en Word: guarde este archivo y use Archivo &gt; Abrir en Microsoft Word.</p>
+</div>
+
+</body>
+</html>

@@ -23,9 +23,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="icon" href="./images/favicon.svg" />
-  <link rel="icon" type="image/x-icon" href="./images/favicon.ico" />
-  <link rel="apple-touch-icon" href="./images/favicon.svg" />
+    <link rel="icon" href="/images/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" href="/images/favicon.svg" />
   <link rel="stylesheet" href="css/style.min.css?v=6" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />

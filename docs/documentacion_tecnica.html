@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Documentación Técnica — Furpal</title>
+<style>
+  body { font-family: 'Calibri', 'Segoe UI', Arial, sans-serif; max-width: 1000px; margin: 40px auto; padding: 20px; color: #1e1e1e; line-height: 1.6; }
+  h1 { color: #b8860b; border-bottom: 4px solid #b8860b; padding-bottom: 12px; font-size: 26pt; margin-top: 30px; }
+  h2 { color: #8b6914; margin-top: 30px; font-size: 18pt; border-left: 6px solid #b8860b; padding-left: 12px; }
+  h3 { color: #333; margin-top: 20px; font-size: 14pt; }
+  h4 { color: #555; margin-top: 15px; font-size: 12pt; }
+  p { font-size: 11pt; margin: 8px 0; }
+  ul, ol { margin: 8px 0 15px; }
+  li { font-size: 11pt; margin-bottom: 4px; }
+  code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-size: 10pt; }
+  pre { background: #1a1a2e; color: #eee; padding: 15px; border-radius: 8px; font-size: 9pt; line-height: 1.5; overflow-x: auto; }
+  pre .hl { color: #ffd700; }
+  pre .gr { color: #4caf50; }
+  pre .bl { color: #64b5f6; }
+  pre .gy { color: #888; }
+  table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 10pt; }
+  th { background: #b8860b; color: #fff; padding: 10px; text-align: left; }
+  td { border: 1px solid #ddd; padding: 8px; vertical-align: top; }
+  tr:nth-child(even) { background: #fafafa; }
+  .pb { page-break-before: always; }
+  .cover { text-align: center; padding: 100px 0 80px; }
+  .cover h1 { font-size: 36pt; border: none; color: #b8860b; }
+  .cover .line { width: 120px; height: 3px; background: #b8860b; margin: 20px auto; }
+  .cover .sub { font-size: 18pt; color: #555; }
+  .cover .version { font-size: 12pt; color: #999; margin-top: 50px; }
+  .info-box { background: #f8f4ec; border-left: 6px solid #b8860b; padding: 12px 18px; margin: 15px 0; border-radius: 4px; }
+  .warn-box { background: #fff5f5; border-left: 6px solid #cc0000; padding: 12px 18px; margin: 15px 0; border-radius: 4px; }
+  .footer { margin-top: 50px; padding-top: 20px; border-top: 2px solid #b8860b; font-size: 9pt; color: #888; text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>🏡 Furpal Inmobiliaria</h1>
+  <div class="line"></div>
+  <p class="sub">Documentación Técnica</p>
+  <p class="version">Versión 1.0 &mdash; Julio 2026</p>
+</div>
+
+<div class="pb"></div>
+
+<h2>1. Stack Tecnológico</h2>
+<table>
+  <tr><th>Capa</th><th>Tecnología</th></tr>
+  <tr><td>Frontend</td><td>HTML5 + CSS3 + JavaScript ES6 (vanilla, sin frameworks)</td></tr>
+  <tr><td>Backend</td><td>PHP 7.4+ (vanilla, sin frameworks)</td></tr>
+  <tr><td>Base de Datos</td><td>MySQL 5.7+ / MariaDB 10.2+</td></tr>
+  <tr><td>Mapas</td><td>Leaflet 1.9+ con OpenStreetMap</td></tr>
+  <tr><td>Video</td><td>Plyr.io 3.7+</td></tr>
+  <tr><td>Minificación</td><td>terser (JS), clean-css (CSS)</td></tr>
+  <tr><td>Hosting Frontend</td><td>GitHub Pages o cualquier hosting estático</td></tr>
+  <tr><td>Hosting Backend</td><td>Cualquier hosting con PHP + MySQL</td></tr>
+</table>
+
+<div class="pb"></div>
+
+<h2>2. API REST (api.php)</h2>
+
+<h3>2.1 Autenticación</h3>
+<p>La API usa autenticación opcional vía Bearer token. Se configura en <code>api-config.php</code>:</p>
+<pre>
+define('API_PASSWORD', 'tu-token-secreto-aqui');
+</pre>
+<p>Si no se define <code>API_PASSWORD</code>, todas las peticiones son públicas.</p>
+<p>Peticiones autenticadas deben incluir:</p>
+<pre>
+<span class="gy">// Header HTTP</span>
+Authorization: Bearer tu-token-secreto-aqui
+
+<span class="gy">// O parámetro GET</span>
+/api.php?action=users&token=tu-token-secreto-aqui
+</pre>
+
+<h3>2.2 Endpoints Detallados</h3>
+
+<h4>HEAD /api.php?action=ping</h4>
+<p><strong>Propósito:</strong> Verificar disponibilidad del servidor.</p>
+<p><strong>Autenticación:</strong> No requerida.</p>
+<p><strong>Respuesta:</strong> HTTP 200 si el servidor responde.</p>
+
+<h4>GET /api.php?action=all</h4>
+<p><strong>Propósito:</strong> Retorna todas las colecciones en un solo objeto JSON.</p>
+<pre>
+{
+  "constants":      { ... },
+  "locations_info": { ... },
+  "stats":          [ ... ],
+  "properties":     [ ... ],
+  "empreendimentos":[ ... ],
+  "faq":            [ ... ],
+  "depoimentos":    [ ... ],
+  "parceiros":      [ ... ],
+  "team":           [ ... ],
+  "blog":           [ ... ]
+}
+</pre>
+
+<h4>GET /api.php?action=[colección]</h4>
+<p><strong>Propósito:</strong> Retorna una colección específica.</p>
+<p>Colecciones válidas: <code>properties</code>, <code>empreendimentos</code>, <code>blog</code>, <code>faq</code>, <code>depoimentos</code>, <code>parceiros</code>, <code>stats</code>, <code>team</code>.</p>
+
+<h4>POST /api.php</h4>
+<p><strong>Propósito:</strong> Guarda todas las colecciones.</p>
+<p><strong>Body:</strong> JSON con las colecciones a guardar.</p>
+<pre>
+{
+  "constants":      { ... },
+  "locations_info": { ... },
+  "stats":          [ ... ],
+  "properties":     [ ... ],
+  "empreendimentos":[ ... ],
+  "faq":            [ ... ],
+  "depoimentos":    [ ... ],
+  "parceiros":      [ ... ],
+  "team":           [ ... ],
+  "blog":           [ ... ]
+}
+</pre>
+<p><strong>Respuesta exitosa:</strong></p>
+<pre>
+{ "ok": true, "message": "Dados salvos com sucesso!" }
+</pre>
+<p><strong>Respuesta error:</strong></p>
+<pre>
+{ "ok": false, "error": "mensaje del error" }
+</pre>
+
+<h4>POST /api.php?action=login</h4>
+<p><strong>Propósito:</strong> Autenticación de usuario.</p>
+<pre>
+<span class="gy">// Request:</span>
+{ "username": "admin", "password": "admin123" }
+
+<span class="gy">// Response exitosa:</span>
+{ "ok": true, "token": "..." }
+
+<span class="gy">// Response error:</span>
+{ "ok": false, "error": "Credenciais inválidas" }
+</pre>
+
+<h4>GET /api.php?action=setup</h4>
+<p><strong>Propósito:</strong> Creación automática de tablas. Lee <code>schema.sql</code> del mismo directorio.</p>
+
+<h4>GET /api.php?action=users</h4>
+<p><strong>Propósito:</strong> Listar usuarios registrados. Requiere autenticación.</p>
+
+<div class="pb"></div>
+
+<h2>3. DataProvider.js</h2>
+<p>Capa de abstracción que permite al frontend funcionar tanto en modo frontend (datos estáticos) como en modo API (base de datos).</p>
+
+<h3>3.1 Modos de operación</h3>
+<table>
+  <tr><th>Método</th><th>Frontend Mode</th><th>API Mode</th></tr>
+  <tr><td><code>get(name)</code></td><td>Retorna <code>window[name]</code> (síncrono)</td><td>fetch GET a <code>/api?action=name</code> (Promise)</td></tr>
+  <tr><td><code>getAll()</code></td><td>Objeto con todas las colecciones (síncrono)</td><td>fetch GET a <code>/api?action=all</code> (Promise)</td></tr>
+  <tr><td><code>saveAll(data)</code></td><td>Callback onFrontend</td><td>fetch POST a <code>/api</code> (Promise)</td></tr>
+  <tr><td><code>ping()</code></td><td>Promise.resolve(false)</td><td>HEAD a <code>/api?action=ping</code></td></tr>
+</table>
+
+<h3>3.2 Flujo de inicialización</h3>
+<ol>
+  <li>Al cargar la página, DataProvider lee <code>localStorage.getItem('data_mode')</code></li>
+  <li>Si es <code>'api'</code>, inicia modo API y hace ping automático</li>
+  <li>Si el ping falla, vuelve a modo frontend automáticamente</li>
+  <li>app.js verifica <code>DataProvider.isApi()</code> y carga datos si es necesario</li>
+</ol>
+
+<div class="pb"></div>
+
+<h2>4. Manejo de Errores en api.php</h2>
+<p>La API incluye manejadores globales de excepciones y errores:</p>
+<pre>
+<span class="gy">// Todas las excepciones no capturadas retornan JSON</span>
+<span class="bl">set_exception_handler</span>(function($e) {
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'error' => $e->getMessage()]);
+});
+</pre>
+
+<h2>5. SPA Router (app.js)</h2>
+<p>El sitio usa el History API para navegación sin recarga de página.</p>
+<table>
+  <tr><th>Función</th><th>Propósito</th></tr>
+  <tr><td><code>goTo(id)</code></td><td>Navega a una sección por ID, actualiza URL con pushState</td></tr>
+  <tr><td><code>getSectionId()</code></td><td>Determina la sección actual desde la URL o hash</td></tr>
+  <tr><td><code>navigate(id)</code></td><td>Manejador principal: oculta todas, muestra la sección, actualiza nav</td></tr>
+  <tr><td><code>renderBreadcrumbs(id)</code></td><td>Actualiza la ruta de navegación (breadcrumbs)</td></tr>
+</table>
+
+<h2>6. CSS y Temas</h2>
+<p>El sistema usa variables CSS para theming y soporta modo oscuro.</p>
+<table>
+  <tr><th>Variable</th><th>Default (claro)</th><th>Oscuro</th><th>Uso</th></tr>
+  <tr><td><code>--gold</code></td><td>#b8860b</td><td>#ffd700</td><td>Color principal</td></tr>
+  <tr><td><code>--bg</code></td><td>#fdfbf7</td><td>#0d0d0d</td><td>Fondo de página</td></tr>
+  <tr><td><code>--text</code></td><td>#1e1e1e</td><td>#e0e0e0</td><td>Texto principal</td></tr>
+  <tr><td><code>--card-bg</code></td><td>#ffffff</td><td>#1a1a1a</td><td>Fondo de tarjetas</td></tr>
+  <tr><td><code>--muted-foreground</code></td><td>#666666</td><td>#999999</td><td>Texto secundario</td></tr>
+</table>
+
+<div class="pb"></div>
+
+<h2>7. Solución de Problemas Técnicos</h2>
+
+<table>
+  <tr><th>Problema</th><th>Causa</th><th>Solución</th></tr>
+  <tr>
+    <td><strong>Error 500 en api.php</strong></td>
+    <td>Credenciales de BD incorrectas, tabla no existe, o error SQL</td>
+    <td>Verificar api-config.php. Ejecutar ?action=setup. Revisar logs de PHP.</td>
+  </tr>
+  <tr>
+    <td><strong>"No active transaction"</strong></td>
+    <td>Rollback llamado sin transacción activa</td>
+    <td>Quitar beginTransaction/commit del save handler (ya corregido en v1.0)</td>
+  </tr>
+  <tr>
+    <td><strong>Datos no cargan del API</strong></td>
+    <td>Auth requerida para GET actions</td>
+    <td>Agregar 'all' y GET actions a $skipAuth (ya corregido en v1.0)</td>
+  </tr>
+  <tr>
+    <td><strong>window.DEPOIMENTOS undefined</strong></td>
+    <td>const no crea propiedad en window</td>
+    <td>Usar nombres de variables directamente, no window[var] (ya corregido)</td>
+  </tr>
+  <tr>
+    <td><strong>URL se acumula</strong></td>
+    <td>BASE_PATH vacío genera rutas relativas</td>
+    <td>BASE_PATH debe terminar con '/' (ya corregido en v1.0)</td>
+  </tr>
+  <tr>
+    <td><strong>Imágenes 403</strong></td>
+    <td>Hotlinking en .htaccess</td>
+    <td>Comentar reglas de hotlinking o agregar dominio actual a allowed referrers</td>
+  </tr>
+  <tr>
+    <td><strong>saveFormsToData is not defined</strong></td>
+    <td>Función llamada antes de ser declarada</td>
+    <td>Mover declaración de saveFormsToData antes de su uso en admin.js</td>
+  </tr>
+  <tr>
+    <td><strong>Cache del navegador</strong></td>
+    <td>Archivos minificados cacheados</td>
+    <td>Incrementar ?v=N en los script tags, o Ctrl+F5</td>
+  </tr>
+</table>
+
+<div class="pb"></div>
+
+<h2>8. Guía Rápida de Hostinger</h2>
+<ol>
+  <li><strong>Subir archivos:</strong> Usa File Manager o FTP (FileZilla) para subir todos los archivos a <code>public_html/</code></li>
+  <li><strong>Crear BD:</strong> En hPanel > Databases > MySQL Databases > crear base, usuario y contraseña</li>
+  <li><strong>Configurar:</strong> Copiar <code>api-config.example.php</code> a <code>api-config.php</code> y pegar credenciales</li>
+  <li><strong>Importar SQL:</strong> En phpMyAdmin, seleccionar la BD > Import > seleccionar <code>schema.sql</code></li>
+  <li><strong>Verificar:</strong> Abrir <code>https://tudominio.com/api.php?action=ping</code> — debe responder OK</li>
+  <li><strong>Activar BD mode:</strong> Ir al sitio con ?edit=1 > Config > Activar modo BD > URL: /api.php</li>
+  <li><strong>Probar:</strong> Editar algo > 💾 Salvar (BD) > recargar página</li>
+</ol>
+
+<div class="warn-box"><strong>⚠️ Nota importante:</strong> Hostinger puede tener restricciones de seguridad. Si encuentras errores 403 en imágenes, contacta al soporte de Hostinger o desactiva la protección hotlinking en el panel de control.</div>
+
+<h2>9. Mantenimiento</h2>
+<ul>
+  <li><strong>Backup de BD:</strong> Exportar regularmente desde phpMyAdmin</li>
+  <li><strong>Actualizaciones:</strong> Mantener PHP actualizado (Hostinger lo gestiona)</li>
+  <li><strong>Minificación:</strong> Después de editar <code>app.js</code> o <code>admin.js</code>, regenerar <code>.min.js</code> con terser</li>
+  <li><strong>Cache:</strong> Incrementar <code>?v=N</code> en index.html después de cambios</li>
+  <li><strong>Logs:</strong> Revisar logs de error de PHP si hay problemas (Hostinger > Advanced > Error Logs)</li>
+</ul>
+
+<div class="footer">
+  <p>Furpal Inmobiliaria — Documentación Técnica — Versión 1.0 — Julio 2026</p>
+  <p>Para abrir en Word: guarde este archivo y use Archivo &gt; Abrir en Microsoft Word.</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Manual do Usuário — Furpal Imobiliária</title>
+<style>
+  body { font-family: 'Calibri', 'Segoe UI', Arial, sans-serif; max-width: 1000px; margin: 40px auto; padding: 20px; color: #1e1e1e; line-height: 1.6; }
+  h1 { color: #b8860b; border-bottom: 4px solid #b8860b; padding-bottom: 12px; font-size: 28pt; margin-top: 30px; }
+  h2 { color: #8b6914; margin-top: 35px; font-size: 20pt; border-left: 6px solid #b8860b; padding-left: 12px; }
+  h3 { color: #333; margin-top: 25px; font-size: 16pt; }
+  h4 { color: #555; margin-top: 15px; font-size: 13pt; }
+  p { font-size: 11pt; margin: 8px 0; }
+  ul, ol { margin: 8px 0 15px; }
+  li { font-size: 11pt; margin-bottom: 4px; }
+
+  /* Cover page */
+  .cover { text-align: center; padding: 100px 0 80px; border: none; }
+  .cover h1 { font-size: 42pt; border: none; color: #b8860b; margin-bottom: 10px; }
+  .cover .sub { font-size: 20pt; color: #555; }
+  .cover .version { font-size: 12pt; color: #999; margin-top: 50px; }
+  .cover .line { width: 120px; height: 3px; background: #b8860b; margin: 20px auto; }
+
+  /* TOC */
+  .toc { background: #f8f4ec; padding: 20px 30px; border-radius: 8px; margin: 25px 0; }
+  .toc ol { margin: 0; }
+  .toc li { margin: 5px 0; }
+  .toc a { color: #8b6914; text-decoration: none; font-weight: bold; }
+
+  /* Info boxes */
+  .info-box { background: #fffbe6; border-left: 6px solid #b8860b; padding: 12px 18px; margin: 15px 0; border-radius: 4px; }
+  .info-box strong { color: #b8860b; }
+  .warn-box { background: #fff5f5; border-left: 6px solid #cc0000; padding: 12px 18px; margin: 15px 0; border-radius: 4px; }
+  .warn-box strong { color: #cc0000; }
+  .tip-box { background: #f0f8f0; border-left: 6px solid #2e7d32; padding: 12px 18px; margin: 15px 0; border-radius: 4px; }
+  .tip-box strong { color: #2e7d32; }
+
+  /* Admin panel mockup */
+  .admin-mock { background: #1a1a2e; color: #eee; padding: 15px; border-radius: 8px; margin: 15px 0; font-family: 'Consolas', 'Courier New', monospace; font-size: 10pt; line-height: 1.5; overflow-x: auto; }
+  .admin-mock .hl { color: #ffd700; }
+  .admin-mock .green { color: #4caf50; }
+  .admin-mock .red { color: #f44336; }
+  .admin-mock .blue { color: #64b5f6; }
+  .admin-mock .gray { color: #888; }
+  .admin-mock .section { border: 1px solid #444; padding: 8px; margin: 5px 0; border-radius: 4px; }
+
+  /* Tab bar */
+  .tab-bar { background: #333; color: #ccc; padding: 10px 15px; border-radius: 6px 6px 0 0; font-family: 'Consolas', monospace; font-size: 10pt; }
+  .tab-bar .active { color: #fff; background: #b8860b; padding: 4px 10px; border-radius: 4px; }
+  .tab-bar .inactive { color: #aaa; padding: 4px 8px; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 10pt; }
+  th { background: #b8860b; color: #fff; padding: 10px; text-align: left; font-weight: bold; }
+  td { border: 1px solid #ddd; padding: 8px; vertical-align: top; }
+  tr:nth-child(even) { background: #fafafa; }
+
+  /* Footer */
+  .footer { margin-top: 50px; padding-top: 20px; border-top: 2px solid #b8860b; font-size: 9pt; color: #888; text-align: center; }
+
+  /* Page break */
+  .pb { page-break-before: always; }
+
+  /* Step indicator */
+  .step { background: #b8860b; color: #fff; border-radius: 50%; width: 24px; height: 24px; display: inline-block; text-align: center; font-weight: bold; margin-right: 8px; font-size: 11pt; line-height: 24px; }
+
+  /* Screenshot placeholder */
+  .screenshot { background: #f0ecf0; border: 2px dashed #ccc; padding: 30px; text-align: center; border-radius: 8px; margin: 15px 0; color: #888; }
+  .screenshot .title { font-weight: bold; color: #555; font-size: 12pt; }
+
+  /* Button */
+  .btn { display: inline-block; background: #b8860b; color: #fff; padding: 4px 12px; border-radius: 4px; font-size: 10pt; font-weight: bold; }
+
+  /* Workflow arrow */
+  .arrow { text-align: center; font-size: 18pt; color: #b8860b; padding: 5px 0; }
+</style>
+</head>
+<body>
+
+<!-- ===== COVER ===== -->
+<div class="cover">
+  <h1>🏡 Furpal Imobiliária</h1>
+  <div class="line"></div>
+  <p class="sub">Manual do Usuário — Painel Administrativo</p>
+  <p style="font-size:14pt;color:#666;">Guia completo para gerenciar seu site imobiliário</p>
+  <p class="version">Versão 1.0 &mdash; Julho 2026</p>
+</div>
+
+<div class="pb"></div>
+
+<!-- ===== TOC ===== -->
+<h2>📋 Sumário</h2>
+<div class="toc">
+<ol>
+  <li><a href="#intro">Introdução — O que é o Furpal?</a></li>
+  <li><a href="#acesso">Acessando o Painel Administrativo</a></li>
+  <li><a href="#painel">Visão Geral do Painel</a></li>
+  <li><a href="#geral">Aba "Geral" — Configurações do Site</a></li>
+  <li><a href="#imoveis">Aba "Imóveis" — Gerenciar Imóveis</a></li>
+  <li><a href="#empreendimentos">Aba "Empreendimentos"</a></li>
+  <li><a href="#blog">Aba "Blog"</a></li>
+  <li><a href="#depoimentos">Aba "Depoimentos"</a></li>
+  <li><a href="#faq">Aba "FAQ"</a></li>
+  <li><a href="#parceiros">Aba "Parceiros"</a></li>
+  <li><a href="#regiao">Aba "Região" — Cidades e Praias</a></li>
+  <li><a href="#equipe">Aba "Equipe" — Corretores</a></li>
+  <li><a href="#estatisticas">Aba "Estatísticas"</a></li>
+  <li><a href="#config">Aba "Config" — Modo BD</a></li>
+  <li><a href="#publicar">Publicando as Alterações</a></li>
+  <li><a href="#dicas">Dicas e Solução de Problemas</a></li>
+</ol>
+</div>
+
+<div class="pb"></div>
+
+<!-- ===== 1. INTRODUÇÃO ===== -->
+<h2 id="intro">1. Introdução — O que é o Furpal?</h2>
+
+<p>O <strong>Furpal Imobiliária</strong> é um sistema de site completo para imobiliárias. Pense nele como o "painel de controle" do seu site: você faz as alterações aqui e elas aparecem automaticamente no site.</p>
+
+<p>Com ele você pode gerenciar tudo do seu site imobiliário sem precisar saber programação:</p>
+
+<table>
+  <tr><th>O que você quer fazer?</th><th>Onde fazer?</th></tr>
+  <tr><td>Alterar o logo ou telefone</td><td>Aba "Geral"</td></tr>
+  <tr><td>Adicionar uma casa para venda</td><td>Aba "Imóveis"</td></tr>
+  <tr><td>Publicar um artigo no blog</td><td>Aba "Blog"</td></tr>
+  <tr><td>Colocar o depoimento de um cliente</td><td>Aba "Depoimentos"</td></tr>
+  <tr><td>Mudar as informações de uma cidade</td><td>Aba "Região"</td></tr>
+  <tr><td>Adicionar um novo corretor</td><td>Aba "Equipe"</td></tr>
+  <tr><td>Salvar tudo no banco de dados</td><td>Botão "💾 Salvar (BD)"</td></tr>
+</table>
+
+<div class="info-box"><strong>💡 Boa notícia:</strong> Você não precisa saber HTML, PHP ou programação. O painel foi feito para ser usado por qualquer pessoa da imobiliária.</div>
+
+<p>O sistema pode funcionar de duas formas:</p>
+<ul>
+  <li><strong>Modo Frontend (padrão):</strong> As alterações são salvas em um arquivo e publicadas no GitHub Pages. Ideal para começar.</li>
+  <li><strong>Modo Banco de Dados:</strong> As alterações vão para um banco MySQL via internet. Mais seguro e recomendado para uso profissional.</li>
+</ul>
+
+<div class="pb"></div>
+
+<!-- ===== 2. ACESSO ===== -->
+<h2 id="acesso">2. Acessando o Painel Administrativo</h2>
+
+<p>O painel fica <strong>dentro do próprio site</strong>. Você não precisa instalar nada.</p>
+
+<h3>Passo a passo:</h3>
+
+<div class="admin-mock">
+<span class="gray">1.</span> Abra o site no navegador<br>
+<span class="gray">2.</span> Na barra de endereço, adicione <span class="hl">?edit=1</span> no final da URL<br>
+<br>
+<span class="gray">Exemplo:</span><br>
+<span class="blue">https://www.furpal.com.br/</span><span class="hl">?edit=1</span><br>
+<br>
+<span class="gray">3.</span> Pressione Enter<br>
+<span class="gray">4.</span> Aparecerá uma tela de login. Digite:
+  &nbsp;&nbsp;Usuário: <span class="hl">admin</span>
+  &nbsp;&nbsp;Senha: <span class="hl">admin123</span>
+<span class="gray">5.</span> Pronto! O painel aparece na parte de cima da página.
+</div>
+
+<div class="tip-box"><strong>⚡ Dica:</strong> Marque "Lembrar login" para não precisar digitar a senha toda vez.</div>
+
+<div class="warn-box"><strong>⚠️ Importante:</strong> Em produção (site no ar), troque a senha padrão! Isso é feito no arquivo de configuração do servidor.</div>
+
+<h3>O que você verá depois do login:</h3>
+
+<div class="admin-mock">
+┌──────────────────────────────────────────────────────────────┐
+│  🏡 Furpal Admin         <span class="hl">Bem-vindo, admin!</span>    │
+├──────────────────────────────────────────────────────────────┤
+│  <span class="hl">📊 Geral</span>  🏠 Imóveis  🏗️ Empreendimentos  📝 Blog  ...  │
+│  <span class="gray">(clique nas abas para navegar entre as seções)</span>      │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│  ┌─ CONTEÚDO DA ABA SELECIONADA ──────────────────────────┐  │
+│  │                                                         │  │
+│  │  Aqui aparecem os campos para editar os dados           │  │
+│  │  Botões: ✏️ Editar  🗑️ Excluir  ➕ Novo                │  │
+│  │                                                         │  │
+│  └─────────────────────────────────────────────────────────┘  │
+│                                                              │
+├──────────────────────────────────────────────────────────────┤
+│  <span class="green">[💾 Salvar (BD)]</span>  <span class="hl">[🚀 Publicar]</span>              │
+│  <span class="gray">Botões principais na parte inferior do painel</span>        │
+└──────────────────────────────────────────────────────────────┘
+</div>
+
+<div class="pb"></div>
+
+<!-- ===== 3. VISÃO GERAL DO PAINEL ===== -->
+<h2 id="painel">3. Visão Geral do Painel</h2>
+
+<p>O painel administrativo tem a seguinte estrutura:</p>
+
+<div class="admin-mock">
+┌──────────────────────────────────────────────────────────┐
+│  🔝 <span class="hl">BARRA SUPERIOR</span> — Título "Furpal Admin" + seu nome  │
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  📋 <span class="hl">BARRA DE ABAS</span> (Navegação)                       │
+│                                                          │
+│  📊 Geral │ 🏠 Imóveis │ 🏗️ Empreend. │ 📝 Blog │     │
+│  💬 Depoimentos │ ❓ FAQ │ 🤝 Parceiros │ 📍 Região │   │
+│  👥 Equipe │ 📈 Estatísticas │ ⚙️ Config │ 💾 Sair    │
+│                                                          │
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  📄 <span class="hl">ÁREA DE CONTEÚDO</span>                               │
+│                                                          │
+│  Dependendo da aba selecionada, você verá:               │
+│  • Uma tabela com os registros existentes                │
+│  • Botão <span class="green">"+ Novo"</span> para adicionar                   │
+│  • Botões <span class="hl">✏️</span> para editar cada registro              │
+│  • Botões <span class="red">🗑️</span> para excluir                         │
+│  • Formulários com campos para preencher                 │
+│                                                          │
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  🎮 <span class="hl">BARRA INFERIOR</span> (Ações globais)                   │
+│                                                          │
+│  <span class="green">[💾 Salvar (BD)]</span>   <span class="hl">[🚀 Publicar]</span>             │
+│  Salva no banco       Publica no GitHub Pages            │
+│                                                          │
+└──────────────────────────────────────────────────────────┘
+</div>
+
+<div class="info-box"><strong>💡 Como funciona:</strong> Quando você edita algo em qualquer aba, a mudança aparece <strong>na hora</strong> na prévia do site (role a página para baixo para ver). Depois, use os botões inferiores para salvar permanentemente.</div>
+
+<div class="pb"></div>
+
+<!-- ===== 4. ABA GERAL ===== -->
+<h2 id="geral">4. Aba "📊 Geral" — Configurações do Site</h2>
+
+<p>A aba <strong>Geral</strong> é onde você configura as informações básicas que aparecem no site inteiro.</p>
+
+<h3>O que cada campo faz:</h3>
+
+<table>
+  <tr><th style="width:30%">Campo</th><th>O que é?</th><th>Onde aparece no site?</th></tr>
+  <tr><td><strong>Logotipo</strong></td><td>URL da imagem do seu logo</td><td>Topo do site, navbar</td></tr>
+  <tr><td><strong>Eyebrow</strong></td><td>Texto pequeno acima do título principal (ex: "Imobiliária Especializada")</td><td>Seção inicial (hero)</td></tr>
+  <tr><td><strong>Título</strong></td><td>O título principal da página inicial</td><td>Seção hero, grande e destacado</td></tr>
+  <tr><td><strong>Subtítulo</strong></td><td>Frase de apoio abaixo do título</td><td>Abaixo do título no hero</td></tr>
+  <tr><td><strong>E-mail</strong></td><td>E-mail de contato da imobiliária</td><td>Rodapé e links de "Fale Conosco"</td></tr>
+  <tr><td><strong>Endereço</strong></td><td>Endereço físico da sede</td><td>Rodapé do site</td></tr>
+  <tr><td><strong>Instagram / Facebook / YouTube</strong></td><td>Links completos das redes sociais</td><td>Ícones no rodapé e navbar</td></tr>
+  <tr><td><strong>WhatsApp</strong></td><td>Número com DDD (só dígitos) e mensagem padrão</td><td>Botão flutuante do WhatsApp</td></tr>
+  <tr><td><strong>Copyright</strong></td><td>Texto do rodapé (ex: "© 2026 Furpal Imobiliária")</td><td>Rodapé do site</td></tr>
+  <tr><td><strong>Seções desabilitadas</strong></td><td>Marque as seções que não quer que apareçam no site</td><td>Oculta seções específicas</td></tr>
+  <tr><td><strong>Financiamento</strong></td><td>Taxa de juros (%) e parcelas padrão</td><td>Calculadora de financiamento</td></tr>
+</table>
+
+<h3>Como editar:</h3>
+<div class="admin-mock">
+<span class="gray">1.</span> Clique na aba <span class="hl">"📊 Geral"</span><br>
+<span class="gray">2.</span> Os campos aparecem na área de conteúdo<br>
+<span class="gray">3.</span> Preencha ou altere os valores desejados<br>
+<span class="gray">4.</span> A mudança já aparece no site (role a página)<br>
+<span class="gray">5.</span> Para salvar permanentemente, clique <span class="green">[💾 Salvar (BD)]</span> no final<br>
+</div>
+
+<div class="tip-box"><strong>⚡ Teste agora:</strong> Altere o subtítulo e veja a mágica acontecer em tempo real!</div>
+
+<div class="pb"></div>
+
+<!-- ===== 5. IMÓVEIS ===== -->
+<h2 id="imoveis">5. Aba "🏠 Imóveis" — Gerenciar Imóveis</h2>
+
+<p>Esta é a aba mais importante. Aqui você cadastra, edita e remove os imóveis que aparecem nas seções de <strong>Venda</strong> e <strong>Aluguel</strong> do site.</p>
+
+<h3>Visual da aba:</h3>
+<div class="admin-mock">
+┌─ 🏠 Imóveis ────────────────────────────────────────────┐
+│                                                          │
+│  <span class="green">[+ Novo Imóvel]</span>                                       │
+│                                                          │
+│  ┌──────┬────────────┬──────────┬──────────┬──────────┐ │
+│  │ Tipo │ Título     │ Preço    │ Local    │ Ações    │ │
+│  ├──────┼────────────┼──────────┼──────────┼──────────┤ │
+│  │ Venda│ Apto Centro│ R$ 500K  │ BC       │ <span class="hl">✏️</span> <span class="red">🗑️</span>  │ │
+│  │ Alug.│ Casa Praia │ R$ 3.000 │ Itajaí   │ <span class="hl">✏️</span> <span class="red">🗑️</span>  │ │
+│  │ Venda│ Terreno     │ R$ 200K  │ Camboriú │ <span class="hl">✏️</span> <span class="red">🗑️</span>  │ │
+│  └──────┴────────────┴──────────┴──────────┴──────────┘ │
+│                                                          │
+└──────────────────────────────────────────────────────────┘
+</div>
+
+<h3>Campos de um imóvel:</h3>
+
+<table>
+  <tr><th>Campo</th><th>Exemplo</th><th>Obrigatório</th></tr>
+  <tr><td>Tipo</td><td>Venda ou Aluguel</td><td>Sim</td></tr>
+  <tr><td>Categoria</td><td>Apartamento, Casa, Terreno, Comercial, Cobertura</td><td>Sim</td></tr>
+  <tr><td>Título</td><td>"Apartamento 2 quartos no Centro"</td><td>Sim</td></tr>
+  <tr><td>Preço (texto)</td><td>"R$ 450.000" ou "Consulte-nos"</td><td>Sim</td></tr>
+  <tr><td>Preço (número)</td><td>450000 (usado para ordenar)</td><td>Recomendado</td></tr>
+  <tr><td>Localização</td><td>"Balneário Camboriú - Centro"</td><td>Sim</td></tr>
+  <tr><td>Mapa</td><td>URL do Google Maps ou embed</td><td>Não</td></tr>
+  <tr><td>Latitude / Longitude</td><td>-26.9876, -48.6342</td><td>Não (mas recomendado)</td></tr>
+  <tr><td>Status</td><td>Disponível, Vendido, Lançamento, Em obras</td><td>Não</td></tr>
+  <tr><td>Descrição curta</td><td>Texto resumido que aparece nos cards</td><td>Sim</td></tr>
+  <tr><td>Quartos / Banheiros / Garagem / Área</td><td>3 / 2 / 1 / 75m²</td><td>Não</td></tr>
+  <tr><td>Imagem principal</td><td>URL da foto principal do imóvel</td><td>Sim</td></tr>
+  <tr><td>Galeria</td><td>URLs das fotos separadas por vírgula</td><td>Não</td></tr>
+  <tr><td>Vídeo</td><td>Link do YouTube ou Vimeo</td><td>Não</td></tr>
+  <tr><td>Características</td><td>"2 vagas | sacada | piscina | churrasqueira"</td><td>Não</td></tr>
+  <tr><td>Descrição longa</td><td>Texto detalhado para a página do imóvel</td><td>Não</td></tr>
+</table>
+
+<h3>Passo a passo para adicionar um imóvel:</h3>
+<div class="admin-mock">
+<span class="gray">1.</span> Clique em <span class="green">[+ Novo Imóvel]</span><br>
+<span class="gray">2.</span> Preencha os campos no formulário que abrir<br>
+<span class="gray">3.</span> Clique em "Salvar" no formulário<br>
+<span class="gray">4.</span> O imóvel aparece na tabela e no site<br>
+<span class="gray">5.</span> Clique <span class="green">[💾 Salvar (BD)]</span> para salvar no banco<br>
+</div>
+
+<div class="info-box"><strong>💡 Dica de fotos:</strong> As imagens precisam estar hospedadas em algum lugar (pode ser no próprio servidor ou em serviços como Imgur, Google Fotos, etc.). Copie a URL da imagem e cole no campo.</div>
+
+<div class="pb"></div>
+
+<!-- ===== 6. EMPREENDIMENTOS ===== -->
+<h2 id="empreendimentos">6. Aba "🏗️ Empreendimentos"</h2>
+
+<p>Funciona de forma similar aos imóveis, mas é voltada para <strong>empreendimentos</strong> (prédios inteiros, condomínios, loteamentos).</p>
+
+<p>Diferenças principais dos imóveis comuns:</p>
+<ul>
+  <li>Tem <strong>planta</strong> (imagem da planta baixa)</li>
+  <li>Tem <strong>diferenciais</strong> (itens de destaque do empreendimento)</li>
+  <li>Pode ter <strong>status</strong> como "Lançamento", "Em obras" ou "Pronto"</li>
+  <li>Cada empreendimento tem sua <strong>página de detalle</strong> com todas as informações</li>
+</ul>
+
+<div class="tip-box"><strong>⚡ Exemplo:</strong> Se você está vendendo um prédio novo com 20 apartamentos, cadastre ele aqui como "Empreendimento", não como 20 imóveis separados.</div>
+
+<div class="pb"></div>
+
+<!-- ===== 7. BLOG ===== -->
+<h2 id="blog">7. Aba "📝 Blog"</h2>
+
+<p>Gerencia as postagens do blog do seu site. Cada postagem pode conter:</p>
+
+<ul>
+  <li><strong>Título</strong> — O nome do artigo</li>
+  <li><strong>Resumo</strong> — Um texto curto que aparece na lista de posts</li>
+  <li><strong>Conteúdo</strong> — O texto completo (pode usar HTML básico para formatar)</li>
+  <li><strong>Imagem de destaque</strong> — A foto principal do post</li>
+  <li><strong>Categoria</strong> — Para organizar os posts (ex: "Dicas", "Mercado", "Novidades")</li>
+  <li><strong>Data</strong> — Data de publicação</li>
+</ul>
+
+<h3>Como escrever o conteúdo:</h3>
+<p>Você pode usar tags HTML simples para formatar o texto:</p>
+
+<div class="admin-mock">
+<span class="gray">&lt;h2&gt;</span>Título da seção<span class="gray">&lt;/h2&gt;</span><br>
+<span class="gray">&lt;p&gt;</span>Parágrafo normal...<span class="gray">&lt;/p&gt;</span><br>
+<span class="gray">&lt;strong&gt;</span><span class="hl">texto em negrito</span><span class="gray">&lt;/strong&gt;</span><br>
+<span class="gray">&lt;img src="</span><span class="blue">URL-da-imagem</span><span class="gray">"&gt;</span><br>
+</div>
+
+<p>Se não souber HTML, apenas escreva o texto normal usando parágrafos simples.</p>
+
+<div class="pb"></div>
+
+<!-- ===== 8. DEPOIMENTOS ===== -->
+<h2 id="depoimentos">8. Aba "💬 Depoimentos"</h2>
+
+<p>Aqui você gerencia os <strong>depoimentos de clientes</strong> que aparecem na página inicial. Cada depoimento mostra:</p>
+
+<div class="admin-mock">
+┌─ Depoimento ─────────────────────────────────────────┐
+│  ★★★★★                                                    │
+│  "A Furpal fez toda a diferença na compra do nosso     │
+│  apartamento. Atendimento nota 10!"                    │
+│                                                   │
+│  — <span class="hl">Ana Carolina Silva</span>                               │
+│  <span class="gray">Compradora • Apartamento 2 quartos • BC</span>          │
+└────────────────────────────────────────────────────────┘
+</div>
+
+<p><strong>Campos:</strong></p>
+<ul>
+  <li><strong>Nome</strong> — Nome do cliente (obrigatório)</li>
+  <li><strong>Descrição</strong> — Informação extra (ex: "Compradora • Apartamento • BC")</li>
+  <li><strong>Texto</strong> — O depoimento em si (entre aspas)</li>
+</ul>
+
+<div class="pb"></div>
+
+<!-- ===== 9. FAQ ===== -->
+<h2 id="faq">9. Aba "❓ FAQ"</h2>
+
+<p>Gerencia as <strong>Perguntas Frequentes</strong> do site. Cada pergunta tem:</p>
+<ul>
+  <li><strong>Pergunta</strong> — O texto da pergunta (ex: "Como financiar um imóvel?")</li>
+  <li><strong>Resposta</strong> — A resposta completa</li>
+</ul>
+<p>No site, as perguntas aparecem em formato de acordeão (clique para expandir).</p>
+
+<div class="pb"></div>
+
+<!-- ===== 10. PARCEIROS ===== -->
+<h2 id="parceiros">10. Aba "🤝 Parceiros"</h2>
+
+<p>Gerencia os logos de <strong>parceiros e empresas</strong> que aparecem na página inicial. Cada parceiro tem:</p>
+<ul>
+  <li><strong>Nome</strong> — Nome da empresa parceira</li>
+  <li><strong>Imagem</strong> — URL do logo da empresa</li>
+  <li><strong>URL</strong> — Link para o site do parceiro</li>
+</ul>
+
+<div class="pb"></div>
+
+<!-- ===== 11. REGIÃO ===== -->
+<h2 id="regiao">11. Aba "📍 Região" — Cidades e Praias</h2>
+
+<p>Esta aba permite gerenciar informações detalhadas sobre cada <strong>cidade ou região</strong> que sua imobiliária atende. É usada na seção "Conhecer a Região" do site.</p>
+
+<h3>Visual:</h3>
+<div class="admin-mock">
+┌─ 📍 REGIÃO ──────────────────────────────────────────┐
+│  <span class="green">[+ Nova Região]</span>                                     │
+│                                                      │
+│  ┌──────────────┬──────────┬──────────┐              │
+│  │ Nome         │ Praias   │ Ações    │              │
+│  ├──────────────┼──────────┼──────────┤              │
+│  │ Balneário BC │ 4 praias │ <span class="hl">✏️</span> <span class="red">🗑️</span>  │              │
+│  │ Itajaí       │ 2 praias │ <span class="hl">✏️</span> <span class="red">🗑️</span>  │              │
+│  │ Florianópolis│ 12 praias│ <span class="hl">✏️</span> <span class="red">🗑️</span>  │              │
+│  └──────────────┴──────────┴──────────┘              │
+└──────────────────────────────────────────────────────┘
+</div>
+
+<h3>Informações de cada região:</h3>
+<table>
+  <tr><th>Campo</th><th>O que colocar</th><th>Exemplo</th></tr>
+  <tr><td>Tagline</td><td>Uma frase de efeito sobre a cidade</td><td>"O melhor lugar para viver"</td></tr>
+  <tr><td>Imagens</td><td>URLs separadas por vírgula</td><td>https://...foto1.jpg, https://...foto2.jpg</td></tr>
+  <tr><td>Introdução</td><td>Texto de apresentação da cidade</td><td>"Balneário Camboriú é conhecida por..."</td></tr>
+  <tr><td>História</td><td>Um pouco da história do local</td><td>"A cidade foi fundada em..."</td></tr>
+  <tr><td>Segurança</td><td>Informações sobre segurança</td><td>"A região conta com..."</td></tr>
+  <tr><td>Praias</td><td>Lista no formato: <code>nome: descrição</code>, separadas por <code>|</code></td><td>Praia Central: principal praia urbana | Praia de Laranjeiras: águas calmas</td></tr>
+  <tr><td>Destaques</td><td>O que tem de bom na região, separado por <code>|</code></td><td>Restaurantes | Shoppings | Vida noturna | Parques</td></tr>
+</table>
+
+<div class="tip-box"><strong>⚡ Dica:</strong> Use o separador <code>|</code> (pipe) para listas. Exemplo de praias: <code>Praia Central: areia larga e calçadão | Praia das Laranjeiras: mar calmo para famílias | Praia do Buraco: point de surf</code></div>
+
+<div class="pb"></div>
+
+<!-- ===== 12. EQUIPE ===== -->
+<h2 id="equipe">12. Aba "👥 Equipe" — Corretores</h2>
+
+<p>Gerencia os <strong>corretores e funcionários</strong> que aparecem na seção "Equipe" do site.</p>
+
+<p><strong>Campos de cada membro:</strong></p>
+<table>
+  <tr><th>Campo</th><th>Descrição</th></tr>
+  <tr><td>Nome</td><td>Nome completo do corretor</td></tr>
+  <tr><td>Cargo</td><td>Ex: "Corretor Sênior", "Especialista em Imóveis de Luxo"</td></tr>
+  <tr><td>Foto</td><td>URL da foto do corretor</td></tr>
+  <tr><td>CRECI</td><td>Número do registro no Conselho Regional</td></tr>
+  <tr><td>Telefone</td><td>Número para contato direto</td></tr>
+  <tr><td>E-mail</td><td>E-mail profissional do corretor</td></tr>
+</table>
+
+<div class="pb"></div>
+
+<!-- ===== 13. ESTATÍSTICAS ===== -->
+<h2 id="estatisticas">13. Aba "📈 Estatísticas"</h2>
+
+<p>Gerencia os <strong>números grandes</strong> que aparecem na página inicial para impressionar os visitantes:</p>
+
+<div class="admin-mock">
+┌──────────────────────────────────────────────────────┐
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐          │
+│  │  <span class="hl">500+</span>    │  │  <span class="hl">200+</span>    │  │  <span class="hl">50+</span>     │          │
+│  │ Imóveis   │  │ Clientes  │  │ Prêmios  │          │
+│  └──────────┘  └──────────┘  └──────────┘          │
+└──────────────────────────────────────────────────────┘
+</div>
+
+<p><strong>Campos:</strong></p>
+<ul>
+  <li><strong>Rótulo:</strong> O texto abaixo do número (ex: "Imóveis", "Clientes")</li>
+  <li><strong>Valor:</strong> O número em si (ex: "500+", "98%")</li>
+  <li><strong>Ícone:</strong> Classe do ícone (uso avançado — pode deixar em branco)</li>
+</ul>
+
+<div class="pb"></div>
+
+<!-- ===== 14. CONFIG ===== -->
+<h2 id="config">14. Aba "⚙️ Config" — Modo Banco de Dados</h2>
+
+<p>Esta aba permite ativar o <strong>Modo Banco de Dados</strong>, que salva as informações em um banco MySQL ao invés de apenas no arquivo do site.</p>
+
+<div class="info-box"><strong>💡 Quando usar:</strong> Se você tem um plano de hospedagem (Hostinger, InfinityFree, etc.) com suporte a PHP e MySQL, ative o modo BD para maior segurança e confiabilidade.</div>
+
+<h3>Como ativar:</h3>
+<div class="admin-mock">
+<span class="gray">1.</span> Vá na aba <span class="hl">"⚙️ Config"</span><br>
+<span class="gray">2.</span> Marque a opção <span class="hl">"Ativar modo BD"</span><br>
+<span class="gray">3.</span> No campo "URL Base da API", digite: <span class="blue">/api.php</span><br>
+<span class="gray">4.</span> Clique em <span class="green">"Salvar Config"</span><br>
+<span class="gray">5.</span> A página vai recarregar automaticamente<br>
+</div>
+
+<div class="warn-box"><strong>⚠️ Antes de ativar:</strong> Certifique-se de que o arquivo <code>api.php</code> foi enviado para o servidor e que o banco de dados está configurado corretamente (veja o Guia de Configuração Técnica para mais detalhes).</div>
+
+<h3>Salvando os dados no banco:</h3>
+<p>Com o modo BD ativo, um novo botão aparece no painel:</p>
+<div class="admin-mock">
+┌──────────────────────────────────────────────────────┐
+│  <span class="green">[💾 Salvar (BD)]</span>  — Salva todos os dados no MySQL    │
+│  <span class="hl">[🚀 Publicar]</span>     — Publica no GitHub Pages           │
+└──────────────────────────────────────────────────────┘
+</div>
+<p>Use o <strong>"💾 Salvar (BD)"</strong> sempre que fizer alterações e quiser salvá-las permanentemente no banco de dados.</p>
+
+<div class="pb"></div>
+
+<!-- ===== 15. PUBLICAR ===== -->
+<h2 id="publicar">15. Publicando as Alterações</h2>
+
+<p>Existem duas formas de publicar as alterações, dependendo do modo que você está usando:</p>
+
+<table>
+  <tr><th>Modo</th><th>Botão</th><th>O que faz</th></tr>
+  <tr><td><strong>Frontend</strong></td><td>🚀 Publicar</td><td>Envia os dados para o GitHub Pages (requer token)</td></tr>
+  <tr><td><strong>BD</strong></td><td>💾 Salvar (BD)</td><td>Salva os dados no banco MySQL</td></tr>
+</table>
+
+<h3>Fluxo de trabalho recomendado:</h3>
+<div class="admin-mock">
+<span class="gray">1.</span> Faça as edições no painel administrativo<br>
+<span class="gray">2.</span> Confira as alterações rolando a página para baixo<br>
+<span class="gray">3.</span> Se estiver satisfeito, clique em <span class="green">[💾 Salvar (BD)]</span><br>
+<span class="gray">4.</span> Uma mensagem <span class="green">"✅ Dados salvos no BD!"</span> confirma o sucesso<br>
+<span class="gray">5.</span> Recarregue a página para ver o resultado final<br>
+</div>
+
+<div class="pb"></div>
+
+<!-- ===== 16. DICAS ===== -->
+<h2 id="dicas">16. Dicas e Solução de Problemas</h2>
+
+<h3>🎯 Dicas para usar o painel:</h3>
+<ul>
+  <li><strong>Sempre confira</strong> as alterações rolando a página para baixo antes de salvar</li>
+  <li><strong>Use imagens no formato</strong> JPG ou WebP para fotos, PNG para logos</li>
+  <li><strong>Não use imagens muito pesadas</strong> — fotos com mais de 500KB podem deixar o site lento</li>
+  <li><strong>O botão "Salvar (BD)"</strong> salva TUDO de uma vez (todas as abas)</li>
+  <li><strong>Para testar</strong> sem medo, abra o site em outra aba do navegador enquanto edita</li>
+</ul>
+
+<h3>❓ Problemas comuns:</h3>
+
+<table>
+  <tr><th>Problema</th><th>Causa provável</th><th>Solução</th></tr>
+  <tr>
+    <td>"Erro 500" ao salvar no BD</td>
+    <td>Conexão com banco de dados incorreta</td>
+    <td>Verifique as credenciais no arquivo api-config.php</td>
+  </tr>
+  <tr>
+    <td>Imagens não aparecem (403)</td>
+    <td>Proteção de hotlinking no servidor</td>
+    <td>Entre em contato com o suporte técnico</td>
+  </tr>
+  <tr>
+    <td>Alterações não aparecem no site</td>
+    <td>Não salvou no BD ou cache do navegador</td>
+    <td>Clique em "Salvar (BD)" e recarregue (Ctrl+F5)</td>
+  </tr>
+  <tr>
+    <td>Não consigo acessar o painel</td>
+    <td>URL sem ?edit=1 ou senha errada</td>
+    <td>Adicione ?edit=1 na URL e tente admin/admin123</td>
+  </tr>
+  <tr>
+    <td>A URL do site está acumulando (ex: /sobre/comprar/...)</td>
+    <td>Configuração de BASE_PATH incorreta</td>
+    <td>Informe ao suporte técnico</td>
+  </tr>
+</table>
+
+<h3>📞 Suporte:</h3>
+<p>Se precisar de ajuda, entre em contato com o desenvolvedor responsável pela implantação do sistema.</p>
+
+<p style="text-align:center;margin-top:40px;"><strong>Furpal Imobiliária</strong> — Sistema de Gerenciamento de Site</p>
+
+<div class="footer">
+  <p>Furpal Imobiliária — Manual do Usuário — Versão 1.0 — Julho 2026</p>
+  <p>Para abrir no Word: salve este arquivo e use Arquivo &gt; Abrir no Microsoft Word, ou copie e cole o conteúdo.</p>
+</div>
+
+</body>
+</html>
