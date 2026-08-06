@@ -1520,7 +1520,8 @@
       padding-top: var(--header-height, 3.5rem);
     }
     .spa section#inicio.active,
-    .spa section#sobre.active { padding-top: 0; }
+    .spa section#sobre.active,
+    .spa section#contato.active { padding-top: 0; }
     .spa section#stats.active,
     .spa section#servicos.active,
     .spa section#depoimentos.active,

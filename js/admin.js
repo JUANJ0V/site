@@ -4,7 +4,7 @@
 
 const ADMIN_ENABLED = true;
 const ADMIN_USER    = "admin";
-const ADMIN_PASS    = "admin123";
+const ADMIN_PASS    = "AdminFurpal#2026";
 const GITHUB_REPO   = "JUANJ0V/site";
 const GITHUB_BRANCH = "main";
 const GITHUB_PATH   = "js/data.js";
@@ -151,7 +151,7 @@ const GITHUB_PATH   = "js/data.js";
 
   var panelEl = document.createElement('div');
   panelEl.id = 'adminPanel';
-  panelEl.innerHTML = '<div class="admin-header"><h1>⚙️ Su Imobiliária — Admin</h1><div class="admin-actions"><button onclick="adminToggleSite()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);">👁 Ver site</button><button onclick="adminSaveServer()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);" id="adminSaveBtn">💾 Salvar</button><button onclick="adminPublish()" class="btn-publish" id="adminPublishBtn">📦 Publicar no GitHub</button><button onclick="adminLogout()">Sair</button></div></div><div class="admin-body"><div class="admin-sidebar" id="adminSidebar"></div><div class="admin-content" id="adminContent"></div></div>';
+  panelEl.innerHTML = '<div class="admin-header"><h1>⚙️ Furpal — Admin</h1><div class="admin-actions"><button onclick="adminToggleSite()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);">👁 Ver site</button><button onclick="adminSaveServer()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);" id="adminSaveBtn">💾 Salvar</button><button onclick="adminPublish()" class="btn-publish" id="adminPublishBtn">💾 Salvar no servidor</button><button onclick="adminLogout()">Sair</button></div></div><div class="admin-body"><div class="admin-sidebar" id="adminSidebar"></div><div class="admin-content" id="adminContent"></div></div>';
   document.body.appendChild(panelEl);
 
   // Update buttons if in API mode (after appending to DOM)
@@ -288,9 +288,12 @@ const GITHUB_PATH   = "js/data.js";
       c.SECTION_LANCAMENTOS_TITLE  = gv('cfg_lancTitle');
       c.SECTION_CONTATO_EYEBROW    = gv('cfg_contEye');
       c.SECTION_CONTATO_TITLE      = gv('cfg_contTitle');
+      c.SECTION_FINANCIAMENTO_EYEBROW = gv('cfg_finEye');
+      c.SECTION_FINANCIAMENTO_TITLE   = gv('cfg_finTitle');
     }
-    // Financiamento tab
-    if (document.getElementById('fin_eye')) {
+    // Financiamento tab (solo si es la pestaña activa, para no pisar los textos de la pestaña General)
+    var finSection = document.getElementById('adminSection_financiamento');
+    if (finSection && finSection.classList.contains('active') && document.getElementById('fin_eye')) {
       c.SECTION_FINANCIAMENTO_EYEBROW = gv('fin_eye');
       c.SECTION_FINANCIAMENTO_TITLE   = gv('fin_title');
       c.FIN_DEFAULT_PRICE = parseInt(gv('fin_defPrice')) || 500000;
@@ -318,11 +321,7 @@ const GITHUB_PATH   = "js/data.js";
     var pwd = localStorage.getItem('admin_server_pass');
     if (!pwd) { adminToast('❌ Defina a senha do save.php na aba Config', 'error'); showTab('settings'); return; }
     var content = generateDataJs();
-    fetch('save.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content: content, password: pwd })
-    })
+    saveToPhp(content, pwd)
     .then(function(r) { return r.json(); })
     .then(function(res) {
       if (res.ok) { adminToast('✅ ' + (res.message || 'Salvo!'), 'success'); }
@@ -342,11 +341,7 @@ const GITHUB_PATH   = "js/data.js";
     var pwd = localStorage.getItem('admin_server_pass');
     if (!pwd) { adminToast('❌ Defina a senha do save.php na aba Config', 'error'); return; }
     var content = generateDataJs();
-    fetch('save.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content: content, password: pwd })
-    })
+    saveToPhp(content, pwd)
     .then(function(r) { return r.json(); })
     .then(function(res) {
       if (res.ok) { adminToast('✅ ' + (res.message || 'Salvo!'), 'success'); }
@@ -359,47 +354,112 @@ const GITHUB_PATH   = "js/data.js";
     return ' <button type="button" onclick="adminUpload(\'' + inputId + '\',\'' + folder + '\')" style="font-size:0.7rem;padding:0.2rem 0.5rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:3px;color:#fff;cursor:pointer;vertical-align:middle;">📷 Upload</button>';
   }
 
+  // InfinityFree bloqueia POSTs com corpo de código JS. Codifica em base64 (UTF-8 seguro) para o save.php aceitar.
+  function encodeContent(s) {
+    var bytes = new TextEncoder().encode(String(s || ''));
+    var bin = '';
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+
+  function saveToPhp(content, pwd) {
+    return fetch('save.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: encodeContent(content), encoded: true, password: pwd })
+    });
+  }
+
+  // Campos de galeria (textarea) que, ao subir imagens, também preenchem a imagem principal automaticamente.
+  var MAIN_IMG_BY_GALLERY = {
+    'prop_gallery': 'prop_img',
+    'emp_gallery': 'emp_img'
+  };
+
   window.adminUpload = function(inputId, folder) {
+    var target = document.getElementById(inputId);
+    var isMulti = target && target.tagName === 'TEXTAREA';
+    var mainImgId = isMulti ? (MAIN_IMG_BY_GALLERY[inputId] || null) : null;
     var el = document.createElement('input');
     el.type = 'file';
+    el.multiple = !!isMulti;
     el.accept = folder === 'videos' ? 'video/mp4,video/webm,video/quicktime' : 'image/*';
     el.onchange = function() {
-      var file = el.files[0];
-      if (!file) return;
-      adminToast('⏳ Enviando ' + file.name + '...', 'info');
-      uploadFile(file, folder, function(url) {
-        var target = document.getElementById(inputId);
-        if (!target) return;
-        if (target.tagName === 'TEXTAREA') {
-          target.value = target.value ? target.value.trim() + '\n' + url : url;
-        } else {
-          target.value = url;
+      var files = Array.prototype.slice.call(el.files || []);
+      if (!files.length) return;
+      var idx = 0;
+      var okCount = 0;
+      function next() {
+        var file = files[idx];
+        if (!file) {
+          if (okCount > 0) adminToast('✅ ' + okCount + ' URL(s) adicionada(s)!', 'success');
+          return;
         }
-        adminToast('✅ URL copiada!', 'success');
-      });
+        adminToast('⏳ Enviando ' + file.name + (files.length > 1 ? ' (' + (idx + 1) + '/' + files.length + ')' : '') + '...', 'info');
+        uploadFile(file, folder, function(url) {
+          if (target) {
+            if (isMulti) {
+              target.value = target.value ? target.value.trim() + '\n' + url : url;
+            } else {
+              target.value = url;
+            }
+          }
+          if (idx === 0 && mainImgId) {
+            var mainEl = document.getElementById(mainImgId);
+            if (mainEl) mainEl.value = url;
+          }
+          okCount++;
+          idx++;
+          next();
+        }, function() {
+          idx++;
+          next();
+        });
+      }
+      next();
     };
     el.click();
   };
 
-  function uploadFile(file, folder, cb) {
+  function uploadFile(file, folder, cb, errCb) {
+    // SEMPRE envia direto ao servidor (upload.php) — não depende de token do GitHub nem de senha configurada.
+    // Usa a senha salva no navegador (Config). Sem fallback: a senha nunca vai embutida no JS público.
     var pwd = localStorage.getItem('admin_server_pass');
-    if (pwd) {
-      var fd = new FormData();
-      fd.append('file', file);
-      fd.append('password', pwd);
-      fd.append('folder', folder);
-      fetch('upload.php', { method: 'POST', body: fd })
-        .then(function(r) { return r.json(); })
-        .then(function(res) {
-          if (res.ok && res.url) { cb(res.url); return; }
-          uploadViaGitHub(file, folder, cb);
-        })
-        .catch(function() { uploadViaGitHub(file, folder, cb); });
-    } else {
-      uploadViaGitHub(file, folder, cb);
-    }
+    var fd = new FormData();
+    fd.append('file', file);
+    fd.append('password', pwd);
+    fd.append('folder', folder);
+    fetch('upload.php', { method: 'POST', body: fd })
+      .then(function(r) { return r.text(); })
+      .then(function(text) {
+        var res;
+        try {
+          res = JSON.parse(text);
+        } catch(e) {
+          if (/<html|aes\.js|slowAES|__test/i.test(text)) {
+            adminToast('⚠️ Firewall do InfinityFree ativo. Recarregue a página 1x e tente de novo.', 'warning');
+          } else {
+            adminToast('❌ Resposta inesperada do servidor.', 'error');
+          }
+          if (errCb) errCb();
+          return;
+        }
+        if (res.ok && res.url) { cb(res.url); return; }
+        adminToast('❌ ' + ((res && res.error) || 'Erro no upload'), 'error');
+        if (errCb) errCb();
+        // ── Fallback GitHub (comentado de propósito — reativar se for usar GitHub de novo) ──
+        // uploadViaGitHub(file, folder, cb);
+      })
+      .catch(function(err) {
+        adminToast('❌ Erro ao conectar em upload.php: ' + err.message, 'error');
+        if (errCb) errCb();
+        // ── Fallback GitHub (comentado de propósito — reativar se for usar GitHub de novo) ──
+        // uploadViaGitHub(file, folder, cb);
+      });
   }
 
+  /*
+  // ── Upload via GitHub (comentado de propósito — reativar se for usar GitHub de novo) ──
   function uploadViaGitHub(file, folder, cb) {
     var token = ADMIN_TOKEN;
     if (!token) { adminToast('❌ Configure o token do GitHub ou a senha do servidor', 'error'); return; }
@@ -442,6 +502,8 @@ const GITHUB_PATH   = "js/data.js";
     };
     reader.readAsDataURL(file);
   }
+  window._uploadViaGitHub = uploadViaGitHub;
+  */
 
   window.adminLogout = function() {
     sessionStorage.removeItem('admin_logged');
@@ -466,18 +528,21 @@ const GITHUB_PATH   = "js/data.js";
   var _data = null;
 
   // ── Verificar login ──
+  // IMPORTANTE: NO usar `return` aquí: si no está logueado, igual deben
+  // definirse abajo window.showTab, adminSaveServer, renderers, etc.
+  // (si no, el primer login rompe el panel hasta recargar la página).
   if (!ADMIN_LOGGED) {
     loginEl.classList.remove('hidden');
     panelEl.classList.remove('active');
-    return;
+  } else {
+    // Defer to next tick so window.showTab & render functions are defined first
+    setTimeout(function() {
+      loginEl.classList.add('hidden');
+      panelEl.classList.add('active');
+      document.body.classList.add('admin-mode');
+      initAdminPanel();
+    }, 0);
   }
-  // Defer to next tick so window.showTab & render functions are defined first
-  setTimeout(function() {
-    loginEl.classList.add('hidden');
-    panelEl.classList.add('active');
-    document.body.classList.add('admin-mode');
-    initAdminPanel();
-  }, 0);
 
   function initAdminPanel() {
     try {
@@ -575,7 +640,7 @@ const GITHUB_PATH   = "js/data.js";
     if (typeof SITE_REGION !== 'undefined') map.SITE_REGION = SITE_REGION;
     if (typeof SITE_MAPS !== 'undefined') map.SITE_MAPS = SITE_MAPS;
     map.HERO_EYEBROW  = typeof HERO_EYEBROW !== 'undefined' ? HERO_EYEBROW : 'Seu lar começa aqui';
-    map.HERO_TITLE    = typeof HERO_TITLE !== 'undefined' ? HERO_TITLE : 'Su Imobiliária';
+    map.HERO_TITLE    = typeof HERO_TITLE !== 'undefined' ? HERO_TITLE : 'Furpal Assessoria Imobiliária';
     map.HERO_SUBTITLE = typeof HERO_SUBTITLE !== 'undefined' ? HERO_SUBTITLE : '';
     map.HERO_VIDEO    = typeof HERO_VIDEO !== 'undefined' ? HERO_VIDEO : '';
     map.SECTION_SOBRE_EYEBROW   = typeof SECTION_SOBRE_EYEBROW !== 'undefined' ? SECTION_SOBRE_EYEBROW : 'Quem somos';
@@ -838,7 +903,7 @@ const GITHUB_PATH   = "js/data.js";
     c.SECTION_FAVORITOS_TITLE         = gv('cfg_favTitle');
     c.SECTION_FAVORITOS_EMPTY         = gv('cfg_favEmpty');
     syncToLive();
-    adminToast('✅ Configurações salvas!', 'success');
+    adminSaveServer();
   };
 
   /* =================================================================
@@ -934,7 +999,7 @@ const GITHUB_PATH   = "js/data.js";
   };
 
   window.delProperty = function(idx) {
-    if (!confirm('Excluir "' + _data.PROPERTIES[idx].title + '"?')) return;
+    if (!confirm('Excluir ' + jq(_data.PROPERTIES[idx].title) + '?')) return;
     _data.PROPERTIES.splice(idx, 1);
     syncToLive();
     renderProperties(document.getElementById('adminSection_properties'));
@@ -1029,7 +1094,7 @@ const GITHUB_PATH   = "js/data.js";
   };
 
   window.delEmp = function(idx) {
-    if (!confirm('Excluir "' + _data.EMPREENDIMENTOS[idx].title + '"?')) return;
+    if (!confirm('Excluir ' + jq(_data.EMPREENDIMENTOS[idx].title) + '?')) return;
     _data.EMPREENDIMENTOS.splice(idx, 1);
     syncToLive();
     renderEmpreendimentos(document.getElementById('adminSection_empreendimentos'));
@@ -1055,7 +1120,7 @@ const GITHUB_PATH   = "js/data.js";
     _data.BLOG_POSTS.push({
       id: 'post-' + Date.now(),
       title: 'Novo Post', date: new Date().toLocaleDateString('pt-BR'),
-      category: 'Dicas', author: 'Su Imobiliária',
+      category: 'Dicas', author: 'Furpal Assessoria Imobiliária',
       image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80',
       excerpt: '', content: ''
     });
@@ -1091,7 +1156,7 @@ const GITHUB_PATH   = "js/data.js";
   };
 
   window.delPost = function(idx) {
-    if (!confirm('Excluir "' + _data.BLOG_POSTS[idx].title + '"?')) return;
+    if (!confirm('Excluir ' + jq(_data.BLOG_POSTS[idx].title) + '?')) return;
     _data.BLOG_POSTS.splice(idx, 1);
     syncToLive();
     renderBlog(document.getElementById('adminSection_blog'));
@@ -1179,7 +1244,7 @@ const GITHUB_PATH   = "js/data.js";
   };
 
   window.delDep = function(idx) {
-    if (!confirm('Excluir depoimento de "' + _data.DEPOIMENTOS[idx].name + '"?')) return;
+    if (!confirm('Excluir depoimento de ' + jq(_data.DEPOIMENTOS[idx].name) + '?')) return;
     _data.DEPOIMENTOS.splice(idx, 1);
     syncToLive();
     renderAdminDepoimentos(document.getElementById('adminSection_depoimentos'));
@@ -1224,7 +1289,7 @@ const GITHUB_PATH   = "js/data.js";
   };
 
   window.delParceiro = function(idx) {
-    if (!confirm('Excluir "' + _data.PARCEIROS[idx].name + '"?')) return;
+    if (!confirm('Excluir ' + jq(_data.PARCEIROS[idx].name) + '?')) return;
     _data.PARCEIROS.splice(idx, 1);
     syncToLive();
     renderAdminParceiros(document.getElementById('adminSection_parceiros'));
@@ -1287,7 +1352,7 @@ const GITHUB_PATH   = "js/data.js";
   };
 
   window.delTeamMember = function(idx) {
-    if (!confirm('Excluir "' + _data.TEAM[idx].name + '"?')) return;
+    if (!confirm('Excluir ' + jq(_data.TEAM[idx].name) + '?')) return;
     _data.TEAM.splice(idx, 1);
     syncToLive();
     renderAdminTeam(document.getElementById('adminSection_team'));
@@ -1341,7 +1406,7 @@ const GITHUB_PATH   = "js/data.js";
     keys.forEach(function(k) {
       var loc = _data.LOCATIONS_INFO[k];
       html += '<tr><td>' + esc(k) + '</td><td>' + (loc.beaches ? loc.beaches.length : 0) + ' praias</td>'
-        + '<td class="actions"><button onclick="editRegionLocation(' + JSON.stringify(k) + ')">✏️</button><button class="btn-del" onclick="delRegionLocation(' + JSON.stringify(k) + ')">🗑️</button></td></tr>';
+        + '<td class="actions"><button onclick="editRegionLocation(' + escAttr(JSON.stringify(k)) + ')">✏️</button><button class="btn-del" onclick="delRegionLocation(' + escAttr(JSON.stringify(k)) + ')">🗑️</button></td></tr>';
     });
     html += '</tbody></table>';
     container.innerHTML = html;
@@ -1365,7 +1430,7 @@ const GITHUB_PATH   = "js/data.js";
   window.editRegionLocation = function(key) {
     var loc = _data.LOCATIONS_INFO[key];
     if (!loc) return;
-    openModal('📍 Editar: ' + key,
+    openModal('📍 Editar: ' + esc(key),
       '<label>Nome da região</label><input id="rl_key" value="' + esc(key) + '">'
       + '<label>Tagline</label><input id="rl_tagline" value="' + esc(loc.tagline || '') + '">'
       + '<label>Imagens (URLs, separadas por vírgula)</label><textarea id="rl_images" rows="2">' + esc((loc.images || []).join(', ')) + '</textarea>'
@@ -1400,7 +1465,7 @@ const GITHUB_PATH   = "js/data.js";
   };
 
   window.delRegionLocation = function(key) {
-    if (!confirm('Excluir região "' + key + '"?')) return;
+    if (!confirm('Excluir região ' + jq(key) + '?')) return;
     delete _data.LOCATIONS_INFO[key];
     syncToLive();
     renderAdminRegion(document.getElementById('adminSection_region'));
@@ -1489,16 +1554,8 @@ const GITHUB_PATH   = "js/data.js";
      SETTINGS (GitHub Token)
      ================================================================= */
   function renderSettings(container) {
-    container.innerHTML = '<h2>🔑 Configurações Avançadas</h2><p class="desc">Token do GitHub para publicar as alterações automaticamente.</p>'
+    container.innerHTML = '<h2>🔑 Configurações Avançadas</h2><p class="desc">Salvamento no servidor, banco de dados e backup.</p>'
       + '<div class="admin-settings">'
-      + '<label>GitHub Personal Access Token</label>'
-      + '<input id="cfg_token" type="password" value="' + esc(ADMIN_TOKEN) + '" placeholder="ghp_... ou github_pat_...">'
-      + '<div class="note">Crie em <a href="https://github.com/settings/tokens" target="_blank" style="color:#d4af37;">github.com/settings/tokens</a> com permissão <strong>repo</strong> (ou public_repo). Fica salvo só no seu navegador.</div>'
-      + '<button class="btn-save" onclick="saveToken()">💾 Salvar Token</button>'
-      + '<hr style="border-color:rgba(255,255,255,0.06);margin:1.5rem 0;">'
-      + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">📦 Publicar no GitHub</h3>'
-      + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0 0 0.75rem;">Depois de editar os dados, clique no botão "Publicar no GitHub" no topo da página. Isso faz um commit direto no repositório e o site atualiza em minutos.</p>'
-      + '<hr style="border-color:rgba(255,255,255,0.06);margin:1.5rem 0;">'
       + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">💾 Salvar no servidor (PHP)</h3>'
       + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0 0 0.75rem;">Se o site está rodando em um host com PHP (ex: Hostinger), usa isso pra salvar as alterações direto no <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">js/data.js</code> do servidor.</p>'
       + '<label>Senha do save.php</label>'
@@ -1508,7 +1565,7 @@ const GITHUB_PATH   = "js/data.js";
       + '<hr style="border-color:rgba(255,255,255,0.06);margin:1.5rem 0;">'
       + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">🗄️ Modo Banco de Dados (API)</h3>'
       + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0 0 0.75rem;">Quando tiver um backend com BD, ative este modo. O painel vai ler e salvar os dados via API REST em vez de usar o <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">data.js</code> local.</p>'
-      + '<div class="note" style="margin:0 0 0.75rem;">Passo a passo para Hostinger:<br>1. Crie o banco MySQL no painel da Hostinger<br>2. Copie <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">api-config.example.php</code> como <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">api-config.php</code> e preencha os dados<br>3. Faça upload de <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">api.php</code> e <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">api-config.php</code> para a raiz do site<br>4. Acesse <strong>/api.php?action=setup</strong> uma vez para criar as tabelas<br>5. Volte aqui, ative o modo BD com URL base <strong>/api.php</strong> e clique em "Testar conexão"</div>'
+      + '<div class="note" style="margin:0 0 0.75rem;">Como funciona neste site:<br>1. O modo BD salva em <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">bd_data.json</code> via <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">api.php</code> (não usa MySQL)<br>2. Mantenha o <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">api-config.php</code> com <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">API_PASSWORD</code> preenchida<br>3. O painel lê e salva via API; o site público continua lendo o <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">data.js</code> (atualizado automaticamente ao salvar)</div>'
       + '<label><input type="checkbox" id="cfg_bdMode" ' + (DataProvider.isApi()?'checked':'') + ' onchange="toggleBdMode()"> Ativar modo BD</label>'
       + '<label>URL base da API</label><input id="cfg_apiBase" type="url" value="' + esc(DataProvider.apiBase) + '" placeholder="/api">'
       + '<button class="btn-save" onclick="saveBdConfig()">💾 Salvar Config BD</button>'
@@ -1525,15 +1582,10 @@ const GITHUB_PATH   = "js/data.js";
       + '</div>';
   }
 
-  window.saveToken = function() {
-    var token = document.getElementById('cfg_token').value.trim();
-    localStorage.setItem('admin_github_token', token);
-    ADMIN_TOKEN = token;
-    adminToast('✅ Token salvo no navegador', 'success');
-  };
-
   window.saveToServer = function() {
-    var pass = document.getElementById('cfg_serverPass').value.trim() || 'fp2026';
+    var pass = document.getElementById('cfg_serverPass').value.trim();
+    if (!pass) { adminToast('❌ Defina a senha do save.php na aba Config', 'error'); return; }
+    localStorage.setItem('admin_server_pass', pass);
     try { saveFormsToData(); } catch(e) {}
     var content = generateDataJs();
     fetch('save.php', {
@@ -1678,13 +1730,19 @@ const GITHUB_PATH   = "js/data.js";
         if (res && res.ok) {
           adminToast('✅ Dados salvos no BD!', 'success');
           var pwd = localStorage.getItem('admin_server_pass');
+          if (!pwd) {
+            pwd = prompt('Dados salvos no BD. Para o site público também atualizar o data.js, informe a senha do save.php (ou deixe em branco):', '');
+            if (pwd) localStorage.setItem('admin_server_pass', pwd);
+          }
           if (pwd) {
-            return fetch('save.php', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ content: generateDataJs(), password: pwd })
-            }).then(function(r) {
-              if (!r.ok) console.warn('[Admin] data.js não foi atualizado');
+            return saveToPhp(generateDataJs(), pwd).then(function(r) {
+              return r.json();
+            }).then(function(sres) {
+              if (sres && sres.ok) {
+                adminToast('✅ BD + data.js atualizados!', 'success');
+              } else {
+                adminToast('⚠️ BD salvo, mas data.js não: ' + ((sres && sres.error) || 'verifique a senha do save.php'), 'warning');
+              }
             });
           }
         } else {
@@ -1744,7 +1802,7 @@ const GITHUB_PATH   = "js/data.js";
     if (titEl) titEl.textContent = c.SECTION_FINANCIAMENTO_TITLE;
     // Recalculate
     if (typeof calcFinancing === 'function') calcFinancing();
-    adminToast('✅ Financiamento salvo', 'success');
+    adminSaveServer();
   };
 
   /* =================================================================
@@ -1757,6 +1815,10 @@ const GITHUB_PATH   = "js/data.js";
       saveToApi();
       return;
     }
+    // Modo frontend: guarda via save.php (igual que "Salvar"). GitHub comentado a propósito —
+    // reativar o modo git descomentando o bloco abaixo se algum dia for usado de novo.
+    adminSaveServer();
+    /*
     var token = ADMIN_TOKEN;
     if (!token) {
       adminToast('❌ Primeiro salve seu GitHub Token na aba "Config"', 'error');
@@ -1808,6 +1870,7 @@ const GITHUB_PATH   = "js/data.js";
       btn.textContent = '📦 Publicar no GitHub';
       btn.disabled = false;
     });
+    */
   };
 
    function generateDataJs() {
@@ -1827,7 +1890,7 @@ const GITHUB_PATH   = "js/data.js";
         if (keys.length === 0) return '{}';
         var pairs = keys.map(function(k) {
           var val = jsVal(v[k], depth + 1);
-          return indent(depth + 1) + k + ': ' + val;
+          return indent(depth + 1) + JSON.stringify(String(k)) + ': ' + val;
         });
         return '{\n' + pairs.join(',\n') + '\n' + indent(depth) + '}';
       }
@@ -2188,7 +2251,7 @@ const GITHUB_PATH   = "js/data.js";
     // .nav-whatsapp-cta may have been set by page init; override completely
     document.querySelectorAll('.nav-whatsapp-cta').forEach(function(a) {
       try {
-        var msg = a.getAttribute('data-whatsapp-msg') || 'Olá, gostaria de falar com a Su Imobiliária.';
+        var msg = a.getAttribute('data-whatsapp-msg') || 'Olá, gostaria de falar com a Furpal.';
         a.setAttribute('href', waUrl + '?text=' + encodeURIComponent(msg));
         a.setAttribute('target', '_blank');
       } catch(e) {}
@@ -2216,6 +2279,16 @@ const GITHUB_PATH   = "js/data.js";
   function esc(s) {
     if (typeof s !== 'string') s = String(s || '');
     return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+  }
+
+  // Escapa uma string para uso dentro de um atributo onclick="..." sem quebrar o HTML nem o JS.
+  function escAttr(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+  }
+
+  // Gera um literal de string JS (com aspas simples) seguro para embutir em código JS.
+  function jq(s) {
+    return "'" + String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\r?\n/g, '\\n') + "'";
   }
 
   function openModal(title, bodyHtml, onSave) {

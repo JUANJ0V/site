@@ -38,6 +38,15 @@ if (!isset($body['content'])) {
 
 $content = $body['content'];
 
+// InfinityFree bloqueia POSTs cujo corpo parece código JS.
+// O painel envia o conteúdo em base64 (encoded=true) para burlar o filtro.
+if (!empty($body['encoded']) && is_string($content)) {
+    $decoded = base64_decode($content, true);
+    if ($decoded !== false) {
+        $content = $decoded;
+    }
+}
+
 // ── Validação básica ──
 $trimmed = trim($content);
 if (strlen($trimmed) < 10) {
@@ -61,7 +70,12 @@ if (file_put_contents($tmpFile, $content) === false) {
     exit;
 }
 
-$nodeOutput = shell_exec('node --check ' . escapeshellarg($tmpFile) . ' 2>&1');
+$nodeOutput = null;
+// node/--check é só uma validação extra. Em hospedagens que desabilitam shell_exec
+// (ex.: InfinityFree) a chamada fatal derrubaria o script — então só roda se existir.
+if (function_exists('shell_exec')) {
+    $nodeOutput = @shell_exec('node --check ' . escapeshellarg($tmpFile) . ' 2>&1');
+}
 if ($nodeOutput !== null && strpos($nodeOutput, 'SyntaxError') !== false) {
     unlink($tmpFile);
     http_response_code(400);
@@ -70,6 +84,12 @@ if ($nodeOutput !== null && strpos($nodeOutput, 'SyntaxError') !== false) {
 }
 
 // ── Se passou, move para o definitivo ──
-rename($tmpFile, __DIR__ . '/js/data.js');
+$final = __DIR__ . '/js/data.js';
+if (!@rename($tmpFile, $final)) {
+    @unlink($tmpFile);
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'error' => 'Erro ao salvar em js/data.js (verifique a permissão de escrita da pasta js/)']);
+    exit;
+}
 
 echo json_encode(['ok' => true, 'message' => 'data.js salvo com sucesso!']);

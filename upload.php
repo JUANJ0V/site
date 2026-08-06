@@ -48,10 +48,23 @@ if (!is_dir($baseDir)) {
 }
 
 $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-$allowedExts = ['jpg','jpeg','png','gif','webp','svg','mp4','webm','mov','avi'];
+$allowedExts = ['jpg','jpeg','png','gif','webp','mp4','webm','mov','avi'];
 if (!in_array($ext, $allowedExts)) {
     http_response_code(400);
     echo json_encode(['ok' => false, 'error' => 'Tipo de arquivo não permitido: ' . $ext]);
+    exit;
+}
+
+$isImage = in_array($ext, ['jpg','jpeg','png','gif','webp']);
+if ($isImage && @getimagesize($file['tmp_name']) === false) {
+    http_response_code(400);
+    echo json_encode(['ok' => false, 'error' => 'Arquivo de imagem inválido']);
+    exit;
+}
+
+if ($file['size'] > 25 * 1024 * 1024) {
+    http_response_code(400);
+    echo json_encode(['ok' => false, 'error' => 'Arquivo muito grande (máx. 25 MB)']);
     exit;
 }
 
@@ -67,6 +80,7 @@ if (!move_uploaded_file($file['tmp_name'], $dest)) {
 
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
 $host = $_SERVER['HTTP_HOST'];
-$url = $protocol . '://' . $host . '/' . $folder . '/' . $name;
+$basePath = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
+$url = $protocol . '://' . $host . $basePath . '/' . $folder . '/' . $name;
 
 echo json_encode(['ok' => true, 'url' => $url]);

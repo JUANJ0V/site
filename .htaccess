@@ -7,16 +7,18 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 # API routing: /api/* -> api.php?action=*
 RewriteRule ^api/(.+)$ api.php?action=$1 [L,QSA]
 
-# SPA: all non-file requests go to index.php
+# SPA: all non-file requests go to index.html (single-page template)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /index.php [L]
+RewriteRule . /index.html [L]
 
-# Hotlinking protection (images, videos)
+# Hotlinking protection (images, videos) — allows own domain + localhost
 RewriteCond %{HTTP_REFERER} !^$
 RewriteCond %{HTTP_REFERER} !^https?://(www\.)?furpal\.com\.br [NC]
+RewriteCond %{HTTP_REFERER} !^https?://(www\.)?fp2026\.infinityfree\.io [NC]
 RewriteCond %{HTTP_REFERER} !^https?://(www\.)?localhost [NC]
 RewriteCond %{HTTP_REFERER} !^https?://127\.0\.0\.1 [NC]
+RewriteCond %{HTTP_HOST}@%{HTTP_REFERER} !^([^@]+)@https?://\1 [NC]
 RewriteRule \.(jpg|jpeg|png|webp|gif|svg|ico|mp4|webm)$ - [F,NC]
 
 # Brotli compression (preferred, falls back to Gzip)

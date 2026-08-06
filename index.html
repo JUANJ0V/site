@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <base href="/" />
   <script>window._pageStart=Date.now();</script>
   <title>Furpal Assessoria Imobiliária Internacional</title>
   <meta name="description" content="Furpal — mais de 7 anos no Território Catarinense. Assessoria imobiliária completa em Balneário Camboriú, Florianópolis, Itapema, Bombinhas e Joinville." />
@@ -14,13 +15,8 @@
   <meta name="keywords" content="assessoria imobiliária, Balneário Camboriú, comprar imóvel SC, alugar imóvel litoral, consultoria investimento imobiliário, Furpal, Território Catarinense, imóveis Florianópolis, Itapema, Bombinhas, Joinville" />
   <meta name="theme-color" content="#0e142e" />
   <link rel="alternate" hreflang="pt" href="https://furpal.com.br/" />
-  <link rel="alternate" hreflang="en" href="https://furpal.com.br/en/" />
-  <link rel="alternate" hreflang="es" href="https://furpal.com.br/es/" />
   <link rel="alternate" hreflang="x-default" href="https://furpal.com.br/" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -29,7 +25,7 @@
     <link rel="icon" href="/images/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
     <link rel="apple-touch-icon" href="/images/favicon.svg" />
-  <link rel="stylesheet" href="css/style.min.css?v=6" />
+  <link rel="stylesheet" href="css/style.min.css?v=7" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
@@ -84,7 +80,6 @@
       <li><a href="/financiamento/">Financiamento</a></li>
       <li><a href="/mapa/">Mapa</a></li>
       <li><a href="/blog/">Blog</a></li>
-      <li><a href="/favoritos/">Favoritos</a></li>
     </ul>
     <a href="/contato/" class="nav-cta" translate="no">Fale conosco</a>
     <div class="nav-actions">
@@ -108,7 +103,6 @@
     <a href="/financiamento/">Financiamento</a>
     <a href="/mapa/">Mapa</a>
     <a href="/blog/">Blog</a>
-    <a href="/favoritos/">Favoritos</a>
     <div class="mobile-social" id="mobileSocial"></div>
     <div class="mobile-lang" translate="no">
       <button class="lang-btn active" data-lang="pt" title="Português">PT</button>
@@ -604,9 +598,9 @@
   </div>
 </div>
 
-<script src="js/data.js?v=5"></script>
+<script>document.write('<script src="js/data.js?ts=' + Date.now() + '"><\/script>');</script>
 <script src="js/data-provider.js?v=2"></script>
-<script src="js/admin.min.js?v=5"></script>
+<script src="js/admin.min.js?v=15"></script>
 <script>
 // Auto-update site info from data.js constants
   document.addEventListener('DOMContentLoaded', function() {
@@ -1021,7 +1015,7 @@ function googleTranslateElementInit() {
   }
 }
 </script>
-<script src="js/app.min.js?v=9"></script>
+<script src="js/app.min.js?v=15"></script>
 <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 <script>document.addEventListener('DOMContentLoaded',function(){var v=document.querySelector('.about-video');if(v)Plyr.setup(v);});</script>
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>

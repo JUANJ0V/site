@@ -80,7 +80,13 @@ function _t(section) {
 
 /* ===== BASE PATH DETECTION ===== */
 // Handles subdirectory deployments (e.g. GitHub Pages /site/)
+// Prefers the <base href> tag; falls back to pathname detection.
 var BASE_PATH = (function() {
+  var base = document.querySelector('base');
+  if (base && base.getAttribute('href')) {
+    var h = base.getAttribute('href').replace(/\/+$/, '');
+    return h === '' ? '/' : h + '/';
+  }
   var p = window.location.pathname.replace(/\/index\.html$/, '').replace(/\/+$/, '');
   return p === '' ? '/' : p + '/';
 })();
@@ -270,6 +276,18 @@ function renderPropertyPage(containerSelector, type) {
   }
 }
 
+function buildGallery(img, gallery) {
+  var arr = [];
+  if (img) arr.push(img);
+  if (gallery && gallery.length) {
+    for (var i = 0; i < gallery.length; i++) {
+      if (!img || gallery[i] !== img) arr.push(gallery[i]);
+    }
+  }
+  if (!arr.length) arr = [img || ''];
+  return arr;
+}
+
 function renderDetailCard(propId) {
   const existing = document.getElementById(propId);
   if (existing) return;
@@ -322,7 +340,7 @@ function renderDetailCard(propId) {
   };
   const eyebrow = eyebrowMap[locClean] || locClean;
 
-  var gallery = p.gallery || [p.img || ''];
+  var gallery = buildGallery(p.img, p.gallery);
   let thumbHtml = '';
   for (let g = 1; g < gallery.length; g++) {
     thumbHtml += '<img src="' + gallery[g].replace('w=1200', 'w=800') + '" alt="Galeria" class="gallery-trigger" data-idx="' + g + '" loading="lazy" />';
@@ -412,7 +430,7 @@ function renderDetailCard(propId) {
       "@type": "Product",
       "name": detailTitle,
       "description": detailDescription || p.desc,
-      "image": p.gallery || [p.img],
+      "image": buildGallery(p.img, p.gallery),
       "url": window.location.origin + BASE_PATH + p.id + '/',
       "offers": {
         "@type": "Offer",
@@ -475,9 +493,10 @@ function renderEmpreendimentoDetail(empId) {
     tagsHtml += '<span class="emp-tag ' + tagClasses[t % 3] + '">' + empTags[t] + '</span>';
   }
 
+  var empGallery = buildGallery(emp.img, emp.gallery);
   let thumbHtml = '';
-  for (let g = 1; g < emp.gallery.length; g++) {
-    thumbHtml += '<img src="' + emp.gallery[g] + '" alt="Galeria" class="gallery-trigger" data-idx="' + g + '" loading="lazy" />';
+  for (let g = 1; g < empGallery.length; g++) {
+    thumbHtml += '<img src="' + empGallery[g] + '" alt="Galeria" class="gallery-trigger" data-idx="' + g + '" loading="lazy" />';
   }
 
   let plantsHtml = '';
@@ -539,7 +558,7 @@ function renderEmpreendimentoDetail(empId) {
     + '</div>'
     + '<div>'
     + '<div class="media-grid">'
-    + '<div class="media-grid-main"><img src="' + emp.gallery[0] + '" alt="' + emp.title.replace(/"/g, '&quot;') + '" class="gallery-trigger" data-idx="0" loading="lazy" /></div>'
+    + '<div class="media-grid-main"><img src="' + empGallery[0] + '" alt="' + emp.title.replace(/"/g, '&quot;') + '" class="gallery-trigger" data-idx="0" loading="lazy" /></div>'
     + '<div class="media-grid-thumbs">' + thumbHtml + '</div>'
     + '</div>'
     + '</div>'
@@ -773,7 +792,7 @@ function closeGallery() {
 function updateGallery() {
   if (!_galleryData) return;
   var data = _galleryData.data;
-  var gallery = data.gallery || [data.img];
+  var gallery = buildGallery(data.img, data.gallery);
   if (_galleryIdx < 0) _galleryIdx = gallery.length - 1;
   if (_galleryIdx >= gallery.length) _galleryIdx = 0;
 
@@ -1147,6 +1166,25 @@ function setupMobileNav() {
     document.querySelectorAll(".detail-card").forEach(function(el) { el.classList.remove("active"); });
     document.querySelectorAll(".empreendimento").forEach(function(el) { el.classList.remove("active"); });
     document.querySelectorAll(".blog-detail").forEach(function(el) { el.classList.remove("active"); });
+    var nf = document.getElementById('notfound-404');
+    if (nf) nf.remove();
+  }
+
+  function showNotFound() {
+    var bc = document.getElementById('breadcrumbs');
+    if (bc) bc.style.display = 'none';
+    var div = document.createElement('section');
+    div.id = 'notfound-404';
+    div.className = 'active';
+    div.style.cssText = 'min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:1.25rem;padding:3rem 1.5rem;';
+    div.innerHTML = '<h1 style="margin:0;font-family:\'Cormorant Garamond\',serif;font-size:4.5rem;color:#d4af37;">404</h1>'
+      + '<p style="margin:0;opacity:.75;font-size:1.05rem;">Página não encontrada</p>'
+      + '<a href="/" style="color:#d4af37;border:1px solid #d4af37;padding:0.6rem 1.6rem;border-radius:6px;text-decoration:none;font-size:0.95rem;">Voltar ao início</a>';
+    pageContent.style.display = "";
+    var footer = document.querySelector('.site-footer');
+    if (footer) pageContent.insertBefore(div, footer);
+    else pageContent.appendChild(div);
+    window.scrollTo(0, 0);
   }
 
   function updateNav(id) {
@@ -1220,8 +1258,15 @@ function setupMobileNav() {
       }
       pageContent.style.display = "";
       const section = document.getElementById(id);
-      if (section) {
-        section.classList.add("active");
+      if (!section) {
+        showNotFound();
+        hideLoading();
+        return;
+      }
+      section.classList.add("active");
+      if (id === 'contato') {
+        section.style.paddingTop = '';
+      } else {
         section.style.paddingTop = 'var(--header-height, 3.5rem)';
       }
       updateNav(id);
@@ -1978,7 +2023,7 @@ function resetMetaTags() {
   var ogTitle = document.querySelector('meta[property="og:title"]');
   if (ogTitle) ogTitle.content = 'Furpal Assessoria Imobili\u00E1ria Internacional';
   var ogDesc = document.querySelector('meta[property="og:description"]');
-  if (ogDesc) ogDesc.content = 'Mais de 15 anos transformando sonhos em endere\u00E7os no litoral catarinense.';
+  if (ogDesc) ogDesc.content = 'Mais de 7 anos transformando sonhos em endere\u00E7os no litoral catarinense.';
   var ogImg = document.querySelector('meta[property="og:image"]');
   if (ogImg) ogImg.content = 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80';
    var ogUrl = document.querySelector('meta[property="og:url"]');

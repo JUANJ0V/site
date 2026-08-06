@@ -15,9 +15,25 @@ $email   = isset($_POST['Email'])    ? trim($_POST['Email'])    : '';
 $phone   = isset($_POST['Telefone']) ? trim($_POST['Telefone']) : '';
 $message = isset($_POST['Mensagem']) ? trim($_POST['Mensagem']) : '';
 
+$name    = str_replace(["\r", "\n"], '', $name);
+$email   = str_replace(["\r", "\n"], '', $email);
+$phone   = str_replace(["\r", "\n"], '', $phone);
+$message = str_replace(["\r", "\n"], '', $message);
+
+$name    = mb_substr($name, 0, 100);
+$email   = mb_substr($email, 0, 254);
+$phone   = mb_substr($phone, 0, 30);
+$message = mb_substr($message, 0, 5000);
+
 if (!$name || !$email || !$message) {
     http_response_code(400);
     echo json_encode(['ok' => false, 'error' => 'Nome, email e mensagem são obrigatórios']);
+    exit;
+}
+
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    http_response_code(400);
+    echo json_encode(['ok' => false, 'error' => 'Email inválido']);
     exit;
 }
 
