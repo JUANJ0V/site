@@ -992,6 +992,12 @@ function setupMobileNav() {
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
     window._revealObserver = revealObserver;
+  } else {
+    // Fallback: navegadores sin IntersectionObserver → mostrar todo de inmediato
+    window._revealObserver = {
+      observe: function(el) { el.classList.add('active'); }
+    };
+    document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('active'); });
   }
 
   // Render all dynamic content from data (cards, lists only — details render on demand)

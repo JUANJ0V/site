@@ -5,9 +5,6 @@
 const ADMIN_ENABLED = true;
 const ADMIN_USER    = "admin";
 const ADMIN_PASS    = "AdminFurpal#2026";
-const GITHUB_REPO   = "JUANJ0V/site";
-const GITHUB_BRANCH = "main";
-const GITHUB_PATH   = "js/data.js";
 
 /* ===================================================================
    INICIALIZAÇÃO
@@ -17,7 +14,6 @@ const GITHUB_PATH   = "js/data.js";
   if (!ADMIN_ENABLED) return;
   if (!window.location.search.includes('edit=1')) return;
 
-  var ADMIN_TOKEN = localStorage.getItem('admin_github_token') || '';
   var ADMIN_LOGGED = sessionStorage.getItem('admin_logged') === '1';
 
   // ── Injetar CSS ──
@@ -154,13 +150,6 @@ const GITHUB_PATH   = "js/data.js";
   panelEl.innerHTML = '<div class="admin-header"><h1>⚙️ Furpal — Admin</h1><div class="admin-actions"><button onclick="adminToggleSite()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);">👁 Ver site</button><button onclick="adminSaveServer()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);" id="adminSaveBtn">💾 Salvar</button><button onclick="adminPublish()" class="btn-publish" id="adminPublishBtn">💾 Salvar no servidor</button><button onclick="adminLogout()">Sair</button></div></div><div class="admin-body"><div class="admin-sidebar" id="adminSidebar"></div><div class="admin-content" id="adminContent"></div></div>';
   document.body.appendChild(panelEl);
 
-  // Update buttons if in API mode (after appending to DOM)
-  if (typeof DataProvider !== 'undefined' && DataProvider.isApi()) {
-    document.getElementById('adminSaveBtn').textContent = '💾 Salvar (BD)';
-    document.getElementById('adminPublishBtn').textContent = '☁️ Salvar na API';
-    document.getElementById('adminPublishBtn').className = 'btn-publish';
-  }
-
   var toastEl = document.createElement('div');
   toastEl.id = 'adminToast';
   document.body.appendChild(toastEl);
@@ -179,46 +168,12 @@ const GITHUB_PATH   = "js/data.js";
   }
 
   function fallbackFrontendLogin(u, p) {
-    // Si falla API login, forza modo frontend e intenta login directo
-    if (typeof DataProvider !== 'undefined') {
-      DataProvider.setMode('frontend', '/api');
-    }
     tryFrontendLogin(u, p);
   }
 
   window.adminLogin = function() {
     var u = document.getElementById('adminUser').value;
     var p = document.getElementById('adminPass').value;
-    // BD mode: login via API
-    if (typeof DataProvider !== 'undefined' && DataProvider.isApi()) {
-      fetch(DataProvider.apiBase + '?action=login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: u, password: p })
-      })
-      .then(function(r) { return r.json(); })
-      .then(function(res) {
-        if (res.ok) {
-          sessionStorage.setItem('admin_logged', '1');
-          sessionStorage.setItem('admin_token', res.token);
-          sessionStorage.setItem('admin_user', JSON.stringify(res.user));
-          loginEl.classList.add('hidden');
-          panelEl.classList.add('active');
-          document.body.classList.add('admin-mode');
-          adminFloat.style.display = 'none';
-          initAdminPanel();
-        } else {
-          // Fallback: tenta login frontend se API falhar
-          fallbackFrontendLogin(u, p);
-        }
-      })
-      .catch(function(err) {
-        // Fallback: tenta login frontend se API não responder
-        fallbackFrontendLogin(u, p);
-      });
-      return;
-    }
-    // Frontend mode: hardcoded login
     tryFrontendLogin(u, p);
   };
 
@@ -313,11 +268,6 @@ const GITHUB_PATH   = "js/data.js";
 
   window.adminSaveServer = function() {
     try { saveFormsToData(); } catch(e) {}
-    // API mode guarda via BD
-    if (DataProvider.isApi()) {
-      saveToApi();
-      return;
-    }
     var pwd = localStorage.getItem('admin_server_pass');
     if (!pwd) { adminToast('❌ Defina a senha do save.php na aba Config', 'error'); showTab('settings'); return; }
     var content = generateDataJs();
@@ -563,41 +513,6 @@ const GITHUB_PATH   = "js/data.js";
       buildSidebar();
       var initialTab = window._redirectTab || 'general';
       queueTabShow(initialTab);
-      // Se estiver em modo BD, recarrega os dados da API
-      if (window.DataProvider && DataProvider.isApi()) {
-        DataProvider.getAll().then(function(apiData) {
-          if (!apiData) return;
-          var hasData = Object.keys(apiData).some(function(k) {
-            var v = apiData[k];
-            if (Array.isArray(v)) return v.length > 0;
-            if (typeof v === 'object' && v !== null) return Object.keys(v).length > 0;
-            return false;
-          });
-          if (!hasData) {
-            adminToast('ℹ️ BD vazio. Dados atuais mantidos. Salve na API para enviá-los.', 'info');
-            return;
-          }
-          if (apiData.constants) Object.assign(_data.constants, apiData.constants);
-          if (apiData.stats) replaceArr(_data, 'STATS', apiData.stats);
-          if (apiData.properties) replaceArr(_data, 'PROPERTIES', apiData.properties);
-          if (apiData.empreendimentos) replaceArr(_data, 'EMPREENDIMENTOS', apiData.empreendimentos);
-          if (apiData.faq) replaceArr(_data, 'FAQS', apiData.faq);
-          if (apiData.depoimentos) replaceArr(_data, 'DEPOIMENTOS', apiData.depoimentos);
-          if (apiData.parceiros) replaceArr(_data, 'PARCEIROS', apiData.parceiros);
-          if (apiData.blog) replaceArr(_data, 'BLOG_POSTS', apiData.blog);
-          if (apiData.team) replaceArr(_data, 'TEAM', apiData.team);
-          if (apiData.locations_info) _data.LOCATIONS_INFO = apiData.locations_info;
-          adminToast('✅ Dados carregados da API', 'success');
-          // Re-render current tab
-          var activeTab = document.querySelector('.sidebar-link.active');
-          if (activeTab) {
-            var tabId = activeTab.getAttribute('data-tab');
-            if (tabId && typeof window.showTab === 'function') window.showTab(tabId);
-          }
-        }).catch(function(e) {
-          adminToast('⚠️ API offline: ' + (e.message || 'erro'), 'error');
-        });
-      }
     } catch(e) { console.error('Admin init error:', e); }
   }
   function replaceArr(obj, key, arr) {
@@ -698,7 +613,6 @@ const GITHUB_PATH   = "js/data.js";
       { id:'parceiros', label:'🤝 Parceiros' },
       { id:'team', label:'👥 Equipe' },
       { id:'region', label:'📍 Região' },
-      { id:'users', label:'👥 Usuários' },
       { id:'settings', label:'🔑 Config' }
     ];
     var sb = document.getElementById('adminSidebar');
@@ -770,7 +684,6 @@ const GITHUB_PATH   = "js/data.js";
         case 'parceiros': renderAdminParceiros(div); break;
         case 'team': renderAdminTeam(div); break;
         case 'region': renderAdminRegion(div); break;
-        case 'users': renderUsers(div); break;
         case 'settings': renderSettings(div); break;
       }
     } catch(e) {
@@ -1021,6 +934,86 @@ const GITHUB_PATH   = "js/data.js";
     container.innerHTML = html;
   }
 
+  var EMP_ROW_STYLE = 'border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.75rem;margin-bottom:0.75rem;background:rgba(255,255,255,0.02);';
+  var EMP_DEL_BTN = 'padding:0.3rem 0.65rem;border-radius:5px;border:1px solid rgba(255,80,80,0.2);background:rgba(255,255,255,0.03);color:#ff6b6b;font-size:0.75rem;cursor:pointer;';
+  var EMP_ADD_BTN = 'margin:0;padding:0.35rem 0.9rem;';
+
+  function empRowHtml(type, item) {
+    item = item || {};
+    if (type === 'timeline') {
+      return '<div class="emp-row" style="' + EMP_ROW_STYLE + '">'
+        + '<div style="display:flex;justify-content:flex-end;margin-bottom:0.25rem;"><button class="btn-del" type="button" style="' + EMP_DEL_BTN + '" onclick="delEmpRow(\'timeline\', this)">🗑️ Excluir</button></div>'
+        + '<div class="row2"><div><label>Data</label><input class="f-date" value="' + esc(item.date || '') + '" placeholder="ex: Jan 2025"></div>'
+        + '<div><label>Título da etapa</label><input class="f-title" value="' + esc(item.title || '') + '" placeholder="ex: Início das obras"></div></div>'
+        + '<label>Descrição</label><textarea class="f-desc" rows="2" placeholder="Detalhe o que acontece nesta etapa">' + esc(item.desc || '') + '</textarea>'
+        + '</div>';
+    }
+    if (type === 'prices') {
+      return '<div class="emp-row" style="' + EMP_ROW_STYLE + '">'
+        + '<div style="display:flex;justify-content:flex-end;margin-bottom:0.25rem;"><button class="btn-del" type="button" style="' + EMP_DEL_BTN + '" onclick="delEmpRow(\'prices\', this)">🗑️ Excluir</button></div>'
+        + '<div class="row3"><div><label>Unidade / Tipo</label><input class="f-unit" value="' + esc(item.unit || '') + '" placeholder="ex: 3 quartos (suíte)"></div>'
+        + '<div><label>Área</label><input class="f-area" value="' + esc(item.area || '') + '" placeholder="ex: 145 m²"></div>'
+        + '<div><label>Valor</label><input class="f-value" value="' + esc(item.value || '') + '" placeholder="ex: R$ 1.380.000"></div></div>'
+        + '<label style="display:flex;align-items:center;gap:0.4rem;margin-top:0.6rem;text-transform:none;letter-spacing:0;cursor:pointer;"><input type="checkbox" class="f-highlight" style="width:auto;height:auto;flex:none;" ' + (item.highlight ? 'checked' : '') + '> <span style="font-size:0.82rem;color:rgba(255,255,255,0.6);">Destacar esta linha na tabela</span></label>'
+        + '</div>';
+    }
+    return '<div class="emp-row" style="' + EMP_ROW_STYLE + '">'
+      + '<div style="display:flex;justify-content:flex-end;margin-bottom:0.25rem;"><button class="btn-del" type="button" style="' + EMP_DEL_BTN + '" onclick="delEmpRow(\'payment\', this)">🗑️ Excluir</button></div>'
+      + '<div class="row2"><div><label>Etiqueta</label><input class="f-label" value="' + esc(item.label || '') + '" placeholder="ex: Entrada"></div>'
+      + '<div><label>Valor / Condição</label><input class="f-pvalue" value="' + esc(item.value || '') + '" placeholder="ex: 30%"></div></div>'
+      + '</div>';
+  }
+
+  function empRowsHtml(type, items) {
+    if (!items || items.length === 0) return '<p class="emp-empty" style="color:rgba(255,255,255,0.35);font-size:0.8rem;margin:0;">Nenhum item ainda — clique em "+ Agregar" abaixo.</p>';
+    return items.map(function(it) { return empRowHtml(type, it); }).join('');
+  }
+
+  function collectEmpRows(type) {
+    var out = [];
+    var rows = document.querySelectorAll('#emp_rows_' + type + ' .emp-row');
+    for (var i = 0; i < rows.length; i++) {
+      var row = rows[i];
+      if (type === 'timeline') {
+        var d = row.querySelector('.f-date').value.trim();
+        var t = row.querySelector('.f-title').value.trim();
+        var desc = row.querySelector('.f-desc').value.trim();
+        if (t || d) out.push({ date: d, title: t, desc: desc });
+      } else if (type === 'prices') {
+        var unit = row.querySelector('.f-unit').value.trim();
+        var area = row.querySelector('.f-area').value.trim();
+        var value = row.querySelector('.f-value').value.trim();
+        if (unit || value) {
+          var o = { unit: unit, area: area, value: value };
+          if (row.querySelector('.f-highlight').checked) o.highlight = true;
+          out.push(o);
+        }
+      } else {
+        var label = row.querySelector('.f-label').value.trim();
+        var pv = row.querySelector('.f-pvalue').value.trim();
+        if (label || pv) out.push({ label: label, value: pv });
+      }
+    }
+    return out;
+  }
+
+  window.addEmpRow = function(type) {
+    var cont = document.getElementById('emp_rows_' + type);
+    if (!cont) return;
+    if (!cont.querySelector('.emp-row')) cont.innerHTML = '';
+    cont.insertAdjacentHTML('beforeend', empRowHtml(type));
+  };
+
+  window.delEmpRow = function(type, btn) {
+    var row = btn.closest('.emp-row');
+    if (!row) return;
+    var cont = row.parentNode;
+    row.remove();
+    if (!cont.querySelector('.emp-row')) {
+      cont.innerHTML = '<p class="emp-empty" style="color:rgba(255,255,255,0.35);font-size:0.8rem;margin:0;">Nenhum item ainda — clique em "+ Agregar" abaixo.</p>';
+    }
+  };
+
   window.addEmp = function() {
     _data.EMPREENDIMENTOS.push({
       id: 'emp-' + Date.now(),
@@ -1059,9 +1052,17 @@ const GITHUB_PATH   = "js/data.js";
       + '<label>Galeria (URLs, uma por linha)' + uploadBtn('emp_gallery', 'images') + '</label><textarea id="emp_gallery" rows="3">' + ((e.gallery||[]).join('\n')) + '</textarea>'
       + '<label>Plantas (URLs, uma por linha)' + uploadBtn('emp_plants', 'images') + '</label><textarea id="emp_plants" rows="3">' + ((e.plants||[]).join('\n')) + '</textarea>'
       + '<label>Comodidades (uma por linha)</label><textarea id="emp_amenities" rows="4">' + ((e.amenities||[]).join('\n')) + '</textarea>'
-      + '<label>Cronograma (JSON — array de objetos)</label><textarea id="emp_timeline" rows="3">' + esc(JSON.stringify(e.timeline||[], null, 2)) + '</textarea>'
-      + '<label>Tabela de preços (JSON — array de objetos)</label><textarea id="emp_prices" rows="3">' + esc(JSON.stringify(e.prices||[], null, 2)) + '</textarea>'
-      + '<label>Plano de pagamento (JSON — array de objetos)</label><textarea id="emp_payment" rows="3">' + esc(JSON.stringify(e.payment||[], null, 2)) + '</textarea>',
+      + '<div style="margin-top:1rem;border-top:1px solid rgba(255,255,255,0.06);padding-top:0.5rem;">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin:0.75rem 0 0.25rem;"><h4 style="margin:0;color:#d4af37;font-size:0.9rem;font-weight:600;">🗓️ Cronograma de obras</h4><button class="btn-add" type="button" style="' + EMP_ADD_BTN + '" onclick="addEmpRow(\'timeline\')">+ Agregar etapa</button></div>'
+      + '<p style="color:rgba(255,255,255,0.35);font-size:0.75rem;margin:0 0 0.5rem;">Cada linha é uma etapa do cronograma exibida no site.</p>'
+      + '<div id="emp_rows_timeline">' + empRowsHtml('timeline', e.timeline) + '</div>'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin:1rem 0 0.25rem;"><h4 style="margin:0;color:#d4af37;font-size:0.9rem;font-weight:600;">💲 Tabela de preços</h4><button class="btn-add" type="button" style="' + EMP_ADD_BTN + '" onclick="addEmpRow(\'prices\')">+ Agregar linha</button></div>'
+      + '<p style="color:rgba(255,255,255,0.35);font-size:0.75rem;margin:0 0 0.5rem;">Cada linha é um tipo de unidade com seu valor.</p>'
+      + '<div id="emp_rows_prices">' + empRowsHtml('prices', e.prices) + '</div>'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin:1rem 0 0.25rem;"><h4 style="margin:0;color:#d4af37;font-size:0.9rem;font-weight:600;">📄 Condições de pagamento</h4><button class="btn-add" type="button" style="' + EMP_ADD_BTN + '" onclick="addEmpRow(\'payment\')">+ Agregar condição</button></div>'
+      + '<p style="color:rgba(255,255,255,0.35);font-size:0.75rem;margin:0 0 0.5rem;">Ex: Entrada 30% / Durante a obra 48 parcelas / Chaves 70% financiamento.</p>'
+      + '<div id="emp_rows_payment">' + empRowsHtml('payment', e.payment) + '</div>'
+      + '</div>',
       function() {
         e.title = gv('emp_title');
         e.id = gv('emp_id');
@@ -1083,9 +1084,9 @@ const GITHUB_PATH   = "js/data.js";
         e.gallery = gv('emp_gallery').split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
         e.plants = gv('emp_plants').split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
         e.amenities = gv('emp_amenities').split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
-        try { e.timeline = JSON.parse(gv('emp_timeline') || '[]'); } catch(_) { e.timeline = []; }
-        try { e.prices = JSON.parse(gv('emp_prices') || '[]'); } catch(_) { e.prices = []; }
-        try { e.payment = JSON.parse(gv('emp_payment') || '[]'); } catch(_) { e.payment = []; }
+        e.timeline = collectEmpRows('timeline');
+        e.prices = collectEmpRows('prices');
+        e.payment = collectEmpRows('payment');
         syncToLive();
         adminToast('✅ Lançamento salvo', 'success');
         renderEmpreendimentos(document.getElementById('adminSection_empreendimentos'));
@@ -1362,40 +1363,6 @@ const GITHUB_PATH   = "js/data.js";
   /* =================================================================
      USERS — gerenciamento de usuários (só no modo BD)
      ================================================================= */
-  function renderUsers(container) {
-    if (!DataProvider.isApi()) {
-      container.innerHTML = '<h2>👥 Usuários</h2><p class="desc" style="color:rgba(255,255,255,0.5);">Disponível apenas no modo BD. Ative em <strong>Config → Modo Banco de Dados</strong>.</p>';
-      return;
-    }
-    var html = '<h2>👥 Usuários do Painel</h2><p class="desc">Gerencie quem pode acessar o admin.</p>';
-    html += '<button class="btn-add" onclick="addUser()">+ Novo Usuário</button>';
-    html += '<table class="admin-table"><thead><tr><th>Usuário</th><th>Função</th><th>Criado em</th><th class="actions">Ações</th></tr></thead><tbody id="usersTableBody"></tbody></table>';
-    container.innerHTML = html;
-    loadUsers();
-  }
-
-  function loadUsers() {
-    var tbody = document.getElementById('usersTableBody');
-    if (!tbody) return;
-    var token = sessionStorage.getItem('admin_token');
-    fetch(DataProvider.apiBase + '/users', {
-      headers: { 'X-Admin-Token': token || '' }
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(users) {
-      if (!Array.isArray(users)) { tbody.innerHTML = '<tr><td colspan="4">Erro ao carregar</td></tr>'; return; }
-      tbody.innerHTML = users.map(function(u) {
-        var roleLabel = u.role === 'admin' ? '🔑 Admin' : '✏️ Editor';
-        var delBtn = u.id === 1 ? '' : '<button class="btn-del" onclick="delUser(' + u.id + ')">🗑️</button>';
-        return '<tr><td>' + esc(u.username) + '</td><td>' + roleLabel + '</td><td>' + (u.created_at || '') + '</td>'
-          + '<td class="actions"><button onclick="editUser(' + u.id + ')">✏️</button>' + delBtn + '</td></tr>';
-      }).join('');
-    })
-    .catch(function() {
-      if (tbody) tbody.innerHTML = '<tr><td colspan="4">Erro de conexão</td></tr>';
-    });
-  }
-
   /* ─── Região (LOCATIONS_INFO) ─── */
 
   window.renderAdminRegion = function(container) {
@@ -1427,18 +1394,80 @@ const GITHUB_PATH   = "js/data.js";
     editRegionLocation(name);
   };
 
+  function regRowHtml(type, item) {
+    item = item || {};
+    if (type === 'images') {
+      return '<div class="reg-row" style="' + EMP_ROW_STYLE + '">'
+        + '<div style="display:flex;justify-content:flex-end;margin-bottom:0.25rem;"><button class="btn-del" type="button" style="' + EMP_DEL_BTN + '" onclick="delRegRow(\'images\', this)">🗑️ Excluir</button></div>'
+        + '<label>URL da imagem</label><input class="r-img" value="' + esc(item) + '" placeholder="ex: images/foto-da-regiao.jpg">'
+        + '</div>';
+    }
+    if (type === 'beaches') {
+      return '<div class="reg-row" style="' + EMP_ROW_STYLE + '">'
+        + '<div style="display:flex;justify-content:flex-end;margin-bottom:0.25rem;"><button class="btn-del" type="button" style="' + EMP_DEL_BTN + '" onclick="delRegRow(\'beaches\', this)">🗑️ Excluir</button></div>'
+        + '<div class="row2"><div><label>Nome da praia</label><input class="r-bname" value="' + esc(item.name || '') + '" placeholder="ex: Praia do Forte"></div>'
+        + '<div><label>Descrição</label><input class="r-bdesc" value="' + esc(item.desc || '') + '" placeholder="ex: Mar calmo e piscinas naturais"></div></div>'
+        + '</div>';
+    }
+    return '<div class="reg-row" style="' + EMP_ROW_STYLE + '">'
+      + '<div style="display:flex;justify-content:flex-end;margin-bottom:0.25rem;"><button class="btn-del" type="button" style="' + EMP_DEL_BTN + '" onclick="delRegRow(\'highlights\', this)">🗑️ Excluir</button></div>'
+      + '<label>Destaque</label><input class="r-high" value="' + esc(item) + '" placeholder="ex: Melhor custo-benefício do litoral">'
+      + '</div>';
+  }
+
+  function regRowsHtml(type, items) {
+    if (!items || items.length === 0) return '<p class="reg-empty" style="color:rgba(255,255,255,0.35);font-size:0.8rem;margin:0;">Nenhum item ainda — clique em "+ Agregar" abaixo.</p>';
+    return items.map(function(it) { return regRowHtml(type, it); }).join('');
+  }
+
+  function collectRegRows(type) {
+    var out = [];
+    var rows = document.querySelectorAll('#reg_rows_' + type + ' .reg-row');
+    for (var i = 0; i < rows.length; i++) {
+      var row = rows[i];
+      if (type === 'images') {
+        var u = row.querySelector('.r-img').value.trim();
+        if (u) out.push(u);
+      } else if (type === 'beaches') {
+        var name = row.querySelector('.r-bname').value.trim();
+        var desc = row.querySelector('.r-bdesc').value.trim();
+        if (name) out.push({ name: name, desc: desc });
+      } else {
+        var h = row.querySelector('.r-high').value.trim();
+        if (h) out.push(h);
+      }
+    }
+    return out;
+  }
+
+  window.addRegRow = function(type) {
+    var cont = document.getElementById('reg_rows_' + type);
+    if (!cont) return;
+    if (!cont.querySelector('.reg-row')) cont.innerHTML = '';
+    cont.insertAdjacentHTML('beforeend', regRowHtml(type));
+  };
+
+  window.delRegRow = function(type, btn) {
+    var row = btn.closest('.reg-row');
+    if (!row) return;
+    row.remove();
+  };
+
   window.editRegionLocation = function(key) {
     var loc = _data.LOCATIONS_INFO[key];
     if (!loc) return;
     openModal('📍 Editar: ' + esc(key),
       '<label>Nome da região</label><input id="rl_key" value="' + esc(key) + '">'
       + '<label>Tagline</label><input id="rl_tagline" value="' + esc(loc.tagline || '') + '">'
-      + '<label>Imagens (URLs, separadas por vírgula)</label><textarea id="rl_images" rows="2">' + esc((loc.images || []).join(', ')) + '</textarea>'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin:0.75rem 0 0.25rem;font-weight:600;">🖼️ Imagens da região<button class="btn-add" type="button" style="' + EMP_ADD_BTN + '" onclick="addRegRow(\'images\')">+ Agregar imagem</button></div>'
+      + '<div id="reg_rows_images">' + regRowsHtml('images', loc.images) + '</div>'
       + '<label>Introdução</label><textarea id="rl_intro" rows="3">' + esc(loc.intro || '') + '</textarea>'
       + '<label>História</label><textarea id="rl_history" rows="3">' + esc(loc.history || '') + '</textarea>'
       + '<label>Segurança</label><textarea id="rl_safety" rows="3">' + esc(loc.safety || '') + '</textarea>'
-      + '<label>Praias (nome: descrição; separar com |)</label><textarea id="rl_beaches" rows="3">' + esc((loc.beaches || []).map(function(b) { return b.name + ': ' + b.desc; }).join(' | ')) + '</textarea>'
-      + '<label>Destaques (separados por |)</label><textarea id="rl_highlights" rows="3">' + esc((loc.highlights || []).join(' | ')) + '</textarea>',
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin:0.75rem 0 0.25rem;font-weight:600;">🏖️ Praias<button class="btn-add" type="button" style="' + EMP_ADD_BTN + '" onclick="addRegRow(\'beaches\')">+ Agregar praia</button></div>'
+      + '<div id="reg_rows_beaches">' + regRowsHtml('beaches', loc.beaches) + '</div>'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin:0.75rem 0 0.25rem;font-weight:600;">⭐ Destaques<button class="btn-add" type="button" style="' + EMP_ADD_BTN + '" onclick="addRegRow(\'highlights\')">+ Agregar destaque</button></div>'
+      + '<div id="reg_rows_highlights">' + regRowsHtml('highlights', loc.highlights) + '</div>',
       function() {
         var newKey = gv('rl_key').trim();
         if (!newKey) return;
@@ -1448,15 +1477,12 @@ const GITHUB_PATH   = "js/data.js";
         }
         var l = _data.LOCATIONS_INFO[newKey];
         l.tagline = gv('rl_tagline');
-        l.images = gv('rl_images').split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+        l.images = collectRegRows('images');
         l.intro = gv('rl_intro');
         l.history = gv('rl_history');
         l.safety = gv('rl_safety');
-        l.beaches = gv('rl_beaches').split('|').map(function(s) {
-          var parts = s.split(':');
-          return { name: (parts[0] || '').trim(), desc: (parts.slice(1).join(':') || '').trim() };
-        }).filter(function(b) { return b.name; });
-        l.highlights = gv('rl_highlights').split('|').map(function(s) { return s.trim(); }).filter(Boolean);
+        l.beaches = collectRegRows('beaches');
+        l.highlights = collectRegRows('highlights');
         syncToLive();
         adminToast('✅ Região salva', 'success');
         renderAdminRegion(document.getElementById('adminSection_region'));
@@ -1472,89 +1498,11 @@ const GITHUB_PATH   = "js/data.js";
     adminToast('🗑️ Região removida', 'info');
   };
 
-  window.addUser = function() {
-    openModal('👤 Novo Usuário',
-      '<label>Usuário</label><input id="user_name" value="">'
-      + '<label>Senha</label><input id="user_pass" type="password" value="">'
-      + '<label>Função</label><select id="user_role"><option value="editor">✏️ Editor</option><option value="admin">🔑 Admin</option></select>',
-      function() {
-        var name = document.getElementById('user_name').value.trim();
-        var pass = document.getElementById('user_pass').value;
-        var role = document.getElementById('user_role').value;
-        if (!name || !pass) { adminToast('⚠️ Preencha usuário e senha', 'warning'); return; }
-        var token = sessionStorage.getItem('admin_token');
-        fetch(DataProvider.apiBase + '/users', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'X-Admin-Token': token || '' },
-          body: JSON.stringify({ username: name, password: pass, role: role })
-        })
-        .then(function(r) { return r.json(); })
-        .then(function(res) {
-          if (res.ok) { adminToast('✅ Usuário criado!', 'success'); loadUsers(); }
-          else { adminToast('❌ ' + (res.error || 'Erro'), 'error'); }
-        })
-        .catch(function(err) { adminToast('❌ ' + err.message, 'error'); });
-      }
-    );
-  };
-
-  window.editUser = function(id) {
-    var token = sessionStorage.getItem('admin_token');
-    fetch(DataProvider.apiBase + '/users', {
-      headers: { 'X-Admin-Token': token || '' }
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(users) {
-      var u = users.find(function(x) { return x.id == id; });
-      if (!u) return;
-      openModal('✏️ Editar Usuário',
-        '<label>Usuário</label><input id="user_name" value="' + esc(u.username) + '">'
-        + '<label>Nova senha (deixe vazio para manter)</label><input id="user_pass" type="password" value="">'
-        + '<label>Função</label><select id="user_role"><option value="editor"' + (u.role==='editor'?' selected':'') + '>✏️ Editor</option><option value="admin"' + (u.role==='admin'?' selected':'') + '>🔑 Admin</option></select>',
-        function() {
-          var name = document.getElementById('user_name').value.trim();
-          var pass = document.getElementById('user_pass').value;
-          var role = document.getElementById('user_role').value;
-          if (!name) { adminToast('⚠️ Nome de usuário obrigatório', 'warning'); return; }
-          var body = { id: id, username: name, role: role };
-          if (pass) body.password = pass;
-          fetch(DataProvider.apiBase + '/users', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'X-Admin-Token': token || '' },
-            body: JSON.stringify(body)
-          })
-          .then(function(r) { return r.json(); })
-          .then(function(res) {
-            if (res.ok) { adminToast('✅ Usuário atualizado!', 'success'); loadUsers(); }
-            else { adminToast('❌ ' + (res.error || 'Erro'), 'error'); }
-          })
-          .catch(function(err) { adminToast('❌ ' + err.message, 'error'); });
-        }
-      );
-    })
-    .catch(function() { adminToast('❌ Erro ao carregar usuários', 'error'); });
-  };
-
-  window.delUser = function(id) {
-    if (!confirm('Excluir este usuário?')) return;
-    var token = sessionStorage.getItem('admin_token');
-    fetch(DataProvider.apiBase + '/users?id=' + id, {
-      method: 'DELETE',
-      headers: { 'X-Admin-Token': token || '' }
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(res) {
-      if (res.ok) { adminToast('🗑️ Usuário excluído', 'info'); loadUsers(); }
-      else { adminToast('❌ ' + (res.error || 'Erro'), 'error'); }
-    })
-    .catch(function(err) { adminToast('❌ ' + err.message, 'error'); });
-  };
-
   /* =================================================================
-     SETTINGS (GitHub Token)
+     SETTINGS (Servidor / Backup)
      ================================================================= */
   function renderSettings(container) {
-    container.innerHTML = '<h2>🔑 Configurações Avançadas</h2><p class="desc">Salvamento no servidor, banco de dados e backup.</p>'
+    container.innerHTML = '<h2>🔑 Configurações Avançadas</h2><p class="desc">Salvamento no servidor e backup.</p>'
       + '<div class="admin-settings">'
       + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">💾 Salvar no servidor (PHP)</h3>'
       + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0 0 0.75rem;">Se o site está rodando em um host com PHP (ex: Hostinger), usa isso pra salvar as alterações direto no <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">js/data.js</code> do servidor.</p>'
@@ -1562,14 +1510,6 @@ const GITHUB_PATH   = "js/data.js";
       + '<input id="cfg_serverPass" type="password" value="' + esc(localStorage.getItem('admin_server_pass') || '') + '" placeholder="Senha definida no save.php">'
       + '<button class="btn-save" onclick="saveServerPass()">💾 Salvar senha</button>'
       + '<button class="btn-save" onclick="saveToServer()" style="margin-left:0.5rem;">💾 Salvar no servidor</button>'
-      + '<hr style="border-color:rgba(255,255,255,0.06);margin:1.5rem 0;">'
-      + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">🗄️ Modo Banco de Dados (API)</h3>'
-      + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0 0 0.75rem;">Quando tiver um backend com BD, ative este modo. O painel vai ler e salvar os dados via API REST em vez de usar o <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">data.js</code> local.</p>'
-      + '<div class="note" style="margin:0 0 0.75rem;">Como funciona neste site:<br>1. O modo BD salva em <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">bd_data.json</code> via <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">api.php</code> (não usa MySQL)<br>2. Mantenha o <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">api-config.php</code> com <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">API_PASSWORD</code> preenchida<br>3. O painel lê e salva via API; o site público continua lendo o <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">data.js</code> (atualizado automaticamente ao salvar)</div>'
-      + '<label><input type="checkbox" id="cfg_bdMode" ' + (DataProvider.isApi()?'checked':'') + ' onchange="toggleBdMode()"> Ativar modo BD</label>'
-      + '<label>URL base da API</label><input id="cfg_apiBase" type="url" value="' + esc(DataProvider.apiBase) + '" placeholder="/api">'
-      + '<button class="btn-save" onclick="saveBdConfig()">💾 Salvar Config BD</button>'
-      + '<button class="btn-save" onclick="testBdConnection()" style="margin-left:0.5rem;">🔌 Testar conexão</button>'
       + '<hr style="border-color:rgba(255,255,255,0.06);margin:1.5rem 0;">'
       + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">📥 Export / Import Dados</h3>'
       + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0 0 0.75rem;">Exporte todos os dados como JSON para backup, ou importe um backup anterior.</p>'
@@ -1604,38 +1544,6 @@ const GITHUB_PATH   = "js/data.js";
     .catch(function(err) {
       adminToast('❌ Erro de conexão: ' + err.message, 'error');
     });
-  };
-
-  /* ---- BD (API) helpers ---- */
-  window.toggleBdMode = function() {
-    // Just visual toggle — saveBdConfig() persists it
-  };
-
-  window.saveBdConfig = function() {
-    var enabled = document.getElementById('cfg_bdMode').checked;
-    var apiBase = document.getElementById('cfg_apiBase').value.trim() || '/api';
-    if (enabled) {
-      DataProvider.setMode('api', apiBase);
-      adminToast('✅ Modo BD ativado. Recarregando...', 'success');
-      setTimeout(function() { location.reload(); }, 1500);
-    } else {
-      DataProvider.setMode('frontend', '/api');
-      adminToast('✅ Modo frontend restaurado. Recarregando...', 'success');
-      setTimeout(function() { location.reload(); }, 1500);
-    }
-  };
-
-  window.testBdConnection = function() {
-    var apiBase = document.getElementById('cfg_apiBase').value.trim() || '/api';
-    adminToast('🔌 Testando conexão com ' + apiBase + '...', 'info');
-    fetch(apiBase + '?action=ping', { method: 'HEAD', cache: 'no-store' })
-      .then(function(r) {
-        if (r.ok) adminToast('✅ Conexão OK!', 'success');
-        else adminToast('⚠️ Respondeu com status ' + r.status, 'warning');
-      })
-      .catch(function(err) {
-        adminToast('❌ Sem conexão: ' + err.message, 'error');
-      });
   };
 
   /* ---- Export / Import ---- */
@@ -1701,64 +1609,6 @@ const GITHUB_PATH   = "js/data.js";
     });
   }
 
-  window.saveToApi = function() {
-    if (!DataProvider.isApi()) {
-      adminToast('⚠️ Modo BD não está ativo (Config > Modo Banco de Dados)', 'warning');
-      return;
-    }
-    try { saveFormsToData(); } catch(e) {}
-    var btn = document.getElementById('adminPublishBtn');
-    var oldText = btn.textContent;
-    btn.textContent = '⏳ Salvando...';
-    btn.disabled = true;
-
-    var data = {
-      constants: _data.constants,
-      stats: _data.STATS,
-      properties: _data.PROPERTIES,
-      empreendimentos: _data.EMPREENDIMENTOS,
-      faq: _data.FAQS,
-      depoimentos: _data.DEPOIMENTOS,
-      parceiros: _data.PARCEIROS,
-      team: _data.TEAM,
-      locations_info: _data.LOCATIONS_INFO,
-      blog: _data.BLOG_POSTS
-    };
-
-    DataProvider.saveAll(data)
-      .then(function(res) {
-        if (res && res.ok) {
-          adminToast('✅ Dados salvos no BD!', 'success');
-          var pwd = localStorage.getItem('admin_server_pass');
-          if (!pwd) {
-            pwd = prompt('Dados salvos no BD. Para o site público também atualizar o data.js, informe a senha do save.php (ou deixe em branco):', '');
-            if (pwd) localStorage.setItem('admin_server_pass', pwd);
-          }
-          if (pwd) {
-            return saveToPhp(generateDataJs(), pwd).then(function(r) {
-              return r.json();
-            }).then(function(sres) {
-              if (sres && sres.ok) {
-                adminToast('✅ BD + data.js atualizados!', 'success');
-              } else {
-                adminToast('⚠️ BD salvo, mas data.js não: ' + ((sres && sres.error) || 'verifique a senha do save.php'), 'warning');
-              }
-            });
-          }
-        } else {
-          adminToast('❌ ' + ((res && res.error) || 'Erro ao salvar no BD'), 'error');
-        }
-      })
-      .catch(function(err) {
-        adminToast('❌ Erro: ' + err.message, 'error');
-      })
-      .finally(function() {
-        btn.textContent = oldText;
-        btn.disabled = false;
-        setTimeout(function() { location.reload(); }, 1000);
-      });
-  };
-
   /* =================================================================
      FINANCIAMENTO
      ================================================================= */
@@ -1810,11 +1660,6 @@ const GITHUB_PATH   = "js/data.js";
      ================================================================= */
   window.adminPublish = function() {
     try { saveFormsToData(); } catch(e) {}
-    // API mode guarda via BD
-    if (DataProvider.isApi()) {
-      saveToApi();
-      return;
-    }
     // Modo frontend: guarda via save.php (igual que "Salvar"). GitHub comentado a propósito —
     // reativar o modo git descomentando o bloco abaixo se algum dia for usado de novo.
     adminSaveServer();

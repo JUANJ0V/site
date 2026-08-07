@@ -4,30 +4,16 @@
  *
  * Copie este arquivo como api-config.php e preencha com seus dados.
  *
- * MODO SIMPLES (sem BD — salva direto no data.js via save.php):
- *   - Preencha apenas API_PASSWORD
- *   - No admin, use "Salvar no servidor (PHP)" em Config
- *
- * MODO BD (com MySQL — salva via api.php):
- *   - Preencha TODAS as constantes abaixo
- *   - Acesse /api.php?setup uma vez para criar as tabelas
- *   - No admin > Config, ative "Modo Banco de Dados" com URL base: /api.php
+ * MODO SIMPLES (padrão — sem banco de dados):
+ *   - O site lê direto de js/data.js
+ *   - No admin, "Salvar no servidor (PHP)" em Config reescreve data.js via save.php
  */
 
 // ── Senha compartilhada ──
-// Usada pelo save.php (modo simples) e como token de autenticação da api.php
+// Usada por save.php e upload.php (o painel pede 1x e fica salva no navegador)
 define('API_PASSWORD', 'suasenhaaqui');
 
 // ── Email para notificações de contato (opcional) ──
-// Se definido, o formulário de contato enviará emails para este endereço via PHP mail().
-// Se não definido, usa contato@furpal.com.br como fallback.
-// NOTA: muitos hosts gratuitos (InfinityFree free) bloqueiam PHP mail().
-// Nesse caso o formulário cai de fallback para FormSubmit.co.
+// Se definido, o formulário envia para este endereço via PHP mail() (ou FormSubmit.co de fallback).
+// Se não definido, usa contato@furpal.com.br.
 define('CONTACT_EMAIL', '');
-
-// ── MySQL (obrigatório apenas para o modo BD) ──
-define('DB_HOST',    'localhost');
-define('DB_NAME',    'seudb');
-define('DB_USER',    'seuusuario');
-define('DB_PASS',    'suasenhamysql');
-define('DB_CHARSET', 'utf8mb4');
