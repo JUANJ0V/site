@@ -16,6 +16,8 @@ if (!defined('API_PASSWORD') || !API_PASSWORD) {
 }
 $password = API_PASSWORD;
 
+require_once __DIR__ . '/_secure.php';
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['ok' => false, 'error' => 'Método não permitido']);
@@ -25,10 +27,21 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $body = $_POST;
 $file = isset($_FILES['file']) ? $_FILES['file'] : null;
 
-if (!$body || empty($body['password']) || $body['password'] !== $password) {
-    http_response_code(403);
-    echo json_encode(['ok' => false, 'error' => 'Senha incorreta']);
-    exit;
+// Autenticação: sessão PHP (auth.php) ou senha (com hash_equals + limite de tentativas)
+if (!_session_authed()) {
+    $rec = _rate_state(_client_ip());
+    if (_rate_is_blocked($rec)) {
+        http_response_code(429);
+        echo json_encode(['ok' => false, 'error' => 'Muitas tentativas. Aguarde ' . ceil($rec['retry_after'] / 60) . ' min.']);
+        exit;
+    }
+    if (empty($body['password']) || !_check_password($body['password'], $password)) {
+        _rate_fail($rec);
+        http_response_code(403);
+        echo json_encode(['ok' => false, 'error' => 'Senha incorreta']);
+        exit;
+    }
+    _rate_ok($rec);
 }
 
 if (!$file || $file['error'] !== UPLOAD_ERR_OK) {
@@ -41,8 +54,18 @@ if (!$file || $file['error'] !== UPLOAD_ERR_OK) {
 
 $folder = isset($body['folder']) ? preg_replace('/[^a-zA-Z0-9_\/-]/', '', $body['folder']) : 'images';
 if (!$folder) $folder = 'images';
+if (strpos($folder, '..') !== false) {
+    http_response_code(400);
+    echo json_encode(['ok' => false, 'error' => 'Pasta inválida']);
+    exit;
+}
 
 $baseDir = __DIR__ . '/' . $folder;
+if (strpos($baseDir, __DIR__) !== 0) {
+    http_response_code(400);
+    echo json_encode(['ok' => false, 'error' => 'Pasta inválida']);
+    exit;
+}
 if (!is_dir($baseDir)) {
     mkdir($baseDir, 0755, true);
 }

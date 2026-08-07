@@ -3,8 +3,6 @@
    =================================================================== */
 
 const ADMIN_ENABLED = true;
-const ADMIN_USER    = "admin";
-const ADMIN_PASS    = "AdminFurpal#2026";
 
 /* ===================================================================
    INICIALIZAÇÃO
@@ -142,7 +140,7 @@ const ADMIN_PASS    = "AdminFurpal#2026";
   // ── Criar elementos ──
   var loginEl = document.createElement('div');
   loginEl.id = 'adminLogin';
-  loginEl.innerHTML = '<div class="box"><h2>🔐 Painel Admin</h2><p>Entre para gerenciar o site</p><form onsubmit="adminLogin();return false"><input type="text" id="adminUser" placeholder="Usuário" autocomplete="off"><input type="password" id="adminPass" placeholder="Senha"><button type="submit">Entrar</button></form><div class="error" id="adminLoginError">Usuário ou senha incorretos</div></div>';
+  loginEl.innerHTML = '<div class="box"><h2>🔐 Painel Admin</h2><p>Digite a senha do servidor para gerenciar o site</p><form onsubmit="adminLogin();return false"><input type="password" id="adminPass" placeholder="Senha do servidor" autocomplete="current-password"><button type="submit">Entrar</button></form><div class="error" id="adminLoginError">Senha incorreta</div></div>';
   document.body.appendChild(loginEl);
 
   var panelEl = document.createElement('div');
@@ -154,17 +152,39 @@ const ADMIN_PASS    = "AdminFurpal#2026";
   toastEl.id = 'adminToast';
   document.body.appendChild(toastEl);
 
+  function showLoginError() {
+    var err = document.getElementById('adminLoginError');
+    if (err) err.style.display = 'block';
+  }
+
+  // Autentica contra auth.php (server-side, con límite de intentos). Nada de credenciales en el código.
+  function authRequest(p) {
+    return fetch('auth.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: p })
+    }).then(function(r) {
+      return r.json().then(function(j) { return j; }).catch(function() { return {}; });
+    });
+  }
+
   function tryFrontendLogin(u, p) {
-    if (u === ADMIN_USER && p === ADMIN_PASS) {
-      sessionStorage.setItem('admin_logged', '1');
-      loginEl.classList.add('hidden');
-      panelEl.classList.add('active');
-      document.body.classList.add('admin-mode');
-      adminFloat.style.display = 'none';
-      initAdminPanel();
-    } else {
-      document.getElementById('adminLoginError').style.display = 'block';
-    }
+    if (!u && !p) { showLoginError(); return; }
+    authRequest(p).then(function(res) {
+      if (res && res.ok) {
+        sessionStorage.setItem('admin_logged', '1');
+        if (p) localStorage.setItem('admin_server_pass', p);
+        loginEl.classList.add('hidden');
+        panelEl.classList.add('active');
+        document.body.classList.add('admin-mode');
+        adminFloat.style.display = 'none';
+        initAdminPanel();
+      } else {
+        showLoginError();
+      }
+    }).catch(function() {
+      showLoginError();
+    });
   }
 
   function fallbackFrontendLogin(u, p) {
@@ -172,7 +192,7 @@ const ADMIN_PASS    = "AdminFurpal#2026";
   }
 
   window.adminLogin = function() {
-    var u = document.getElementById('adminUser').value;
+    var u = document.getElementById('adminUser') ? document.getElementById('adminUser').value : '';
     var p = document.getElementById('adminPass').value;
     tryFrontendLogin(u, p);
   };

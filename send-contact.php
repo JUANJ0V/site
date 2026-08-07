@@ -1,8 +1,14 @@
 <?php
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
+
+$allowedOrigins = array('https://furpal.com.br', 'https://www.furpal.com.br', 'https://fp2026.infinityfree.io');
+$origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+if (in_array($origin, $allowedOrigins, true)) {
+    header('Access-Control-Allow-Origin: ' . $origin);
+    header('Vary: Origin');
+}
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -10,10 +16,32 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+require_once __DIR__ . '/_secure.php';
+
+// Honeypot anti-bot: los bots rellenan el campo oculto; los humanos no lo ven
+if (!empty($_POST['_company'])) {
+    echo json_encode(['ok' => true, 'message' => 'Mensagem enviada com sucesso!']);
+    exit;
+}
+
+// Throttle: máx. 1 envío por IP cada 60s
+$throttle = _throttle_once(_client_ip(), 'contact', 60);
+if ($throttle['blocked']) {
+    http_response_code(429);
+    echo json_encode(['ok' => false, 'error' => 'Muitas mensagens. Aguarde ' . ceil($throttle['wait']) . 's.']);
+    exit;
+}
+
 $name    = isset($_POST['Nome'])     ? trim($_POST['Nome'])     : '';
 $email   = isset($_POST['Email'])    ? trim($_POST['Email'])    : '';
 $phone   = isset($_POST['Telefone']) ? trim($_POST['Telefone']) : '';
 $message = isset($_POST['Mensagem']) ? trim($_POST['Mensagem']) : '';
+$honeypot = isset($_POST['_company']) ? $_POST['_company'] : '';
+
+if ($honeypot !== '') {
+    echo json_encode(['ok' => true, 'message' => 'Mensagem enviada com sucesso!']);
+    exit;
+}
 
 $name    = str_replace(["\r", "\n"], '', $name);
 $email   = str_replace(["\r", "\n"], '', $email);

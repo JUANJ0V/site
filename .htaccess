@@ -1,8 +1,20 @@
+Options -Indexes
 RewriteEngine On
 
 # HTTPS redirect
 RewriteCond %{HTTPS} off
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Block access to source control (in case .git is ever uploaded)
+RedirectMatch 404 /\.git
+
+# Protect sensitive files (config, SQL schema, backups, temp)
+<FilesMatch "^(api-config\.php|api-config\.example\.php|_secure\.php|schema\.sql|.*\.sql|\.gitignore|\.nojekyll|.*\.log|.*\.tmp|.*\.bak|.*~)$">
+  Require all denied
+</FilesMatch>
+
+# Block /docs and /tmp entirely
+RewriteRule ^(docs|tmp)/ - [F,L]
 
 # SPA: all non-file requests go to index.html (single-page template)
 RewriteCond %{REQUEST_FILENAME} !-f

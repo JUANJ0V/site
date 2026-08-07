@@ -16,6 +16,8 @@ if (!defined('API_PASSWORD') || !API_PASSWORD) {
 }
 $password = API_PASSWORD;
 
+require_once __DIR__ . '/_secure.php';
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['ok' => false, 'error' => 'Método não permitido']);
@@ -23,11 +25,27 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $body = json_decode(file_get_contents('php://input'), true);
-
-if (!$body || empty($body['password']) || $body['password'] !== $password) {
-    http_response_code(403);
-    echo json_encode(['ok' => false, 'error' => 'Senha incorreta']);
+if (!$body) {
+    http_response_code(400);
+    echo json_encode(['ok' => false, 'error' => 'JSON inválido']);
     exit;
+}
+
+// Autenticação: sessão PHP (auth.php) ou senha (com hash_equals + limite de tentativas)
+if (!_session_authed()) {
+    $rec = _rate_state(_client_ip());
+    if (_rate_is_blocked($rec)) {
+        http_response_code(429);
+        echo json_encode(['ok' => false, 'error' => 'Muitas tentativas. Aguarde ' . ceil($rec['retry_after'] / 60) . ' min.']);
+        exit;
+    }
+    if (!isset($body['password']) || !_check_password($body['password'], $password)) {
+        _rate_fail($rec);
+        http_response_code(403);
+        echo json_encode(['ok' => false, 'error' => 'Senha incorreta']);
+        exit;
+    }
+    _rate_ok($rec);
 }
 
 if (!isset($body['content'])) {
