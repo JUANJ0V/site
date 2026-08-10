@@ -22,8 +22,8 @@ let SITE_REGION = "SC";
 let SECTION_PARCEIROS_EYEBROW = "Parceiros";
 let SECTION_PARCEIROS_TITLE = "Instituições que confiam em nós";
 
-let HERO_EYEBROW = "Sua jornada começa aqui";
-let HERO_TITLE = "Furpal em Balneário Camboriú | Assessoria Imobiliária Completa";
+let HERO_EYEBROW = "Furpal — Consultoria Imobiliária Internacional";
+let HERO_TITLE = "Assessoria imobiliária completa em Santa Catarina";
 let HERO_SUBTITLE = "Mais de 500 imóveis no Território Catarinense. Te acompanhamos do início ao fim para você investir com segurança e confiança.";
 
 let SECTION_SOBRE_EYEBROW = "Assessoria imobiliária";
@@ -50,7 +50,7 @@ let FIN_DEFAULT_TERM  = 240;
 let SECTION_CONTATO_EYEBROW = "Envie sua mensagem";
 let SECTION_CONTATO_TITLE = "Fale conosco";
 let SECTION_MAPA_EYEBROW = "Explore Santa Catarina";
-let SECTION_MAPA_TITLE = "Imóveis com tudo perto";
+let SECTION_MAPA_TITLE = "";
 let SECTION_BLOG_EYEBROW = "Blog";
 let SECTION_BLOG_TITLE = "Últimas do blog";
 let SECTION_FAVORITOS_EYEBROW = "Favoritos";

@@ -25,7 +25,7 @@
     <link rel="icon" href="/images/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
     <link rel="apple-touch-icon" href="/images/favicon.svg" />
-  <link rel="stylesheet" href="css/style.min.css?v=7" />
+  <link rel="stylesheet" href="css/style.min.css?v=8" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
@@ -120,8 +120,8 @@
     </div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
-      <p class="eyebrow" style="margin-bottom:1.5rem;">Sua jornada começa aqui</p>
-          <h1>Furpal em Balneário Camboriú | Assessoria Imobiliária Completa</h1>
+      <p class="eyebrow" style="margin-bottom:1.5rem;">Furpal — Consultoria Imobiliária Internacional</p>
+          <h1>Assessoria imobiliária completa em Santa Catarina</h1>
       <p>Mais de 500 imóveis no Território Catarinense. Te acompanhamos do início ao fim para você investir com segurança e confiança.</p>
       <div class="hero-search">
         <form class="hero-search-inner" onsubmit="handleSearch();return false;">
@@ -479,6 +479,10 @@
           <div id="formSuccess" style="display:none;text-align:center;padding:2rem;">
             <p style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold);margin-bottom:0.5rem;">Mensagem enviada! ✓</p>
             <p style="color:var(--text);">Obrigado pelo contato. Responderemos em breve.</p>
+          </div>
+          <div id="formError" style="display:none;text-align:center;padding:1.5rem;border:1px solid rgba(255,107,107,0.4);border-radius:8px;background:rgba(255,107,107,0.08);">
+            <p style="color:#ff6b6b;margin-bottom:0.75rem;">Não foi possível enviar pelo formulário agora.</p>
+            <a href="https://wa.me/554788079254" target="_blank" class="btn-primary" style="display:inline-block;text-decoration:none;">Falar pelo WhatsApp</a>
           </div>
         </form>
       </div>
@@ -915,22 +919,36 @@
         document.getElementById('formFields').style.display = 'none';
         document.getElementById('formSuccess').style.display = 'block';
       }
-      fetch('send-contact.php', { method: 'POST', body: new FormData(form) })
-        .then(function(r) { return r.json(); })
-        .then(function(res) {
-          if (res.ok) { showSuccess(); }
-          else { throw new Error(res.error || 'Erro'); }
-        })
+      function showError() {
+        var err = document.getElementById('formError');
+        var flds = document.getElementById('formFields');
+        if (err && flds) { flds.style.display = 'none'; err.style.display = 'block'; }
+      }
+      function trySendContactPhp() {
+        return fetch('send-contact.php', { method: 'POST', body: new FormData(form) })
+          .then(function(r) { return r.json().catch(function() { throw new Error('Resposta inválida'); }); })
+          .then(function(res) { if (!res.ok) throw new Error((res && res.error) || 'Erro'); });
+      }
+      trySendContactPhp()
+        .then(showSuccess)
         .catch(function() {
-          // Fallback to formsubmit.co
+          // Fallback: formsubmit.co (JSON, sem redirecionar o visitante)
           form.action = 'https://formsubmit.co/' + SITE_EMAIL;
-          return fetch(form.action, { method: 'POST', body: new FormData(form) });
+          return fetch(form.action, {
+            method: 'POST',
+            headers: { 'Accept': 'application/json' },
+            body: new FormData(form)
+          });
         })
-        .then(function() { showSuccess(); })
-        .catch(function() {
-          // Last resort: native submit (opens formsubmit thank-you page)
-          form.submit();
+        .then(function(res) {
+          if (res && typeof res.json === 'function') return res.json();
+          return null;
         })
+        .then(function(fs) {
+          if (fs && (fs.success === true || fs.ok === true)) showSuccess();
+          else throw new Error('formsubmit');
+        })
+        .catch(showError)
         .finally(function() {
           btn.textContent = originalText;
           btn.disabled = false;
@@ -1013,10 +1031,20 @@ function googleTranslateElementInit() {
         });
       }
     }, 100);
+    // Se o Google Translate não inicializar (bloqueado/sem rede), esconde o seletor
+    setTimeout(function() {
+      var combo = document.getElementById('google_translate_element').querySelector('.goog-te-combo');
+      if (!combo) {
+        clearInterval(checkCombo);
+        document.querySelectorAll('.lang-switcher, .mobile-lang').forEach(function(el) { if (el) el.style.display = 'none'; });
+      }
+    }, 4000);
+  } else {
+    document.querySelectorAll('.lang-switcher, .mobile-lang').forEach(function(el) { if (el) el.style.display = 'none'; });
   }
 }
 </script>
-<script src="js/app.min.js?v=16"></script>
+<script src="js/app.min.js?v=17"></script>
 <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 <script>document.addEventListener('DOMContentLoaded',function(){var v=document.querySelector('.about-video');if(v)Plyr.setup(v);});</script>
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>

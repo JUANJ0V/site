@@ -1133,7 +1133,7 @@
     }
     #stats .section-header .eyebrow { margin-bottom: 0.2rem; }
 
-    #mapa .eyebrow { margin-top: 0.75rem; }
+    #mapa .eyebrow { margin-top: 0.15rem; }
     #stats .section-header .gold-rule { margin: 0 auto 0.05rem; }
     #stats .section-header h2 {
       margin: 0;
@@ -1537,11 +1537,12 @@
 
     /* ── MAPA ── */
     .section-mapa {
-      padding-bottom: 2rem;
-    }
-    .section-mapa .container {
       padding-bottom: 1rem;
     }
+    .section-mapa .container {
+      padding-bottom: 0.2rem;
+    }
+    #sectionMapaTitle:empty { display: none; }
     .map-wrapper {
       position: relative;
       width: 100%;

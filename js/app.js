@@ -1457,13 +1457,8 @@ function setupMobileNav() {
     _mapInstance = L.map('map', {
       center: [-27.3, -50.5],
       zoom: 7,
-      minZoom: 7,
-      maxZoom: 17,
-      maxBounds: [
-        [-29.5, -53.5],
-        [-25.5, -47.5]
-      ],
-      maxBoundsViscosity: 1.0,
+      minZoom: 3,
+      maxZoom: 18,
       zoomControl: true
     });
     window._mapInstance = _mapInstance;
