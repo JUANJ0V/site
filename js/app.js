@@ -632,7 +632,7 @@ function renderFavorites() {
   if (!container) return;
   var favs = getFavs();
   var html = '';
-  var emptyMsg = 'Nenhum im\u00F3vel favoritado ainda.';
+  var emptyMsg = window.SECTION_FAVORITOS_EMPTY || (typeof SECTION_FAVORITOS_EMPTY !== 'undefined' ? SECTION_FAVORITOS_EMPTY : '') || 'Nenhum im\u00F3vel favoritado ainda.';
   for (var fi = 0; fi < favs.length; fi++) {
     var p = null;
     for (var pj = 0; pj < PROPERTIES.length; pj++) {
@@ -1073,7 +1073,7 @@ function setupMobileNav() {
             if (_c.HERO_EYEBROW) { var e = document.querySelector('#inicio .eyebrow'); if (e) e.textContent = _c.HERO_EYEBROW; }
             if (_c.HERO_TITLE) { var e = document.querySelector('#inicio h1'); if (e) e.textContent = _c.HERO_TITLE; }
             if (_c.HERO_SUBTITLE) { var e = document.querySelector('#inicio .hero-content p:not(.eyebrow)'); if (e) e.textContent = _c.HERO_SUBTITLE; }
-            var _smap = { HERO_EYEBROW:'.hero-content .eyebrow',HERO_TITLE:'.hero-content h1',HERO_SUBTITLE:'.hero-content p + p',SECTION_SOBRE_EYEBROW:'#sobre .eyebrow',SECTION_SOBRE_TITLE:'#sobre h2',SECTION_COMPRAR_EYEBROW:'#comprar .eyebrow',SECTION_COMPRAR_TITLE:'#comprar h2',SECTION_ALUGAR_EYEBROW:'#alugar .eyebrow',SECTION_ALUGAR_TITLE:'#alugar h2',SECTION_LANCAMENTOS_EYEBROW:'#lancamentos .eyebrow',SECTION_LANCAMENTOS_TITLE:'#lancamentos h2',SECTION_SERVICOS_EYEBROW:'#servicos .eyebrow',SECTION_SERVICOS_TITLE:'#servicos h2',SECTION_DEPOIMENTOS_EYEBROW:'#depoimentos .eyebrow',SECTION_DEPOIMENTOS_TITLE:'#depoimentos h2',SECTION_PARCEIROS_EYEBROW:'#parceiros .eyebrow',SECTION_PARCEIROS_TITLE:'#parceiros h2',SECTION_FAQ_EYEBROW:'#faq .eyebrow',SECTION_FAQ_TITLE:'#faq h2',SECTION_STATS_EYEBROW:'#sectionStatsEyebrow',SECTION_STATS_TITLE:'#sectionStatsTitle',SECTION_FINANCIAMENTO_EYEBROW:'#financiamento .eyebrow',SECTION_FINANCIAMENTO_TITLE:'#financiamento h2',SECTION_CONTATO_EYEBROW:'#contato-form .eyebrow',SECTION_CONTATO_TITLE:'#contato-form h2',SECTION_MAPA_EYEBROW:'#sectionMapaEyebrow',SECTION_MAPA_TITLE:'#sectionMapaTitle',SECTION_BLOG_EYEBROW:'#sectionBlogEyebrow',SECTION_BLOG_TITLE:'#sectionBlogTitle',SECTION_FAVORITOS_EYEBROW:'#sectionFavEyebrow',SECTION_FAVORITOS_TITLE:'#sectionFavTitle',SECTION_PRIVACIDADE_EYEBROW:'#privacidade .eyebrow',SECTION_PRIVACIDADE_TITLE:'#privacidade h2' };
+            var _smap = { HERO_EYEBROW:'.hero-content .eyebrow',HERO_TITLE:'.hero-content h1',HERO_SUBTITLE:'.hero-content p:not(.eyebrow)',SECTION_SOBRE_EYEBROW:'#sobre .eyebrow',SECTION_SOBRE_TITLE:'#sobre h2',SECTION_COMPRAR_EYEBROW:'#comprar .eyebrow',SECTION_COMPRAR_TITLE:'#comprar h2',SECTION_ALUGAR_EYEBROW:'#alugar .eyebrow',SECTION_ALUGAR_TITLE:'#alugar h2',SECTION_LANCAMENTOS_EYEBROW:'#lancamentos .eyebrow',SECTION_LANCAMENTOS_TITLE:'#lancamentos h2',SECTION_SERVICOS_EYEBROW:'#servicos .eyebrow',SECTION_SERVICOS_TITLE:'#servicos h2',SECTION_DEPOIMENTOS_EYEBROW:'#depoimentos .eyebrow',SECTION_DEPOIMENTOS_TITLE:'#depoimentos h2',SECTION_PARCEIROS_EYEBROW:'#parceiros .eyebrow',SECTION_PARCEIROS_TITLE:'#parceiros h2',SECTION_FAQ_EYEBROW:'#faq .eyebrow',SECTION_FAQ_TITLE:'#faq h2',SECTION_STATS_EYEBROW:'#sectionStatsEyebrow',SECTION_STATS_TITLE:'#sectionStatsTitle',SECTION_FINANCIAMENTO_EYEBROW:'#financiamento .eyebrow',SECTION_FINANCIAMENTO_TITLE:'#financiamento h2',SECTION_CONTATO_EYEBROW:'#contato-form .eyebrow',SECTION_CONTATO_TITLE:'#contato-form h2',SECTION_MAPA_EYEBROW:'#sectionMapaEyebrow',SECTION_MAPA_TITLE:'#sectionMapaTitle',SECTION_BLOG_EYEBROW:'#sectionBlogEyebrow',SECTION_BLOG_TITLE:'#sectionBlogTitle',SECTION_FAVORITOS_EYEBROW:'#sectionFavEyebrow',SECTION_FAVORITOS_TITLE:'#sectionFavTitle',SECTION_PRIVACIDADE_EYEBROW:'#privacidade .eyebrow',SECTION_PRIVACIDADE_TITLE:'#privacidade h2' };
             for (var _sk in _smap) { if (_c[_sk]) { var el = document.querySelector(_smap[_sk]); if (el) el.textContent = _c[_sk]; } }
             var _logo = _c.SITE_LOGO || window.SITE_LOGO || '';
             var _heroVideo = _c.HERO_VIDEO || window.HERO_VIDEO || '';
@@ -1107,6 +1107,10 @@ function setupMobileNav() {
               if (_fc) _fc.textContent = '\u00A9 ' + new Date().getFullYear() + ' ' + _cn + '. Todos os direitos reservados.';
               var _tt = document.querySelector('title');
               if (_tt) _tt.textContent = _tt.textContent.replace(/\|.*$/, '| ' + _cn);
+            if (_c.FIN_DEFAULT_PRICE) { var _fp = document.getElementById('fin-price'); if (_fp) _fp.value = _c.FIN_DEFAULT_PRICE; }
+            if (_c.FIN_DEFAULT_DOWN) { var _fd = document.getElementById('fin-down'); if (_fd) _fd.value = _c.FIN_DEFAULT_DOWN; }
+            if (_c.FIN_DEFAULT_RATE) { var _fr = document.getElementById('fin-rate'); if (_fr) _fr.value = _c.FIN_DEFAULT_RATE; }
+            if (_c.FIN_DEFAULT_TERM) { var _ft = document.getElementById('fin-term'); if (_ft) _ft.value = String(_c.FIN_DEFAULT_TERM); }
             if (_c.SITE_EMAIL) {
               document.querySelectorAll('a[href*="mailto:"]').forEach(function(a) {
                 a.href = 'mailto:' + _c.SITE_EMAIL;

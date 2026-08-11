@@ -45,18 +45,19 @@ const ADMIN_ENABLED = true;
       .admin-header .admin-actions .btn-publish:hover { background:linear-gradient(135deg,#c5a030,#b8962b); color:#0a0f24; box-shadow:0 2px 10px rgba(212,175,55,0.3); }
 
       .admin-body { display:flex; flex:1; overflow:hidden; }
-      .admin-sidebar { width:220px; min-width:220px; background:#080c1e; border-right:1px solid rgba(255,255,255,0.03); padding:0.5rem 0; overflow-y:auto; }
-      .admin-sidebar button { display:block; width:100%; text-align:left; padding:0.6rem 1.2rem; background:none; border:none; color:rgba(255,255,255,0.4); font-size:0.82rem; cursor:pointer; transition:all 0.15s; touch-action:manipulation; border-left:2px solid transparent; }
+      .admin-sidebar { width:220px; min-width:220px; background:#080c1e; border-right:1px solid rgba(255,255,255,0.03); padding:0.75rem 0.5rem; overflow-y:auto; }
+      .admin-sidebar button { display:block; width:100%; text-align:left; padding:0.55rem 0.9rem; margin:0 0 4px; background:rgba(255,255,255,0.02); border:none; border-radius:9px; color:rgba(255,255,255,0.45); font-size:0.82rem; cursor:pointer; transition:all 0.15s; touch-action:manipulation; }
       .admin-mobile-tab { display:none; width:100%; padding:0.75rem 1rem; background:#080c1e; border:none; border-bottom:1px solid rgba(255,255,255,0.04); color:#fff; font-size:0.9rem; outline:none; cursor:pointer; }
       .admin-mobile-tab option { background:#080c1e; color:#fff; }
-      .admin-sidebar button:hover { background:rgba(255,255,255,0.03); color:rgba(255,255,255,0.8); }
-      .admin-sidebar button.active { background:rgba(212,175,55,0.06); color:#d4af37; border-left-color:#d4af37; }
+      .admin-sidebar button:hover { background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.85); }
+      .admin-sidebar button.active { background:rgba(212,175,55,0.13); color:#ffd700; box-shadow:inset 0 0 0 1px rgba(212,175,55,0.28); }
       .admin-content { flex:1; padding:1.5rem; overflow-y:auto; background:rgba(255,255,255,0.015); }
 
       .admin-section { display:none; }
       .admin-section.active { display:block; }
-      .admin-section h2 { margin:0 0 0.5rem; color:#d4af37; font-size:1.15rem; font-weight:600; }
-      .admin-section .desc { margin:0 0 1.5rem; color:rgba(255,255,255,0.3); font-size:0.82rem; }
+      .admin-section h2 { margin:0 0 0.4rem; color:#ffd700; font-size:1.2rem; font-weight:700; letter-spacing:-0.01em; }
+      .admin-section h2::after { content:""; display:block; width:64px; height:3px; background:linear-gradient(90deg,#d4af37,rgba(212,175,55,0.1)); border-radius:3px; margin-top:6px; }
+      .admin-section .desc { margin:0 0 1.5rem; color:rgba(255,255,255,0.35); font-size:0.82rem; }
 
       .admin-table { width:100%; border-collapse:separate; border-spacing:0; font-size:0.82rem; }
       .admin-table thead { position:sticky; top:0; z-index:1; }
@@ -94,12 +95,16 @@ const ADMIN_ENABLED = true;
       .admin-modal .modal-box .modal-actions .btn-cancel { background:rgba(255,255,255,0.03); color:rgba(255,255,255,0.55); border:1px solid rgba(255,255,255,0.06); }
       .admin-modal .modal-box .modal-actions .btn-cancel:hover { background:rgba(255,255,255,0.06); color:#fff; }
 
+      .admin-settings { background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:14px; padding:1.25rem 1.5rem; }
       .admin-settings label { display:block; margin:0.75rem 0 0.25rem; color:rgba(255,255,255,0.45); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; }
       .admin-settings input, .admin-settings textarea { width:100%; max-width:500px; padding:0.55rem 0.75rem; background:rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.06); border-radius:6px; color:#e8e8f0; font-size:0.85rem; outline:none; margin-bottom:0.5rem; transition:border-color 0.2s,box-shadow 0.2s; }
       .admin-settings input:focus { border-color:#d4af37; box-shadow:0 0 0 3px rgba(212,175,55,0.06); }
       .admin-settings .note { color:rgba(255,255,255,0.25); font-size:0.75rem; margin:-0.25rem 0 0.75rem; }
       .admin-settings .btn-save { padding:0.5rem 1.4rem; border-radius:7px; background:linear-gradient(135deg,#d4af37,#c5a030); color:#0a0f24; border:none; font-weight:700; font-size:0.82rem; cursor:pointer; transition:all 0.15s; }
       .admin-settings .btn-save:hover { box-shadow:0 2px 10px rgba(212,175,55,0.25); transform:translateY(-1px); }
+
+      .btn-up { font-size:0.72rem; padding:0.25rem 0.8rem; background:rgba(212,175,55,0.14); border:1px solid rgba(212,175,55,0.45); border-radius:999px; color:#ffd700; cursor:pointer; vertical-align:middle; transition:all 0.15s; margin-left:6px; }
+      .btn-up:hover { background:rgba(212,175,55,0.28); }
 
       #adminToast { position:fixed; z-index:2147483647; bottom:1.5rem; right:1.5rem; padding:0.75rem 1.25rem; border-radius:10px; font-size:0.85rem; opacity:0; transition:opacity 0.3s,transform 0.3s; pointer-events:none; transform:translateY(10px); box-shadow:0 4px 20px rgba(0,0,0,0.4); }
       #adminToast.show { opacity:1; transform:translateY(0); }
@@ -122,6 +127,7 @@ const ADMIN_ENABLED = true;
         .admin-header .admin-actions a { font-size:0.7rem; padding:0.3rem 0.6rem; }
         .admin-settings input,
         .admin-settings textarea { max-width:100%; }
+        .admin-settings { padding:1rem; }
         .admin-table { font-size:0.7rem; display:block; overflow-x:auto; -webkit-overflow-scrolling:touch; white-space:nowrap; }
         .admin-table td, .admin-table th { padding:0.35rem 0.4rem; }
         .admin-modal .modal-box { max-width:98vw; padding:1rem; max-height:90vh; }
@@ -145,7 +151,7 @@ const ADMIN_ENABLED = true;
 
   var panelEl = document.createElement('div');
   panelEl.id = 'adminPanel';
-  panelEl.innerHTML = '<div class="admin-header"><h1>⚙️ Furpal — Admin</h1><div class="admin-actions"><button onclick="adminToggleSite()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);">👁 Ver site</button><button onclick="adminSaveServer()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);" id="adminSaveBtn">💾 Salvar</button><button onclick="adminPublish()" class="btn-publish" id="adminPublishBtn">💾 Salvar no servidor</button><button onclick="adminLogout()">Sair</button></div></div><div class="admin-body"><div class="admin-sidebar" id="adminSidebar"></div><div class="admin-content" id="adminContent"></div></div>';
+  panelEl.innerHTML = '<div class="admin-header"><h1>⚙️ Furpal — Admin</h1><div class="admin-actions"><button onclick="adminToggleSite()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);">👁 Ver site</button><button onclick="adminPublish()" class="btn-publish" id="adminPublishBtn">💾 Salvar no servidor</button><button onclick="adminLogout()">Sair</button></div></div><div class="admin-body"><div class="admin-sidebar" id="adminSidebar"></div><div class="admin-content" id="adminContent"></div></div>';
   document.body.appendChild(panelEl);
 
   var toastEl = document.createElement('div');
@@ -253,6 +259,10 @@ const ADMIN_ENABLED = true;
       c.SECTION_FAVORITOS_EYEBROW   = gv('cfg_favEye');
       c.SECTION_FAVORITOS_TITLE     = gv('cfg_favTitle');
       c.SECTION_FAVORITOS_EMPTY     = gv('cfg_favEmpty');
+      c.SECTION_STATS_EYEBROW       = gv('cfg_statsEye');
+      c.SECTION_STATS_TITLE         = gv('cfg_statsTitle');
+      c.SECTION_PRIVACIDADE_EYEBROW = gv('cfg_privEye');
+      c.SECTION_PRIVACIDADE_TITLE   = gv('cfg_privTitle');
       c.SECTION_SOBRE_EYEBROW      = gv('cfg_sobreEye');
       c.SECTION_SOBRE_TITLE        = gv('cfg_sobreTitle');
       c.SECTION_COMPRAR_EYEBROW    = gv('cfg_comprarEye');
@@ -306,22 +316,8 @@ const ADMIN_ENABLED = true;
     adminToast('✅ Senha do servidor salva no navegador', 'success');
   };
 
-  window.saveToServer = function() {
-    try { saveFormsToData(); } catch(e) {}
-    var pwd = localStorage.getItem('admin_server_pass');
-    if (!pwd) { adminToast('❌ Defina a senha do save.php na aba Config', 'error'); return; }
-    var content = generateDataJs();
-    saveToPhp(content, pwd)
-    .then(function(r) { return r.json(); })
-    .then(function(res) {
-      if (res.ok) { adminToast('✅ ' + (res.message || 'Salvo!'), 'success'); }
-      else { adminToast('❌ ' + (res.error || 'Erro'), 'error'); }
-    })
-    .catch(function(err) { adminToast('❌ Erro de conexão: ' + err.message, 'error'); });
-  };
-
   function uploadBtn(inputId, folder) {
-    return ' <button type="button" onclick="adminUpload(\'' + inputId + '\',\'' + folder + '\')" style="font-size:0.7rem;padding:0.2rem 0.5rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:3px;color:#fff;cursor:pointer;vertical-align:middle;">📷 Upload</button>';
+    return ' <button type="button" class="btn-up" onclick="adminUpload(\'' + inputId + '\',\'' + folder + '\')">📷 Upload</button>';
   }
 
   // InfinityFree bloqueia POSTs com corpo de código JS. Codifica em base64 (UTF-8 seguro) para o save.php aceitar.
@@ -529,7 +525,7 @@ const ADMIN_ENABLED = true;
         LOCATIONS_INFO: JSON.parse(JSON.stringify(typeof LOCATIONS_INFO !== 'undefined' ? LOCATIONS_INFO : {}))
       };
       var contentEl = document.getElementById('adminContent');
-      if (contentEl) contentEl.innerHTML = '<p style="color:rgba(255,255,255,0.3);padding:1rem;font-size:0.85rem;">Carregando…</p>';
+      if (contentEl) contentEl.innerHTML = '<p id="adminLoading" style="color:rgba(255,255,255,0.3);padding:1rem;font-size:0.85rem;">Carregando…</p>';
       buildSidebar();
       var initialTab = window._redirectTab || 'general';
       queueTabShow(initialTab);
@@ -553,7 +549,11 @@ const ADMIN_ENABLED = true;
     try {
       window.showTab(id);
       var el = document.getElementById('adminSection_' + id);
-      if (el && el.childNodes.length > 0) return;
+      if (el && el.childNodes.length > 0) {
+        var loadingEl = document.getElementById('adminLoading');
+        if (loadingEl) loadingEl.remove();
+        return;
+      }
     } catch(e) {}
     setTimeout(function() { queueTabShow(id, attempt + 1); }, 100);
   }
@@ -773,6 +773,10 @@ const ADMIN_ENABLED = true;
       + '<div><label>Favoritos — Eyebrow</label><input id="cfg_favEye" value="' + esc(c.SECTION_FAVORITOS_EYEBROW||'') + '"><label>Favoritos — Título</label><input id="cfg_favTitle" value="' + esc(c.SECTION_FAVORITOS_TITLE||'') + '"></div>'
       + '<div><label>Favoritos — Texto vazio</label><input id="cfg_favEmpty" value="' + esc(c.SECTION_FAVORITOS_EMPTY||'') + '"></div>'
       + '</div>'
+      + '<div class="row2">'
+      + '<div><label>Equipe (stats) — Eyebrow</label><input id="cfg_statsEye" value="' + esc(c.SECTION_STATS_EYEBROW||'') + '"><label>Equipe (stats) — Título</label><input id="cfg_statsTitle" value="' + esc(c.SECTION_STATS_TITLE||'') + '"></div>'
+      + '<div><label>Privacidade — Eyebrow</label><input id="cfg_privEye" value="' + esc(c.SECTION_PRIVACIDADE_EYEBROW||'') + '"><label>Privacidade — Título</label><input id="cfg_privTitle" value="' + esc(c.SECTION_PRIVACIDADE_TITLE||'') + '"></div>'
+      + '</div>'
       + '<hr style="border-color:rgba(255,255,255,0.06);margin:1rem 0;">'
       + '<label>Seções desabilitadas (IDs separados por vírgula)</label><input id="cfg_disabled" value="' + esc((c.DISABLED_SECTIONS||[]).join(', ')) + '">'
       + '<div class="note">Disponíveis: sobre, stats, servicos, depoimentos, parceiros, faq, financiamento, alugar, favoritos</div>'
@@ -783,58 +787,7 @@ const ADMIN_ENABLED = true;
   }
 
   window.saveGeneral = function() {
-    var c = _data.constants;
-    c.SITE_NAME = gv('cfg_siteName');
-    c.SITE_LOGO = gv('cfg_logo');
-    c.LOGO_MAX_HEIGHT = gv('cfg_logoH');
-    c.LOGO_MAX_WIDTH = gv('cfg_logoW');
-    c.LOGO_MARGIN = gv('cfg_logoM');
-    c.WHATSAPP_NUMBER = gv('cfg_whatsNum');
-    c.WHATSAPP_DISPLAY = gv('cfg_whatsDisp');
-    c.WHATSAPP_MSG = gv('cfg_whatsMsg');
-    c.SITE_EMAIL = gv('cfg_email');
-    c.SITE_URL = gv('cfg_siteUrl');
-    c.SITE_CITY = gv('cfg_city');
-    c.SITE_ADDRESS = gv('cfg_address');
-    c.SITE_REGION = gv('cfg_region');
-    c.SITE_MAPS = gv('cfg_maps');
-    c.HERO_EYEBROW = gv('cfg_heroEye');
-    c.HERO_TITLE = gv('cfg_heroTitle');
-    c.HERO_SUBTITLE = gv('cfg_heroSub');
-    c.HERO_VIDEO = gv('cfg_heroVideo');
-    c.SOCIAL.instagram = gv('cfg_ig');
-    c.SOCIAL.facebook = gv('cfg_fb');
-    c.SOCIAL.youtube = gv('cfg_yt');
-    c.SOCIAL.linkedin = gv('cfg_li');
-    c.DISABLED_SECTIONS = gv('cfg_disabled').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
-    c.PAGE_SIZE = parseInt(gv('cfg_pageSize')) || 6;
-    c.SECTION_SOBRE_EYEBROW           = gv('cfg_sobreEye');
-    c.SECTION_SOBRE_TITLE             = gv('cfg_sobreTitle');
-    c.SECTION_SERVICOS_EYEBROW        = gv('cfg_servEye');
-    c.SECTION_SERVICOS_TITLE          = gv('cfg_servTitle');
-    c.SECTION_COMPRAR_EYEBROW         = gv('cfg_comprarEye');
-    c.SECTION_COMPRAR_TITLE           = gv('cfg_comprarTitle');
-    c.SECTION_ALUGAR_EYEBROW          = gv('cfg_alugarEye');
-    c.SECTION_ALUGAR_TITLE            = gv('cfg_alugarTitle');
-    c.SECTION_LANCAMENTOS_EYEBROW     = gv('cfg_lancEye');
-    c.SECTION_LANCAMENTOS_TITLE       = gv('cfg_lancTitle');
-    c.SECTION_FINANCIAMENTO_EYEBROW   = gv('cfg_finEye');
-    c.SECTION_FINANCIAMENTO_TITLE     = gv('cfg_finTitle');
-    c.SECTION_CONTATO_EYEBROW         = gv('cfg_contEye');
-    c.SECTION_CONTATO_TITLE           = gv('cfg_contTitle');
-    c.SECTION_PARCEIROS_EYEBROW       = gv('cfg_parcEye');
-    c.SECTION_PARCEIROS_TITLE         = gv('cfg_parcTitle');
-    c.SECTION_DEPOIMENTOS_EYEBROW     = gv('cfg_depEye');
-    c.SECTION_DEPOIMENTOS_TITLE       = gv('cfg_depTitle');
-    c.SECTION_FAQ_EYEBROW             = gv('cfg_faqEye');
-    c.SECTION_FAQ_TITLE               = gv('cfg_faqTitle');
-    c.SECTION_MAPA_EYEBROW            = gv('cfg_mapEye');
-    c.SECTION_MAPA_TITLE              = gv('cfg_mapTitle');
-    c.SECTION_BLOG_EYEBROW            = gv('cfg_blogEye');
-    c.SECTION_BLOG_TITLE              = gv('cfg_blogTitle');
-    c.SECTION_FAVORITOS_EYEBROW       = gv('cfg_favEye');
-    c.SECTION_FAVORITOS_TITLE         = gv('cfg_favTitle');
-    c.SECTION_FAVORITOS_EMPTY         = gv('cfg_favEmpty');
+    try { saveFormsToData(); } catch(e) {}
     syncToLive();
     adminSaveServer();
   };
@@ -1546,24 +1499,7 @@ const ADMIN_ENABLED = true;
     var pass = document.getElementById('cfg_serverPass').value.trim();
     if (!pass) { adminToast('❌ Defina a senha do save.php na aba Config', 'error'); return; }
     localStorage.setItem('admin_server_pass', pass);
-    try { saveFormsToData(); } catch(e) {}
-    var content = generateDataJs();
-    fetch('save.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content: content, password: pass })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(res) {
-      if (res.ok) {
-        adminToast('✅ ' + (res.message || 'Salvo no servidor!'), 'success');
-      } else {
-        adminToast('❌ ' + (res.error || 'Erro ao salvar'), 'error');
-      }
-    })
-    .catch(function(err) {
-      adminToast('❌ Erro de conexão: ' + err.message, 'error');
-    });
+    adminSaveServer();
   };
 
   /* ---- Export / Import ---- */
@@ -1676,66 +1612,10 @@ const ADMIN_ENABLED = true;
   };
 
   /* =================================================================
-     GitHub PUBLISH
+     SAVE (no servidor via save.php)
      ================================================================= */
   window.adminPublish = function() {
-    try { saveFormsToData(); } catch(e) {}
-    // Modo frontend: guarda via save.php (igual que "Salvar"). GitHub comentado a propósito —
-    // reativar o modo git descomentando o bloco abaixo se algum dia for usado de novo.
     adminSaveServer();
-    /*
-    var token = ADMIN_TOKEN;
-    if (!token) {
-      adminToast('❌ Primeiro salve seu GitHub Token na aba "Config"', 'error');
-      showTab('settings');
-      return;
-    }
-
-    var btn = document.getElementById('adminPublishBtn');
-    btn.textContent = '⏳ Publicando...';
-    btn.disabled = true;
-
-    // Generate data.js content
-    var content = generateDataJs();
-
-    // GitHub API: GET current file to get SHA
-    var apiUrl = 'https://api.github.com/repos/' + GITHUB_REPO + '/contents/' + GITHUB_PATH;
-
-    fetch(apiUrl + '?ref=' + GITHUB_BRANCH, {
-      headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(file) {
-      var sha = file.sha;
-      var encoded = btoa(unescape(encodeURIComponent(content)));
-
-      return fetch(apiUrl, {
-        method: 'PUT',
-        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: 'Admin: atualização de dados',
-          content: encoded,
-          sha: sha,
-          branch: GITHUB_BRANCH
-        })
-      });
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(res) {
-      if (res.content) {
-        adminToast('✅ Publicado com sucesso! O site atualiza em ~1-2 min.', 'success');
-      } else {
-        adminToast('❌ Erro: ' + (res.message || 'desconhecido'), 'error');
-      }
-    })
-    .catch(function(err) {
-      adminToast('❌ Erro de conexão: ' + err.message, 'error');
-    })
-    .finally(function() {
-      btn.textContent = '📦 Publicar no GitHub';
-      btn.disabled = false;
-    });
-    */
   };
 
    function generateDataJs() {

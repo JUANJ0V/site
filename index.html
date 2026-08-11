@@ -605,7 +605,7 @@
 
 <script>document.write('<script src="js/data.js?ts=' + Date.now() + '"><\/script>');</script>
 <script src="js/data-provider.js?v=2"></script>
-<script src="js/admin.min.js?v=19"></script>
+<script src="js/admin.min.js?v=20"></script>
 <script>
 // Auto-update site info from data.js constants
   document.addEventListener('DOMContentLoaded', function() {
@@ -771,7 +771,7 @@
   })();
   // Section texts — editable from data.js
   var sectionTexts = [
-    { id: 'hero', eyebrowSel: '.hero-content .eyebrow', eyebrow: HERO_EYEBROW, titleSel: '.hero-content h1', title: HERO_TITLE, subtitleSel: '.hero-content p + p', subtitle: HERO_SUBTITLE },
+    { id: 'hero', eyebrowSel: '.hero-content .eyebrow', eyebrow: HERO_EYEBROW, titleSel: '.hero-content h1', title: HERO_TITLE, subtitleSel: '.hero-content p:not(.eyebrow)', subtitle: HERO_SUBTITLE },
     { id: 'sobre', eyebrowSel: '#sobre .eyebrow', eyebrow: SECTION_SOBRE_EYEBROW, titleSel: '#sobre h2', title: SECTION_SOBRE_TITLE },
     { id: 'comprar', eyebrowSel: '#comprar .eyebrow', eyebrow: SECTION_COMPRAR_EYEBROW, titleSel: '#comprar h2', title: SECTION_COMPRAR_TITLE },
     { id: 'alugar', eyebrowSel: '#alugar .eyebrow', eyebrow: SECTION_ALUGAR_EYEBROW, titleSel: '#alugar h2', title: SECTION_ALUGAR_TITLE },
@@ -799,6 +799,13 @@
       if (sub) sub.textContent = s.subtitle;
     }
   }
+  var favEmptyEl = document.getElementById('favEmptyMsg');
+  if (favEmptyEl && SECTION_FAVORITOS_EMPTY) favEmptyEl.textContent = SECTION_FAVORITOS_EMPTY;
+  // Financiamento simulator defaults (editable from panel)
+  if (typeof FIN_DEFAULT_PRICE !== 'undefined' && FIN_DEFAULT_PRICE) { var fpEl = document.getElementById('fin-price'); if (fpEl) fpEl.value = FIN_DEFAULT_PRICE; }
+  if (typeof FIN_DEFAULT_DOWN !== 'undefined' && FIN_DEFAULT_DOWN) { var fdEl = document.getElementById('fin-down'); if (fdEl) fdEl.value = FIN_DEFAULT_DOWN; }
+  if (typeof FIN_DEFAULT_RATE !== 'undefined' && FIN_DEFAULT_RATE) { var frEl = document.getElementById('fin-rate'); if (frEl) frEl.value = FIN_DEFAULT_RATE; }
+  if (typeof FIN_DEFAULT_TERM !== 'undefined' && FIN_DEFAULT_TERM) { var ftEl = document.getElementById('fin-term'); if (ftEl) ftEl.value = String(FIN_DEFAULT_TERM); }
   // Render dynamic content
   if (typeof renderFAQs === 'function') renderFAQs();
   if (typeof renderDepoimentos === 'function') renderDepoimentos();
@@ -1044,7 +1051,7 @@ function googleTranslateElementInit() {
   }
 }
 </script>
-<script src="js/app.min.js?v=17"></script>
+<script src="js/app.min.js?v=18"></script>
 <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 <script>document.addEventListener('DOMContentLoaded',function(){var v=document.querySelector('.about-video');if(v)Plyr.setup(v);});</script>
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>

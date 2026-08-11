@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manual do Administrador — Furpal Imobiliária</title>
+<style>
+  body { font-family: 'Calibri', 'Segoe UI', Arial, sans-serif; max-width: 1000px; margin: 40px auto; padding: 20px; color: #1e1e1e; line-height: 1.6; }
+  h1 { color: #b8860b; border-bottom: 4px solid #b8860b; padding-bottom: 12px; font-size: 28pt; margin-top: 30px; }
+  h2 { color: #8b6914; margin-top: 40px; font-size: 20pt; border-left: 6px solid #b8860b; padding-left: 12px; }
+  h3 { color: #333; margin-top: 25px; font-size: 16pt; }
+  h4 { color: #555; margin-top: 15px; font-size: 13pt; }
+  p { font-size: 11pt; margin: 8px 0; }
+  ul, ol { margin: 8px 0 15px; }
+  li { font-size: 11pt; margin-bottom: 4px; }
+  code { background: #f2f0e8; border: 1px solid #e0dcc8; padding: 1px 5px; border-radius: 3px; font-size: 10pt; color: #7a5a00; }
+
+  .cover { text-align: center; padding: 100px 0 80px; }
+  .cover h1 { font-size: 42pt; border: none; color: #b8860b; margin-bottom: 10px; }
+  .cover .sub { font-size: 20pt; color: #555; }
+  .cover .version { font-size: 12pt; color: #999; margin-top: 50px; }
+  .cover .line { width: 120px; height: 3px; background: #b8860b; margin: 20px auto; }
+
+  .toc { background: #f8f4ec; padding: 20px 30px; border-radius: 8px; margin: 25px 0; }
+  .toc ol { margin: 0; }
+  .toc li { margin: 5px 0; }
+  .toc a { color: #8b6914; text-decoration: none; font-weight: bold; }
+
+  .info-box { background: #fffbe6; border-left: 6px solid #b8860b; padding: 12px 18px; margin: 15px 0; border-radius: 4px; }
+  .info-box strong { color: #b8860b; }
+  .warn-box { background: #fff5f5; border-left: 6px solid #cc0000; padding: 12px 18px; margin: 15px 0; border-radius: 4px; }
+  .warn-box strong { color: #cc0000; }
+  .tip-box { background: #f0f8f0; border-left: 6px solid #2e7d32; padding: 12px 18px; margin: 15px 0; border-radius: 4px; }
+  .tip-box strong { color: #2e7d32; }
+
+  .browser { background: #1b2136; border-radius: 10px; overflow: hidden; margin: 18px 0; box-shadow: 0 8px 30px rgba(0,0,0,0.25); font-size: 10.5pt; }
+  .browser .bar { background: #0e142e; color: #8a93b5; padding: 9px 14px; font-size: 9pt; display: flex; align-items: center; gap: 7px; border-bottom: 1px solid rgba(255,255,255,0.06); font-family: 'Consolas', monospace; }
+  .browser .bar .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .browser .bar .r { background: #ff5f57; } .browser .bar .y { background: #febc2e; } .browser .bar .g { background: #28c840; }
+  .browser .bar .url { flex: 1; background: rgba(255,255,255,0.05); border-radius: 5px; padding: 4px 10px; color: #c8cfea; margin-left: 8px; }
+  .browser .bar .url b { color: #ffd700; font-weight: normal; }
+  .browser .screen { padding: 18px; }
+
+  .panel-mock { background: #0a0f24; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); color: #dfe3f5; font-size: 10pt; overflow: hidden; margin: 16px 0; box-shadow: 0 6px 22px rgba(0,0,0,0.3); }
+  .panel-mock .hdr { background: #0e142e; border-bottom: 1px solid rgba(255,255,255,0.06); padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+  .panel-mock .hdr h5 { margin: 0; color: #fff; font-size: 11pt; }
+  .panel-mock .hdr .acts button { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); border-radius: 5px; padding: 4px 10px; font-size: 8.5pt; margin-left: 6px; cursor: default; }
+  .panel-mock .hdr .acts .gold { background: rgba(212,175,55,0.18); border-color: rgba(212,175,55,0.5); color: #ffd700; }
+  .panel-mock .body { display: flex; min-height: 130px; }
+  .panel-mock .tabs { width: 150px; background: rgba(255,255,255,0.015); border-right: 1px solid rgba(255,255,255,0.05); padding: 8px 6px; flex-shrink: 0; }
+  .panel-mock .tabs div { padding: 6px 9px; border-radius: 5px; color: rgba(255,255,255,0.5); font-size: 9pt; margin-bottom: 2px; }
+  .panel-mock .tabs div.on { background: rgba(212,175,55,0.15); color: #ffd700; }
+  .panel-mock .content { padding: 14px 16px; flex: 1; }
+  .panel-mock .fld { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  .panel-mock .fld span { width: 150px; color: rgba(255,255,255,0.45); font-size: 8.5pt; }
+  .panel-mock .fld .in { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.09); border-radius: 4px; padding: 5px 9px; color: #cfd4e8; flex: 1; min-width: 120px; }
+  .panel-mock .btn-gold { background: rgba(212,175,55,0.9); color: #1a1405; border: none; border-radius: 5px; padding: 6px 14px; font-weight: bold; font-size: 9.5pt; display: inline-block; margin-top: 6px; }
+  .panel-mock .btn-ghost { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.7); border-radius: 5px; padding: 6px 14px; font-size: 9.5pt; display: inline-block; margin-top: 6px; margin-left: 6px; }
+  .panel-mock table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+  .panel-mock th { text-align: left; color: rgba(255,255,255,0.3); text-transform: uppercase; font-size: 7.5pt; letter-spacing: 0.06em; padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .panel-mock td { padding: 7px 8px; border-bottom: 1px solid rgba(255,255,255,0.03); }
+  .panel-mock .act { color: rgba(255,255,255,0.4); margin-left: 8px; font-size: 8.5pt; }
+  .panel-mock .up { color: #ffd700; background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.4); border-radius: 4px; padding: 1px 7px; font-size: 8pt; margin-left: 6px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 10pt; }
+  th { background: #b8860b; color: #fff; padding: 10px; text-align: left; font-weight: bold; }
+  td { border: 1px solid #ddd; padding: 8px; vertical-align: top; }
+  tr:nth-child(even) { background: #fafafa; }
+
+  .footer { margin-top: 60px; padding-top: 20px; border-top: 2px solid #b8860b; font-size: 9pt; color: #888; text-align: center; }
+  .pb { page-break-before: always; }
+  .step { background: #b8860b; color: #fff; border-radius: 50%; width: 24px; height: 24px; display: inline-block; text-align: center; font-weight: bold; margin-right: 8px; font-size: 11pt; line-height: 24px; }
+  .key { background: #fffbe6; border: 1px solid #e6d9a6; padding: 2px 8px; border-radius: 4px; font-weight: bold; color: #8b6914; font-family: 'Consolas', monospace; font-size: 10pt; }
+  .footer a { color: #b8860b; }
+  .badge { display: inline-block; background: #b8860b; color: #fff; border-radius: 4px; padding: 1px 8px; font-size: 8.5pt; font-weight: bold; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<!-- ===== CAPA ===== -->
+<div class="cover">
+  <h1>⚙️ Furpal Imobiliária</h1>
+  <div class="line"></div>
+  <p class="sub">Manual do Administrador — Painel de Controle</p>
+  <p style="font-size:14pt;color:#666;">Guia completo para gerenciar imóveis, lançamentos, blog e todas as configurações do site</p>
+  <p class="version">Versão 2.0 &mdash; Agosto 2026</p>
+</div>
+
+<div class="pb"></div>
+
+<!-- ===== SUMÁRIO ===== -->
+<h2>📋 Sumário</h2>
+<div class="toc">
+<ol>
+  <li><a href="#intro">Introdução — O que é o Painel Admin?</a></li>
+  <li><a href="#acesso">Acessando o Painel (login)</a></li>
+  <li><a href="#visao">Visão Geral do Painel</a></li>
+  <li><a href="#geral">Aba "Geral" — Configurações do Site</a></li>
+  <li><a href="#financiamento">Aba "Financiamento" — Parâmetros da Simulação</a></li>
+  <li><a href="#imoveis">Aba "Imóveis" — Venda e Aluguel</a></li>
+  <li><a href="#lancamentos">Aba "Lançamentos" — Empreendimentos</a></li>
+  <li><a href="#blog">Aba "Blog" — Artigos</a></li>
+  <li><a href="#faq">Aba "FAQ" — Perguntas Frequentes</a></li>
+  <li><a href="#depoimentos">Aba "Depoimentos" — Avaliações de Clientes</a></li>
+  <li><a href="#parceiros">Aba "Parceiros" — Logos de Empresas</a></li>
+  <li><a href="#equipe">Aba "Equipe" — Corretores</a></li>
+  <li><a href="#regiao">Aba "Região" — Cidades, Praias e Destaques</a></li>
+  <li><a href="#config">Aba "Config" — Senha, Backup e Painel</a></li>
+  <li><a href="#apikey">Senha do Servidor e Email (api-config.php)</a></li>
+  <li><a href="#salvar">Salvando as Alterações no Servidor</a></li>
+  <li><a href="#upload">Subindo Imagens e Vídeos</a></li>
+  <li><a href="#backup">Backup e Restauração (Export / Import)</a></li>
+  <li><a href="#dicas">Dicas, Segurança e Solução de Problemas</a></li>
+</ol>
+</div>
+
+<div class="pb"></div>
+
+<!-- ===== 1. INTRODUÇÃO ===== -->
+<h2 id="intro">1. Introdução — O que é o Painel Admin?</h2>
+
+<p>O <strong>Painel Admin</strong> é a área privada do site Furpal. É aqui que você edita todo o conteúdo do site <strong>sem precisar saber programação</strong>: imóveis, lançamentos, blog, FAQ, depoimentos, parceiros, equipe, cidades da região e todas as configurações gerais (logo, WhatsApp, textos das seções, redes sociais etc.).</p>
+
+<p>Tabela rápida de "o que eu quero fazer / onde fica":</p>
+
+<table>
+  <tr><th>O que você quer fazer</th><th>Onde fica no painel</th></tr>
+  <tr><td>Trocar logo, telefone/WhatsApp, email, endereço ou textos</td><td>Aba <strong>Geral</strong></td></tr>
+  <tr><td>Definir preço, entrada, taxa e prazo padrão da simulação de financiamento</td><td>Aba <strong>Financiamento</strong></td></tr>
+  <tr><td>Adicionar / editar / remover imóveis de venda ou aluguel</td><td>Aba <strong>Imóveis</strong></td></tr>
+  <tr><td>Gerenciar lançamentos e empreendimentos exclusivos</td><td>Aba <strong>Lançamentos</strong></td></tr>
+  <tr><td>Publicar artigos no blog</td><td>Aba <strong>Blog</strong></td></tr>
+  <tr><td>Editar perguntas frequentes (FAQ)</td><td>Aba <strong>FAQ</strong></td></tr>
+  <tr><td>Cadastrar depoimentos de clientes</td><td>Aba <strong>Depoimentos</strong></td></tr>
+  <tr><td>Cadastrar parceiros (logos)</td><td>Aba <strong>Parceiros</strong></td></tr>
+  <tr><td>Cadastrar corretores da equipe</td><td>Aba <strong>Equipe</strong></td></tr>
+  <tr><td>Editar conteúdo das cidades (praias, história, destaques)</td><td>Aba <strong>Região</strong></td></tr>
+  <tr><td>Definir senha do servidor, fazer backup ou desligar o painel</td><td>Aba <strong>Config</strong></td></tr>
+</table>
+
+<div class="info-box"><strong>💡 Boa notícia:</strong> Você não precisa saber HTML, PHP ou programação. O painel foi feito para uso de qualquer pessoa da imobiliária.</div>
+
+<div class="info-box"><strong>🖥️ Como o painel funciona:</strong> Quando você clica em <strong>"💾 Salvar"</strong>, o painel gera o arquivo <code>js/data.js</code> e o grava no próprio servidor (via <code>save.php</code>). Não usa banco de dados externo: tudo fica no seu site. As imagens ficam em pastas do site (<code>images/</code> e <code>videos/</code>).</div>
+
+<div class="pb"></div>
+
+<!-- ===== 2. ACESSO ===== -->
+<h2 id="acesso">2. Acessando o Painel (login)</h2>
+
+<p>O painel fica <strong>dentro do próprio site</strong>. Você não precisa instalar nada.</p>
+
+<h3>Passo a passo:</h3>
+<ol>
+  <li>Abra o site no navegador (ex.: <code>https://www.furpal.com.br</code>).</li>
+  <li>No final da URL, adicione <strong>?edit=1</strong> e pressione <strong>Enter</strong>.</li>
+</ol>
+
+<div class="browser">
+  <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="url">https://www.furpal.com.br<b>?edit=1</b></span></div>
+  <div class="screen">
+    <div class="panel-mock">
+      <div class="hdr"><h5>🔐 Painel Admin</h5></div>
+      <div class="body" style="min-height:120px;justify-content:center;align-items:center;">
+        <div style="width:320px;text-align:center;padding:18px 0;">
+          <div style="color:rgba(255,255,255,0.55);font-size:9pt;margin-bottom:12px;">Digite a senha do servidor para gerenciar o site</div>
+          <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:6px;padding:10px;color:#8a93b5;">•••••••••••</div>
+          <div class="btn-gold" style="width:100%;text-align:center;">Entrar</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ol start="3">
+  <li>Digite a <strong>senha do servidor</strong> (a mesma definida no arquivo <code>api-config.php</code> — veja a <a href="#apikey">seção 15</a>).</li>
+  <li>Clique em <strong>"Entrar"</strong>. O painel abre na parte superior do site.</li>
+</ol>
+
+<div class="warn-box"><strong>⚠️ Importante:</strong> A senha é verificada no servidor (<code>auth.php</code>) com limite de tentativas. Use uma senha <strong>longa e única</strong>, que só a administração da imobiliária conheça. Não use "admin123" nem datas de aniversário.</div>
+
+<div class="tip-box"><strong>⚡ Dica:</strong> Depois do login, a senha fica guardada no seu navegador (em "Config" você pode atualizá-la). Ao fechar a aba você é deslogado automaticamente.</div>
+
+<h3>O que você verá depois do login:</h3>
+
+<div class="browser">
+  <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="url">https://www.furpal.com.br/?edit=1 — modo administração</span></div>
+  <div class="screen" style="padding:6px;">
+    <div class="panel-mock">
+      <div class="hdr">
+        <h5>⚙️ Furpal — Admin</h5>
+        <div class="acts"><button>👁 Ver site</button><button>💾 Salvar</button><button class="gold">💾 Salvar no servidor</button><button>Sair</button></div>
+      </div>
+      <div class="body">
+        <div class="tabs">
+          <div class="on">⚙️ Geral</div>
+          <div>💰 Financiamento</div>
+          <div>🏠 Imóveis</div>
+          <div>🏗️ Lançamentos</div>
+          <div>📝 Blog</div>
+          <div>❓ FAQ</div>
+          <div>💬 Depoimentos</div>
+          <div>🤝 Parceiros</div>
+          <div>👥 Equipe</div>
+          <div>📍 Região</div>
+          <div>🔑 Config</div>
+        </div>
+        <div class="content">
+          <div style="color:rgba(255,255,255,0.35);font-size:8.5pt;margin-bottom:10px;">CONTEÚDO DA ABA SELECIONADA</div>
+          <div style="border:1px dashed rgba(212,175,55,0.35);border-radius:6px;padding:16px;color:rgba(255,255,255,0.45);font-size:9pt;text-align:center;">Aqui aparecem os campos de edição.<br>Botões típicos: <span style="color:#ffd700;">✏️ Editar</span> &nbsp; <span style="color:#ff6b6b;">🗑️ Excluir</span> &nbsp; <span class="badge">+ Novo</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="info-box"><strong>💡 No celular:</strong> o menu de abas vira um seletor (dropdown) no topo — toque em "⚙️ Geral" para abrir a lista e escolher a aba desejada.</div>
+
+<div class="pb"></div>
+
+<!-- ===== 3. VISÃO GERAL ===== -->
+<h2 id="visao">3. Visão Geral do Painel</h2>
+
+<p>O painel tem <strong>3 partes</strong>:</p>
+
+<table>
+  <tr><th>Parte</th><th>Função</th></tr>
+  <tr><td><strong>Barra superior</strong></td><td>Título do painel + 4 botões: <strong>👁 Ver site</strong> (volta ao site sem sair do login), <strong>💾 Salvar</strong> e <strong>💾 Salvar no servidor</strong> (ambos gravam as alterações no servidor via <code>save.php</code>) e <strong>Sair</strong>.</td></tr>
+  <tr><td><strong>Menu lateral (abas)</strong></td><td>11 abas que organizam todo o conteúdo do site. No celular vira um seletor no topo.</td></tr>
+  <tr><td><strong>Área de conteúdo</strong></td><td>Mostra os formulários, listas e botões da aba selecionada.</td></tr>
+</table>
+
+<h3>Regra de ouro para NUNCA perder trabalho:</h3>
+<div class="warn-box"><strong>⚠️ Sempre clique em "💾 Salvar" (ou "💾 Salvar no servidor")</strong> depois de editar qualquer aba, antes de fechar a página ou trocar de aba. O painel não salva sozinho.</div>
+
+<!-- ===== 4. ABA GERAL ===== -->
+<h2 id="geral">4. Aba "Geral" — Configurações do Site</h2>
+
+<p>Nesta aba você edita as informações principais do site e os textos de cada seção da página inicial.</p>
+
+<div class="browser">
+  <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="url">Painel Admin → Aba <b>Geral</b></span></div>
+  <div class="screen" style="padding:6px;">
+    <div class="panel-mock">
+      <div class="body">
+        <div class="tabs">
+          <div class="on">⚙️ Geral</div>
+          <div>💰 Financiamento</div>
+          <div>🏠 Imóveis</div>
+          <div>🏗️ Lançamentos</div>
+          <div>📝 Blog</div>
+          <div>❓ FAQ</div>
+          <div>💬 Depoimentos</div>
+          <div>🤝 Parceiros</div>
+          <div>👥 Equipe</div>
+          <div>📍 Região</div>
+          <div>🔑 Config</div>
+        </div>
+        <div class="content">
+          <div class="fld"><span>Nome do site</span><div class="in">Furpal — Consultoria Imobiliária</div></div>
+          <div class="fld"><span>Logo</span><div class="in">images/furpal-logo.png <span class="up">📷 Upload</span></div></div>
+          <div class="fld"><span>WhatsApp (número)</span><div class="in">+5547999990000</div></div>
+          <div class="fld"><span>WhatsApp (exibição)</span><div class="in">(47) 99999-0000</div></div>
+          <div class="fld"><span>Email</span><div class="in">contato@furpal.com.br</div></div>
+          <div class="fld"><span>Endereço</span><div class="in">Av. Brasil, 1000 — Balneário Camboriú</div></div>
+          <div class="fld"><span>Cidade</span><div class="in">Balneário Camboriú</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Campos principais:</h3>
+<ul>
+  <li><strong>Nome do site / Logo:</strong> nome exibido no topo e no rodapé; o logo pode ser enviado com o botão <strong>📷 Upload</strong> (fica em <code>images/</code>).</li>
+  <li><strong>WhatsApp (número / exibição / mensagem):</strong> número com código do país (ex. <code>55</code> + DDD + número), texto que aparece no botão e mensagem pré-preenchida ao abrir a conversa.</li>
+  <li><strong>Email, Endereço, Cidade, Região, URL do site e URL do Google Maps:</strong> usados no rodapé e na seção de contato.</li>
+  <li><strong>Hero (banner do topo):</strong> eyebrow, título, subtítulo e vídeo de fundo do topo da página inicial.</li>
+  <li><strong>Redes sociais:</strong> Instagram, Facebook, YouTube e LinkedIn.</li>
+  <li><strong>Seções desabilitadas:</strong> lista de seções que ficam ocultas (ex.: para esconder "Blog", digite <code>blog</code> separado por vírgula).</li>
+  <li><strong>Itens por página:</strong> quantos imóveis aparecem por página na listagem.</li>
+</ul>
+
+<h3>Textos (eyebrow + título) de cada seção</h3>
+<p>Abaixo dos campos principais há pares de campos <strong>eyebrow</strong> (texto curto acima do título, ex. "Imóveis") e <strong>título</strong> (ex. "Encontre o imóvel ideal") para as seções: Serviços, Parceiros, Depoimentos, FAQ, Mapa, Blog, Favoritos, Sobre, Comprar, Alugar, Lançamentos, Contato e Financiamento.</p>
+
+<div class="tip-box"><strong>⚡ Dica:</strong> Se um campo estiver <strong>vazio</strong>, a linha inteira da seção é removida do site. Por exemplo: título do mapa vazio = o bloco de título não aparece (fica só o mapa).</div>
+
+<div class="pb"></div>
+
+<!-- ===== 5. ABA FINANCIAMENTO ===== -->
+<h2 id="financiamento">5. Aba "Financiamento" — Parâmetros da Simulação</h2>
+
+<p>Esta aba controla a <strong>calculadora de financiamento</strong> do site (a seção que mostra "entrada, parcelas, taxa de juros").</p>
+
+<ul>
+  <li><strong>Eyebrow e Título:</strong> textos da seção de financiamento.</li>
+  <li><strong>Preço padrão (R$):</strong> valor inicial do imóvel na simulação (ex. <code>500000</code>).</li>
+  <li><strong>Entrada padrão (R$):</strong> valor inicial da entrada (ex. <code>100000</code>).</li>
+  <li><strong>Taxa de juros padrão (% a.a.):</strong> taxa usada por padrão (ex. <code>8.5</code>).</li>
+  <li><strong>Prazo padrão (meses):</strong> número de parcelas (ex. <code>240</code> = 20 anos).</li>
+</ul>
+
+<div class="info-box"><strong>💡 Importante:</strong> os valores "padrão" são apenas o ponto de partida do simulador — o visitante pode ajustá-los na página.</div>
+
+<div class="pb"></div>
+
+<!-- ===== 6. ABA IMÓVEIS ===== -->
+<h2 id="imoveis">6. Aba "Imóveis" — Venda e Aluguel</h2>
+
+<p>Nesta aba você gerencia a <strong>lista de imóveis</strong> do site. Ela mostra uma tabela com <strong>Título, Tipo (Venda/Aluguel), Preço, Local, Status</strong> e as ações <strong>✏️ Editar</strong> e <strong>🗑️ Excluir</strong>.</p>
+
+<div class="browser">
+  <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="url">Painel Admin → Aba <b>Imóveis</b></span></div>
+  <div class="screen" style="padding:6px;">
+    <div class="panel-mock">
+      <div class="body">
+        <div class="tabs">
+          <div>⚙️ Geral</div>
+          <div>💰 Financiamento</div>
+          <div class="on">🏠 Imóveis</div>
+          <div>🏗️ Lançamentos</div>
+          <div>📝 Blog</div>
+          <div>❓ FAQ</div>
+          <div>💬 Depoimentos</div>
+          <div>🤝 Parceiros</div>
+          <div>👥 Equipe</div>
+          <div>📍 Região</div>
+          <div>🔑 Config</div>
+        </div>
+        <div class="content">
+          <div style="margin-bottom:8px;"><span class="badge">+ Novo Imóvel</span></div>
+          <table>
+            <tr><th>Título</th><th>Tipo</th><th>Preço</th><th>Local</th><th>Status</th><th style="text-align:right;">Ações</th></tr>
+            <tr><td>Apto 2 quartos</td><td>Venda</td><td>R$ 890.000</td><td>Balneário Camboriú</td><td>disponivel</td><td style="text-align:right;">✏️ 🗑️</td></tr>
+            <tr><td>Casa com piscina</td><td>Aluguel</td><td>R$ 4.500/mês</td><td>Itapema</td><td>disponivel</td><td style="text-align:right;">✏️ 🗑️</td></tr>
+            <tr><td>Cobertura frente mar</td><td>Venda</td><td>R$ 2.400.000</td><td>Balneário Camboriú</td><td>vendido</td><td style="text-align:right;">✏️ 🗑️</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Adicionar um novo imóvel:</h3>
+<ol>
+  <li>Clique em <strong>+ Novo Imóvel</strong> (no topo da lista).</li>
+  <li>Preencha o formulário (janela de edição) e clique em <strong>Salvar</strong>.</li>
+  <li>Clique em <strong>💾 Salvar no servidor</strong> para publicar no site.</li>
+</ol>
+
+<h3>Campos do formulário de imóvel:</h3>
+<table>
+  <tr><th>Campo</th><th>O que preencher</th></tr>
+  <tr><td>Título</td><td>Nome do anúncio (ex. "Apto 2 quartos vista mar").</td></tr>
+  <tr><td>ID (único)</td><td>Código interno do imóvel (não repita entre imóveis).</td></tr>
+  <tr><td>Tipo</td><td><strong>Venda</strong> ou <strong>Aluguel</strong>.</td></tr>
+  <tr><td>Categoria</td><td>Apartamento, Casa, Cobertura, Kitnet/Studio, Comercial ou Terreno/Lote.</td></tr>
+  <tr><td>Status</td><td><strong>Disponível</strong>, <strong>Vendido</strong> ou <strong>Locado</strong>.</td></tr>
+  <tr><td>Preço (texto)</td><td>Como aparece no card (ex. "R$ 890.000").</td></tr>
+  <tr><td>Preço (número)</td><td>Valor numérico (para ordenação e filtros).</td></tr>
+  <tr><td>Área (m²), Quartos, Banheiros, Vagas</td><td>Números do imóvel.</td></tr>
+  <tr><td>Localização</td><td>Cidade/bairro (ex. "Balneário Camboriú").</td></tr>
+  <tr><td>Latitude / Longitude</td><td>Coordenadas do mapa (opcional — se vazio, o pin não aparece no mapa).</td></tr>
+  <tr><td>Metros frente/fundo, Zona, Topografia</td><td>Somente para <strong>terrenos/lotes</strong>.</td></tr>
+  <tr><td>URL do Maps</td><td>Link do Google Maps para "Como chegar".</td></tr>
+  <tr><td>Descrição curta</td><td>Resumo exibido no card (1–2 frases).</td></tr>
+  <tr><td>Descrição longa</td><td>Texto completo da página de detalhes.</td></tr>
+  <tr><td>Imagem principal / Vídeo</td><td>URL ou envio pelo botão <strong>📷 Upload</strong> (imagens → <code>images/</code>, vídeo → <code>videos/</code>).</td></tr>
+  <tr><td>Galeria</td><td>Várias URLs de fotos, uma por linha (ou envie várias com o Upload).</td></tr>
+  <tr><td>Características</td><td>Itens de destaque, um por linha (ex. "Piscina", "3º andar", "Próximo à praia").</td></tr>
+</table>
+
+<div class="tip-box"><strong>⚡ Dica:</strong> ao subir fotos na <strong>Galeria</strong>, a primeira foto enviada também preenche a <strong>imagem principal</strong> automaticamente.</div>
+
+<div class="pb"></div>
+
+<!-- ===== 7. ABA LANÇAMENTOS ===== -->
+<h2 id="lancamentos">7. Aba "Lançamentos" — Empreendimentos</h2>
+
+<p>Nesta aba você gerencia os <strong>lançamentos/empreendimentos exclusivos</strong>. A lista mostra <strong>Título, Preço, Progresso (%)</strong> e ações <strong>✏️ Editar</strong> / <strong>🗑️ Excluir</strong>.</p>
+
+<ol>
+  <li>Clique em <strong>+ Novo Lançamento</strong>.</li>
+  <li>Preencha: <strong>Título</strong>, <strong>Preço</strong>, <strong>Progresso (%)</strong> da obra, <strong>Imagem</strong> (upload), <strong>Descrição</strong> e o <strong>eyebrow/título</strong> da seção.</li>
+  <li>Monte os blocos repetíveis:</li>
+</ol>
+
+<table>
+  <tr><th>Bloco</th><th>O que cadastrar</th></tr>
+  <tr><td>📅 Cronograma (timeline)</td><td>Cada etapa: <strong>data</strong> (ex. "Jan 2025"), <strong>título</strong> (ex. "Início das obras") e <strong>descrição</strong>. Use <strong>+ Agregar</strong> para adicionar etapas.</td></tr>
+  <tr><td>💲 Tabela de preços</td><td>Cada linha: <strong>unidade/tipo</strong> (ex. "3 quartos (suíte)"), <strong>área</strong> (ex. "145 m²") e <strong>valor</strong>. Marque "Destacar esta linha" se quiser que a linha apareça em destaque na tabela do site.</td></tr>
+  <tr><td>🏦 Condições de pagamento</td><td>Cada item: <strong>etiqueta</strong> (ex. "Entrada") e <strong>valor/condição</strong> (ex. "30%").</td></tr>
+</table>
+
+<div class="info-box"><strong>💡 Como funciona:</strong> use os botões <strong>+ Agregar</strong> dentro de cada bloco para criar novas linhas e o <strong>🗑️ Excluir</strong> de cada linha para remover.</div>
+
+<div class="pb"></div>
+
+<!-- ===== 8. ABA BLOG ===== -->
+<h2 id="blog">8. Aba "Blog" — Artigos</h2>
+
+<p>Aqui você publica e edita os <strong>artigos do blog</strong>. A lista mostra <strong>Título, Data e Categoria</strong>, com ações <strong>✏️ Editar</strong> / <strong>🗑️ Excluir</strong>.</p>
+
+<div class="browser">
+  <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="url">Painel Admin → Aba <b>Blog</b></span></div>
+  <div class="screen" style="padding:6px;">
+    <div class="panel-mock">
+      <div class="body">
+        <div class="tabs">
+          <div>⚙️ Geral</div>
+          <div>💰 Financiamento</div>
+          <div>🏠 Imóveis</div>
+          <div>🏗️ Lançamentos</div>
+          <div class="on">📝 Blog</div>
+          <div>❓ FAQ</div>
+          <div>💬 Depoimentos</div>
+          <div>🤝 Parceiros</div>
+          <div>👥 Equipe</div>
+          <div>📍 Região</div>
+          <div>🔑 Config</div>
+        </div>
+        <div class="content">
+          <div style="margin-bottom:8px;"><span class="badge">+ Novo Post</span></div>
+          <table>
+            <tr><th>Título</th><th>Data</th><th>Categoria</th><th style="text-align:right;">Ações</th></tr>
+            <tr><td>Guia do financiamento imobiliário</td><td>2026-07-12</td><td>Financiamento</td><td style="text-align:right;">✏️ 🗑️</td></tr>
+            <tr><td>Melhores praias de Santa Catarina</td><td>2026-06-28</td><td>Região</td><td style="text-align:right;">✏️ 🗑️</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Campos de um artigo:</h3>
+<ul>
+  <li><strong>Título</strong> — nome do artigo.</li>
+  <li><strong>Data</strong> — data de publicação.</li>
+  <li><strong>Categoria</strong> — ex. "Financiamento", "Região", "Dicas".</li>
+  <li><strong>Imagem de capa</strong> — foto do card (upload pelo <strong>📷 Upload</strong>).</li>
+  <li><strong>Conteúdo</strong> — o texto do artigo.</li>
+</ul>
+
+<div class="tip-box"><strong>⚡ Dica:</strong> publique artigos regularmente: isso melhora o SEO do site (aparecer melhor no Google).</div>
+
+<div class="pb"></div>
+
+<!-- ===== 9. ABA FAQ ===== -->
+<h2 id="faq">9. Aba "FAQ" — Perguntas Frequentes</h2>
+
+<p>Nesta aba você edita as <strong>perguntas e respostas</strong> da seção FAQ do site. Cada item tem uma <strong>Pergunta</strong> e a <strong>Resposta</strong> correspondente.</p>
+
+<ol>
+  <li>Clique em <strong>+ Nova Pergunta</strong> (ou use <strong>✏️</strong> para editar uma existente).</li>
+  <li>Digite a pergunta e a resposta.</li>
+  <li>Salve e depois clique em <strong>💾 Salvar no servidor</strong>.</li>
+</ol>
+
+<div class="info-box"><strong>💡 Dica de conteúdo:</strong> responda as dúvidas mais comuns dos clientes (financiamento, documentação, visita ao imóvel, etc.).</div>
+
+<div class="pb"></div>
+
+<!-- ===== 10. ABA DEPOIMENTOS ===== -->
+<h2 id="depoimentos">10. Aba "Depoimentos" — Avaliações de Clientes</h2>
+
+<p>Gerencia as <strong>avaliações</strong> exibidas na seção de depoimentos do site. Cada depoimento tem:</p>
+
+<ul>
+  <li><strong>Nome</strong> — do cliente que avaliou.</li>
+  <li><strong>Texto</strong> — o depoimento em si.</li>
+</ul>
+
+<ol>
+  <li>Clique em <strong>+ Novo Depoimento</strong>.</li>
+  <li>Preencha nome e texto.</li>
+  <li>Salve e depois clique em <strong>💾 Salvar no servidor</strong>.</li>
+</ol>
+
+<div class="tip-box"><strong>⚡ Dica:</strong> depoimentos reais (com nome) geram mais confiança nos visitantes.</div>
+
+<div class="pb"></div>
+
+<!-- ===== 11. ABA PARCEIROS ===== -->
+<h2 id="parceiros">11. Aba "Parceiros" — Logos de Empresas</h2>
+
+<p>Gerencia os <strong>logos de empresas parceiras</strong> exibidos na seção "Parceiros" do site. Cada parceiro tem:</p>
+
+<ul>
+  <li><strong>Nome</strong> — da empresa.</li>
+  <li><strong>Logo</strong> — imagem do logo (enviada pelo <strong>📷 Upload</strong> para <code>images/</code>).</li>
+</ul>
+
+<ol>
+  <li>Clique em <strong>+ Novo Parceiro</strong>.</li>
+  <li>Informe o nome e envie o logo.</li>
+  <li>Salve e depois clique em <strong>💾 Salvar no servidor</strong>.</li>
+</ol>
+
+<div class="warn-box"><strong>⚠️ Logos em branco:</strong> se um parceiro aparecer sem imagem no site, é porque o campo <strong>logo</strong> está vazio — envie a imagem pelo botão <strong>📷 Upload</strong>.</div>
+
+<div class="pb"></div>
+
+<!-- ===== 12. ABA EQUIPE ===== -->
+<h2 id="equipe">12. Aba "Equipe" — Corretores</h2>
+
+<p>Gerencia a <strong>equipe de corretores</strong> exibida na seção "Sobre". Cada membro tem:</p>
+
+<ul>
+  <li><strong>Nome</strong> — do corretor.</li>
+  <li><strong>Cargo</strong> — ex. "Corretor", "Gerente Comercial".</li>
+  <li><strong>Foto</strong> — imagem do profissional (upload para <code>images/</code>).</li>
+</ul>
+
+<ol>
+  <li>Clique em <strong>+ Novo Membro</strong>.</li>
+  <li>Preencha nome, cargo e foto.</li>
+  <li>Salve e depois clique em <strong>💾 Salvar no servidor</strong>.</li>
+</ol>
+
+<div class="pb"></div>
+
+<!-- ===== 13. ABA REGIÃO ===== -->
+<h2 id="regiao">13. Aba "Região" — Cidades, Praias e Destaques</h2>
+
+<p>Nesta aba você edita o <strong>conteúdo das cidades/regiões</strong> atendidas pela Furpal. Cada cidade vira uma página de região com fotos, história, segurança, praias e destaques.</p>
+
+<div class="browser">
+  <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="url">Painel Admin → Aba <b>Região</b></span></div>
+  <div class="screen" style="padding:6px;">
+    <div class="panel-mock">
+      <div class="body">
+        <div class="tabs">
+          <div>⚙️ Geral</div>
+          <div>💰 Financiamento</div>
+          <div>🏠 Imóveis</div>
+          <div>🏗️ Lançamentos</div>
+          <div>📝 Blog</div>
+          <div>❓ FAQ</div>
+          <div>💬 Depoimentos</div>
+          <div>🤝 Parceiros</div>
+          <div>👥 Equipe</div>
+          <div class="on">📍 Região</div>
+          <div>🔑 Config</div>
+        </div>
+        <div class="content">
+          <div style="margin-bottom:8px;"><span class="badge">+ Nova Cidade</span></div>
+          <table>
+            <tr><th>Nome</th><th>Praias</th><th style="text-align:right;">Ações</th></tr>
+            <tr><td>Balneário Camboriú</td><td>3 praias</td><td style="text-align:right;">✏️ 🗑️</td></tr>
+            <tr><td>Itapema</td><td>2 praias</td><td style="text-align:right;">✏️ 🗑️</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Adicionar uma cidade:</h3>
+<ol>
+  <li>Clique em <strong>+ Nova Cidade</strong>.</li>
+  <li>Digite o nome da cidade/região na janela que aparece e confirme.</li>
+  <li>Preencha os campos:</li>
+</ol>
+
+<table>
+  <tr><th>Campo / Bloco</th><th>O que preencher</th></tr>
+  <tr><td>Nome da região</td><td>Nome exibido (ex. "Balneário Camboriú").</td></tr>
+  <tr><td>Tagline</td><td>Frase curta de apresentação.</td></tr>
+  <tr><td>🖼️ Imagens da região</td><td>Fotos da cidade (enviar pelo <strong>📷 Upload</strong> ou colar URLs, uma por linha, com <strong>+ Agregar</strong>).</td></tr>
+  <tr><td>Introdução / História / Segurança</td><td>Textos das seções da página da região.</td></tr>
+  <tr><td>🏖️ Praias</td><td>Cada praia: <strong>nome</strong> (ex. "Praia do Forte") e <strong>descrição</strong> (ex. "Mar calmo e piscinas naturais").</td></tr>
+  <tr><td>⭐ Destaques</td><td>Frases de destaque da região (ex. "Melhor custo-benefício do litoral").</td></tr>
+</table>
+
+<div class="tip-box"><strong>⚡ Dica:</strong> para adicionar mais praias, destaques ou imagens, use o botão <strong>+ Agregar</strong> dentro de cada bloco.</div>
+
+<div class="pb"></div>
+
+<!-- ===== 14. ABA CONFIG ===== -->
+<h2 id="config">14. Aba "Config" — Senha, Backup e Painel</h2>
+
+<p>A aba <strong>Config</strong> é onde ficam as <strong>configurações avançadas</strong> do servidor e o backup dos dados.</p>
+
+<div class="browser">
+  <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="url">Painel Admin → Aba <b>Config</b></span></div>
+  <div class="screen" style="padding:6px;">
+    <div class="panel-mock">
+      <div class="body">
+        <div class="tabs">
+          <div>⚙️ Geral</div>
+          <div>💰 Financiamento</div>
+          <div>🏠 Imóveis</div>
+          <div>🏗️ Lançamentos</div>
+          <div>📝 Blog</div>
+          <div>❓ FAQ</div>
+          <div>💬 Depoimentos</div>
+          <div>🤝 Parceiros</div>
+          <div>👥 Equipe</div>
+          <div>📍 Região</div>
+          <div class="on">🔑 Config</div>
+        </div>
+        <div class="content">
+          <div style="margin-bottom:8px;">💾 <strong>Salvar no servidor (PHP)</strong></div>
+          <div class="fld"><span>Senha do save.php</span><div class="in">•••••••••••</div></div>
+          <div><span class="btn-gold">💾 Salvar senha</span> <span class="btn-ghost">💾 Salvar no servidor</span></div>
+          <div style="margin:14px 0 8px;">📥 <strong>Export / Import Dados</strong></div>
+          <div><span class="btn-gold">📤 Exportar dados (JSON)</span> <span class="btn-ghost">📥 Importar dados (JSON)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>O que você encontra aqui:</h3>
+
+<table>
+  <tr><th>Bloco</th><th>O que faz</th></tr>
+  <tr><td><strong>💾 Salvar no servidor (PHP)</strong></td><td>Grava as alterações direto no <code>js/data.js</code> do servidor (via <code>save.php</code>). Campo <strong>Senha do save.php</strong> = senha do servidor (a mesma do login); clique em <strong>💾 Salvar senha</strong> para guardá-la no navegador e use <strong>💾 Salvar no servidor</strong> para publicar.</td></tr>
+  <tr><td><strong>📥 Export / Import Dados</strong></td><td>Backup manual em um arquivo JSON. Veja a <a href="#backup">seção 18</a>.</td></tr>
+  <tr><td><strong>🔒 Desabilitar Painel</strong></td><td>Permite desligar o painel no site final (ver abaixo).</td></tr>
+</table>
+
+<h3>Desabilitar o painel (site final)</h3>
+<p>Quando o site for entregue, você pode <strong>desligar o painel</strong> para ninguém acessar <code>?edit=1</code>. Isso é feito mudando a primeira linha do arquivo <code>js/admin.js</code>:</p>
+
+<div class="info-box" style="font-family:'Consolas',monospace;font-size:10pt;">
+  const ADMIN_ENABLED = <strong>true</strong>; &nbsp;&nbsp;→&nbsp;&nbsp; const ADMIN_ENABLED = <strong>false</strong>;
+</div>
+
+<p>Depois é preciso <strong>atualizar o arquivo no servidor</strong> (via FTP/Hospedagem ou pedindo ao desenvolvedor). Enquanto <code>ADMIN_ENABLED = true</code>, o painel continua ativo.</p>
+
+<div class="pb"></div>
+
+<!-- ===== 15. API CONFIG ===== -->
+<h2 id="apikey">15. Senha do Servidor e Email (api-config.php)</h2>
+
+<p>A <strong>senha de acesso ao painel</strong> e o <strong>email que recebe o formulário de contato</strong> não ficam no código do site: ficam em um arquivo <strong>fora do GitHub</strong>, chamado <code>api-config.php</code>, dentro da pasta do site no servidor.</p>
+
+<div class="browser">
+  <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="url">Servidor → raiz do site → <b>api-config.php</b></span></div>
+  <div class="screen">
+    <div class="panel-mock" style="margin:0;">
+      <div class="content" style="font-family:'Consolas',monospace;font-size:9.5pt;color:#a9b4d0;">
+        &lt;?php<br>
+        &nbsp;&nbsp;// ===== CONFIGURAÇÕES DA API / SERVIDOR =====<br>
+        &nbsp;&nbsp;define("<span style="color:#ffd700;">API_PASSWORD</span>", "<span style="color:#6ee7a8;">RankfdIFPosRKqlrJMTU9g</span>");<br>
+        &nbsp;&nbsp;define("<span style="color:#ffd700;">CONTACT_EMAIL</span>", "<span style="color:#6ee7a8;">contato@furpal.com.br</span>");<br>
+        &nbsp;&nbsp;?&gt;
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>O que cada linha significa:</h3>
+<table>
+  <tr><th>Constante</th><th>Função</th></tr>
+  <tr><td><code>API_PASSWORD</code></td><td>A <strong>senha do servidor</strong>. É ela que você digita no login do painel (tela <code>?edit=1</code>). Protege o login (<code>auth.php</code>), o salvamento (<code>save.php</code>) e o upload de imagens (<code>upload.php</code>).</td></tr>
+  <tr><td><code>CONTACT_EMAIL</code></td><td>O email que <strong>recebe as mensagens</strong> do formulário de contato do site (via <code>send-contact.php</code>).</td></tr>
+</table>
+
+<h3>Como trocar a senha do painel:</h3>
+<ol>
+  <li>Acesse o servidor (painel da hospedagem ou FTP).</li>
+  <li>Abra o arquivo <code>api-config.php</code> na raiz do site.</li>
+  <li>Troque o valor de <code>API_PASSWORD</code> por uma senha nova e longa.</li>
+  <li>Salve o arquivo. Pronto: o painel passa a exigir a senha nova.</li>
+</ol>
+
+<div class="warn-box"><strong>⚠️ Muito importante:</strong> NÃO envie o arquivo <code>api-config.php</code> para o GitHub nem o compartilhe. Quem tiver essa senha consegue entrar no painel. Mantenha-o apenas no servidor.</div>
+
+<div class="warn-box"><strong>⚠️ Não use caracteres com acento</strong> nem aspas simples dentro do valor da senha. Se a senha tiver aspas simples (<code>'</code>), o arquivo quebra e o site para de funcionar.</div>
+
+<div class="pb"></div>
+
+<!-- ===== 16. SALVANDO ===== -->
+<h2 id="salvar">16. Salvando as Alterações no Servidor</h2>
+
+<p>Sempre que você terminar de editar uma aba, siga este fluxo:</p>
+
+<h3>Fluxo de salvamento (3 passos):</h3>
+
+<div class="browser">
+  <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="url">Fluxo de salvamento</span></div>
+  <div class="screen">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <div class="panel-mock" style="margin:0;flex:1;min-width:200px;">
+        <div class="content" style="text-align:center;">
+          <div style="font-size:20pt;">✏️</div>
+          <div style="font-size:9pt;color:rgba(255,255,255,0.6);">1. Edite os campos<br>na aba desejada</div>
+        </div>
+      </div>
+      <div style="align-self:center;color:#ffd700;font-size:16pt;">→</div>
+      <div class="panel-mock" style="margin:0;flex:1;min-width:200px;">
+        <div class="content" style="text-align:center;">
+          <div style="font-size:20pt;">💾</div>
+          <div style="font-size:9pt;color:rgba(255,255,255,0.6);">2. Clique em "💾 Salvar no servidor"</div>
+        </div>
+      </div>
+      <div style="align-self:center;color:#ffd700;font-size:16pt;">→</div>
+      <div class="panel-mock" style="margin:0;flex:1;min-width:200px;">
+        <div class="content" style="text-align:center;">
+          <div style="font-size:20pt;">✅</div>
+          <div style="font-size:9pt;color:rgba(255,255,255,0.6);">3. Mensagem verde<br>"Salvo no servidor!"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ol>
+  <li>Edite os campos da aba (os campos ficam na memória do painel enquanto você edita).</li>
+  <li>Clique em <strong>💾 Salvar no servidor</strong> (barra superior) <em>ou</em> em <strong>💾 Salvar no servidor</strong> dentro da aba <strong>Config</strong>.</li>
+  <li>Aparece uma notificação verde confirmando. Atualize o site (F5) para ver o resultado.</li>
+</ol>
+
+<div class="warn-box"><strong>⚠️ Erro "Defina a senha do save.php na aba Config":</strong> significa que o navegador ainda não tem a senha guardada. Vá na aba <strong>Config</strong>, digite a senha do servidor e clique em <strong>💾 Salvar senha</strong>. Depois disso, "Salvar" volta a funcionar.</div>
+
+<div class="tip-box"><strong>⚡ Dica:</strong> o botão <strong>👁 Ver site</strong> mostra o site (modo público) sem precisar fazer logout. Para voltar ao painel, use o botão <strong>⚙️ Admin</strong> que aparece no canto inferior esquerdo.</div>
+
+<div class="pb"></div>
+
+<!-- ===== 17. UPLOAD ===== -->
+<h2 id="upload">17. Subindo Imagens e Vídeos</h2>
+
+<p>Em vários formulários existe o botão <strong>📷 Upload</strong> ao lado do campo de imagem. Ele envia o arquivo direto para o servidor (pastas <code>images/</code> para fotos e <code>videos/</code> para vídeos) e preenche a URL sozinho.</p>
+
+<h3>Como usar:</h3>
+<ol>
+  <li>Clique no botão <strong>📷 Upload</strong> ao lado do campo (ex. "Imagem principal").</li>
+  <li>Escolha o arquivo no seu computador (fotos, ou MP4/WebM para vídeo).</li>
+  <li>Aguarde a mensagem "✅ URL adicionada!" — o campo de URL é preenchido automaticamente.</li>
+  <li>Clique em <strong>💾 Salvar no servidor</strong> para publicar.</li>
+</ol>
+
+<div class="browser">
+  <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="url">Upload de imagem</span></div>
+  <div class="screen" style="padding:6px;">
+    <div class="panel-mock" style="margin:0;">
+      <div class="content">
+        <div class="fld"><span>URL da imagem principal</span><div class="in">images/imovel-001.jpg <span class="up">📷 Upload</span></div></div>
+        <div style="color:rgba(255,255,255,0.4);font-size:8.5pt;margin-top:6px;">Clique em "📷 Upload" → escolha a foto → a URL aparece aqui automaticamente</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tip-box"><strong>⚡ Dica:</strong> para enviar <strong>várias fotos de uma vez</strong> (galeria), selecione mais de um arquivo na janela do Windows/Mac enquanto segura <strong>Ctrl</strong>.</div>
+
+<div class="warn-box"><strong>⚠️ Tamanho:</strong> prefira fotos em JPG/WebP com menos de 500&nbsp;KB (redimensionadas). Fotos muito pesadas deixam o site lento. Se o upload falhar por tamanho, reduza a imagem antes.</div>
+
+<div class="pb"></div>
+
+<!-- ===== 18. BACKUP ===== -->
+<h2 id="backup">18. Backup e Restauração (Export / Import)</h2>
+
+<p>O site Furpal guarda todo o conteúdo (imóveis, lançamentos, blog, etc.) no arquivo <code>js/data.js</code> do servidor. Para garantir segurança, use o recurso <strong>Export / Import</strong> da aba <strong>Config</strong>.</p>
+
+<h3>📤 Fazer backup (exportar):</h3>
+<ol>
+  <li>Vá em <strong>Config → 📤 Exportar dados (JSON)</strong>.</li>
+  <li>O navegador baixa um arquivo chamado <code>furpal-backup-2026-08-10.json</code> (com a data do dia).</li>
+  <li><strong>Guarde esse arquivo em um local seguro</strong> (nuvem, pendrive, email). Ele contém todos os dados do site.</li>
+</ol>
+
+<div class="info-box"><strong>💡 O que o backup inclui:</strong> todas as configurações gerais, estatísticas, imóveis, lançamentos, FAQ, depoimentos, parceiros, equipe, informações das cidades e artigos do blog. <em>As imagens/vídeos não entram no JSON</em> — elas já estão nas pastas <code>images/</code> e <code>videos/</code> do servidor.</div>
+
+<h3>📥 Restaurar (importar):</h3>
+<ol>
+  <li>Vá em <strong>Config → 📥 Importar dados (JSON)</strong>.</li>
+  <li>Selecione o arquivo de backup que você baixou.</li>
+  <li>O painel recarrega os dados no formulário.</li>
+  <li><strong>Atenção:</strong> a importação só fica no navegador. Clique em <strong>💾 Salvar no servidor</strong> para gravar de volta no site.</li>
+</ol>
+
+<div class="warn-box"><strong>⚠️ A importação SUBSTITUI os dados atuais</strong> pelas informações do arquivo. Faça um <strong>Export antes de importar</strong>, para não perder nada por engano.</div>
+
+<div class="pb"></div>
+
+<!-- ===== 19. DICAS ===== -->
+<h2 id="dicas">19. Dicas, Segurança e Solução de Problemas</h2>
+
+<h3>🔐 Segurança (não pule!)</h3>
+<ul>
+  <li>Use uma <strong>senha longa e única</strong> no <code>api-config.php</code> (mínimo 12 caracteres, com letras e números).</li>
+  <li><strong>Nunca compartilhe</strong> o arquivo <code>api-config.php</code> nem a senha por mensagem com estranhos.</li>
+  <li>Para não deixar o painel acessível a visitantes, desligue com <code>ADMIN_ENABLED = false</code> (seção 14) quando o site for entregue.</li>
+  <li>Mantenha um backup JSON atualizado (seção 18).</li>
+</ul>
+
+<h3>🛠️ Problemas comuns e soluções</h3>
+
+<table>
+  <tr><th>Problema</th><th>Solução</th></tr>
+  <tr><td>Não consigo entrar no painel ("Senha incorreta")</td><td>A senha digitada não é a do <code>API_PASSWORD</code> no <code>api-config.php</code> do servidor. Confira o arquivo e o valor exato (atenção a maiúsculas/minúsculas).</td></tr>
+  <tr><td>"Defina a senha do save.php na aba Config" ao salvar</td><td>Vá na aba <strong>Config</strong>, digite a senha do servidor e clique em <strong>💾 Salvar senha</strong>.</td></tr>
+  <tr><td>Editei mas o site continua igual</td><td>Você esqueceu de clicar em <strong>💾 Salvar no servidor</strong>. Depois de salvar, atualize a página do site (F5).</td></tr>
+  <tr><td>Imagem do parceiro/imóvel em branco</td><td>O campo de imagem está vazio. Envie a foto pelo <strong>📷 Upload</strong> e salve.</td></tr>
+  <tr><td>Foto não sobe (upload falha)</td><td>A imagem é muito grande. Reduza para menos de ~500 KB (ou máximo 2 MB) e tente de novo.</td></tr>
+  <tr><td>Mapa não mostra um imóvel</td><td>O imóvel está sem <strong>Latitude/Longitude</strong>. Preencha esses dois campos no formulário do imóvel.</td></tr>
+  <tr><td>Site aparece sem uma seção</td><td>O título (ou eyebrow) da seção está vazio na aba <strong>Geral</strong> — preencha os dois e salve.</td></tr>
+  <tr><td>Não recebo emails do formulário de contato</td><td>Confira o <code>CONTACT_EMAIL</code> no <code>api-config.php</code> e a pasta <code>spam</code>/<code>lixo</code> do email. Se o host bloquear, o site mostra um botão de WhatsApp como alternativa.</td></tr>
+  <tr><td>Quero recuperar tudo de um backup</td><td>Aba <strong>Config → 📥 Importar dados (JSON)</strong>, escolha o arquivo e depois <strong>💾 Salvar no servidor</strong>.</td></tr>
+</table>
+
+<h3>⚠️ Última chamada</h3>
+<div class="warn-box"><strong>Lembrete final:</strong> <strong>SEMPRE</strong> clique em <strong>"💾 Salvar no servidor"</strong> após editar qualquer aba. Isso é a regra número 1 deste manual.</div>
+
+<div class="footer">
+  Furpal — Manual do Administrador &bull; Versão 2.0 &bull; Agosto 2026<br>
+  Dúvidas? Fale com o desenvolvedor do site.
+</div>
+
+</body>
+</html>
