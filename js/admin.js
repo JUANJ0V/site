@@ -999,9 +999,12 @@ const ADMIN_ENABLED = true;
   }
 
   window.addProperty = function() {
+    var defCats = (_data.constants.PROPERTY_CATEGORIES && _data.constants.PROPERTY_CATEGORIES.length)
+      ? _data.constants.PROPERTY_CATEGORIES
+      : ["Apartamento","Casa","Cobertura","Kitnet/Studio","Comercial","Terreno/Lote"];
     _data.PROPERTIES.push({
       id: 'prop-' + Date.now(),
-      type: 'sale', category: 'Apartamento', title: 'Novo Imóvel', price: 'R$ 0',
+      type: 'sale', category: defCats[0] || '', title: 'Novo Imóvel', price: 'R$ 0',
       priceNum: 0, location: 'Balneário Camboriú', status: 'disponivel',
       desc: '', beds: 1, baths: 1, garage: 1, area: 50,
       img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80',
