@@ -358,6 +358,15 @@ const ADMIN_ENABLED = true;
     return ' <button type="button" class="btn-up" onclick="adminUpload(\'' + inputId + '\',\'' + folder + '\')">📷 Upload</button>';
   }
 
+  // Resolve a pasta final de uploads: imóveis vão para subpasta por tipo (venta/aluguel)
+  function resolveFolder(folder) {
+    if (folder === 'images/properties') {
+      var t = document.getElementById('prop_type');
+      return 'images/properties/' + ((t && t.value === 'rent') ? 'alquiler' : 'venta');
+    }
+    return folder;
+  }
+
   // InfinityFree bloqueia POSTs com corpo de código JS. Codifica em base64 (UTF-8 seguro) para o save.php aceitar.
   function encodeContent(s) {
     var bytes = new TextEncoder().encode(String(s || ''));
@@ -453,6 +462,7 @@ const ADMIN_ENABLED = true;
   };
 
   window.adminUpload = function(inputId, folder) {
+    folder = resolveFolder(folder);
     var target = document.getElementById(inputId);
     var isMulti = target && target.tagName === 'TEXTAREA';
     var mainImgId = isMulti ? (MAIN_IMG_BY_GALLERY[inputId] || null) : null;
@@ -971,9 +981,9 @@ const ADMIN_ENABLED = true;
       + '<label>URL do Maps</label><input id="prop_maps" value="' + esc(p.maps||'') + '">'
       + '<label>Descrição curta (card)</label><textarea id="prop_desc" rows="2">' + esc(p.desc||'') + '</textarea>'
       + '<label>Descrição longa (detalhes)</label><textarea id="prop_description" rows="4">' + esc(p.description||'') + '</textarea>'
-      + '<label>URL da imagem principal' + uploadBtn('prop_img', 'images') + '</label><input id="prop_img" value="' + esc(p.img) + '">'
+      + '<label>URL da imagem principal' + uploadBtn('prop_img', 'images/properties') + '</label><input id="prop_img" value="' + esc(p.img) + '">'
       + '<label>URL do vídeo' + uploadBtn('prop_video', 'videos') + '</label><input id="prop_video" value="' + esc(p.video||'') + '">'
-      + '<label>Galeria (URLs, uma por linha)' + uploadBtn('prop_gallery', 'images') + '</label><textarea id="prop_gallery" rows="3">' + ((p.gallery||[]).join('\n')) + '</textarea>'
+      + '<label>Galeria (URLs, uma por linha)' + uploadBtn('prop_gallery', 'images/properties') + '</label><textarea id="prop_gallery" rows="3">' + ((p.gallery||[]).join('\n')) + '</textarea>'
       + '<label>Características (uma por linha)</label><textarea id="prop_features" rows="4">' + ((p.features||[]).join('\n')) + '</textarea>',
       function() {
         p.title = gv('prop_title');
@@ -1144,10 +1154,10 @@ const ADMIN_ENABLED = true;
       + '<div class="row2"><div><label>Latitude</label><input id="emp_lat" type="number" step="any" value="' + (e.lat||'') + '"></div>'
       + '<div><label>Longitude</label><input id="emp_lng" type="number" step="any" value="' + (e.lng||'') + '"></div></div>'
       + '<label>Descrição</label><textarea id="emp_desc" rows="4">' + esc(e.description || '') + '</textarea>'
-      + '<label>URL da imagem principal' + uploadBtn('emp_img', 'images') + '</label><input id="emp_img" value="' + esc(e.img) + '">'
+      + '<label>URL da imagem principal' + uploadBtn('emp_img', 'images/properties/lanzamentos') + '</label><input id="emp_img" value="' + esc(e.img) + '">'
       + '<label>URL do vídeo' + uploadBtn('emp_video', 'videos') + '</label><input id="emp_video" value="' + esc(e.video||'') + '">'
-      + '<label>Galeria (URLs, uma por linha)' + uploadBtn('emp_gallery', 'images') + '</label><textarea id="emp_gallery" rows="3">' + ((e.gallery||[]).join('\n')) + '</textarea>'
-      + '<label>Plantas (URLs, uma por linha)' + uploadBtn('emp_plants', 'images') + '</label><textarea id="emp_plants" rows="3">' + ((e.plants||[]).join('\n')) + '</textarea>'
+      + '<label>Galeria (URLs, uma por linha)' + uploadBtn('emp_gallery', 'images/properties/lanzamentos') + '</label><textarea id="emp_gallery" rows="3">' + ((e.gallery||[]).join('\n')) + '</textarea>'
+      + '<label>Plantas (URLs, uma por linha)' + uploadBtn('emp_plants', 'images/properties/lanzamentos') + '</label><textarea id="emp_plants" rows="3">' + ((e.plants||[]).join('\n')) + '</textarea>'
       + '<label>Comodidades (uma por linha)</label><textarea id="emp_amenities" rows="4">' + ((e.amenities||[]).join('\n')) + '</textarea>'
       + '<div style="margin-top:1rem;border-top:1px solid rgba(255,255,255,0.06);padding-top:0.5rem;">'
       + '<div style="display:flex;justify-content:space-between;align-items:center;margin:0.75rem 0 0.25rem;"><h4 style="margin:0;color:#d4af37;font-size:0.9rem;font-weight:600;">🗓️ Cronograma de obras</h4><button class="btn-add" type="button" style="' + EMP_ADD_BTN + '" onclick="addEmpRow(\'timeline\')">+ Agregar etapa</button></div>'
