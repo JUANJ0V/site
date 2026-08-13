@@ -284,6 +284,14 @@ const ADMIN_ENABLED = true;
       c.SECTION_CONTATO_TITLE      = gv('cfg_contTitle');
       c.SECTION_FINANCIAMENTO_EYEBROW = gv('cfg_finEye');
       c.SECTION_FINANCIAMENTO_TITLE   = gv('cfg_finTitle');
+      var catInputs = document.querySelectorAll('.cfg-cat-input');
+      if (catInputs.length) {
+        c.PROPERTY_CATEGORIES = [];
+        for (var ci2 = 0; ci2 < catInputs.length; ci2++) {
+          var catV = catInputs[ci2].value.trim();
+          if (catV) c.PROPERTY_CATEGORIES.push(catV);
+        }
+      }
     }
     // Financiamento tab (solo si es la pestaña activa, para no pisar los textos de la pestaña General)
     var finSection = document.getElementById('adminSection_financiamento');
@@ -366,6 +374,49 @@ const ADMIN_ENABLED = true;
     }
     return folder;
   }
+
+  // Opções do select de categoria a partir de PROPERTY_CATEGORIES (editável no admin)
+  function catOptions(current) {
+    var cats = (_data && _data.constants && _data.constants.PROPERTY_CATEGORIES && _data.constants.PROPERTY_CATEGORIES.length)
+      ? _data.constants.PROPERTY_CATEGORIES
+      : ["Apartamento","Casa","Cobertura","Kitnet/Studio","Comercial","Terreno/Lote"];
+    var html = '';
+    for (var ci = 0; ci < cats.length; ci++) {
+      html += '<option value="' + esc(cats[ci]) + '"' + (current === cats[ci] ? ' selected' : '') + '>' + esc(cats[ci]) + '</option>';
+    }
+    if (current && cats.indexOf(current) === -1) {
+      html += '<option value="' + esc(current) + '" selected>' + esc(current) + '</option>';
+    }
+    return html;
+  }
+
+  // Editor de categorías (pestaña Geral)
+  function catEditorHtml() {
+    var cats = (_data && _data.constants && _data.constants.PROPERTY_CATEGORIES && _data.constants.PROPERTY_CATEGORIES.length)
+      ? _data.constants.PROPERTY_CATEGORIES
+      : ["Apartamento","Casa","Cobertura","Kitnet/Studio","Comercial","Terreno/Lote"];
+    var html = '';
+    for (var ci = 0; ci < cats.length; ci++) {
+      html += '<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">'
+        + '<input class="cfg-cat-input" value="' + esc(cats[ci]) + '" style="margin-bottom:0;">'
+        + '<button class="btn-arrow" onclick="delCategory(' + ci + ')" title="Remover">🗑️</button>'
+        + '</div>';
+    }
+    return html;
+  }
+
+  window.addCategory = function() {
+    try { saveFormsToData(); } catch(e) {}
+    if (!_data.constants.PROPERTY_CATEGORIES) _data.constants.PROPERTY_CATEGORIES = [];
+    _data.constants.PROPERTY_CATEGORIES.push('Nova categoria');
+    renderGeneral(document.getElementById('adminSection_general'));
+  };
+
+  window.delCategory = function(i) {
+    try { saveFormsToData(); } catch(e) {}
+    if (_data.constants.PROPERTY_CATEGORIES) _data.constants.PROPERTY_CATEGORIES.splice(i, 1);
+    renderGeneral(document.getElementById('adminSection_general'));
+  };
 
   // InfinityFree bloqueia POSTs com corpo de código JS. Codifica em base64 (UTF-8 seguro) para o save.php aceitar.
   function encodeContent(s) {
@@ -704,6 +755,7 @@ const ADMIN_ENABLED = true;
     map.HERO_TITLE    = typeof HERO_TITLE !== 'undefined' ? HERO_TITLE : 'Furpal Assessoria Imobiliária';
     map.HERO_SUBTITLE = typeof HERO_SUBTITLE !== 'undefined' ? HERO_SUBTITLE : '';
     map.HERO_VIDEO    = typeof HERO_VIDEO !== 'undefined' ? HERO_VIDEO : '';
+    map.PROPERTY_CATEGORIES = typeof PROPERTY_CATEGORIES !== 'undefined' ? PROPERTY_CATEGORIES : ["Apartamento","Casa","Cobertura","Kitnet/Studio","Comercial","Terreno/Lote"];
     map.SECTION_SOBRE_EYEBROW   = typeof SECTION_SOBRE_EYEBROW !== 'undefined' ? SECTION_SOBRE_EYEBROW : 'Quem somos';
     map.SECTION_SOBRE_TITLE     = typeof SECTION_SOBRE_TITLE !== 'undefined' ? SECTION_SOBRE_TITLE : '';
     map.SECTION_SOBRE_P1        = typeof SECTION_SOBRE_P1 !== 'undefined' ? SECTION_SOBRE_P1 : '';
@@ -916,6 +968,11 @@ const ADMIN_ENABLED = true;
       + '<div class="note">Disponíveis: sobre, stats, servicos, depoimentos, parceiros, faq, financiamento, alugar, favoritos</div>'
       + '<label>Imóveis por página</label><input id="cfg_pageSize" value="' + (c.PAGE_SIZE || 6) + '" style="max-width:100px;">'
       + '<hr style="border-color:rgba(255,255,255,0.06);margin:1rem 0;">'
+      + '<h3 style="color:#d4af37;font-size:0.9rem;margin:0 0 1rem;">🏷️ Categorias de Imóveis</h3>'
+      + '<p class="note">Lista que aparece ao cadastrar um imóvel. Os filtros do site se ajustam sozinhos às categorias em uso.</p>'
+      + '<div id="cfgCatsList">' + catEditorHtml() + '</div>'
+      + '<button class="btn-add" style="margin-bottom:0;" onclick="addCategory()">+ Nova Categoria</button>'
+      + '<hr style="border-color:rgba(255,255,255,0.06);margin:1rem 0;">'
       + '<button class="btn-save" onclick="saveGeneral()">💾 Salvar alterações</button>'
       + '</div>';
   }
@@ -963,7 +1020,7 @@ const ADMIN_ENABLED = true;
       '<div class="row2"><div><label>Título</label><input id="prop_title" value="' + esc(p.title) + '"></div>'
       + '<div><label>ID (único)</label><input id="prop_id" value="' + esc(p.id) + '"></div></div>'
       + '<div class="row3"><div><label>Tipo</label><select id="prop_type"><option value="sale"' + (p.type==='sale'?' selected':'') + '>Venda</option><option value="rent"' + (p.type==='rent'?' selected':'') + '>Aluguel</option></select></div>'
-      + '<div><label>Categoria</label><select id="prop_cat"><option value="Apartamento"' + (p.category==='Apartamento'?' selected':'') + '>Apartamento</option><option value="Casa"' + (p.category==='Casa'?' selected':'') + '>Casa</option><option value="Cobertura"' + (p.category==='Cobertura'?' selected':'') + '>Cobertura</option><option value="Kitnet/Studio"' + (p.category==='Kitnet/Studio'?' selected':'') + '>Kitnet/Studio</option><option value="Comercial"' + (p.category==='Comercial'?' selected':'') + '>Comercial</option><option value="Terreno/Lote"' + (p.category==='Terreno/Lote'?' selected':'') + '>Terreno/Lote</option></select></div>'
+      + '<div><label>Categoria</label><select id="prop_cat">' + catOptions(p.category) + '</select></div>'
       + '<div><label>Status</label><select id="prop_status"><option value="disponivel"' + ((p.status||'disponivel')==='disponivel'?' selected':'') + '>Disponível</option><option value="vendido"' + (p.status==='vendido'?' selected':'') + '>Vendido</option><option value="locado"' + (p.status==='locado'?' selected':'') + '>Locado</option></select></div></div>'
       + '<div class="row3"><div><label>Preço (texto)</label><input id="prop_price" value="' + esc(p.price) + '"></div>'
       + '<div><label>Preço (número)</label><input id="prop_priceNum" type="number" value="' + (p.priceNum||0) + '"></div>'
@@ -1965,6 +2022,7 @@ const ADMIN_ENABLED = true;
     out += '\nconst DISABLED_SECTIONS = ' + JSON.stringify(c.DISABLED_SECTIONS || []) + ';\n';
     out += '\nconst SOCIAL = ' + JSON.stringify(c.SOCIAL || {}) + ';\n';
     out += '\nconst PAGE_SIZE = ' + (c.PAGE_SIZE || 6) + ';\n';
+    out += '\nconst PROPERTY_CATEGORIES = ' + JSON.stringify(c.PROPERTY_CATEGORIES && c.PROPERTY_CATEGORIES.length ? c.PROPERTY_CATEGORIES : ["Apartamento","Casa","Cobertura","Kitnet/Studio","Comercial","Terreno/Lote"]) + ';\n';
     out += '\nconst ENABLE_DROPDOWN_MENU = true;\n';
 
     out += '\n/* ===== PROPERTIES ===== */\n';

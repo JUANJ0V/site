@@ -282,6 +282,8 @@ let PAGE_SIZE = 6;
 
 let ENABLE_DROPDOWN_MENU = true;
 
+let PROPERTY_CATEGORIES = ["Apartamento", "Casa", "Cobertura", "Kitnet/Studio", "Comercial", "Terreno/Lote"];
+
 /* ===== PROPERTIES ===== */
 
 let PROPERTIES = [
