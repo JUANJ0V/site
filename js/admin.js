@@ -3,7 +3,13 @@
    =================================================================== */
 
 const ADMIN_ENABLED = true;
-var ADMIN_VERSION = 'v29';
+var ADMIN_VERSION = 'v30';
+
+// Credenciais de ACESSO ao painel (visíveis no código-fonte do JS, por isso a
+// senha do servidor é a que realmente protege as modificações).
+// Mude para um usuário/senha que você escolher.
+const ADMIN_USER = "admin";
+const ADMIN_PASS = "AdminFurpal#2026";
 
 /* ===================================================================
    INICIALIZAÇÃO
@@ -156,7 +162,7 @@ var ADMIN_VERSION = 'v29';
   // ── Criar elementos ──
   var loginEl = document.createElement('div');
   loginEl.id = 'adminLogin';
-  loginEl.innerHTML = '<div class="box"><h2>🔐 Painel Admin</h2><p>Digite a senha do servidor para gerenciar o site</p><form onsubmit="adminLogin();return false"><input type="password" id="adminPass" placeholder="Senha do servidor" autocomplete="current-password"><button type="submit">Entrar</button></form><div class="error" id="adminLoginError">Senha incorreta</div></div>';
+  loginEl.innerHTML = '<div class="box"><h2>🔐 Painel Admin</h2><p>Entre para gerenciar o site</p><form onsubmit="adminLogin();return false"><input type="text" id="adminUser" placeholder="Usuário" autocomplete="off"><input type="password" id="adminPass" placeholder="Senha" autocomplete="current-password"><button type="submit">Entrar</button></form><div class="error" id="adminLoginError">Usuário ou senha incorretos</div></div>';
   document.body.appendChild(loginEl);
 
   var panelEl = document.createElement('div');
@@ -173,38 +179,19 @@ var ADMIN_VERSION = 'v29';
     if (err) err.style.display = 'block';
   }
 
-  // Autentica contra auth.php (server-side, con límite de intentos). Nada de credenciales en el código.
-  function authRequest(p) {
-    return fetch('auth.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password: p })
-    }).then(function(r) {
-      return r.json().then(function(j) { return j; }).catch(function() { return {}; });
-    });
-  }
-
+  // Acesso ao painel: usuário + senha do ADMIN (definidas no topo do arquivo).
+  // Sem a senha do servidor (aba Config) não é possível salvar/modificar nada.
   function tryFrontendLogin(u, p) {
-    if (!u && !p) { showLoginError(); return; }
-    authRequest(p).then(function(res) {
-      if (res && res.ok) {
-        sessionStorage.setItem('admin_logged', '1');
-        if (p) localStorage.setItem('admin_server_pass', p);
-        loginEl.classList.add('hidden');
-        panelEl.classList.add('active');
-        document.body.classList.add('admin-mode');
-        adminFloat.style.display = 'none';
-        initAdminPanel();
-      } else {
-        showLoginError();
-      }
-    }).catch(function() {
+    if (u === ADMIN_USER && p === ADMIN_PASS) {
+      sessionStorage.setItem('admin_logged', '1');
+      loginEl.classList.add('hidden');
+      panelEl.classList.add('active');
+      document.body.classList.add('admin-mode');
+      adminFloat.style.display = 'none';
+      initAdminPanel();
+    } else {
       showLoginError();
-    });
-  }
-
-  function fallbackFrontendLogin(u, p) {
-    tryFrontendLogin(u, p);
+    }
   }
 
   window.adminLogin = function() {
@@ -1754,7 +1741,7 @@ var ADMIN_VERSION = 'v29';
       + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">💾 Salvar no servidor (PHP)</h3>'
       + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0 0 0.75rem;">Se o site está rodando em um host com PHP (ex: Hostinger), usa isso pra salvar as alterações direto no <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">js/data.js</code> do servidor.</p>'
       + '<label>Senha do save.php</label>'
-      + '<input id="cfg_serverPass" type="password" value="' + esc(localStorage.getItem('admin_server_pass') || '') + '" placeholder="Senha definida no save.php">'
+      + '<input id="cfg_serverPass" type="password" value="" placeholder="Senha definida no save.php" autocomplete="off">'
       + '<button class="btn-save" onclick="saveServerPass()">💾 Salvar senha</button>'
       + '<button class="btn-save" onclick="saveToServer()" style="margin-left:0.5rem;">💾 Salvar no servidor</button>'
       + '<hr style="border-color:rgba(255,255,255,0.06);margin:1.5rem 0;">'
