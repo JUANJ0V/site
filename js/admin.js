@@ -3,7 +3,7 @@
    =================================================================== */
 
 const ADMIN_ENABLED = true;
-var ADMIN_VERSION = 'v31';
+var ADMIN_VERSION = 'v32';
 
 // Credenciais de ACESSO ao painel (visíveis no código-fonte do JS, por isso a
 // senha do servidor é a que realmente protege as modificações).
@@ -210,26 +210,91 @@ const ADMIN_PASS = "AdminFurpal#2026";
   };
   document.body.appendChild(adminFloat);
 
-  // Reconcilia as categorias dos imóveis com a lista atual. Se uma única
-  // categoria saiu e uma única entrou, trata como RENAME (propaga aos imóveis).
-  // Se uma categoria foi REMOVIDA, os imóveis associados MANTÊM a categoria:
-  // ela continua aparecendo nos filtros/busca/nav até não restar nenhum imóvel
-  // com ela. Quando não houver mais associações, some sozinha.
+  // Detecta renomes entre a lista anterior e a atual:
+  //  - mesmo comprimento: compara posição a posição (cada mudança é um rename);
+  //  - comprimento diferente: só o caso limpo de 1 removida + 1 adicionada.
+  function detectRenames(prevCats, newCats) {
+    prevCats = prevCats || [];
+    newCats = newCats || [];
+    var renames = [];
+    if (prevCats.length === newCats.length) {
+      for (var i = 0; i < prevCats.length; i++) {
+        if (prevCats[i] !== newCats[i]) renames.push({ old: prevCats[i], n: newCats[i] });
+      }
+    } else {
+      var removed = [], added = [];
+      for (var j = 0; j < prevCats.length; j++) if (newCats.indexOf(prevCats[j]) === -1) removed.push(prevCats[j]);
+      for (var k = 0; k < newCats.length; k++) if (prevCats.indexOf(newCats[k]) === -1) added.push(newCats[k]);
+      if (removed.length === 1 && added.length === 1) renames.push({ old: removed[0], n: added[0] });
+    }
+    return renames;
+  }
+
+  function applyRenames(renames) {
+    var total = 0;
+    for (var r = 0; r < renames.length; r++) {
+      for (var pj = 0; pj < _data.PROPERTIES.length; pj++) {
+        if (_data.PROPERTIES[pj].category === renames[r].old) {
+          _data.PROPERTIES[pj].category = renames[r].n;
+          total++;
+        }
+      }
+    }
+    return total;
+  }
+
+  // Reconcilia as categorias dos imóveis com a lista atual.
+  // Rename (mesma posição ou 1 removida + 1 adicionada) propaga aos imóveis.
+  // Categoria REMOVIDA: os imóveis associados MANTÊM a categoria — ela continua
+  // aparecendo nos filtros/busca/nav até não restar nenhum imóvel com ela.
   function reconcileCategories(newCats) {
     newCats = newCats || [];
     var prevCats = (_data.__prevCats && _data.__prevCats.length) ? _data.__prevCats : [];
-    var removed = [], added = [];
-    for (var i = 0; i < prevCats.length; i++) if (newCats.indexOf(prevCats[i]) === -1) removed.push(prevCats[i]);
-    for (var j = 0; j < newCats.length; j++) if (prevCats.indexOf(newCats[j]) === -1) added.push(newCats[j]);
-    var renameMap = (removed.length === 1 && added.length === 1) ? { old: removed[0], n: added[0] } : null;
-    if (renameMap) {
-      for (var pj = 0; pj < _data.PROPERTIES.length; pj++) {
-        if (_data.PROPERTIES[pj].category === renameMap.old) _data.PROPERTIES[pj].category = renameMap.n;
-      }
+    var renames = detectRenames(prevCats, newCats);
+    if (renames.length) {
+      var n = applyRenames(renames);
+      console.log('[Furpal Admin] categorias propagadas (' + n + ' imóveis): ' + renames.map(function(r){ return r.old + ' -> ' + r.n; }).join(', '));
     }
     _data.__prevCats = newCats.slice();
-    return renameMap;
+    return renames;
   }
+
+  // Na carga do admin, corrige dados antigos/inconsistentes:
+  //  - se data.js tem PREV_PROPERTY_CATEGORIES e a lista mudou no último save,
+  //    propaga renomes que eventualmente não foram aplicados;
+  //  - se data.js é antigo (sem PREV) e há exatamente 1 categoria órfã nos
+  //    imóveis e 1 categoria da lista sem uso, assume que foi um rename.
+  function healCategoriesOnInit() {
+    var c = _data.constants;
+    var cur = (c.PROPERTY_CATEGORIES || []).slice();
+    var prev = c.PREV_PROPERTY_CATEGORIES;
+    if (prev && prev.length) {
+      if (JSON.stringify(prev) !== JSON.stringify(cur)) {
+        var renames = detectRenames(prev, cur);
+        if (renames.length) {
+          var n = applyRenames(renames);
+          console.log('[Furpal Admin] carga: renomes aplicados (' + n + ' imóveis): ' + renames.map(function(r){ return r.old + ' -> ' + r.n; }).join(', '));
+        }
+      }
+      return;
+    }
+    var used = [], orphan = [], unused = [];
+    for (var i = 0; i < _data.PROPERTIES.length; i++) {
+      var cat = _data.PROPERTIES[i].category;
+      if (cat && used.indexOf(cat) === -1) used.push(cat);
+    }
+    for (var j = 0; j < used.length; j++) if (cur.indexOf(used[j]) === -1) orphan.push(used[j]);
+    for (var k = 0; k < cur.length; k++) if (used.indexOf(cur[k]) === -1) unused.push(cur[k]);
+    if (orphan.length === 1 && unused.length === 1) {
+      var count = 0;
+      for (var m = 0; m < _data.PROPERTIES.length; m++) {
+        if (_data.PROPERTIES[m].category === orphan[0]) { _data.PROPERTIES[m].category = unused[0]; count++; }
+      }
+      if (count) console.log('[Furpal Admin] carga: renome aplicado (heurística): ' + orphan[0] + ' -> ' + unused[0] + ' (' + count + ' imóveis)');
+    }
+  }
+
+  var _publishPrevCats = [];
 
   // Lê as categorias dos inputs da aba Geral e devolve o array limpo ('' fica de fora).
   function readCatInputs() {
@@ -360,6 +425,7 @@ const ADMIN_PASS = "AdminFurpal#2026";
   };
 
   window.adminSaveServer = function() {
+    _publishPrevCats = (_data.__prevCats && _data.__prevCats.length) ? _data.__prevCats.slice() : [];
     try { saveFormsToData(); } catch(e) {}
     // Garante a reconciliação de categorias em qualquer publicação,
     // mesmo se a aba Geral não estiver renderizada.
@@ -760,6 +826,8 @@ const ADMIN_PASS = "AdminFurpal#2026";
         LOCATIONS_INFO: JSON.parse(JSON.stringify(typeof LOCATIONS_INFO !== 'undefined' ? LOCATIONS_INFO : {}))
       };
       _data.__prevCats = (_data.constants.PROPERTY_CATEGORIES && _data.constants.PROPERTY_CATEGORIES.length) ? _data.constants.PROPERTY_CATEGORIES.slice() : [];
+      healCategoriesOnInit();
+      _data.__prevCats = (_data.constants.PROPERTY_CATEGORIES || []).slice();
       var contentEl = document.getElementById('adminContent');
       if (contentEl) contentEl.innerHTML = '<p id="adminLoading" style="color:rgba(255,255,255,0.3);padding:1rem;font-size:0.85rem;">Carregando…</p>';
       buildSidebar();
@@ -815,6 +883,7 @@ const ADMIN_PASS = "AdminFurpal#2026";
     map.HERO_SUBTITLE = typeof HERO_SUBTITLE !== 'undefined' ? HERO_SUBTITLE : '';
     map.HERO_VIDEO    = typeof HERO_VIDEO !== 'undefined' ? HERO_VIDEO : '';
     map.PROPERTY_CATEGORIES = typeof PROPERTY_CATEGORIES !== 'undefined' ? PROPERTY_CATEGORIES : ["Apartamento","Casa","Cobertura","Kitnet/Studio","Comercial","Terreno/Lote"];
+    map.PREV_PROPERTY_CATEGORIES = typeof PREV_PROPERTY_CATEGORIES !== 'undefined' ? PREV_PROPERTY_CATEGORIES.slice() : null;
     map.SECTION_SOBRE_EYEBROW   = typeof SECTION_SOBRE_EYEBROW !== 'undefined' ? SECTION_SOBRE_EYEBROW : 'Quem somos';
     map.SECTION_SOBRE_TITLE     = typeof SECTION_SOBRE_TITLE !== 'undefined' ? SECTION_SOBRE_TITLE : '';
     map.SECTION_SOBRE_P1        = typeof SECTION_SOBRE_P1 !== 'undefined' ? SECTION_SOBRE_P1 : '';
@@ -2085,6 +2154,7 @@ const ADMIN_PASS = "AdminFurpal#2026";
     out += '\nconst SOCIAL = ' + JSON.stringify(c.SOCIAL || {}) + ';\n';
     out += '\nconst PAGE_SIZE = ' + (c.PAGE_SIZE || 6) + ';\n';
     out += '\nconst PROPERTY_CATEGORIES = ' + JSON.stringify(c.PROPERTY_CATEGORIES && c.PROPERTY_CATEGORIES.length ? c.PROPERTY_CATEGORIES : ["Apartamento","Casa","Cobertura","Kitnet/Studio","Comercial","Terreno/Lote"]) + ';\n';
+    out += '\nconst PREV_PROPERTY_CATEGORIES = ' + JSON.stringify(_publishPrevCats || []) + ';\n';
     out += '\nconst ENABLE_DROPDOWN_MENU = true;\n';
 
     out += '\n/* ===== PROPERTIES ===== */\n';
