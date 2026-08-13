@@ -167,12 +167,12 @@
           <div class="about-stats" id="aboutStats"></div>
         </div>
         <div class="about-text">
-          <p>A <strong>Furpal</strong> nasceu em Balneário Camboriú com uma missão clara: transformar a experiência de comprar, vender ou alugar um imóvel em algo transparente, seguro e humano.</p>
-          <video class="about-video" controls preload="metadata" style="margin:1.25rem 0;width:100%;max-width:480px;border-radius:12px;display:block;">
+          <p id="sobreP1">A Furpal nasceu em Balneário Camboriú com uma missão clara: transformar a experiência de comprar, vender ou alugar um imóvel em algo transparente, seguro e humano.</p>
+          <video class="about-video" controls preload="metadata" playsinline webkit-playsinline poster="/images/sobre-poster.jpg" style="margin:1.25rem 0;width:100%;max-width:480px;border-radius:12px;display:block;">
             <source src="/video/sobre.mp4" type="video/mp4">
           </video>
-          <p>Ao longo de mais de 7 anos, construímos uma sólida trajetória assessorando famílias, investidores e empresas em todo o Território Catarinense. Cada operação é tratada com a dedicação e o profissionalismo que nos caracterizam.</p>
-          <p>Nossa equipe combina conhecimento profundo do mercado imobiliário local com uma rede consolidada de parceiros — bancos, cartórios, avaliadores e construtoras — para garantir resultados consistentes em qualquer tipo de operação.</p>
+          <p id="sobreP2">Ao longo de mais de 7 anos, construímos uma sólida trajetória assessorando famílias, investidores e empresas em todo o Território Catarinense. Cada operação é tratada com a dedicação e o profissionalismo que nos caracterizam.</p>
+          <p id="sobreP3">Nossa equipe combina conhecimento profundo do mercado imobiliário local com uma rede consolidada de parceiros — bancos, cartórios, avaliadores e construtoras — para garantir resultados consistentes em qualquer tipo de operação.</p>
           <a href="/contato/" class="about-link" style="margin-bottom:2rem;">Agende uma visita →</a>
         </div>
       </div>
@@ -772,7 +772,7 @@
   // Section texts — editable from data.js
   var sectionTexts = [
     { id: 'hero', eyebrowSel: '.hero-content .eyebrow', eyebrow: HERO_EYEBROW, titleSel: '.hero-content h1', title: HERO_TITLE, subtitleSel: '.hero-content p:not(.eyebrow)', subtitle: HERO_SUBTITLE },
-    { id: 'sobre', eyebrowSel: '#sobre .eyebrow', eyebrow: SECTION_SOBRE_EYEBROW, titleSel: '#sobre h2', title: SECTION_SOBRE_TITLE },
+    { id: 'sobre', eyebrowSel: '#sobre .eyebrow', eyebrow: SECTION_SOBRE_EYEBROW, titleSel: '#sobre h2', title: SECTION_SOBRE_TITLE, p1Sel: '#sobreP1', p1: SECTION_SOBRE_P1, p2Sel: '#sobreP2', p2: SECTION_SOBRE_P2, p3Sel: '#sobreP3', p3: SECTION_SOBRE_P3 },
     { id: 'comprar', eyebrowSel: '#comprar .eyebrow', eyebrow: SECTION_COMPRAR_EYEBROW, titleSel: '#comprar h2', title: SECTION_COMPRAR_TITLE },
     { id: 'alugar', eyebrowSel: '#alugar .eyebrow', eyebrow: SECTION_ALUGAR_EYEBROW, titleSel: '#alugar h2', title: SECTION_ALUGAR_TITLE },
     { id: 'lancamentos', eyebrowSel: '#lancamentos .eyebrow', eyebrow: SECTION_LANCAMENTOS_EYEBROW, titleSel: '#lancamentos h2', title: SECTION_LANCAMENTOS_TITLE },
@@ -797,6 +797,18 @@
     if (s.subtitleSel) {
       var sub = document.querySelector(s.subtitleSel);
       if (sub) sub.textContent = s.subtitle;
+    }
+    if (s.p1Sel) { var p1 = document.querySelector(s.p1Sel); if (p1) p1.textContent = s.p1; }
+    if (s.p2Sel) { var p2 = document.querySelector(s.p2Sel); if (p2) p2.textContent = s.p2; }
+    if (s.p3Sel) { var p3 = document.querySelector(s.p3Sel); if (p3) p3.textContent = s.p3; }
+  }
+  // Sobre video — src configurable desde el admin
+  var sobreVid = document.querySelector('.about-video');
+  if (sobreVid && typeof SOBRE_VIDEO !== 'undefined' && SOBRE_VIDEO) {
+    var srcEl = sobreVid.querySelector('source');
+    if (srcEl && srcEl.src.indexOf(SOBRE_VIDEO) === -1) {
+      srcEl.src = SOBRE_VIDEO;
+      sobreVid.load();
     }
   }
   var favEmptyEl = document.getElementById('favEmptyMsg');
@@ -893,7 +905,42 @@
           vw.innerHTML = '<iframe src="' + ytSrc + '" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="no-referrer-when-downgrade" style="width:100%;height:100%;pointer-events:none;" loading="lazy"></iframe>';
         }
       } else {
-        vw.innerHTML = '<video autoplay muted loop playsinline><source src="' + HERO_VIDEO + '" type="video/mp4" /></video>';
+        var vid = document.createElement('video');
+        vid.autoplay = true;
+        vid.muted = true;
+        vid.loop = true;
+        vid.playsInline = true;
+        vid.setAttribute('webkit-playsinline', '');
+        vid.setAttribute('preload', 'auto');
+        vid.poster = '/images/hero-poster.jpg';
+        vid.src = HERO_VIDEO;
+        var heroPosterSnapped = false;
+        vid.addEventListener('playing', function heroPosterSnap() {
+          if (heroPosterSnapped) return;
+          heroPosterSnapped = true;
+          setTimeout(function() {
+            try {
+              var c = document.createElement('canvas');
+              var w = vid.videoWidth, h = vid.videoHeight;
+              if (w > 0 && h > 0) {
+                var mw = 1280;
+                if (w > mw) { h = Math.round(h * mw / w); w = mw; }
+                c.width = w; c.height = h;
+                var ctx = c.getContext('2d');
+                ctx.drawImage(vid, 0, 0, w, h);
+                var pd = ctx.getImageData(0, 0, w, h).data;
+                var ps = 0, pn = w * h;
+                for (var pi = 0; pi < pd.length; pi += 4) {
+                  ps += 0.299*pd[pi] + 0.587*pd[pi+1] + 0.114*pd[pi+2];
+                }
+                if (ps / pn > 30 && ps / pn < 245) vid.poster = c.toDataURL('image/jpeg', 0.82);
+              }
+            } catch(e) {}
+          }, 1500);
+        });
+        vw.appendChild(vid);
+        var pp = vid.play();
+        if (pp && pp.then) pp.catch(function() {});
       }
       heroMedia.appendChild(vw);
     }
@@ -1053,7 +1100,28 @@ function googleTranslateElementInit() {
 </script>
 <script src="js/app.min.js?v=18"></script>
 <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
-<script>document.addEventListener('DOMContentLoaded',function(){var v=document.querySelector('.about-video');if(v)Plyr.setup(v);});</script>
+<script>document.addEventListener('DOMContentLoaded',function(){var v=document.querySelector('.about-video');if(v){
+  if(window.Plyr)Plyr.setup(v);
+  var snapped=false;
+  v.addEventListener('playing',function(){
+    if(snapped)return; snapped=true;
+    setTimeout(function(){
+      try{
+        var c=document.createElement('canvas'),w=v.videoWidth,h=v.videoHeight;
+        if(w>0&&h>0){
+          var mw=1280;
+          if(w>mw){h=Math.round(h*mw/w);w=mw;}
+          c.width=w;c.height=h;
+          var ctx=c.getContext('2d');
+          ctx.drawImage(v,0,0,w,h);
+          var pd=ctx.getImageData(0,0,w,h).data,ps=0,pn=w*h;
+          for(var pi=0;pi<pd.length;pi+=4)ps+=0.299*pd[pi]+0.587*pd[pi+1]+0.114*pd[pi+2];
+          if(ps/pn>30&&ps/pn<245)v.poster=c.toDataURL('image/jpeg',0.82);
+        }
+      }catch(e){}
+    },1500);
+  });
+}});</script>
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
 </body>
 </html>

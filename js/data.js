@@ -28,6 +28,10 @@ let HERO_SUBTITLE = "Mais de 500 imóveis no Território Catarinense. Te acompan
 
 let SECTION_SOBRE_EYEBROW = "Assessoria imobiliária";
 let SECTION_SOBRE_TITLE = "Mais de 7 anos guiando pessoas ao redor do mundo rumo ao imóvel ideal.";
+let SECTION_SOBRE_P1 = "A Furpal nasceu em Balneário Camboriú com uma missão clara: transformar a experiência de comprar, vender ou alugar um imóvel em algo transparente, seguro e humano.";
+let SECTION_SOBRE_P2 = "Ao longo de mais de 7 anos, construímos uma sólida trajetória assessorando famílias, investidores e empresas em todo o Território Catarinense. Cada operação é tratada com a dedicação e o profissionalismo que nos caracterizam.";
+let SECTION_SOBRE_P3 = "Nossa equipe combina conhecimento profundo do mercado imobiliário local com uma rede consolidada de parceiros — bancos, cartórios, avaliadores e construtoras — para garantir resultados consistentes em qualquer tipo de operação.";
+let SOBRE_VIDEO = "/video/sobre.mp4";
 let SECTION_COMPRAR_EYEBROW = "Imóveis à venda";
 let SECTION_COMPRAR_TITLE = "Encontre o imóvel ideal para comprar";
 let SECTION_ALUGAR_EYEBROW = "Imóveis para alugar";
@@ -1093,17 +1097,23 @@ let DEPOIMENTOS = [
     {
       text: "A Furpal fez toda a diferença na compra do nosso primeiro apartamento. Profissionais atenciosos, transparentes e extremamente competentes. Recomendo de olhos fechados!",
       name: "Ana Carolina Silva",
-      role: "Compradora • Apartamento 2 quartos • Balneário Camboriú"
+      role: "Compradora • Apartamento 2 quartos • Balneário Camboriú",
+      photo: "https://randomuser.me/api/portraits/women/44.jpg",
+      rating: 5
     },
     {
       text: "Vendi meu apartamento em menos de 30 dias graças ao trabalho sério da equipe. A precificação foi certeira e a comunicação impecável do começo ao fim.",
       name: "Luciano Mendes",
-      role: "Vendedor • Cobertura • Florianópolis"
+      role: "Vendedor • Cobertura • Florianópolis",
+      photo: "https://randomuser.me/api/portraits/men/32.jpg",
+      rating: 4
     },
     {
       text: "Alugo um imóvel comercial há 3 anos com a Furpal. A gestão é impecável, os relatórios são mensais e qualquer manutenção é resolvida rapidamente. Parceria que dá certo.",
       name: "Roberta Oliveira",
-      role: "Locatária • Sala comercial • Itapema"
+      role: "Locatária • Sala comercial • Itapema",
+      photo: "https://randomuser.me/api/portraits/women/68.jpg",
+      rating: 5
     }
   ];
 

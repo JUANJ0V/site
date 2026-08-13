@@ -91,8 +91,16 @@ if ($file['size'] > 25 * 1024 * 1024) {
     exit;
 }
 
-$name = preg_replace('/[^a-zA-Z0-9_-]/', '', pathinfo($file['name'], PATHINFO_FILENAME));
-$name = substr($name, 0, 40) . '_' . time() . '.' . $ext;
+$name = '';
+if (!empty($body['name'])) {
+    $req = preg_replace('/[^a-zA-Z0-9._-]/', '', $body['name']);
+    if ($req !== '' && strpos($req, '..') === false && strlen($req) <= 60 && strtolower(pathinfo($req, PATHINFO_EXTENSION)) === $ext) {
+        $name = $req;
+    }
+}
+if ($name === '') {
+    $name = substr(preg_replace('/[^a-zA-Z0-9_-]/', '', pathinfo($file['name'], PATHINFO_FILENAME)), 0, 40) . '_' . time() . '.' . $ext;
+}
 $dest = $baseDir . '/' . $name;
 
 if (!move_uploaded_file($file['tmp_name'], $dest)) {

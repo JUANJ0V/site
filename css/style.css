@@ -1124,6 +1124,98 @@
       line-height: 1.625;
     }
 
+    /* ── TESTIMONIAL CARDS ── */
+    #depoimentos .grid-3 { gap: 1.75rem; }
+
+    .testimonial-card {
+      background-color: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.75rem 1.75rem 1.5rem;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
+    }
+
+    .testimonial-header {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .testimonial-photo {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 2px solid var(--gold);
+      background-color: var(--cream);
+    }
+
+    .testimonial-photo-fallback {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .testimonial-author {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      min-width: 0;
+    }
+
+    .testimonial-author strong {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .testimonial-author span {
+      font-size: 0.72rem;
+      color: var(--muted-foreground);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      line-height: 1.4;
+    }
+
+    .testimonial-stars {
+      display: flex;
+      gap: 0.15rem;
+      margin-bottom: 0.85rem;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+    }
+
+    .testimonial-stars .star {
+      color: var(--border);
+    }
+
+    .testimonial-stars .star.filled {
+      color: var(--gold);
+    }
+
+    .testimonial-text {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--muted-foreground);
+      font-style: italic;
+      margin-top: auto;
+    }
+
     /* ── TEAM CARDS ── */
     #stats .section-header {
       margin: 0 auto 0;
@@ -1146,7 +1238,7 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 1.5rem;
       max-width: 680px;
-      margin: -0.25rem auto 0;
+      margin: 0.5rem auto 0;
       padding: 0 1.5rem;
     }
 

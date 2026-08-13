@@ -1,6 +1,11 @@
 Options -Indexes
 RewriteEngine On
 
+# Video MIME types (required for reliable playback on iOS Safari / Safari)
+AddType video/mp4 .mp4
+AddType video/webm .webm
+AddType video/ogg .ogv
+
 # HTTPS redirect
 RewriteCond %{HTTPS} off
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

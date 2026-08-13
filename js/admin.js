@@ -286,6 +286,22 @@ const ADMIN_ENABLED = true;
       c.FIN_DEFAULT_RATE  = parseFloat(gv('fin_defRate')) || 8.5;
       c.FIN_DEFAULT_TERM  = parseInt(gv('fin_defTerm'))   || 240;
     }
+    // Sobre tab (solo si es la pestaña activa)
+    var sobreSection = document.getElementById('adminSection_sobre');
+    if (sobreSection && sobreSection.classList.contains('active') && document.getElementById('sobre_eye')) {
+      c.SECTION_SOBRE_EYEBROW = gv('sobre_eye');
+      c.SECTION_SOBRE_TITLE   = gv('sobre_title');
+      c.SECTION_SOBRE_P1      = gv('sobre_p1');
+      c.SECTION_SOBRE_P2      = gv('sobre_p2');
+      c.SECTION_SOBRE_P3      = gv('sobre_p3');
+      c.SOBRE_VIDEO           = gv('sobre_video');
+      var stInputs = document.querySelectorAll('#adminSection_sobre .sobre-stat-val');
+      var stLabels = document.querySelectorAll('#adminSection_sobre .sobre-stat-label');
+      for (var si2 = 0; si2 < stInputs.length && si2 < _data.STATS.length; si2++) {
+        _data.STATS[si2].value = stInputs[si2].value;
+        if (stLabels[si2]) _data.STATS[si2].label = stLabels[si2].value;
+      }
+    }
   }
 
   window.adminToggleSite = function() {
@@ -326,6 +342,78 @@ const ADMIN_ENABLED = true;
     var bin = '';
     for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
     return btoa(bin);
+  }
+
+  function dataURLtoBlob(dataUrl) {
+    var parts = String(dataUrl).split(',');
+    var mime = (parts[0].match(/:(.*?);/) || [])[1] || 'image/jpeg';
+    var bin = atob(parts[1]);
+    var arr = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+    return new Blob([arr], { type: mime });
+  }
+
+  // Extrai um frame representativo do vídeo (sem depender de ffmpeg no servidor)
+  // e entrega como JPEG dataURL. Guard de brilho: não usa frame escuro/claro demais.
+  function extractVideoFrame(file, cb) {
+    var url = URL.createObjectURL(file);
+    var v = document.createElement('video');
+    v.muted = true;
+    v.playsInline = true;
+    v.preload = 'auto';
+    var settled = false;
+    function finish(dataUrl) {
+      if (settled) return;
+      settled = true;
+      try { v.pause(); v.removeAttribute('src'); v.load(); } catch(e) {}
+      URL.revokeObjectURL(url);
+      if (cb) cb(dataUrl || null);
+    }
+    function snap() {
+      try {
+        var w = v.videoWidth, h = v.videoHeight;
+        if (!w || !h) { finish(null); return; }
+        var mw = 1280;
+        if (w > mw) { h = Math.round(h * mw / w); w = mw; }
+        var c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        var ctx = c.getContext('2d');
+        ctx.drawImage(v, 0, 0, w, h);
+        var pd = ctx.getImageData(0, 0, w, h).data;
+        var ps = 0, pn = w * h;
+        for (var i = 0; i < pd.length; i += 4) ps += 0.299*pd[i] + 0.587*pd[i+1] + 0.114*pd[i+2];
+        if (ps / pn > 30 && ps / pn < 245) finish(c.toDataURL('image/jpeg', 0.82));
+        else finish(null);
+      } catch(e) { finish(null); }
+    }
+    v.addEventListener('loadeddata', function() {
+      var d = v.duration || 0;
+      var seek = d > 1.5 ? 1.0 : (d > 0.3 ? d * 0.3 : 0);
+      if (seek > 0 && seek < d) v.currentTime = seek;
+      else snap();
+    });
+    v.addEventListener('seeked', snap);
+    v.addEventListener('error', function() { finish(null); });
+    setTimeout(snap, 5000);
+    v.src = url;
+    v.load();
+  }
+
+  // Ao subir um vídeo do Hero ou do Sobre, gera automaticamente o poster
+  // (images/hero-poster.jpg ou images/sobre-poster.jpg) extraindo um frame do vídeo enviado.
+  function autoPosterFromVideo(file, posterName) {
+    adminToast('🖼️ Gerando poster do vídeo...', 'info');
+    extractVideoFrame(file, function(dataUrl) {
+      if (!dataUrl) { adminToast('⚠️ Não foi possível extrair o frame do vídeo', 'warning'); return; }
+      try {
+        var f = new File([dataURLtoBlob(dataUrl)], posterName, { type: 'image/jpeg' });
+        uploadFile(f, 'images', function() {
+          adminToast('✅ Poster atualizado automaticamente', 'success');
+        }, function() {
+          adminToast('⚠️ O poster não pôde ser salvo no servidor', 'warning');
+        }, posterName);
+      } catch(e) { adminToast('⚠️ Erro ao gerar o poster: ' + e.message, 'warning'); }
+    });
   }
 
   function saveToPhp(content, pwd) {
@@ -377,6 +465,10 @@ const ADMIN_ENABLED = true;
           okCount++;
           idx++;
           next();
+          if (folder === 'videos') {
+            if (inputId === 'cfg_heroVideo') autoPosterFromVideo(file, 'hero-poster.jpg');
+            else if (inputId === 'sobre_video') autoPosterFromVideo(file, 'sobre-poster.jpg');
+          }
         }, function() {
           idx++;
           next();
@@ -387,7 +479,7 @@ const ADMIN_ENABLED = true;
     el.click();
   };
 
-  function uploadFile(file, folder, cb, errCb) {
+  function uploadFile(file, folder, cb, errCb, fixedName) {
     // SEMPRE envia direto ao servidor (upload.php) — não depende de token do GitHub nem de senha configurada.
     // Usa a senha salva no navegador (Config). Sem fallback: a senha nunca vai embutida no JS público.
     var pwd = localStorage.getItem('admin_server_pass');
@@ -395,6 +487,7 @@ const ADMIN_ENABLED = true;
     fd.append('file', file);
     fd.append('password', pwd);
     fd.append('folder', folder);
+    if (fixedName) fd.append('name', fixedName);
     fetch('upload.php', { method: 'POST', body: fd })
       .then(function(r) { return r.text(); })
       .then(function(text) {
@@ -580,6 +673,10 @@ const ADMIN_ENABLED = true;
     map.HERO_VIDEO    = typeof HERO_VIDEO !== 'undefined' ? HERO_VIDEO : '';
     map.SECTION_SOBRE_EYEBROW   = typeof SECTION_SOBRE_EYEBROW !== 'undefined' ? SECTION_SOBRE_EYEBROW : 'Quem somos';
     map.SECTION_SOBRE_TITLE     = typeof SECTION_SOBRE_TITLE !== 'undefined' ? SECTION_SOBRE_TITLE : '';
+    map.SECTION_SOBRE_P1        = typeof SECTION_SOBRE_P1 !== 'undefined' ? SECTION_SOBRE_P1 : '';
+    map.SECTION_SOBRE_P2        = typeof SECTION_SOBRE_P2 !== 'undefined' ? SECTION_SOBRE_P2 : '';
+    map.SECTION_SOBRE_P3        = typeof SECTION_SOBRE_P3 !== 'undefined' ? SECTION_SOBRE_P3 : '';
+    map.SOBRE_VIDEO             = typeof SOBRE_VIDEO !== 'undefined' ? SOBRE_VIDEO : '/video/sobre.mp4';
     map.SECTION_COMPRAR_EYEBROW = typeof SECTION_COMPRAR_EYEBROW !== 'undefined' ? SECTION_COMPRAR_EYEBROW : 'Imóveis à venda';
     map.SECTION_COMPRAR_TITLE   = typeof SECTION_COMPRAR_TITLE !== 'undefined' ? SECTION_COMPRAR_TITLE : '';
     map.SECTION_ALUGAR_EYEBROW  = typeof SECTION_ALUGAR_EYEBROW !== 'undefined' ? SECTION_ALUGAR_EYEBROW : 'Imóveis para alugar';
@@ -624,6 +721,7 @@ const ADMIN_ENABLED = true;
   function buildSidebar() {
     _adminTabs = [
       { id:'general', label:'⚙️ Geral' },
+      { id:'sobre', label:'🏡 Sobre' },
       { id:'financiamento', label:'💰 Financiamento' },
       { id:'properties', label:'🏠 Imóveis' },
       { id:'empreendimentos', label:'🏗️ Lançamentos' },
@@ -695,6 +793,7 @@ const ADMIN_ENABLED = true;
     try {
       switch (id) {
         case 'general': renderGeneral(div); break;
+        case 'sobre': renderSobre(div); break;
         case 'financiamento': renderFinanciamento(div); break;
         case 'properties': renderProperties(div); break;
         case 'empreendimentos': renderEmpreendimentos(div); break;
@@ -1196,19 +1295,27 @@ const ADMIN_ENABLED = true;
   }
 
   window.addDep = function() {
-    _data.DEPOIMENTOS.push({ text: '', name: 'Novo Cliente', role: '' });
+    _data.DEPOIMENTOS.push({ text: '', name: 'Novo Cliente', role: '', photo: '', rating: 5 });
     editDep(_data.DEPOIMENTOS.length - 1);
   };
 
   window.editDep = function(idx) {
     var d = _data.DEPOIMENTOS[idx];
+    var starsOpts = '';
+    for (var s = 1; s <= 5; s++) {
+      starsOpts += '<option value="' + s + '"' + ((parseInt(d.rating, 10) || 5) === s ? ' selected' : '') + '>' + s + ' estrela' + (s > 1 ? 's' : '') + '</option>';
+    }
     openModal('✏️ Editar Depoimento',
       '<label>Nome</label><input id="dep_name" value="' + esc(d.name) + '">'
       + '<label>Descrição (ex: Compradora • Apartamento • BC)</label><input id="dep_role" value="' + esc(d.role||'') + '">'
+      + '<label>Foto de perfil (URL)' + uploadBtn('dep_photo', 'images') + '</label><input id="dep_photo" value="' + esc(d.photo||'') + '">'
+      + '<label>Estrelas (1 a 5)</label><select id="dep_rating">' + starsOpts + '</select>'
       + '<label>Texto</label><textarea id="dep_text" rows="4">' + esc(d.text) + '</textarea>',
       function() {
         d.name = gv('dep_name');
         d.role = gv('dep_role');
+        d.photo = gv('dep_photo');
+        d.rating = parseInt(gv('dep_rating'), 10) || 5;
         d.text = gv('dep_text');
         syncToLive();
         adminToast('✅ Depoimento salvo', 'success');
@@ -1558,12 +1665,50 @@ const ADMIN_ENABLED = true;
   };
 
   function reRenderAllTabs() {
-    var tabs = ['general','financiamento','properties','empreendimentos','blog','faq','depoimentos','parceiros','team','region'];
+    var tabs = ['general','sobre','financiamento','properties','empreendimentos','blog','faq','depoimentos','parceiros','team','region'];
     tabs.forEach(function(id) {
       var div = document.querySelector('.admin-section[data-tab="' + id + '"]');
       if (div) window['render' + id.charAt(0).toUpperCase() + id.slice(1)](div);
     });
   }
+
+  /* =================================================================
+     SOBRE
+     ================================================================= */
+  function renderSobre(container) {
+    var c = _data.constants;
+    var statsHtml = '';
+    var stArr = (_data.STATS && _data.STATS.length ? _data.STATS : [{value:'+?',label:'Imóveis comercializados'},{value:'+7',label:'Anos de experiência'},{value:'+?',label:'Clientes satisfeitos'}]);
+    for (var si2 = 0; si2 < stArr.length; si2++) {
+      statsHtml += '<div class="row3" style="align-items:end;">'
+        + '<div><label>Número / Valor</label><input class="sobre-stat-val" value="' + esc(stArr[si2].value||'') + '" placeholder="+7"></div>'
+        + '<div style="grid-column:span 2;"><label>Texto</label><input class="sobre-stat-label" value="' + esc(stArr[si2].label||'') + '" placeholder="Anos de experiência"></div>'
+        + '</div>';
+    }
+    container.innerHTML = '<h2>🏡 Seção Sobre</h2><p class="desc">Texto, vídeo e números exibidos na seção "Sobre".</p>'
+      + '<div class="admin-settings">'
+      + '<label>Sobre — Eyebrow</label><input id="sobre_eye" value="' + esc(c.SECTION_SOBRE_EYEBROW||'') + '">'
+      + '<label>Sobre — Título</label><textarea id="sobre_title" rows="2">' + esc(c.SECTION_SOBRE_TITLE||'') + '</textarea>'
+      + '<hr style="border-color:rgba(255,255,255,0.06);margin:1rem 0;">'
+      + '<label>Vídeo do Sobre (MP4)' + uploadBtn('sobre_video', 'videos') + '</label><input id="sobre_video" value="' + esc(c.SOBRE_VIDEO||'/video/sobre.mp4') + '" placeholder="https://...mp4 ou /video/...mp4">'
+      + '<div class="note">Ao enviar o vídeo, o poster (imagem de capa) é gerado automaticamente.</div>'
+      + '<hr style="border-color:rgba(255,255,255,0.06);margin:1rem 0;">'
+      + '<h3 style="color:#d4af37;font-size:0.9rem;margin:0 0 1rem;">📄 Textos (parágrafos)</h3>'
+      + '<label>Parágrafo 1</label><textarea id="sobre_p1" rows="3">' + esc(c.SECTION_SOBRE_P1||'') + '</textarea>'
+      + '<label>Parágrafo 2</label><textarea id="sobre_p2" rows="3">' + esc(c.SECTION_SOBRE_P2||'') + '</textarea>'
+      + '<label>Parágrafo 3</label><textarea id="sobre_p3" rows="3">' + esc(c.SECTION_SOBRE_P3||'') + '</textarea>'
+      + '<hr style="border-color:rgba(255,255,255,0.06);margin:1rem 0;">'
+      + '<h3 style="color:#d4af37;font-size:0.9rem;margin:0 0 1rem;">🔢 Números (estatísticas)</h3>'
+      + statsHtml
+      + '<button class="btn-save" onclick="saveSobre()">💾 Salvar alterações</button>'
+      + '</div>';
+  }
+
+  window.saveSobre = function() {
+    try { saveFormsToData(); } catch(e) {}
+    syncToLive();
+    adminSaveServer();
+  };
 
   /* =================================================================
      FINANCIAMENTO
@@ -1686,6 +1831,10 @@ const ADMIN_ENABLED = true;
     out += '\n';
     out += strConst('SECTION_SOBRE_EYEBROW', c.SECTION_SOBRE_EYEBROW || 'Quem somos');
     out += strConst('SECTION_SOBRE_TITLE', c.SECTION_SOBRE_TITLE || '');
+    out += strConst('SECTION_SOBRE_P1', c.SECTION_SOBRE_P1 || '');
+    out += strConst('SECTION_SOBRE_P2', c.SECTION_SOBRE_P2 || '');
+    out += strConst('SECTION_SOBRE_P3', c.SECTION_SOBRE_P3 || '');
+    out += strConst('SOBRE_VIDEO', c.SOBRE_VIDEO || '/video/sobre.mp4');
     out += strConst('SECTION_COMPRAR_EYEBROW', c.SECTION_COMPRAR_EYEBROW || 'Imóveis à venda');
     out += strConst('SECTION_COMPRAR_TITLE', c.SECTION_COMPRAR_TITLE || '');
     out += strConst('SECTION_ALUGAR_EYEBROW', c.SECTION_ALUGAR_EYEBROW || 'Imóveis para alugar');
@@ -1827,7 +1976,15 @@ const ADMIN_ENABLED = true;
     if (typeof STATS !== 'undefined') {
       STATS.length = 0;
       _data.STATS.forEach(function(s) { STATS.push(s); });
-      if (typeof renderStatsWithLang === 'function') renderStatsWithLang();
+      var _as = document.getElementById('aboutStats');
+      if (_as) {
+        _as.innerHTML = '';
+        for (var _ai = 0; _ai < Math.min(3, STATS.length); _ai++) {
+          var _ad = document.createElement('div');
+          _ad.innerHTML = '<p class="stat-num">' + STATS[_ai].value + '</p><p class="stat-label">' + STATS[_ai].label + '</p>';
+          _as.appendChild(_ad);
+        }
+      }
     }
     } catch(e) { console.warn('syncToLive stats:', e); }
     // Set dynamic WhatsApp overrides BEFORE rendering (app.js checks window._waURL / _waMsg)
@@ -1942,6 +2099,21 @@ const ADMIN_ENABLED = true;
         if (titEl) titEl.textContent = c[item.tit];
       }
     });
+    // Sobre paragraphs + video
+    var _p1 = document.getElementById('sobreP1');
+    if (_p1 && c.SECTION_SOBRE_P1) _p1.textContent = c.SECTION_SOBRE_P1;
+    var _p2 = document.getElementById('sobreP2');
+    if (_p2 && c.SECTION_SOBRE_P2) _p2.textContent = c.SECTION_SOBRE_P2;
+    var _p3 = document.getElementById('sobreP3');
+    if (_p3 && c.SECTION_SOBRE_P3) _p3.textContent = c.SECTION_SOBRE_P3;
+    var _av = document.querySelector('.about-video');
+    if (_av && c.SOBRE_VIDEO) {
+      var _avSrc = _av.querySelector('source');
+      if (_avSrc && _avSrc.src.indexOf(c.SOBRE_VIDEO) === -1) {
+        _avSrc.src = c.SOBRE_VIDEO;
+        _av.load();
+      }
+    }
     } catch(e) { console.warn('syncToLive sectionText:', e); }
     // Financiamento defaults
     try {
