@@ -1244,7 +1244,7 @@ const ADMIN_ENABLED = true;
       + '<div class="row3"><div><label>Data</label><input id="post_date" value="' + esc(b.date) + '"></div>'
       + '<div><label>Categoria</label><input id="post_cat" value="' + esc(b.category) + '"></div>'
       + '<div><label>Autor</label><input id="post_author" value="' + esc(b.author||'') + '"></div></div>'
-      + '<label>URL da imagem' + uploadBtn('post_img', 'images') + '</label><input id="post_img" value="' + esc(b.image) + '">'
+      + '<label>URL da imagem' + uploadBtn('post_img', 'images/blog') + '</label><input id="post_img" value="' + esc(b.image) + '">'
       + '<label>Resumo (excerpt)</label><textarea id="post_excerpt" rows="2">' + esc(b.excerpt||'') + '</textarea>'
       + '<label>Conteúdo completo (use ## para subtítulos, \\n\\n para parágrafos)</label><textarea id="post_content" rows="8">' + esc(b.content) + '</textarea>',
       function() {
@@ -1343,7 +1343,7 @@ const ADMIN_ENABLED = true;
     openModal('✏️ Editar Depoimento',
       '<label>Nome</label><input id="dep_name" value="' + esc(d.name) + '">'
       + '<label>Descrição (ex: Compradora • Apartamento • BC)</label><input id="dep_role" value="' + esc(d.role||'') + '">'
-      + '<label>Foto de perfil (URL)' + uploadBtn('dep_photo', 'images') + '</label><input id="dep_photo" value="' + esc(d.photo||'') + '">'
+      + '<label>Foto de perfil (URL)' + uploadBtn('dep_photo', 'images/depoimentos') + '</label><input id="dep_photo" value="' + esc(d.photo||'') + '">'
       + '<label>Estrelas (1 a 5)</label><select id="dep_rating">' + starsOpts + '</select>'
       + '<label>Texto</label><textarea id="dep_text" rows="4">' + esc(d.text) + '</textarea>',
       function() {
@@ -1391,7 +1391,7 @@ const ADMIN_ENABLED = true;
     var p = _data.PARCEIROS[idx];
     openModal('✏️ Editar Parceiro',
       '<label>Nome</label><input id="par_name" value="' + esc(p.name) + '">'
-      + '<label>URL do logo' + uploadBtn('par_img', 'images') + '</label><input id="par_img" value="' + esc(p.img||'') + '">'
+      + '<label>URL do logo' + uploadBtn('par_img', 'images/parceiros') + '</label><input id="par_img" value="' + esc(p.img||'') + '">'
       + '<label>Site</label><input id="par_url" value="' + esc(p.url||'') + '">',
       function() {
         p.name = gv('par_name');
@@ -1438,7 +1438,7 @@ const ADMIN_ENABLED = true;
     openModal('✏️ Editar Membro',
       '<label>Nome</label><input id="tm_name" value="' + esc(m.name) + '">'
       + '<label>Cargo</label><input id="tm_role" value="' + esc(m.role || '') + '">'
-      + '<label>Foto (URL)' + uploadBtn('tm_photo', 'images') + '</label><input id="tm_photo" value="' + esc(m.photo || '') + '">'
+      + '<label>Foto (URL)' + uploadBtn('tm_photo', 'images/equipe') + '</label><input id="tm_photo" value="' + esc(m.photo || '') + '">'
       + '<label>Descrição</label><textarea id="tm_desc" rows="3">' + esc(m.desc || '') + '</textarea>'
       + '<hr><h4 style="margin:1rem 0 0.5rem;color:var(--gold);">Redes Sociais</h4>'
       + '<label>Instagram</label><input id="tm_instagram" value="' + esc(social.instagram || '') + '">'
