@@ -15,7 +15,8 @@
     depoimentos:    'DEPOIMENTOS',
     parceiros:      'PARCEIROS',
     stats:          'STATS',
-    team:           'TEAM'
+    team:           'TEAM',
+    servicos:       'SERVICES'
   };
 
   function globalVal(name) {
@@ -42,7 +43,8 @@
         depoimentos:     globalVal('DEPOIMENTOS') || [],
         parceiros:       globalVal('PARCEIROS') || [],
         stats:           globalVal('STATS') || [],
-        team:            globalVal('TEAM') || []
+        team:            globalVal('TEAM') || [],
+        servicos:        globalVal('SERVICES') || []
       };
     },
 

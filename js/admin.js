@@ -76,6 +76,15 @@ const ADMIN_ENABLED = true;
       .btn-add { padding:0.5rem 1.2rem; border-radius:8px; border:1px solid rgba(212,175,55,0.2); background:rgba(212,175,55,0.04); color:#d4af37; font-size:0.8rem; cursor:pointer; margin-bottom:1rem; transition:all 0.15s; font-weight:500; }
       .btn-add:hover { background:rgba(212,175,55,0.1); border-color:rgba(212,175,55,0.35); }
 
+      .btn-save, .btn-del { display:inline-flex; align-items:center; gap:0.4rem; padding:0.5rem 1.4rem; border-radius:7px; font-size:0.82rem; font-weight:600; cursor:pointer; transition:all 0.15s; }
+      .btn-save { background:linear-gradient(135deg,#d4af37,#c5a030); color:#0a0f24; border:none; font-weight:700; }
+      .btn-save:hover { box-shadow:0 2px 10px rgba(212,175,55,0.25); transform:translateY(-1px); }
+      .btn-del { background:rgba(255,80,80,0.06); color:#ff6b6b; border:1px solid rgba(255,80,80,0.25); }
+      .btn-del:hover { background:rgba(255,80,80,0.14); border-color:rgba(255,80,80,0.45); }
+      .btn-arrow { display:inline-flex; align-items:center; justify-content:center; width:2.1rem; height:2.1rem; padding:0; border-radius:7px; border:1px solid rgba(212,175,55,0.35); background:rgba(212,175,55,0.08); color:#d4af37; font-size:0.95rem; line-height:1; cursor:pointer; transition:all 0.15s; }
+      .btn-arrow:hover:not(:disabled) { background:rgba(212,175,55,0.22); border-color:rgba(212,175,55,0.6); transform:translateY(-1px); }
+      .btn-arrow:disabled { opacity:0.3; cursor:default; }
+
       .admin-modal { display:none; position:fixed; z-index:2147483647; inset:0; background:rgba(0,0,0,0.75); align-items:center; justify-content:center; backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
       .admin-modal.active { display:flex; }
       .admin-modal .modal-box { background:linear-gradient(180deg,#20274a 0%,#1a1f3a 100%); border-radius:16px; border:1px solid rgba(255,255,255,0.05); width:720px; max-width:95vw; max-height:85vh; overflow-y:auto; padding:1.5rem; box-shadow:0 20px 60px rgba(0,0,0,0.5); }
@@ -300,6 +309,19 @@ const ADMIN_ENABLED = true;
       for (var si2 = 0; si2 < stInputs.length && si2 < _data.STATS.length; si2++) {
         _data.STATS[si2].value = stInputs[si2].value;
         if (stLabels[si2]) _data.STATS[si2].label = stLabels[si2].value;
+      }
+    }
+    // Serviços tab (solo si es la pestaña activa)
+    var servSection = document.getElementById('adminSection_servicos');
+    if (servSection && servSection.classList.contains('active')) {
+      var svTitles = servSection.querySelectorAll('.serv-card-title');
+      var svTexts  = servSection.querySelectorAll('.serv-card-text');
+      _data.SERVICES = [];
+      for (var si3 = 0; si3 < svTitles.length; si3++) {
+        _data.SERVICES.push({
+          title: svTitles[si3].value,
+          text:  svTexts[si3] ? svTexts[si3].value : ''
+        });
       }
     }
   }
@@ -615,6 +637,7 @@ const ADMIN_ENABLED = true;
         PARCEIROS:    JSON.parse(JSON.stringify(typeof PARCEIROS !== 'undefined' ? PARCEIROS : [])),
         BLOG_POSTS:   JSON.parse(JSON.stringify(typeof BLOG_POSTS !== 'undefined' ? BLOG_POSTS : [])),
         TEAM:         JSON.parse(JSON.stringify(typeof TEAM !== 'undefined' ? TEAM : [])),
+        SERVICES:     JSON.parse(JSON.stringify(typeof SERVICES !== 'undefined' ? SERVICES : [])),
         LOCATIONS_INFO: JSON.parse(JSON.stringify(typeof LOCATIONS_INFO !== 'undefined' ? LOCATIONS_INFO : {}))
       };
       var contentEl = document.getElementById('adminContent');
@@ -722,6 +745,7 @@ const ADMIN_ENABLED = true;
     _adminTabs = [
       { id:'general', label:'⚙️ Geral' },
       { id:'sobre', label:'🏡 Sobre' },
+      { id:'servicos', label:'🧰 Serviços' },
       { id:'financiamento', label:'💰 Financiamento' },
       { id:'properties', label:'🏠 Imóveis' },
       { id:'empreendimentos', label:'🏗️ Lançamentos' },
@@ -794,6 +818,7 @@ const ADMIN_ENABLED = true;
       switch (id) {
         case 'general': renderGeneral(div); break;
         case 'sobre': renderSobre(div); break;
+        case 'servicos': renderServicos(div); break;
         case 'financiamento': renderFinanciamento(div); break;
         case 'properties': renderProperties(div); break;
         case 'empreendimentos': renderEmpreendimentos(div); break;
@@ -1621,6 +1646,7 @@ const ADMIN_ENABLED = true;
       depoimentos: _data.DEPOIMENTOS,
       parceiros: _data.PARCEIROS,
       team: _data.TEAM,
+      servicos: _data.SERVICES,
       locations_info: _data.LOCATIONS_INFO,
       blog: _data.BLOG_POSTS
     };
@@ -1652,6 +1678,7 @@ const ADMIN_ENABLED = true;
         if (data.parceiros) replaceArr(_data, 'PARCEIROS', data.parceiros);
         if (data.blog) replaceArr(_data, 'BLOG_POSTS', data.blog);
         if (data.team) replaceArr(_data, 'TEAM', data.team);
+        if (data.servicos) replaceArr(_data, 'SERVICES', data.servicos);
         if (data.locations_info) _data.LOCATIONS_INFO = data.locations_info;
         syncToLive();
         adminToast('✅ Dados importados com sucesso! Re-renderizando...', 'success');
@@ -1665,7 +1692,7 @@ const ADMIN_ENABLED = true;
   };
 
   function reRenderAllTabs() {
-    var tabs = ['general','sobre','financiamento','properties','empreendimentos','blog','faq','depoimentos','parceiros','team','region'];
+    var tabs = ['general','sobre','servicos','financiamento','properties','empreendimentos','blog','faq','depoimentos','parceiros','team','region'];
     tabs.forEach(function(id) {
       var div = document.querySelector('.admin-section[data-tab="' + id + '"]');
       if (div) window['render' + id.charAt(0).toUpperCase() + id.slice(1)](div);
@@ -1705,6 +1732,57 @@ const ADMIN_ENABLED = true;
   }
 
   window.saveSobre = function() {
+    try { saveFormsToData(); } catch(e) {}
+    syncToLive();
+    adminSaveServer();
+  };
+
+  /* =================================================================
+     SERVIÇOS
+     ================================================================= */
+  function renderServicos(container) {
+    var sv = (_data.SERVICES && _data.SERVICES.length ? _data.SERVICES : []);
+    var html = '<h2>🧰 Serviços (' + sv.length + ')</h2><p class="desc">Tarjetas da seção "Serviços": título e descrição de cada card.</p>'
+      + '<div class="admin-settings" id="servicosList">';
+    for (var si4 = 0; si4 < sv.length; si4++) {
+      html += '<div style="border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:1rem;margin-bottom:1rem;">'
+        + '<label>Card ' + (si4 + 1) + ' — Título</label><input class="serv-card-title" value="' + esc(sv[si4].title || '') + '">'
+        + '<label>Card ' + (si4 + 1) + ' — Descrição</label><textarea class="serv-card-text" rows="4">' + esc(sv[si4].text || '') + '</textarea>'
+        + '<div style="display:flex;align-items:center;gap:0.5rem;margin-top:0.5rem;">'
+        + '<button class="btn-arrow" onclick="moveService(' + si4 + ', -1)" title="Mover para cima"' + (si4 === 0 ? ' disabled' : '') + '>↑</button>'
+        + '<button class="btn-arrow" onclick="moveService(' + si4 + ', 1)" title="Mover para baixo"' + (si4 === sv.length - 1 ? ' disabled' : '') + '>↓</button>'
+        + '<button class="btn-del" style="margin-left:auto;" onclick="delService(' + si4 + ')">🗑️ Remover</button>'
+        + '</div></div>';
+    }
+    html += '</div>'
+      + '<button class="btn-add" onclick="addService()">+ Novo Serviço</button>'
+      + '<div style="margin-top:1rem;"><button class="btn-save" onclick="saveServicos()">💾 Salvar alterações</button></div>';
+    container.innerHTML = html;
+  }
+
+  window.addService = function() {
+    try { saveFormsToData(); } catch(e) {}
+    _data.SERVICES.push({ title: 'Novo serviço', text: 'Descrição do serviço.' });
+    renderServicos(document.getElementById('adminSection_servicos'));
+  };
+
+  window.delService = function(i) {
+    try { saveFormsToData(); } catch(e) {}
+    _data.SERVICES.splice(i, 1);
+    renderServicos(document.getElementById('adminSection_servicos'));
+  };
+
+  window.moveService = function(i, dir) {
+    try { saveFormsToData(); } catch(e) {}
+    var j = i + dir;
+    if (j < 0 || j >= _data.SERVICES.length) return;
+    var t = _data.SERVICES[i];
+    _data.SERVICES[i] = _data.SERVICES[j];
+    _data.SERVICES[j] = t;
+    renderServicos(document.getElementById('adminSection_servicos'));
+  };
+
+  window.saveServicos = function() {
     try { saveFormsToData(); } catch(e) {}
     syncToLive();
     adminSaveServer();
@@ -1889,6 +1967,8 @@ const ADMIN_ENABLED = true;
     out += arrToJs('DEPOIMENTOS', _data.DEPOIMENTOS);
     out += '\n/* ===== PARCEIROS ===== */\n';
     out += arrToJs('PARCEIROS', _data.PARCEIROS);
+    out += '\n/* ===== SERVICES ===== */\n';
+    out += arrToJs('SERVICES', _data.SERVICES);
     out += '\n/* ===== BLOG_POSTS ===== */\n';
     out += arrToJs('BLOG_POSTS', _data.BLOG_POSTS);
     out += '\n/* ===== LOCATIONS_INFO ===== */\n';
@@ -2114,6 +2194,8 @@ const ADMIN_ENABLED = true;
         _av.load();
       }
     }
+    // Services cards
+    if (typeof window.renderServices === 'function') renderServices();
     } catch(e) { console.warn('syncToLive sectionText:', e); }
     // Financiamento defaults
     try {

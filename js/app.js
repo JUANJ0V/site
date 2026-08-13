@@ -758,6 +758,21 @@ function renderDepoPage(container) {
   container.innerHTML = html;
 }
 
+function renderServices() {
+  const container = document.getElementById('servicesGrid');
+  if (!container) return;
+  var items = (typeof SERVICES !== 'undefined') ? SERVICES : [];
+  let html = '';
+  for (let i = 0; i < items.length; i++) {
+    const s = items[i];
+    html += '<div class="service-card" data-service="' + i + '">'
+      + '<h3>' + String(s.title || '').replace(/"/g, '&quot;') + '</h3>'
+      + '<p>' + String(s.text || '').replace(/"/g, '&quot;') + '</p>'
+      + '</div>';
+  }
+  container.innerHTML = html;
+}
+
 function renderDepoimentos() {
   const container = document.querySelector('#depoimentos .grid-3');
   if (!container) return;
@@ -1042,6 +1057,7 @@ function setupMobileNav() {
   renderEmpreendimentoCards();
   renderFAQs();
   renderDepoimentos();
+  renderServices();
   renderParceiros();
   renderBlogCards();
   buildDropdownMenus();
@@ -1078,6 +1094,10 @@ function setupMobileNav() {
         TEAM.length = 0;
         data.team.forEach(function(i) { TEAM.push(i); });
       }
+      if (data.servicos) {
+        SERVICES.length = 0;
+        data.servicos.forEach(function(i) { SERVICES.push(i); });
+      }
       // Re-build nav dropdowns with updated data
       ['ddComprar','ddAlugar','ddLanc','mobDdComprar','mobDdAlugar','mobDdLanc'].forEach(function(id) {
         var el = document.getElementById(id);
@@ -1090,6 +1110,7 @@ function setupMobileNav() {
       renderEmpreendimentoCards();
       renderFAQs();
       renderDepoimentos();
+      renderServices();
       renderParceiros();
       renderBlogCards();
       // Apply constants from API to globals and DOM

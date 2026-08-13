@@ -40,6 +40,12 @@ let SECTION_LANCAMENTOS_EYEBROW = "Lançamentos";
 let SECTION_LANCAMENTOS_TITLE = "Empreendimentos exclusivos";
 let SECTION_SERVICOS_EYEBROW = "Serviços";
 let SECTION_SERVICOS_TITLE = "Assessoria completa no Território Catarinense";
+let SERVICES = [
+  { title: "Compra com assessoria", text: "Te guiamos em cada etapa: da busca ao imóvel ideal até a assinatura do contrato. Análise documental, negociação de preço e condições, e acompanhamento do financiamento." },
+  { title: "Aluguel inteligente", text: "Gestão completa de locação com foco em resultados. Seleção criteriosa de inquilinos, contratos sob medida e suporte contínuo durante todo o período locatício." },
+  { title: "Venda estratégica", text: "Maximizamos o valor do seu imóvel com estratégias de marketing digital, precificação precisa e negociação qualificada. Venda mais rápido pelo melhor preço." },
+  { title: "Consultoria para investidores", text: "Análise de viabilidade, projeção de retorno e identificação das melhores oportunidades do mercado catarinense para você investir com segurança e confiança." }
+];
 let SECTION_DEPOIMENTOS_EYEBROW = "Depoimentos";
 let SECTION_DEPOIMENTOS_TITLE = "O que nossos clientes dizem";
 let SECTION_FAQ_EYEBROW = "FAQ";
