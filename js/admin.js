@@ -3,6 +3,7 @@
    =================================================================== */
 
 const ADMIN_ENABLED = true;
+var ADMIN_VERSION = 'v29';
 
 /* ===================================================================
    INICIALIZAÇÃO
@@ -160,7 +161,7 @@ const ADMIN_ENABLED = true;
 
   var panelEl = document.createElement('div');
   panelEl.id = 'adminPanel';
-  panelEl.innerHTML = '<div class="admin-header"><h1>⚙️ Furpal — Admin</h1><div class="admin-actions"><button onclick="adminToggleSite()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);">👁 Ver site</button><button onclick="adminPublish()" class="btn-publish" id="adminPublishBtn">💾 Salvar no servidor</button><button onclick="adminLogout()">Sair</button></div></div><div class="admin-body"><div class="admin-sidebar" id="adminSidebar"></div><div class="admin-content" id="adminContent"></div></div>';
+  panelEl.innerHTML = '<div class="admin-header"><h1>⚙️ Furpal — Admin <span style="font-size:0.62rem;font-weight:400;opacity:0.45;vertical-align:middle;">' + ADMIN_VERSION + '</span></h1><div class="admin-actions"><button onclick="adminToggleSite()" style="color:rgba(255,255,255,0.6);font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);">👁 Ver site</button><button onclick="adminPublish()" class="btn-publish" id="adminPublishBtn">💾 Salvar no servidor</button><button onclick="adminLogout()">Sair</button></div></div><div class="admin-body"><div class="admin-sidebar" id="adminSidebar"></div><div class="admin-content" id="adminContent"></div></div>';
   document.body.appendChild(panelEl);
 
   var toastEl = document.createElement('div');
@@ -221,6 +222,38 @@ const ADMIN_ENABLED = true;
     adminFloat.style.display = 'none';
   };
   document.body.appendChild(adminFloat);
+
+  // Reconcilia as categorias dos imóveis com a lista atual. Se uma única
+  // categoria saiu e uma única entrou, trata como RENAME (propaga aos imóveis).
+  // Caso contrário, imóveis com categoria fora da lista vão para a 1ª categoria.
+  function reconcileCategories(newCats) {
+    newCats = newCats || [];
+    var prevCats = (_data.__prevCats && _data.__prevCats.length) ? _data.__prevCats : [];
+    var removed = [], added = [];
+    for (var i = 0; i < prevCats.length; i++) if (newCats.indexOf(prevCats[i]) === -1) removed.push(prevCats[i]);
+    for (var j = 0; j < newCats.length; j++) if (prevCats.indexOf(newCats[j]) === -1) added.push(newCats[j]);
+    var renameMap = (removed.length === 1 && added.length === 1) ? { old: removed[0], n: added[0] } : null;
+    var fallback = newCats.length ? newCats[0] : '';
+    for (var pj = 0; pj < _data.PROPERTIES.length; pj++) {
+      var cur = _data.PROPERTIES[pj].category;
+      if (newCats.indexOf(cur) !== -1) continue;
+      if (renameMap && cur === renameMap.old) _data.PROPERTIES[pj].category = renameMap.n;
+      else _data.PROPERTIES[pj].category = fallback;
+    }
+    _data.__prevCats = newCats.slice();
+    return renameMap;
+  }
+
+  // Lê as categorias dos inputs da aba Geral e devolve o array limpo ('' fica de fora).
+  function readCatInputs() {
+    var out = [];
+    var catInputs = document.querySelectorAll('.cfg-cat-input');
+    for (var ci = 0; ci < catInputs.length; ci++) {
+      var catV = catInputs[ci].value.trim();
+      if (catV) out.push(catV);
+    }
+    return out;
+  }
 
   function saveFormsToData() {
     var c = _data ? _data.constants : null;
@@ -286,24 +319,8 @@ const ADMIN_ENABLED = true;
       c.SECTION_FINANCIAMENTO_TITLE   = gv('cfg_finTitle');
       var catInputs = document.querySelectorAll('.cfg-cat-input');
       if (catInputs.length) {
-        var prevCats = (c.PROPERTY_CATEGORIES && c.PROPERTY_CATEGORIES.length) ? c.PROPERTY_CATEGORIES.slice() : [];
-        c.PROPERTY_CATEGORIES = [];
-        for (var ci2 = 0; ci2 < catInputs.length; ci2++) {
-          var catV = catInputs[ci2].value.trim();
-          if (catV) c.PROPERTY_CATEGORIES.push(catV);
-        }
-        var newCats = c.PROPERTY_CATEGORIES;
-        var removed = [], added = [];
-        for (var ci3 = 0; ci3 < prevCats.length; ci3++) if (newCats.indexOf(prevCats[ci3]) === -1) removed.push(prevCats[ci3]);
-        for (var ci4 = 0; ci4 < newCats.length; ci4++) if (prevCats.indexOf(newCats[ci4]) === -1) added.push(newCats[ci4]);
-        var renameMap = (removed.length === 1 && added.length === 1) ? { old: removed[0], n: added[0] } : null;
-        var fallback = newCats.length ? newCats[0] : '';
-        for (var pj = 0; pj < _data.PROPERTIES.length; pj++) {
-          var cur = _data.PROPERTIES[pj].category;
-          if (newCats.indexOf(cur) !== -1) continue;
-          if (renameMap && cur === renameMap.old) _data.PROPERTIES[pj].category = renameMap.n;
-          else _data.PROPERTIES[pj].category = fallback;
-        }
+        c.PROPERTY_CATEGORIES = readCatInputs();
+        reconcileCategories(c.PROPERTY_CATEGORIES);
       }
     }
     // Financiamento tab (solo si es la pestaña activa, para no pisar los textos de la pestaña General)
@@ -357,6 +374,13 @@ const ADMIN_ENABLED = true;
 
   window.adminSaveServer = function() {
     try { saveFormsToData(); } catch(e) {}
+    // Garante a reconciliação de categorias em qualquer publicação,
+    // mesmo se a aba Geral não estiver renderizada.
+    try {
+      var ci = readCatInputs();
+      if (ci.length) _data.constants.PROPERTY_CATEGORIES = ci;
+      reconcileCategories(_data.constants.PROPERTY_CATEGORIES || []);
+    } catch(e) {}
     var pwd = localStorage.getItem('admin_server_pass');
     if (!pwd) { adminToast('❌ Defina a senha do save.php na aba Config', 'error'); showTab('settings'); return; }
     var content = generateDataJs();
@@ -734,6 +758,7 @@ const ADMIN_ENABLED = true;
 
   function initAdminPanel() {
     try {
+      console.log('[Furpal Admin] versão carregada: ' + ADMIN_VERSION);
       _data = {
         constants: extractConstants(),
         STATS:        JSON.parse(JSON.stringify(typeof STATS !== 'undefined' ? STATS : [])),
@@ -747,6 +772,7 @@ const ADMIN_ENABLED = true;
         SERVICES:     JSON.parse(JSON.stringify(typeof SERVICES !== 'undefined' ? SERVICES : [])),
         LOCATIONS_INFO: JSON.parse(JSON.stringify(typeof LOCATIONS_INFO !== 'undefined' ? LOCATIONS_INFO : {}))
       };
+      _data.__prevCats = (_data.constants.PROPERTY_CATEGORIES && _data.constants.PROPERTY_CATEGORIES.length) ? _data.constants.PROPERTY_CATEGORIES.slice() : [];
       var contentEl = document.getElementById('adminContent');
       if (contentEl) contentEl.innerHTML = '<p id="adminLoading" style="color:rgba(255,255,255,0.3);padding:1rem;font-size:0.85rem;">Carregando…</p>';
       buildSidebar();
