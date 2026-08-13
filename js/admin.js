@@ -286,20 +286,23 @@ const ADMIN_ENABLED = true;
       c.SECTION_FINANCIAMENTO_TITLE   = gv('cfg_finTitle');
       var catInputs = document.querySelectorAll('.cfg-cat-input');
       if (catInputs.length) {
+        var prevCats = (c.PROPERTY_CATEGORIES && c.PROPERTY_CATEGORIES.length) ? c.PROPERTY_CATEGORIES.slice() : [];
         c.PROPERTY_CATEGORIES = [];
         for (var ci2 = 0; ci2 < catInputs.length; ci2++) {
           var catV = catInputs[ci2].value.trim();
           if (catV) c.PROPERTY_CATEGORIES.push(catV);
         }
-        // Reclasifica imóveis cuja categoria não existe mais na lista
-        if (c.PROPERTY_CATEGORIES.length) {
-          for (var pj = 0; pj < _data.PROPERTIES.length; pj++) {
-            if (c.PROPERTY_CATEGORIES.indexOf(_data.PROPERTIES[pj].category) === -1) {
-              _data.PROPERTIES[pj].category = c.PROPERTY_CATEGORIES[0];
-            }
-          }
-        } else {
-          for (var pj2 = 0; pj2 < _data.PROPERTIES.length; pj2++) _data.PROPERTIES[pj2].category = '';
+        var newCats = c.PROPERTY_CATEGORIES;
+        var removed = [], added = [];
+        for (var ci3 = 0; ci3 < prevCats.length; ci3++) if (newCats.indexOf(prevCats[ci3]) === -1) removed.push(prevCats[ci3]);
+        for (var ci4 = 0; ci4 < newCats.length; ci4++) if (prevCats.indexOf(newCats[ci4]) === -1) added.push(newCats[ci4]);
+        var renameMap = (removed.length === 1 && added.length === 1) ? { old: removed[0], n: added[0] } : null;
+        var fallback = newCats.length ? newCats[0] : '';
+        for (var pj = 0; pj < _data.PROPERTIES.length; pj++) {
+          var cur = _data.PROPERTIES[pj].category;
+          if (newCats.indexOf(cur) !== -1) continue;
+          if (renameMap && cur === renameMap.old) _data.PROPERTIES[pj].category = renameMap.n;
+          else _data.PROPERTIES[pj].category = fallback;
         }
       }
     }
