@@ -979,6 +979,9 @@
     .tag-terreno { background: rgba(39,174,96,0.12); color: #1a7a42; }
     .tag-comercial { background: rgba(52,152,219,0.12); color: #1a6fa0; }
 
+    .detail-cat { margin-top: 0.75rem; }
+    .detail-cat .card-tag { font-size: 0.7rem; padding: 0.3rem 0.7rem; }
+
     .card-location {
       display: block;
       font-size: 0.75rem;

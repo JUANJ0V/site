@@ -383,6 +383,7 @@ function renderDetailCard(propId) {
     + '<div class="detail-header">'
     + '<div>'
     + '<p class="eyebrow">' + eyebrow + '</p>'
+    + (p.category ? '<div class="detail-cat"><span class="card-tag tag-' + p.category.toLowerCase().replace(/[\/\s]+/g, '') + '">' + p.category + '</span></div>' : '')
     + '<h1>' + detailTitle + '</h1>'
     + '<p class="price">' + (p.type === 'rent' && p.price.indexOf('/m\u00EAs') === -1 ? p.price + ' ' + ct.perMonth : p.price) + statusDetailHtml + '</p>'
     + '<div class="props-lg">' + propsLgHtml + '</div>'
