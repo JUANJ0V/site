@@ -3,7 +3,7 @@
    =================================================================== */
 
 const ADMIN_ENABLED = true;
-var ADMIN_VERSION = 'v30';
+var ADMIN_VERSION = 'v31';
 
 // Credenciais de ACESSO ao painel (visíveis no código-fonte do JS, por isso a
 // senha do servidor é a que realmente protege as modificações).
@@ -212,7 +212,9 @@ const ADMIN_PASS = "AdminFurpal#2026";
 
   // Reconcilia as categorias dos imóveis com a lista atual. Se uma única
   // categoria saiu e uma única entrou, trata como RENAME (propaga aos imóveis).
-  // Caso contrário, imóveis com categoria fora da lista vão para a 1ª categoria.
+  // Se uma categoria foi REMOVIDA, os imóveis associados MANTÊM a categoria:
+  // ela continua aparecendo nos filtros/busca/nav até não restar nenhum imóvel
+  // com ela. Quando não houver mais associações, some sozinha.
   function reconcileCategories(newCats) {
     newCats = newCats || [];
     var prevCats = (_data.__prevCats && _data.__prevCats.length) ? _data.__prevCats : [];
@@ -220,12 +222,10 @@ const ADMIN_PASS = "AdminFurpal#2026";
     for (var i = 0; i < prevCats.length; i++) if (newCats.indexOf(prevCats[i]) === -1) removed.push(prevCats[i]);
     for (var j = 0; j < newCats.length; j++) if (prevCats.indexOf(newCats[j]) === -1) added.push(newCats[j]);
     var renameMap = (removed.length === 1 && added.length === 1) ? { old: removed[0], n: added[0] } : null;
-    var fallback = newCats.length ? newCats[0] : '';
-    for (var pj = 0; pj < _data.PROPERTIES.length; pj++) {
-      var cur = _data.PROPERTIES[pj].category;
-      if (newCats.indexOf(cur) !== -1) continue;
-      if (renameMap && cur === renameMap.old) _data.PROPERTIES[pj].category = renameMap.n;
-      else _data.PROPERTIES[pj].category = fallback;
+    if (renameMap) {
+      for (var pj = 0; pj < _data.PROPERTIES.length; pj++) {
+        if (_data.PROPERTIES[pj].category === renameMap.old) _data.PROPERTIES[pj].category = renameMap.n;
+      }
     }
     _data.__prevCats = newCats.slice();
     return renameMap;
