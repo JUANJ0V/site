@@ -291,6 +291,16 @@ const ADMIN_ENABLED = true;
           var catV = catInputs[ci2].value.trim();
           if (catV) c.PROPERTY_CATEGORIES.push(catV);
         }
+        // Reclasifica imóveis cuja categoria não existe mais na lista
+        if (c.PROPERTY_CATEGORIES.length) {
+          for (var pj = 0; pj < _data.PROPERTIES.length; pj++) {
+            if (c.PROPERTY_CATEGORIES.indexOf(_data.PROPERTIES[pj].category) === -1) {
+              _data.PROPERTIES[pj].category = c.PROPERTY_CATEGORIES[0];
+            }
+          }
+        } else {
+          for (var pj2 = 0; pj2 < _data.PROPERTIES.length; pj2++) _data.PROPERTIES[pj2].category = '';
+        }
       }
     }
     // Financiamento tab (solo si es la pestaña activa, para no pisar los textos de la pestaña General)
@@ -403,6 +413,39 @@ const ADMIN_ENABLED = true;
         + '</div>';
     }
     return html;
+  }
+
+  // Reconstruye os selects de tipo/categoria do site (busca e seções) com as categorias em uso
+  function refreshTypeSelects() {
+    var cats = [];
+    for (var pi = 0; pi < _data.PROPERTIES.length; pi++) {
+      var c = _data.PROPERTIES[pi].category;
+      if (c && cats.indexOf(c) === -1) cats.push(c);
+    }
+    cats.sort();
+    var defs = { 'search-type': 'Tipo de imóvel', 'comprar-type': 'Tipo', 'alugar-type': 'Tipo' };
+    for (var sid in defs) {
+      var sel = document.getElementById(sid);
+      if (!sel) continue;
+      var hadHist = sid === 'search-type' && sel.options[1] && sel.options[1].value === 'history';
+      sel.innerHTML = '';
+      var o0 = document.createElement('option');
+      o0.value = '';
+      o0.textContent = defs[sid];
+      sel.appendChild(o0);
+      for (var pi2 = 0; pi2 < cats.length; pi2++) {
+        var o = document.createElement('option');
+        o.value = cats[pi2];
+        o.textContent = cats[pi2];
+        sel.appendChild(o);
+      }
+      if (hadHist) {
+        var hist = document.createElement('option');
+        hist.value = 'history';
+        hist.textContent = 'Conhecer a região';
+        sel.insertBefore(hist, sel.options[1] || null);
+      }
+    }
   }
 
   window.addCategory = function() {
@@ -2150,6 +2193,8 @@ const ADMIN_ENABLED = true;
         renderPropertyCards('#comprar .grid-3', 'sale');
         renderPropertyCards('#alugar .grid-2', 'rent');
       }
+      if (typeof buildDropdownMenus === 'function') buildDropdownMenus();
+      refreshTypeSelects();
     }
     } catch(e) { console.warn('syncToLive properties:', e); }
     // EMPREENDIMENTOS
