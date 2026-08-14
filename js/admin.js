@@ -162,7 +162,7 @@ const ADMIN_PASS = "AdminFurpal#2026";
   // ── Criar elementos ──
   var loginEl = document.createElement('div');
   loginEl.id = 'adminLogin';
-  loginEl.innerHTML = '<div class="box"><h2>🔐 Painel Admin</h2><p>Entre para gerenciar o site</p><form onsubmit="adminLogin();return false"><input type="text" id="adminUser" placeholder="Usuário" autocomplete="off"><input type="password" id="adminPass" placeholder="Senha" autocomplete="current-password"><button type="submit">Entrar</button></form><div class="error" id="adminLoginError">Usuário ou senha incorretos</div></div>';
+  loginEl.innerHTML = '<div class="box"><h2>Painel Admin</h2><p>Entre para gerenciar o site</p><form onsubmit="adminLogin();return false"><input type="text" id="adminUser" placeholder="Usuário" autocomplete="off"><input type="password" id="adminPass" placeholder="Senha" autocomplete="current-password"><button type="submit">Entrar</button></form><div class="error" id="adminLoginError">Usuário ou senha incorretos</div></div>';
   document.body.appendChild(loginEl);
 
   var panelEl = document.createElement('div');
@@ -417,11 +417,13 @@ const ADMIN_PASS = "AdminFurpal#2026";
   }
 
   window.adminToggleSite = function() {
+    askConfirm('Sair do modo de edição? (as alterações não salvas serão aplicadas no site local, mas NÃO enviadas ao servidor)', function() {
     try { saveFormsToData(); } catch(e) { console.warn('saveFormsToData error:', e); }
     try { syncToLive(); } catch(e) { console.warn('syncToLive error:', e); }
     panelEl.classList.remove('active');
     document.body.classList.remove('admin-mode');
     adminFloat.style.display = 'flex';
+    });
   };
 
   window.adminSaveServer = function() {
@@ -448,8 +450,11 @@ const ADMIN_PASS = "AdminFurpal#2026";
 
   window.saveServerPass = function() {
     var pwd = document.getElementById('cfg_serverPass').value.trim();
+    if (!pwd) { adminToast('❌ Digite a senha', 'error'); return; }
+    askConfirm('Guardar esta senha do servidor no navegador?', function() {
     localStorage.setItem('admin_server_pass', pwd);
     adminToast('✅ Senha do servidor salva no navegador', 'success');
+    });
   };
 
   function uploadBtn(inputId, folder) {
@@ -529,16 +534,23 @@ const ADMIN_PASS = "AdminFurpal#2026";
   }
 
   window.addCategory = function() {
-    try { saveFormsToData(); } catch(e) {}
-    if (!_data.constants.PROPERTY_CATEGORIES) _data.constants.PROPERTY_CATEGORIES = [];
-    _data.constants.PROPERTY_CATEGORIES.push('Nova categoria');
-    renderGeneral(document.getElementById('adminSection_general'));
+    askConfirm('Adicionar a categoria "Nova categoria"?', function() {
+      try { saveFormsToData(); } catch(e) {}
+      if (!_data.constants.PROPERTY_CATEGORIES) _data.constants.PROPERTY_CATEGORIES = [];
+      _data.constants.PROPERTY_CATEGORIES.push('Nova categoria');
+      renderGeneral(document.getElementById('adminSection_general'));
+      adminToast('✅ Categoria adicionada', 'success');
+    });
   };
 
   window.delCategory = function(i) {
-    try { saveFormsToData(); } catch(e) {}
-    if (_data.constants.PROPERTY_CATEGORIES) _data.constants.PROPERTY_CATEGORIES.splice(i, 1);
-    renderGeneral(document.getElementById('adminSection_general'));
+    var cat = (_data.constants.PROPERTY_CATEGORIES && _data.constants.PROPERTY_CATEGORIES[i]) || 'esta categoria';
+    askConfirm('Excluir a categoria "' + cat + '"?', function() {
+      try { saveFormsToData(); } catch(e) {}
+      if (_data.constants.PROPERTY_CATEGORIES) _data.constants.PROPERTY_CATEGORIES.splice(i, 1);
+      renderGeneral(document.getElementById('adminSection_general'));
+      adminToast('🗑️ Categoria removida', 'info');
+    }, { danger: true, title: 'Excluir categoria', yesLabel: 'Sim, excluir' });
   };
 
   // InfinityFree bloqueia POSTs com corpo de código JS. Codifica em base64 (UTF-8 seguro) para o save.php aceitar.
@@ -711,8 +723,7 @@ const ADMIN_PASS = "AdminFurpal#2026";
         }
         if (res.ok && res.url) { cb(res.url); return; }
         adminToast('❌ ' + ((res && res.error) || 'Erro no upload'), 'error');
-        if (errCb) errCb();
-        // ── Fallback GitHub (comentado de propósito — reativar se for usar GitHub de novo) ──
+        if (errCb) errCb();        // ── Fallback GitHub (comentado de propósito — reativar se for usar GitHub de novo) ──
         // uploadViaGitHub(file, folder, cb);
       })
       .catch(function(err) {
@@ -771,6 +782,7 @@ const ADMIN_PASS = "AdminFurpal#2026";
   */
 
   window.adminLogout = function() {
+    askConfirm('Sair do painel admin?', function() {
     sessionStorage.removeItem('admin_logged');
     panelEl.classList.remove('active');
     loginEl.classList.remove('hidden');
@@ -779,6 +791,7 @@ const ADMIN_PASS = "AdminFurpal#2026";
     document.getElementById('adminLoginError').style.display = 'none';
     document.body.classList.remove('admin-mode');
     adminFloat.style.display = 'none';
+    });
   };
 
   window.adminToast = function(msg, type) {
@@ -933,19 +946,19 @@ const ADMIN_PASS = "AdminFurpal#2026";
 
   function buildSidebar() {
     _adminTabs = [
-      { id:'general', label:'⚙️ Geral' },
-      { id:'sobre', label:'🏡 Sobre' },
-      { id:'servicos', label:'🧰 Serviços' },
-      { id:'financiamento', label:'💰 Financiamento' },
-      { id:'properties', label:'🏠 Imóveis' },
-      { id:'empreendimentos', label:'🏗️ Lançamentos' },
-      { id:'blog', label:'📝 Blog' },
-      { id:'faq', label:'❓ FAQ' },
-      { id:'depoimentos', label:'💬 Depoimentos' },
-      { id:'parceiros', label:'🤝 Parceiros' },
-      { id:'team', label:'👥 Equipe' },
-      { id:'region', label:'📍 Região' },
-      { id:'settings', label:'🔑 Config' }
+      { id:'general', label:'Geral' },
+      { id:'sobre', label:'Sobre' },
+      { id:'servicos', label:'Serviços' },
+      { id:'financiamento', label:'Financiamento' },
+      { id:'properties', label:'Imóveis' },
+      { id:'empreendimentos', label:'Lançamentos' },
+      { id:'blog', label:'Blog' },
+      { id:'faq', label:'FAQ' },
+      { id:'depoimentos', label:'Depoimentos' },
+      { id:'parceiros', label:'Parceiros' },
+      { id:'team', label:'Equipe' },
+      { id:'region', label:'Região' },
+      { id:'settings', label:'Config' }
     ];
     var sb = document.getElementById('adminSidebar');
     sb.innerHTML = '';
@@ -1031,7 +1044,7 @@ const ADMIN_PASS = "AdminFurpal#2026";
      ================================================================= */
   function renderGeneral(container) {
     var c = _data.constants;
-    container.innerHTML = '<h2>⚙️ Configurações Gerais</h2><p class="desc">Texto do site, redes sociais e seções visíveis.</p>'
+    container.innerHTML = '<h2>Configurações Gerais</h2><p class="desc">Texto do site, redes sociais e seções visíveis.</p>'
       + '<div class="admin-settings">'
       + '<div class="row2"><div><label>Nome do site</label><input id="cfg_siteName" value="' + esc(c.SITE_NAME) + '"></div>'
       + '<div><label>URL do logo (imagem)' + uploadBtn('cfg_logo', 'images') + '</label><input id="cfg_logo" value="' + esc(c.SITE_LOGO||'') + '" placeholder="https://...svg ou png"></div></div>'
@@ -1106,16 +1119,18 @@ const ADMIN_PASS = "AdminFurpal#2026";
   }
 
   window.saveGeneral = function() {
+    askConfirm('Salvar as alterações da aba Geral no servidor?', function() {
     try { saveFormsToData(); } catch(e) {}
     syncToLive();
     adminSaveServer();
+    });
   };
 
   /* =================================================================
      PROPERTIES
      ================================================================= */
   function renderProperties(container) {
-    var html = '<h2>🏠 Imóveis (' + _data.PROPERTIES.length + ')</h2><p class="desc">Lista de imóveis para venda e aluguel.</p>';
+    var html = '<h2>Imóveis (' + _data.PROPERTIES.length + ')</h2><p class="desc">Lista de imóveis para venda e aluguel.</p>';
     html += '<button class="btn-add" onclick="addProperty()">+ Novo Imóvel</button>';
     html += '<table class="admin-table"><thead><tr><th>Título</th><th>Tipo</th><th>Preço</th><th>Local</th><th>Status</th><th class="actions">Ações</th></tr></thead><tbody>';
     _data.PROPERTIES.forEach(function(p, i) {
@@ -1127,6 +1142,7 @@ const ADMIN_PASS = "AdminFurpal#2026";
   }
 
   window.addProperty = function() {
+    askConfirm('Adicionar um novo imóvel?', function() {
     var defCats = (_data.constants.PROPERTY_CATEGORIES && _data.constants.PROPERTY_CATEGORIES.length)
       ? _data.constants.PROPERTY_CATEGORIES
       : ["Apartamento","Casa","Cobertura","Kitnet/Studio","Comercial","Terreno/Lote"];
@@ -1142,6 +1158,8 @@ const ADMIN_PASS = "AdminFurpal#2026";
       front: 0, back: 0, zone: '', topography: ''
     });
     editProperty(_data.PROPERTIES.length - 1);
+    adminToast('✅ Imóvel adicionado', 'success');
+    });
   };
 
   window.editProperty = function(idx) {
@@ -1207,18 +1225,20 @@ const ADMIN_PASS = "AdminFurpal#2026";
   };
 
   window.delProperty = function(idx) {
-    if (!confirm('Excluir ' + jq(_data.PROPERTIES[idx].title) + '?')) return;
+    var t = (_data.PROPERTIES[idx] && _data.PROPERTIES[idx].title) || 'este imóvel';
+    askConfirm('Excluir "' + t + '"?', function() {
     _data.PROPERTIES.splice(idx, 1);
     syncToLive();
     renderProperties(document.getElementById('adminSection_properties'));
     adminToast('🗑️ Imóvel removido', 'info');
+    }, { danger: true, title: 'Excluir imóvel', yesLabel: 'Sim, excluir' });
   };
 
   /* =================================================================
      EMPREENDIMENTOS
      ================================================================= */
   function renderEmpreendimentos(container) {
-    var html = '<h2>🏗️ Lançamentos (' + _data.EMPREENDIMENTOS.length + ')</h2><p class="desc">Empreendimentos exclusivos.</p>';
+    var html = '<h2>Lançamentos (' + _data.EMPREENDIMENTOS.length + ')</h2><p class="desc">Empreendimentos exclusivos.</p>';
     html += '<button class="btn-add" onclick="addEmp()">+ Novo Lançamento</button>';
     html += '<table class="admin-table"><thead><tr><th>Título</th><th>Preço</th><th>Progresso</th><th class="actions">Ações</th></tr></thead><tbody>';
     _data.EMPREENDIMENTOS.forEach(function(e, i) {
@@ -1302,14 +1322,17 @@ const ADMIN_PASS = "AdminFurpal#2026";
   window.delEmpRow = function(type, btn) {
     var row = btn.closest('.emp-row');
     if (!row) return;
+    askConfirm('Excluir este item?', function() {
     var cont = row.parentNode;
     row.remove();
     if (!cont.querySelector('.emp-row')) {
       cont.innerHTML = '<p class="emp-empty" style="color:rgba(255,255,255,0.35);font-size:0.8rem;margin:0;">Nenhum item ainda — clique em "+ Agregar" abaixo.</p>';
     }
+    }, { danger: true, title: 'Excluir item', yesLabel: 'Sim, excluir' });
   };
 
   window.addEmp = function() {
+    askConfirm('Adicionar um novo lançamento?', function() {
     _data.EMPREENDIMENTOS.push({
       id: 'emp-' + Date.now(),
       title: 'Novo Lançamento', location: 'Balneário Camboriú — SC',
@@ -1321,6 +1344,8 @@ const ADMIN_PASS = "AdminFurpal#2026";
       lat: -26.99, lng: -48.63, address: '', beachDistance: '', maps: ''
     });
     editEmp(_data.EMPREENDIMENTOS.length - 1);
+    adminToast('✅ Lançamento adicionado', 'success');
+    });
   };
 
   window.editEmp = function(idx) {
@@ -1390,18 +1415,20 @@ const ADMIN_PASS = "AdminFurpal#2026";
   };
 
   window.delEmp = function(idx) {
-    if (!confirm('Excluir ' + jq(_data.EMPREENDIMENTOS[idx].title) + '?')) return;
+    var t = (_data.EMPREENDIMENTOS[idx] && _data.EMPREENDIMENTOS[idx].title) || 'este lançamento';
+    askConfirm('Excluir "' + t + '"?', function() {
     _data.EMPREENDIMENTOS.splice(idx, 1);
     syncToLive();
     renderEmpreendimentos(document.getElementById('adminSection_empreendimentos'));
     adminToast('🗑️ Lançamento removido', 'info');
+    }, { danger: true, title: 'Excluir lançamento', yesLabel: 'Sim, excluir' });
   };
 
   /* =================================================================
      BLOG
      ================================================================= */
   function renderBlog(container) {
-    var html = '<h2>📝 Blog (' + _data.BLOG_POSTS.length + ')</h2><p class="desc">Posts do blog.</p>';
+    var html = '<h2>Blog (' + _data.BLOG_POSTS.length + ')</h2><p class="desc">Posts do blog.</p>';
     html += '<button class="btn-add" onclick="addPost()">+ Novo Post</button>';
     html += '<table class="admin-table"><thead><tr><th>Título</th><th>Data</th><th>Categoria</th><th class="actions">Ações</th></tr></thead><tbody>';
     _data.BLOG_POSTS.forEach(function(b, i) {
@@ -1413,6 +1440,7 @@ const ADMIN_PASS = "AdminFurpal#2026";
   }
 
   window.addPost = function() {
+    askConfirm('Adicionar um novo post no blog?', function() {
     _data.BLOG_POSTS.push({
       id: 'post-' + Date.now(),
       title: 'Novo Post', date: new Date().toLocaleDateString('pt-BR'),
@@ -1421,6 +1449,8 @@ const ADMIN_PASS = "AdminFurpal#2026";
       excerpt: '', content: ''
     });
     editPost(_data.BLOG_POSTS.length - 1);
+    adminToast('✅ Post adicionado', 'success');
+    });
   };
 
   window.editPost = function(idx) {
@@ -1452,18 +1482,20 @@ const ADMIN_PASS = "AdminFurpal#2026";
   };
 
   window.delPost = function(idx) {
-    if (!confirm('Excluir ' + jq(_data.BLOG_POSTS[idx].title) + '?')) return;
+    var t = (_data.BLOG_POSTS[idx] && _data.BLOG_POSTS[idx].title) || 'este post';
+    askConfirm('Excluir "' + t + '"?', function() {
     _data.BLOG_POSTS.splice(idx, 1);
     syncToLive();
     renderBlog(document.getElementById('adminSection_blog'));
     adminToast('🗑️ Post removido', 'info');
+    }, { danger: true, title: 'Excluir post', yesLabel: 'Sim, excluir' });
   };
 
   /* =================================================================
      FAQ
      ================================================================= */
   function renderFaq(container) {
-    var html = '<h2>❓ FAQ (' + _data.FAQS.length + ')</h2><p class="desc">Perguntas frequentes.</p>';
+    var html = '<h2>FAQ (' + _data.FAQS.length + ')</h2><p class="desc">Perguntas frequentes.</p>';
     html += '<button class="btn-add" onclick="addFaq()">+ Nova Pergunta</button>';
     html += '<table class="admin-table"><thead><tr><th>Pergunta</th><th class="actions">Ações</th></tr></thead><tbody>';
     _data.FAQS.forEach(function(f, i) {
@@ -1475,8 +1507,11 @@ const ADMIN_PASS = "AdminFurpal#2026";
   }
 
   window.addFaq = function() {
+    askConfirm('Adicionar uma nova pergunta no FAQ?', function() {
     _data.FAQS.push({ q: 'Nova pergunta', a: 'Resposta...' });
     editFaq(_data.FAQS.length - 1);
+    adminToast('✅ Pergunta adicionada', 'success');
+    });
   };
 
   window.editFaq = function(idx) {
@@ -1495,18 +1530,19 @@ const ADMIN_PASS = "AdminFurpal#2026";
   };
 
   window.delFaq = function(idx) {
-    if (!confirm('Excluir esta pergunta?')) return;
+    askConfirm('Excluir esta pergunta do FAQ?', function() {
     _data.FAQS.splice(idx, 1);
     syncToLive();
     renderFaq(document.getElementById('adminSection_faq'));
     adminToast('🗑️ FAQ removida', 'info');
+    }, { danger: true, title: 'Excluir FAQ', yesLabel: 'Sim, excluir' });
   };
 
   /* =================================================================
      DEPOIMENTOS
      ================================================================= */
   function renderAdminDepoimentos(container) {
-    var html = '<h2>💬 Depoimentos (' + _data.DEPOIMENTOS.length + ')</h2><p class="desc">Depoimentos de clientes.</p>';
+    var html = '<h2>Depoimentos (' + _data.DEPOIMENTOS.length + ')</h2><p class="desc">Depoimentos de clientes.</p>';
     html += '<button class="btn-add" onclick="addDep()">+ Novo Depoimento</button>';
     html += '<table class="admin-table"><thead><tr><th>Nome</th><th>Texto</th><th class="actions">Ações</th></tr></thead><tbody>';
     _data.DEPOIMENTOS.forEach(function(d, i) {
@@ -1518,8 +1554,11 @@ const ADMIN_PASS = "AdminFurpal#2026";
   }
 
   window.addDep = function() {
+    askConfirm('Adicionar um novo depoimento?', function() {
     _data.DEPOIMENTOS.push({ text: '', name: 'Novo Cliente', role: '', photo: '', rating: 5 });
     editDep(_data.DEPOIMENTOS.length - 1);
+    adminToast('✅ Depoimento adicionado', 'success');
+    });
   };
 
   window.editDep = function(idx) {
@@ -1548,18 +1587,20 @@ const ADMIN_PASS = "AdminFurpal#2026";
   };
 
   window.delDep = function(idx) {
-    if (!confirm('Excluir depoimento de ' + jq(_data.DEPOIMENTOS[idx].name) + '?')) return;
+    var n = (_data.DEPOIMENTOS[idx] && _data.DEPOIMENTOS[idx].name) || 'este depoimento';
+    askConfirm('Excluir o depoimento de "' + n + '"?', function() {
     _data.DEPOIMENTOS.splice(idx, 1);
     syncToLive();
     renderAdminDepoimentos(document.getElementById('adminSection_depoimentos'));
     adminToast('🗑️ Depoimento removido', 'info');
+    }, { danger: true, title: 'Excluir depoimento', yesLabel: 'Sim, excluir' });
   };
 
   /* =================================================================
      PARCEIROS
      ================================================================= */
   function renderAdminParceiros(container) {
-    var html = '<h2>🤝 Parceiros (' + _data.PARCEIROS.length + ')</h2><p class="desc">Instituições parceiras.</p>';
+    var html = '<h2>Parceiros (' + _data.PARCEIROS.length + ')</h2><p class="desc">Instituições parceiras.</p>';
     html += '<button class="btn-add" onclick="addParceiro()">+ Novo Parceiro</button>';
     html += '<table class="admin-table"><thead><tr><th>Nome</th><th>URL</th><th class="actions">Ações</th></tr></thead><tbody>';
     _data.PARCEIROS.forEach(function(p, i) {
@@ -1571,8 +1612,11 @@ const ADMIN_PASS = "AdminFurpal#2026";
   }
 
   window.addParceiro = function() {
+    askConfirm('Adicionar um novo parceiro?', function() {
     _data.PARCEIROS.push({ name: 'Novo Parceiro', img: '', url: '' });
     editParceiro(_data.PARCEIROS.length - 1);
+    adminToast('✅ Parceiro adicionado', 'success');
+    });
   };
 
   window.editParceiro = function(idx) {
@@ -1593,18 +1637,20 @@ const ADMIN_PASS = "AdminFurpal#2026";
   };
 
   window.delParceiro = function(idx) {
-    if (!confirm('Excluir ' + jq(_data.PARCEIROS[idx].name) + '?')) return;
+    var n = (_data.PARCEIROS[idx] && _data.PARCEIROS[idx].name) || 'este parceiro';
+    askConfirm('Excluir o parceiro "' + n + '"?', function() {
     _data.PARCEIROS.splice(idx, 1);
     syncToLive();
     renderAdminParceiros(document.getElementById('adminSection_parceiros'));
     adminToast('🗑️ Parceiro removido', 'info');
+    }, { danger: true, title: 'Excluir parceiro', yesLabel: 'Sim, excluir' });
   };
 
   /* =================================================================
      TEAM — Equipe
      ================================================================= */
   function renderAdminTeam(container) {
-    var html = '<h2>👥 Equipe (' + _data.TEAM.length + ')</h2><p class="desc">Membros da equipe Furpal.</p>';
+    var html = '<h2>Equipe (' + _data.TEAM.length + ')</h2><p class="desc">Membros da equipe Furpal.</p>';
     html += '<button class="btn-add" onclick="addTeamMember()">+ Novo Membro</button>';
     html += '<table class="admin-table"><thead><tr><th>Nome</th><th>Cargo</th><th class="actions">Ações</th></tr></thead><tbody>';
     _data.TEAM.forEach(function(m, i) {
@@ -1616,8 +1662,11 @@ const ADMIN_PASS = "AdminFurpal#2026";
   }
 
   window.addTeamMember = function() {
+    askConfirm('Adicionar um novo membro da equipe?', function() {
     _data.TEAM.push({ name: 'Novo Membro', role: '', photo: '', desc: '', social: { instagram: '', whatsapp: '', linkedin: '', facebook: '', youtube: '', site: '' } });
     editTeamMember(_data.TEAM.length - 1);
+    adminToast('✅ Membro adicionado', 'success');
+    });
   };
 
   window.editTeamMember = function(idx) {
@@ -1656,11 +1705,13 @@ const ADMIN_PASS = "AdminFurpal#2026";
   };
 
   window.delTeamMember = function(idx) {
-    if (!confirm('Excluir ' + jq(_data.TEAM[idx].name) + '?')) return;
+    var n = (_data.TEAM[idx] && _data.TEAM[idx].name) || 'este membro';
+    askConfirm('Excluir o membro "' + n + '"?', function() {
     _data.TEAM.splice(idx, 1);
     syncToLive();
     renderAdminTeam(document.getElementById('adminSection_team'));
     adminToast('🗑️ Membro removido', 'info');
+    }, { danger: true, title: 'Excluir membro', yesLabel: 'Sim, excluir' });
   };
 
   /* =================================================================
@@ -1670,7 +1721,7 @@ const ADMIN_PASS = "AdminFurpal#2026";
 
   window.renderAdminRegion = function(container) {
     var keys = Object.keys(_data.LOCATIONS_INFO);
-    var html = '<h2>📍 Conhecer a Região (' + keys.length + ')</h2><p class="desc">Informações sobre cada cidade/região.</p>';
+    var html = '<h2>Conhecer a Região (' + keys.length + ')</h2><p class="desc">Informações sobre cada cidade/região.</p>';
     html += '<button class="btn-add" onclick="addRegionLocation()">+ Nova Região</button>';
     html += '<table class="admin-table"><thead><tr><th>Nome</th><th>Praias</th><th class="actions">Ações</th></tr></thead><tbody>';
     keys.forEach(function(k) {
@@ -1685,6 +1736,7 @@ const ADMIN_PASS = "AdminFurpal#2026";
   window.addRegionLocation = function() {
     var name = prompt('Nome da cidade/região:');
     if (!name || _data.LOCATIONS_INFO[name]) return;
+    askConfirm('Adicionar a região "' + name + '"?', function() {
     _data.LOCATIONS_INFO[name] = {
       tagline: '',
       images: [],
@@ -1695,6 +1747,8 @@ const ADMIN_PASS = "AdminFurpal#2026";
       highlights: []
     };
     editRegionLocation(name);
+    adminToast('✅ Região adicionada', 'success');
+    });
   };
 
   function regRowHtml(type, item) {
@@ -1753,7 +1807,9 @@ const ADMIN_PASS = "AdminFurpal#2026";
   window.delRegRow = function(type, btn) {
     var row = btn.closest('.reg-row');
     if (!row) return;
+    askConfirm('Excluir este item?', function() {
     row.remove();
+    }, { danger: true, title: 'Excluir item', yesLabel: 'Sim, excluir' });
   };
 
   window.editRegionLocation = function(key) {
@@ -1794,18 +1850,19 @@ const ADMIN_PASS = "AdminFurpal#2026";
   };
 
   window.delRegionLocation = function(key) {
-    if (!confirm('Excluir região ' + jq(key) + '?')) return;
+    askConfirm('Excluir a região "' + key + '"?', function() {
     delete _data.LOCATIONS_INFO[key];
     syncToLive();
     renderAdminRegion(document.getElementById('adminSection_region'));
     adminToast('🗑️ Região removida', 'info');
+    }, { danger: true, title: 'Excluir região', yesLabel: 'Sim, excluir' });
   };
 
   /* =================================================================
      SETTINGS (Servidor / Backup)
      ================================================================= */
   function renderSettings(container) {
-    container.innerHTML = '<h2>🔑 Configurações Avançadas</h2><p class="desc">Salvamento no servidor e backup.</p>'
+    container.innerHTML = '<h2>Configurações Avançadas</h2><p class="desc">Salvamento no servidor e backup.</p>'
       + '<div class="admin-settings">'
       + '<h3 style="color:#d4af37;font-size:0.95rem;margin:0 0 0.5rem;">💾 Salvar no servidor (PHP)</h3>'
       + '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0 0 0.75rem;">Se o site está rodando em um host com PHP (ex: Hostinger), usa isso pra salvar as alterações direto no <code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.3rem;border-radius:3px;">js/data.js</code> do servidor.</p>'
@@ -1828,8 +1885,10 @@ const ADMIN_PASS = "AdminFurpal#2026";
   window.saveToServer = function() {
     var pass = document.getElementById('cfg_serverPass').value.trim();
     if (!pass) { adminToast('❌ Defina a senha do save.php na aba Config', 'error'); return; }
+    askConfirm('Salvar todos os dados no servidor?', function() {
     localStorage.setItem('admin_server_pass', pass);
     adminSaveServer();
+    });
   };
 
   /* ---- Export / Import ---- */
@@ -1863,6 +1922,7 @@ const ADMIN_PASS = "AdminFurpal#2026";
   window.importData = function(input) {
     var file = input.files[0];
     if (!file) return;
+    askConfirm('Importar "' + file.name + '"? Isso SUBSTITUI os dados atuais.', function() {
     var reader = new FileReader();
     reader.onload = function(e) {
       try {
@@ -1887,6 +1947,7 @@ const ADMIN_PASS = "AdminFurpal#2026";
     };
     reader.readAsText(file);
     input.value = '';
+    }, { danger: true, title: 'Importar dados', yesLabel: 'Sim, importar' });
   };
 
   function reRenderAllTabs() {
@@ -1910,7 +1971,7 @@ const ADMIN_PASS = "AdminFurpal#2026";
         + '<div style="grid-column:span 2;"><label>Texto</label><input class="sobre-stat-label" value="' + esc(stArr[si2].label||'') + '" placeholder="Anos de experiência"></div>'
         + '</div>';
     }
-    container.innerHTML = '<h2>🏡 Seção Sobre</h2><p class="desc">Texto, vídeo e números exibidos na seção "Sobre".</p>'
+    container.innerHTML = '<h2>Seção Sobre</h2><p class="desc">Texto, vídeo e números exibidos na seção "Sobre".</p>'
       + '<div class="admin-settings">'
       + '<label>Sobre — Eyebrow</label><input id="sobre_eye" value="' + esc(c.SECTION_SOBRE_EYEBROW||'') + '">'
       + '<label>Sobre — Título</label><textarea id="sobre_title" rows="2">' + esc(c.SECTION_SOBRE_TITLE||'') + '</textarea>'
@@ -1930,9 +1991,11 @@ const ADMIN_PASS = "AdminFurpal#2026";
   }
 
   window.saveSobre = function() {
+    askConfirm('Salvar as alterações da seção Sobre no servidor?', function() {
     try { saveFormsToData(); } catch(e) {}
     syncToLive();
     adminSaveServer();
+    });
   };
 
   /* =================================================================
@@ -1940,7 +2003,7 @@ const ADMIN_PASS = "AdminFurpal#2026";
      ================================================================= */
   function renderServicos(container) {
     var sv = (_data.SERVICES && _data.SERVICES.length ? _data.SERVICES : []);
-    var html = '<h2>🧰 Serviços (' + sv.length + ')</h2><p class="desc">Tarjetas da seção "Serviços": título e descrição de cada card.</p>'
+    var html = '<h2>Serviços (' + sv.length + ')</h2><p class="desc">Tarjetas da seção "Serviços": título e descrição de cada card.</p>'
       + '<div class="admin-settings" id="servicosList">';
     for (var si4 = 0; si4 < sv.length; si4++) {
       html += '<div style="border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:1rem;margin-bottom:1rem;">'
@@ -1959,15 +2022,22 @@ const ADMIN_PASS = "AdminFurpal#2026";
   }
 
   window.addService = function() {
+    askConfirm('Adicionar um novo serviço?', function() {
     try { saveFormsToData(); } catch(e) {}
     _data.SERVICES.push({ title: 'Novo serviço', text: 'Descrição do serviço.' });
     renderServicos(document.getElementById('adminSection_servicos'));
+    adminToast('✅ Serviço adicionado', 'success');
+    });
   };
 
   window.delService = function(i) {
+    var sv = (_data.SERVICES[i] && _data.SERVICES[i].title) || 'este serviço';
+    askConfirm('Excluir o serviço "' + sv + '"?', function() {
     try { saveFormsToData(); } catch(e) {}
     _data.SERVICES.splice(i, 1);
     renderServicos(document.getElementById('adminSection_servicos'));
+    adminToast('🗑️ Serviço removido', 'info');
+    }, { danger: true, title: 'Excluir serviço', yesLabel: 'Sim, excluir' });
   };
 
   window.moveService = function(i, dir) {
@@ -1981,9 +2051,11 @@ const ADMIN_PASS = "AdminFurpal#2026";
   };
 
   window.saveServicos = function() {
+    askConfirm('Salvar as alterações da seção Serviços no servidor?', function() {
     try { saveFormsToData(); } catch(e) {}
     syncToLive();
     adminSaveServer();
+    });
   };
 
   /* =================================================================
@@ -1991,7 +2063,7 @@ const ADMIN_PASS = "AdminFurpal#2026";
      ================================================================= */
   function renderFinanciamento(container) {
     var c = _data.constants;
-    container.innerHTML = '<h2>💰 Financiamento</h2><p class="desc">Texto e valores padrão do simulador.</p>'
+    container.innerHTML = '<h2>Financiamento</h2><p class="desc">Texto e valores padrão do simulador.</p>'
       + '<div class="admin-settings">'
       + '<label>Título (eyebrow)</label><input id="fin_eye" value="' + esc(c.SECTION_FINANCIAMENTO_EYEBROW) + '">'
       + '<label>Título principal</label><textarea id="fin_title" rows="2">' + esc(c.SECTION_FINANCIAMENTO_TITLE) + '</textarea>'
@@ -2006,6 +2078,7 @@ const ADMIN_PASS = "AdminFurpal#2026";
   }
 
   window.saveFinanciamento = function() {
+    askConfirm('Salvar as alterações da aba Financiamento no servidor?', function() {
     var c = _data.constants;
     c.SECTION_FINANCIAMENTO_EYEBROW = gv('fin_eye');
     c.SECTION_FINANCIAMENTO_TITLE   = gv('fin_title');
@@ -2030,13 +2103,15 @@ const ADMIN_PASS = "AdminFurpal#2026";
     // Recalculate
     if (typeof calcFinancing === 'function') calcFinancing();
     adminSaveServer();
+    });
   };
-
   /* =================================================================
      SAVE (no servidor via save.php)
      ================================================================= */
   window.adminPublish = function() {
+    askConfirm('Publicar (salvar) todas as alterações no servidor?', function() {
     adminSaveServer();
+    });
   };
 
    function generateDataJs() {
@@ -2510,5 +2585,25 @@ const ADMIN_PASS = "AdminFurpal#2026";
   window.closeModal = function() {
     var modal = document.querySelector('.admin-modal');
     if (modal) modal.remove();
+  };
+
+  // Cartel de confirmação antes de qualquer ação (adicionar, salvar, excluir…).
+  // Uso: askConfirm(mensagem, funçãoConfirmada, { danger:true, title:'...', yesLabel:'...' })
+  window.askConfirm = function(message, onYes, opts) {
+    opts = opts || {};
+    var existing = document.querySelector('.admin-modal');
+    if (existing) existing.remove();
+    var modal = document.createElement('div');
+    modal.className = 'admin-modal active';
+    modal.innerHTML = '<div class="modal-box" style="max-width:440px;">'
+      + '<h3>' + (opts.title || 'Confirmar ação') + '</h3>'
+      + '<p style="margin:0 0 0.25rem;color:rgba(255,255,255,0.75);font-size:0.9rem;line-height:1.55;">' + message + '</p>'
+      + '<div class="modal-actions"><button class="btn-cancel" onclick="closeModal()">Cancelar</button>'
+      + '<button class="' + (opts.danger ? 'btn-del' : 'btn-save') + '" id="confirmYesBtn">' + (opts.yesLabel || 'Sim, confirmar') + '</button></div></div>';
+    document.body.appendChild(modal);
+    document.getElementById('confirmYesBtn').onclick = function() {
+      closeModal();
+      if (typeof onYes === 'function') onYes();
+    };
   };
 })();
