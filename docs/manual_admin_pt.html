@@ -159,12 +159,13 @@
   <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="url">https://www.furpal.com.br<b>?edit=1</b></span></div>
   <div class="screen">
     <div class="panel-mock">
-      <div class="hdr"><h5>🔐 Painel Admin</h5></div>
+      <div class="hdr"><h5>Painel Admin</h5></div>
       <div class="body" style="min-height:120px;justify-content:center;align-items:center;">
         <div style="width:320px;text-align:center;padding:18px 0;">
-          <div style="color:rgba(255,255,255,0.55);font-size:9pt;margin-bottom:12px;">Digite a senha do servidor para gerenciar o site</div>
+          <div style="color:rgba(255,255,255,0.55);font-size:9pt;margin-bottom:12px;">Digite o usuário e a senha de administrador</div>
+          <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:6px;padding:10px;color:#8a93b5;margin-bottom:8px;">admin</div>
           <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:6px;padding:10px;color:#8a93b5;">•••••••••••</div>
-          <div class="btn-gold" style="width:100%;text-align:center;">Entrar</div>
+          <div class="btn-gold" style="width:100%;text-align:center;margin-top:10px;">Entrar</div>
         </div>
       </div>
     </div>
@@ -172,13 +173,14 @@
 </div>
 
 <ol start="3">
-  <li>Digite a <strong>senha do servidor</strong> (a mesma definida no arquivo <code>api-config.php</code> — veja a <a href="#apikey">seção 15</a>).</li>
+  <li>Digite o <strong>usuário</strong> e a <strong>senha de administrador</strong> (definidos no arquivo <code>js/admin.js</code> — linhas 5 e 6).</li>
   <li>Clique em <strong>"Entrar"</strong>. O painel abre na parte superior do site.</li>
+  <li>Para <strong>salvar</strong> ou fazer <strong>upload</strong>, será pedida a <strong>senha do servidor</strong> (a do arquivo <code>api-config.php</code> — veja a <a href="#apikey">seção 15</a>).</li>
 </ol>
 
-<div class="warn-box"><strong>⚠️ Importante:</strong> A senha é verificada no servidor (<code>auth.php</code>) com limite de tentativas. Use uma senha <strong>longa e única</strong>, que só a administração da imobiliária conheça. Não use "admin123" nem datas de aniversário.</div>
+<div class="warn-box"><strong>⚠️ Importante:</strong> a senha de administrador é o "cadeado de entrada" do painel. A senha do servidor (<code>API_PASSWORD</code>) é um segundo cadeado que protege o <strong>salvamento</strong> e o <strong>upload de arquivos</strong>. Use senhas <strong>longas e únicas</strong>, que só a administração da imobiliária conheça.</div>
 
-<div class="tip-box"><strong>⚡ Dica:</strong> Depois do login, a senha fica guardada no seu navegador (em "Config" você pode atualizá-la). Ao fechar a aba você é deslogado automaticamente.</div>
+<div class="tip-box"><strong>⚡ Dica:</strong> a senha do servidor fica guardada no seu navegador (em "Config" você pode atualizá-la). Ao fechar a aba você é deslogado automaticamente.</div>
 
 <h3>O que você verá depois do login:</h3>
 
@@ -187,33 +189,32 @@
   <div class="screen" style="padding:6px;">
     <div class="panel-mock">
       <div class="hdr">
-        <h5>⚙️ Furpal — Admin</h5>
-        <div class="acts"><button>👁 Ver site</button><button>💾 Salvar</button><button class="gold">💾 Salvar no servidor</button><button>Sair</button></div>
+        <h5>Furpal — Admin</h5>
+        <div class="acts"><button>👁 Ver site</button><button class="gold">💾 Salvar no servidor</button><button>Sair</button></div>
       </div>
       <div class="body">
         <div class="tabs">
-          <div class="on">⚙️ Geral</div>
-          <div>💰 Financiamento</div>
-          <div>🏠 Imóveis</div>
-          <div>🏗️ Lançamentos</div>
-          <div>📝 Blog</div>
-          <div>❓ FAQ</div>
-          <div>💬 Depoimentos</div>
-          <div>🤝 Parceiros</div>
-          <div>👥 Equipe</div>
-          <div>📍 Região</div>
-          <div>🔑 Config</div>
+          <div class="on">Geral</div>
+          <div>Financiamento</div>
+          <div>Imóveis</div>
+          <div>Lançamentos</div>
+          <div>Blog</div>
+          <div>FAQ</div>
+          <div>Depoimentos</div>
+          <div>Parceiros</div>
+          <div>Equipe</div>
+          <div>Região</div>
+          <div>Config</div>
         </div>
         <div class="content">
           <div style="color:rgba(255,255,255,0.35);font-size:8.5pt;margin-bottom:10px;">CONTEÚDO DA ABA SELECIONADA</div>
-          <div style="border:1px dashed rgba(212,175,55,0.35);border-radius:6px;padding:16px;color:rgba(255,255,255,0.45);font-size:9pt;text-align:center;">Aqui aparecem os campos de edição.<br>Botões típicos: <span style="color:#ffd700;">✏️ Editar</span> &nbsp; <span style="color:#ff6b6b;">🗑️ Excluir</span> &nbsp; <span class="badge">+ Novo</span></div>
-        </div>
+          <div style="border:1px dashed rgba(212,175,55,0.35);border-radius:6px;padding:16px;color:rgba(255,255,255,0.45);font-size:9pt;text-align:center;">Aqui aparecem os campos de edição.<br>Botões típicos: <span style="color:#ffd700;">✏️ Editar</span> &nbsp; <span style="color:#ff6b6b;">🗑️ Excluir</span> &nbsp; <span class="badge">+ Novo</span></div>        </div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="info-box"><strong>💡 No celular:</strong> o menu de abas vira um seletor (dropdown) no topo — toque em "⚙️ Geral" para abrir a lista e escolher a aba desejada.</div>
+<div class="info-box"><strong>💡 No celular:</strong> o menu de abas vira um seletor (dropdown) no topo — toque em "Geral" para abrir a lista e escolher a aba desejada.</div>
 
 <div class="pb"></div>
 
@@ -224,13 +225,16 @@
 
 <table>
   <tr><th>Parte</th><th>Função</th></tr>
-  <tr><td><strong>Barra superior</strong></td><td>Título do painel + 4 botões: <strong>👁 Ver site</strong> (volta ao site sem sair do login), <strong>💾 Salvar</strong> e <strong>💾 Salvar no servidor</strong> (ambos gravam as alterações no servidor via <code>save.php</code>) e <strong>Sair</strong>.</td></tr>
-  <tr><td><strong>Menu lateral (abas)</strong></td><td>11 abas que organizam todo o conteúdo do site. No celular vira um seletor no topo.</td></tr>
+  <tr><td><strong>Barra superior</strong></td><td>Título do painel + 3 botões: <strong>👁 Ver site</strong> (volta ao site sem sair do login), <strong>💾 Salvar no servidor</strong> (grava as alterações no servidor via <code>save.php</code>) e <strong>Sair</strong>.</td></tr>
+  <tr><td><strong>Menu lateral (abas)</strong></td><td>13 abas que organizam todo o conteúdo do site. No celular vira um seletor no topo.</td></tr>
   <tr><td><strong>Área de conteúdo</strong></td><td>Mostra os formulários, listas e botões da aba selecionada.</td></tr>
 </table>
 
+<h3>Confirmação antes de cada ação</h3>
+<p>Para evitar alterações por engano, o painel <strong>pede confirmação antes de toda ação</strong>: adicionar, excluir, salvar, importar dados, sair do modo de edição etc. Sempre aparece uma janela de confirmação com <strong>"Cancelar"</strong> e <strong>"Sim, confirmar"</strong> (para exclusões o botão fica vermelho). Leia a mensagem antes de confirmar.</p>
+
 <h3>Regra de ouro para NUNCA perder trabalho:</h3>
-<div class="warn-box"><strong>⚠️ Sempre clique em "💾 Salvar" (ou "💾 Salvar no servidor")</strong> depois de editar qualquer aba, antes de fechar a página ou trocar de aba. O painel não salva sozinho.</div>
+<div class="warn-box"><strong>⚠️ Sempre clique em "💾 Salvar no servidor"</strong> depois de editar qualquer aba, antes de fechar a página ou trocar de aba. O painel não salva sozinho.</div>
 
 <!-- ===== 4. ABA GERAL ===== -->
 <h2 id="geral">4. Aba "Geral" — Configurações do Site</h2>
@@ -243,17 +247,17 @@
     <div class="panel-mock">
       <div class="body">
         <div class="tabs">
-          <div class="on">⚙️ Geral</div>
-          <div>💰 Financiamento</div>
-          <div>🏠 Imóveis</div>
-          <div>🏗️ Lançamentos</div>
-          <div>📝 Blog</div>
-          <div>❓ FAQ</div>
-          <div>💬 Depoimentos</div>
-          <div>🤝 Parceiros</div>
-          <div>👥 Equipe</div>
-          <div>📍 Região</div>
-          <div>🔑 Config</div>
+          <div class="on">Geral</div>
+          <div>Financiamento</div>
+          <div>Imóveis</div>
+          <div>Lançamentos</div>
+          <div>Blog</div>
+          <div>FAQ</div>
+          <div>Depoimentos</div>
+          <div>Parceiros</div>
+          <div>Equipe</div>
+          <div>Região</div>
+          <div>Config</div>
         </div>
         <div class="content">
           <div class="fld"><span>Nome do site</span><div class="in">Furpal — Consultoria Imobiliária</div></div>
@@ -292,6 +296,38 @@
 
 <p>Esta aba controla a <strong>calculadora de financiamento</strong> do site (a seção que mostra "entrada, parcelas, taxa de juros").</p>
 
+<div class="browser">
+  <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="url">Painel Admin → Aba <b>Financiamento</b></span></div>
+  <div class="screen" style="padding:6px;">
+    <div class="panel-mock">
+      <div class="body">
+        <div class="tabs">
+          <div>Geral</div>
+          <div class="on">Financiamento</div>
+          <div>Imóveis</div>
+          <div>Lançamentos</div>
+          <div>Blog</div>
+          <div>FAQ</div>
+          <div>Depoimentos</div>
+          <div>Parceiros</div>
+          <div>Equipe</div>
+          <div>Região</div>
+          <div>Config</div>
+        </div>
+        <div class="content">
+          <div class="fld"><span>Título (eyebrow)</span><div class="in">Financiamento</div></div>
+          <div class="fld"><span>Título principal</span><div class="in">Simule o financiamento do seu imóvel</div></div>
+          <div class="fld"><span>Valor padrão do imóvel (R$)</span><div class="in">500000</div></div>
+          <div class="fld"><span>Entrada padrão (R$)</span><div class="in">100000</div></div>
+          <div class="fld"><span>Taxa de juros padrão (% a.a.)</span><div class="in">8.5</div></div>
+          <div class="fld"><span>Prazo padrão (meses)</span><div class="in">20 anos (240 meses)</div></div>
+          <div><span class="btn-gold">💾 Salvar alterações</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <ul>
   <li><strong>Eyebrow e Título:</strong> textos da seção de financiamento.</li>
   <li><strong>Preço padrão (R$):</strong> valor inicial do imóvel na simulação (ex. <code>500000</code>).</li>
@@ -315,17 +351,17 @@
     <div class="panel-mock">
       <div class="body">
         <div class="tabs">
-          <div>⚙️ Geral</div>
-          <div>💰 Financiamento</div>
-          <div class="on">🏠 Imóveis</div>
-          <div>🏗️ Lançamentos</div>
-          <div>📝 Blog</div>
-          <div>❓ FAQ</div>
-          <div>💬 Depoimentos</div>
-          <div>🤝 Parceiros</div>
-          <div>👥 Equipe</div>
-          <div>📍 Região</div>
-          <div>🔑 Config</div>
+          <div>Geral</div>
+          <div>Financiamento</div>
+          <div class="on">Imóveis</div>
+          <div>Lançamentos</div>
+          <div>Blog</div>
+          <div>FAQ</div>
+          <div>Depoimentos</div>
+          <div>Parceiros</div>
+          <div>Equipe</div>
+          <div>Região</div>
+          <div>Config</div>
         </div>
         <div class="content">
           <div style="margin-bottom:8px;"><span class="badge">+ Novo Imóvel</span></div>
@@ -344,8 +380,9 @@
 <h3>Adicionar um novo imóvel:</h3>
 <ol>
   <li>Clique em <strong>+ Novo Imóvel</strong> (no topo da lista).</li>
+  <li>Confirme na janela "Adicionar um novo imóvel?" → <strong>Sim, confirmar</strong>.</li>
   <li>Preencha o formulário (janela de edição) e clique em <strong>Salvar</strong>.</li>
-  <li>Clique em <strong>💾 Salvar no servidor</strong> para publicar no site.</li>
+  <li>Clique em <strong>💾 Salvar no servidor</strong> para publicar no site (confirme novamente se pedir).</li>
 </ol>
 
 <h3>Campos do formulário de imóvel:</h3>
@@ -379,6 +416,37 @@
 
 <p>Nesta aba você gerencia os <strong>lançamentos/empreendimentos exclusivos</strong>. A lista mostra <strong>Título, Preço, Progresso (%)</strong> e ações <strong>✏️ Editar</strong> / <strong>🗑️ Excluir</strong>.</p>
 
+<div class="browser">
+  <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="url">Painel Admin → Aba <b>Lançamentos</b></span></div>
+  <div class="screen" style="padding:6px;">
+    <div class="panel-mock">
+      <div class="body">
+        <div class="tabs">
+          <div>Geral</div>
+          <div>Financiamento</div>
+          <div>Imóveis</div>
+          <div class="on">Lançamentos</div>
+          <div>Blog</div>
+          <div>FAQ</div>
+          <div>Depoimentos</div>
+          <div>Parceiros</div>
+          <div>Equipe</div>
+          <div>Região</div>
+          <div>Config</div>
+        </div>
+        <div class="content">
+          <div style="margin-bottom:8px;"><span class="badge">+ Novo Lançamento</span></div>
+          <table>
+            <tr><th>Título</th><th>Preço</th><th>Progresso</th><th style="text-align:right;">Ações</th></tr>
+            <tr><td>Boulevard Balneário</td><td>A partir de R$ 890.000</td><td>72%</td><td style="text-align:right;">✏️ 🗑️</td></tr>
+            <tr><td>Marinas 240</td><td>A partir de R$ 1.250.000</td><td>35%</td><td style="text-align:right;">✏️ 🗑️</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <ol>
   <li>Clique em <strong>+ Novo Lançamento</strong>.</li>
   <li>Preencha: <strong>Título</strong>, <strong>Preço</strong>, <strong>Progresso (%)</strong> da obra, <strong>Imagem</strong> (upload), <strong>Descrição</strong> e o <strong>eyebrow/título</strong> da seção.</li>
@@ -407,17 +475,17 @@
     <div class="panel-mock">
       <div class="body">
         <div class="tabs">
-          <div>⚙️ Geral</div>
-          <div>💰 Financiamento</div>
-          <div>🏠 Imóveis</div>
-          <div>🏗️ Lançamentos</div>
-          <div class="on">📝 Blog</div>
-          <div>❓ FAQ</div>
-          <div>💬 Depoimentos</div>
-          <div>🤝 Parceiros</div>
-          <div>👥 Equipe</div>
-          <div>📍 Região</div>
-          <div>🔑 Config</div>
+          <div>Geral</div>
+          <div>Financiamento</div>
+          <div>Imóveis</div>
+          <div>Lançamentos</div>
+          <div class="on">Blog</div>
+          <div>FAQ</div>
+          <div>Depoimentos</div>
+          <div>Parceiros</div>
+          <div>Equipe</div>
+          <div>Região</div>
+          <div>Config</div>
         </div>
         <div class="content">
           <div style="margin-bottom:8px;"><span class="badge">+ Novo Post</span></div>
@@ -456,6 +524,37 @@
   <li>Salve e depois clique em <strong>💾 Salvar no servidor</strong>.</li>
 </ol>
 
+<div class="browser">
+  <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="url">Painel Admin → Aba <b>FAQ</b></span></div>
+  <div class="screen" style="padding:6px;">
+    <div class="panel-mock">
+      <div class="body">
+        <div class="tabs">
+          <div>Geral</div>
+          <div>Financiamento</div>
+          <div>Imóveis</div>
+          <div>Lançamentos</div>
+          <div>Blog</div>
+          <div class="on">FAQ</div>
+          <div>Depoimentos</div>
+          <div>Parceiros</div>
+          <div>Equipe</div>
+          <div>Região</div>
+          <div>Config</div>
+        </div>
+        <div class="content">
+          <div style="margin-bottom:8px;"><span class="badge">+ Nova Pergunta</span></div>
+          <table>
+            <tr><th>Pergunta</th><th style="text-align:right;">Ações</th></tr>
+            <tr><td>Como funciona o financiamento?</td><td style="text-align:right;">✏️ 🗑️</td></tr>
+            <tr><td>Quais documentos são necessários?</td><td style="text-align:right;">✏️ 🗑️</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="info-box"><strong>💡 Dica de conteúdo:</strong> responda as dúvidas mais comuns dos clientes (financiamento, documentação, visita ao imóvel, etc.).</div>
 
 <div class="pb"></div>
@@ -476,6 +575,37 @@
   <li>Salve e depois clique em <strong>💾 Salvar no servidor</strong>.</li>
 </ol>
 
+<div class="browser">
+  <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="url">Painel Admin → Aba <b>Depoimentos</b></span></div>
+  <div class="screen" style="padding:6px;">
+    <div class="panel-mock">
+      <div class="body">
+        <div class="tabs">
+          <div>Geral</div>
+          <div>Financiamento</div>
+          <div>Imóveis</div>
+          <div>Lançamentos</div>
+          <div>Blog</div>
+          <div>FAQ</div>
+          <div class="on">Depoimentos</div>
+          <div>Parceiros</div>
+          <div>Equipe</div>
+          <div>Região</div>
+          <div>Config</div>
+        </div>
+        <div class="content">
+          <div style="margin-bottom:8px;"><span class="badge">+ Novo Depoimento</span></div>
+          <table>
+            <tr><th>Nome</th><th>Texto</th><th style="text-align:right;">Ações</th></tr>
+            <tr><td>Marina Souza</td><td>Atendimento excelente, recomendo...</td><td style="text-align:right;">✏️ 🗑️</td></tr>
+            <tr><td>Carlos Pereira</td><td>Encontrei o apartamento dos meus sonh...</td><td style="text-align:right;">✏️ 🗑️</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="tip-box"><strong>⚡ Dica:</strong> depoimentos reais (com nome) geram mais confiança nos visitantes.</div>
 
 <div class="pb"></div>
@@ -495,6 +625,37 @@
   <li>Informe o nome e envie o logo.</li>
   <li>Salve e depois clique em <strong>💾 Salvar no servidor</strong>.</li>
 </ol>
+
+<div class="browser">
+  <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="url">Painel Admin → Aba <b>Parceiros</b></span></div>
+  <div class="screen" style="padding:6px;">
+    <div class="panel-mock">
+      <div class="body">
+        <div class="tabs">
+          <div>Geral</div>
+          <div>Financiamento</div>
+          <div>Imóveis</div>
+          <div>Lançamentos</div>
+          <div>Blog</div>
+          <div>FAQ</div>
+          <div>Depoimentos</div>
+          <div class="on">Parceiros</div>
+          <div>Equipe</div>
+          <div>Região</div>
+          <div>Config</div>
+        </div>
+        <div class="content">
+          <div style="margin-bottom:8px;"><span class="badge">+ Novo Parceiro</span></div>
+          <table>
+            <tr><th>Nome</th><th>URL</th><th style="text-align:right;">Ações</th></tr>
+            <tr><td>Banco do Brasil</td><td>https://www.bb.com.br</td><td style="text-align:right;">✏️ 🗑️</td></tr>
+            <tr><td>Caixa Econômica</td><td>https://www.caixa.gov.br</td><td style="text-align:right;">✏️ 🗑️</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="warn-box"><strong>⚠️ Logos em branco:</strong> se um parceiro aparecer sem imagem no site, é porque o campo <strong>logo</strong> está vazio — envie a imagem pelo botão <strong>📷 Upload</strong>.</div>
 
@@ -517,6 +678,37 @@
   <li>Salve e depois clique em <strong>💾 Salvar no servidor</strong>.</li>
 </ol>
 
+<div class="browser">
+  <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="url">Painel Admin → Aba <b>Equipe</b></span></div>
+  <div class="screen" style="padding:6px;">
+    <div class="panel-mock">
+      <div class="body">
+        <div class="tabs">
+          <div>Geral</div>
+          <div>Financiamento</div>
+          <div>Imóveis</div>
+          <div>Lançamentos</div>
+          <div>Blog</div>
+          <div>FAQ</div>
+          <div>Depoimentos</div>
+          <div>Parceiros</div>
+          <div class="on">Equipe</div>
+          <div>Região</div>
+          <div>Config</div>
+        </div>
+        <div class="content">
+          <div style="margin-bottom:8px;"><span class="badge">+ Novo Membro</span></div>
+          <table>
+            <tr><th>Nome</th><th>Cargo</th><th style="text-align:right;">Ações</th></tr>
+            <tr><td>Ana Beatriz</td><td>Corretora</td><td style="text-align:right;">✏️ 🗑️</td></tr>
+            <tr><td>Ricardo Lima</td><td>Gerente Comercial</td><td style="text-align:right;">✏️ 🗑️</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="pb"></div>
 
 <!-- ===== 13. ABA REGIÃO ===== -->
@@ -530,17 +722,17 @@
     <div class="panel-mock">
       <div class="body">
         <div class="tabs">
-          <div>⚙️ Geral</div>
-          <div>💰 Financiamento</div>
-          <div>🏠 Imóveis</div>
-          <div>🏗️ Lançamentos</div>
-          <div>📝 Blog</div>
-          <div>❓ FAQ</div>
-          <div>💬 Depoimentos</div>
-          <div>🤝 Parceiros</div>
-          <div>👥 Equipe</div>
-          <div class="on">📍 Região</div>
-          <div>🔑 Config</div>
+          <div>Geral</div>
+          <div>Financiamento</div>
+          <div>Imóveis</div>
+          <div>Lançamentos</div>
+          <div>Blog</div>
+          <div>FAQ</div>
+          <div>Depoimentos</div>
+          <div>Parceiros</div>
+          <div>Equipe</div>
+          <div class="on">Região</div>
+          <div>Config</div>
         </div>
         <div class="content">
           <div style="margin-bottom:8px;"><span class="badge">+ Nova Cidade</span></div>
@@ -587,21 +779,21 @@
     <div class="panel-mock">
       <div class="body">
         <div class="tabs">
-          <div>⚙️ Geral</div>
-          <div>💰 Financiamento</div>
-          <div>🏠 Imóveis</div>
-          <div>🏗️ Lançamentos</div>
-          <div>📝 Blog</div>
-          <div>❓ FAQ</div>
-          <div>💬 Depoimentos</div>
-          <div>🤝 Parceiros</div>
-          <div>👥 Equipe</div>
-          <div>📍 Região</div>
-          <div class="on">🔑 Config</div>
+          <div>Geral</div>
+          <div>Financiamento</div>
+          <div>Imóveis</div>
+          <div>Lançamentos</div>
+          <div>Blog</div>
+          <div>FAQ</div>
+          <div>Depoimentos</div>
+          <div>Parceiros</div>
+          <div>Equipe</div>
+          <div>Região</div>
+          <div class="on">Config</div>
         </div>
         <div class="content">
           <div style="margin-bottom:8px;">💾 <strong>Salvar no servidor (PHP)</strong></div>
-          <div class="fld"><span>Senha do save.php</span><div class="in">•••••••••••</div></div>
+          <div class="fld"><span>Senha do servidor</span><div class="in">•••••••••••</div></div>
           <div><span class="btn-gold">💾 Salvar senha</span> <span class="btn-ghost">💾 Salvar no servidor</span></div>
           <div style="margin:14px 0 8px;">📥 <strong>Export / Import Dados</strong></div>
           <div><span class="btn-gold">📤 Exportar dados (JSON)</span> <span class="btn-ghost">📥 Importar dados (JSON)</span></div>
@@ -615,7 +807,7 @@
 
 <table>
   <tr><th>Bloco</th><th>O que faz</th></tr>
-  <tr><td><strong>💾 Salvar no servidor (PHP)</strong></td><td>Grava as alterações direto no <code>js/data.js</code> do servidor (via <code>save.php</code>). Campo <strong>Senha do save.php</strong> = senha do servidor (a mesma do login); clique em <strong>💾 Salvar senha</strong> para guardá-la no navegador e use <strong>💾 Salvar no servidor</strong> para publicar.</td></tr>
+  <tr><td><strong>💾 Salvar no servidor (PHP)</strong></td><td>Grava as alterações direto no <code>js/data.js</code> do servidor (via <code>save.php</code>). Campo <strong>Senha do servidor</strong> = senha do <code>api-config.php</code> (a "chave do cofre", diferente da senha de administrador); clique em <strong>💾 Salvar senha</strong> para guardá-la no navegador e use <strong>💾 Salvar no servidor</strong> para publicar.</td></tr>
   <tr><td><strong>📥 Export / Import Dados</strong></td><td>Backup manual em um arquivo JSON. Veja a <a href="#backup">seção 18</a>.</td></tr>
   <tr><td><strong>🔒 Desabilitar Painel</strong></td><td>Permite desligar o painel no site final (ver abaixo).</td></tr>
 </table>
@@ -634,7 +826,12 @@
 <!-- ===== 15. API CONFIG ===== -->
 <h2 id="apikey">15. Senha do Servidor e Email (api-config.php)</h2>
 
-<p>A <strong>senha de acesso ao painel</strong> e o <strong>email que recebe o formulário de contato</strong> não ficam no código do site: ficam em um arquivo <strong>fora do GitHub</strong>, chamado <code>api-config.php</code>, dentro da pasta do site no servidor.</p>
+<p>As <strong>senhas de acesso ao painel</strong> e o <strong>email que recebe o formulário de contato</strong> ficam em arquivos de configuração. Existem <strong>duas senhas</strong>:</p>
+
+<ul>
+  <li><strong>Senha de administrador</strong> (arquivo <code>js/admin.js</code>, linhas 5–6): abre o painel (login <code>?edit=1</code>). É a "porta de entrada".</li>
+  <li><strong>Senha do servidor</strong> (<code>API_PASSWORD</code> no arquivo <code>api-config.php</code>): protege o <strong>salvamento</strong> e o <strong>upload</strong> de arquivos. É a "chave do cofre".</li>
+</ul>
 
 <div class="browser">
   <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="url">Servidor → raiz do site → <b>api-config.php</b></span></div>
@@ -643,7 +840,7 @@
       <div class="content" style="font-family:'Consolas',monospace;font-size:9.5pt;color:#a9b4d0;">
         &lt;?php<br>
         &nbsp;&nbsp;// ===== CONFIGURAÇÕES DA API / SERVIDOR =====<br>
-        &nbsp;&nbsp;define("<span style="color:#ffd700;">API_PASSWORD</span>", "<span style="color:#6ee7a8;">RankfdIFPosRKqlrJMTU9g</span>");<br>
+        &nbsp;&nbsp;define("<span style="color:#ffd700;">API_PASSWORD</span>", "<span style="color:#6ee7a8;">••••••••••••••••</span>");<br>
         &nbsp;&nbsp;define("<span style="color:#ffd700;">CONTACT_EMAIL</span>", "<span style="color:#6ee7a8;">contato@furpal.com.br</span>");<br>
         &nbsp;&nbsp;?&gt;
       </div>
@@ -654,19 +851,19 @@
 <h3>O que cada linha significa:</h3>
 <table>
   <tr><th>Constante</th><th>Função</th></tr>
-  <tr><td><code>API_PASSWORD</code></td><td>A <strong>senha do servidor</strong>. É ela que você digita no login do painel (tela <code>?edit=1</code>). Protege o login (<code>auth.php</code>), o salvamento (<code>save.php</code>) e o upload de imagens (<code>upload.php</code>).</td></tr>
+  <tr><td><code>API_PASSWORD</code></td><td>A <strong>senha do servidor</strong>. Protege o salvamento (<code>save.php</code>) e o upload de imagens (<code>upload.php</code>). É ela que você digita na aba <strong>Config</strong> do painel para poder salvar/subir arquivos. Não abre mais o painel sozinha.</td></tr>
   <tr><td><code>CONTACT_EMAIL</code></td><td>O email que <strong>recebe as mensagens</strong> do formulário de contato do site (via <code>send-contact.php</code>).</td></tr>
 </table>
 
-<h3>Como trocar a senha do painel:</h3>
+<h3>Como trocar a senha do servidor:</h3>
 <ol>
   <li>Acesse o servidor (painel da hospedagem ou FTP).</li>
   <li>Abra o arquivo <code>api-config.php</code> na raiz do site.</li>
   <li>Troque o valor de <code>API_PASSWORD</code> por uma senha nova e longa.</li>
-  <li>Salve o arquivo. Pronto: o painel passa a exigir a senha nova.</li>
+  <li>Salve o arquivo. Pronto: o painel passa a exigir a senha nova na aba <strong>Config</strong>.</li>
 </ol>
 
-<div class="warn-box"><strong>⚠️ Muito importante:</strong> NÃO envie o arquivo <code>api-config.php</code> para o GitHub nem o compartilhe. Quem tiver essa senha consegue entrar no painel. Mantenha-o apenas no servidor.</div>
+<div class="warn-box"><strong>⚠️ Muito importante:</strong> NÃO envie o arquivo <code>api-config.php</code> para o GitHub nem o compartilhe. Quem tiver essa senha consegue salvar e subir arquivos no site. Mantenha-o apenas no servidor.</div>
 
 <div class="warn-box"><strong>⚠️ Não use caracteres com acento</strong> nem aspas simples dentro do valor da senha. Se a senha tiver aspas simples (<code>'</code>), o arquivo quebra e o site para de funcionar.</div>
 
@@ -675,7 +872,7 @@
 <!-- ===== 16. SALVANDO ===== -->
 <h2 id="salvar">16. Salvando as Alterações no Servidor</h2>
 
-<p>Sempre que você terminar de editar uma aba, siga este fluxo:</p>
+<p>Sempre que você terminar de editar uma aba, siga este fluxo. O painel pede confirmação ("Sim, confirmar") antes de enviar.</p>
 
 <h3>Fluxo de salvamento (3 passos):</h3>
 
@@ -713,7 +910,7 @@
   <li>Aparece uma notificação verde confirmando. Atualize o site (F5) para ver o resultado.</li>
 </ol>
 
-<div class="warn-box"><strong>⚠️ Erro "Defina a senha do save.php na aba Config":</strong> significa que o navegador ainda não tem a senha guardada. Vá na aba <strong>Config</strong>, digite a senha do servidor e clique em <strong>💾 Salvar senha</strong>. Depois disso, "Salvar" volta a funcionar.</div>
+<div class="warn-box"><strong>⚠️ Erro "Defina a senha do save.php na aba Config":</strong> significa que o navegador ainda não tem a senha do servidor guardada. Vá na aba <strong>Config</strong>, digite a senha do servidor (a do <code>api-config.php</code>) e clique em <strong>💾 Salvar senha</strong>. Depois disso, "Salvar no servidor" volta a funcionar.</div>
 
 <div class="tip-box"><strong>⚡ Dica:</strong> o botão <strong>👁 Ver site</strong> mostra o site (modo público) sem precisar fazer logout. Para voltar ao painel, use o botão <strong>⚙️ Admin</strong> que aparece no canto inferior esquerdo.</div>
 
@@ -781,8 +978,8 @@
 
 <h3>🔐 Segurança (não pule!)</h3>
 <ul>
-  <li>Use uma <strong>senha longa e única</strong> no <code>api-config.php</code> (mínimo 12 caracteres, com letras e números).</li>
-  <li><strong>Nunca compartilhe</strong> o arquivo <code>api-config.php</code> nem a senha por mensagem com estranhos.</li>
+  <li>Use <strong>senhas longas e únicas</strong> tanto para o administrador (<code>js/admin.js</code>) quanto para o servidor (<code>api-config.php</code>).</li>
+  <li><strong>Nunca compartilhe</strong> o arquivo <code>api-config.php</code> nem as senhas por mensagem com estranhos.</li>
   <li>Para não deixar o painel acessível a visitantes, desligue com <code>ADMIN_ENABLED = false</code> (seção 14) quando o site for entregue.</li>
   <li>Mantenha um backup JSON atualizado (seção 18).</li>
 </ul>
@@ -791,8 +988,9 @@
 
 <table>
   <tr><th>Problema</th><th>Solução</th></tr>
-  <tr><td>Não consigo entrar no painel ("Senha incorreta")</td><td>A senha digitada não é a do <code>API_PASSWORD</code> no <code>api-config.php</code> do servidor. Confira o arquivo e o valor exato (atenção a maiúsculas/minúsculas).</td></tr>
-  <tr><td>"Defina a senha do save.php na aba Config" ao salvar</td><td>Vá na aba <strong>Config</strong>, digite a senha do servidor e clique em <strong>💾 Salvar senha</strong>.</td></tr>
+  <tr><td>Não consigo entrar no painel ("Usuário ou senha incorretos")</td><td>O usuário ou a senha de administrador digitados não batem com os do arquivo <code>js/admin.js</code> (linhas 5–6). Confira exatamente (atenção a maiúsculas/minúsculas).</td></tr>
+  <tr><td>"Defina a senha do save.php na aba Config" ao salvar</td><td>Vá na aba <strong>Config</strong>, digite a senha do servidor (a do <code>api-config.php</code>) e clique em <strong>💾 Salvar senha</strong>.</td></tr>
+  <tr><td>Cliquei em algo e o painel pergunta "Confirmar ação"</td><td>Isso é normal: o painel confirma antes de toda ação para evitar erros. Leia a mensagem e clique em <strong>"Sim, confirmar"</strong> para continuar (ou <strong>"Cancelar"</strong> para voltar).</td></tr>
   <tr><td>Editei mas o site continua igual</td><td>Você esqueceu de clicar em <strong>💾 Salvar no servidor</strong>. Depois de salvar, atualize a página do site (F5).</td></tr>
   <tr><td>Imagem do parceiro/imóvel em branco</td><td>O campo de imagem está vazio. Envie a foto pelo <strong>📷 Upload</strong> e salve.</td></tr>
   <tr><td>Foto não sobe (upload falha)</td><td>A imagem é muito grande. Reduza para menos de ~500 KB (ou máximo 2 MB) e tente de novo.</td></tr>
